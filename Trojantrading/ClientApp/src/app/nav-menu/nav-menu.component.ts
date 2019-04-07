@@ -6,13 +6,17 @@ import { Component } from '@angular/core';
   styleUrls: ['./nav-menu.component.css']
 })
 export class NavMenuComponent {
-  isExpanded = false;
+  testJsonObj = [
+    {type: 'Hand-Made Cigars'},
+    {type: 'Machine-Made Cigars'},
+    {type: 'Little Cigars'},
+    {type: 'Cigarettes'},
+    {type: 'Pipe Tobacco'},
+    {type: 'Roll Your Own'},
+    {type: 'Filters'},
+    {type: 'Papers'},
+    {type: 'Lighters'},
+    {type: 'Accessories'},
+  ]
 
-  collapse() {
-    this.isExpanded = false;
-  }
-
-  toggle() {
-    this.isExpanded = !this.isExpanded;
-  }
 }
