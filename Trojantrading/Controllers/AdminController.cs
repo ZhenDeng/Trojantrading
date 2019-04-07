@@ -1,11 +1,7 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Trojantrading.Repositories;
-using Trojantrading.Models;
 
 namespace Trojantrading.Controllers
 {
