@@ -55,9 +55,9 @@ namespace Trojantrading.Repositories
             modelBuilder.Entity<Role>()
                 .ToTable("role")
                 .HasKey(r => r.Id);
-            modelBuilder.Entity<ShoppingItem>()
-                .ToTable("shoppingItem")
-                .HasKey(s => s.Id);
+            //modelBuilder.Entity<ShoppingItem>()
+            //    .ToTable("shoppingItem")
+            //    .HasKey(s => s.Id);
             modelBuilder.Entity<UserRole>()
                 .ToTable("userrole")
                 .HasKey(ur=>new{ur.UserId, ur.RoleId});
@@ -96,7 +96,8 @@ namespace Trojantrading.Repositories
             modelBuilder.Entity<ShoppingItem>()
                 .HasOne(s => s.ShoppingCart)
                 .WithMany(s => s.ShoppingItems)
-                .HasForeignKey(s=>s.ShoppingCartId);
+                .HasForeignKey(s => s.ShoppingCartId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             //shopping item product 1:1
             modelBuilder.Entity<Product>()
