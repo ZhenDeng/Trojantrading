@@ -1,1 +1,152 @@
 /* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+/*#region Buttons */
+.button {
+    cursor: pointer;
+    vertical-align: middle;
+    text-align: center;
+    display: inline-block;
+    border: none;
+    white-space: nowrap;
+    /* IE7 Fix */
+    *zoom: 1;
+    *display: inline;
+}
+
+    .button.stretch {
+        display: block;
+    }
+
+    .button.disabled-dark-bg, .button.disabled-light-bg {
+        pointer-events: none;
+    }
+
+a.button {
+    text-decoration: none;
+}
+
+.button-red, .button-dark, .button-ed, .button-medium {
+    color: white;
+}
+
+.button-large, .button-mid, .button-small {
+    line-height: normal;
+    min-width: 60px;
+    /* IE7 Fix */
+    min-width: 0;
+}
+
+.button-large, .button-mid {
+    font-size: 14px;
+    border-radius: 5px;
+}
+
+.button-large {
+    padding: 12px 24px;
+}
+
+.button-mid {
+    padding: 9px 16px;
+}
+
+.button-small {
+    padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 3px;
+}
+
+.button-tiny {
+    padding: 3px 10px;
+    font-size: 9px;
+    border-radius: 1px;
+    line-height: normal;
+}
+
+/* The below color change should also be reflected in JS ($('.button-red').hover) */
+.button-red {
+    background-color: #CA1845;
+    border: 1px #CA1845 solid;
+    display: block;
+    margin: 0 auto;
+}
+
+    .button-red.disabled-dark-bg {
+        opacity: 0.8;
+    }
+
+    .button-red.disabled-light-bg {
+        opacity: 0.4;
+    }
+
+.button-red:hover{
+    border: 1px #CA1845 solid;
+    color: #CA1845;
+    background: white;
+}
+/* The below color change should also be reflected in JS ($('.button-dark').hover) */
+.button-dark {
+    background-color: #343535;
+}
+
+    .button-dark.disabled-dark-bg {
+        opacity: 0.8;
+    }
+
+    .button-dark.disabled-light-bg {
+        opacity: 0.4;
+    }
+
+/* The below color change should also be reflected in JS ($('.button-medium').hover) */
+.button-medium {
+    background-color: #484847;
+}
+
+    .button-medium.disabled-dark-bg {
+        opacity: 0.8;
+    }
+
+    .button-medium.disabled-light-bg {
+        opacity: 0.4;
+    }
+
+/* The below color change should also be reflected in JS ($('.button-light').hover) */
+.button-light {
+    background-color: #E7E6E3;
+    color: black;
+}
+
+    .button-light.disabled-dark-bg {
+        opacity: 0.8;
+    }
+
+    .button-light.disabled-light-bg {
+        opacity: 0.4;
+    }
+
+/* The below color change should also be reflected in JS ($('.button-clear-dark').hover) */
+.button-clear-dark {
+    background-color: transparent;
+    color: white;
+}
+
+.button-clear.disabled-dark-bg {
+    opacity: 0.8;
+}
+
+.button-clear.disabled-light-bg {
+    opacity: 0.4;
+}
+
+/* The below color change should also be reflected in JS ($('.button-ed').hover) */
+.button-ed {
+    background-color: #FF6201;
+}
+
+    .button-ed.disabled-dark-bg {
+        opacity: 0.8;
+    }
+
+    .button-ed.disabled-light-bg {
+        opacity: 0.4;
+    }

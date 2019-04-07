@@ -1,0 +1,85 @@
+#logo img{
+    display: block;
+    width: 170px;
+    height: 174px;
+    margin: 2em auto;
+}
+
+.top{
+    background: #343731;
+    padding: 0;
+    position: fixed;
+    width: 100%;
+    z-index: 2;
+    text-align: center;
+}
+
+.bottom{
+    background: white;
+    padding: 0;
+    position: fixed;
+    width: 100%;
+    min-height: 200px;
+    z-index: 2;
+    text-align: center;
+}
+
+#logo span {
+    background: url(/img/stg-wordmark.png) center center no-repeat;
+    background-size: contain;
+    display: inline-block;
+    vertical-align: middle;
+    overflow: hidden;
+    text-indent: -999em;
+    width: 400px;
+    height: 50px;
+    margin: 1em 1em 0;
+}
+
+#welcome{
+    max-width: 800px;
+    text-align: center;
+    padding: 50px 20px;
+}
+
+#welcome p {
+    font-size: 1.8rem;
+    font-weight: 100;
+    line-height: 1.6;
+    color: #eeede1;
+}
+
+footer {
+    text-align: center;
+}
+
+footer p {
+    font-family: "helvetica",sans-serif;
+    font-size: 0.65rem;
+}
+
+.login-box{
+    margin: 0 auto;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.8);
+    border-bottom: 20px #b0001f solid;
+    position: relative;
+    top: -18px;
+    padding: 1.6em;
+    width:40%;
+    background: white;
+}
+
+.login-box p{
+  font-size: 2.15rem;
+  font-weight: 600;
+  color: #2d2c26;
+  margin-bottom: 40px;
+}
+
+.button-red{
+  margin-top: 15px !important;
+}
+
+:host /deep/ .mat-form-field-underline{
+  background: gray;
+}
