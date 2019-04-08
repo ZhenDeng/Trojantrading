@@ -1,7 +1,50 @@
 /* You can add global styles to this file, and also import other style files */
-@import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
 /*#region Buttons */
+
+.btn {
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
+.btn-long {
+    width: 270px;
+    padding: 4px 10px 2px 10px;
+    font-size: 12px;
+    margin: 0px 8px;
+    background-color: #C20047;
+    color: white;
+    text-align: center;
+    border-radius: 20px;
+    cursor: pointer;
+    vertical-align: middle;
+    text-align: center;
+    display: inline-block;
+    border: 1px #CA1845 solid;
+    white-space: nowrap;
+    margin-top: 40px;
+}
+
+.btn-long:hover {
+    border: 1px #CA1845 solid;
+    color: #CA1845 !important;
+    background: white;
+}
+
 .button {
     cursor: pointer;
     vertical-align: middle;
@@ -14,13 +57,13 @@
     *display: inline;
 }
 
-    .button.stretch {
-        display: block;
-    }
+.button.stretch {
+    display: block;
+}
 
-    .button.disabled-dark-bg, .button.disabled-light-bg {
-        pointer-events: none;
-    }
+.button.disabled-dark-bg, .button.disabled-light-bg {
+    pointer-events: none;
+}
 
 a.button {
     text-decoration: none;
@@ -64,6 +107,7 @@ a.button {
 }
 
 /* The below color change should also be reflected in JS ($('.button-red').hover) */
+
 .button-red {
     background-color: #CA1845;
     border: 1px #CA1845 solid;
@@ -71,60 +115,59 @@ a.button {
     margin: 0 auto;
 }
 
-    .button-red.disabled-dark-bg {
-        opacity: 0.8;
-    }
-
-    .button-red.disabled-light-bg {
-        opacity: 0.4;
-    }
-
-.button-red:hover{
-    border: 1px #CA1845 solid;
-    color: #CA1845;
-    background: white;
+.button-red.disabled-dark-bg {
+    opacity: 0.8;
 }
+
+.button-red.disabled-light-bg {
+    opacity: 0.4;
+}
+
 /* The below color change should also be reflected in JS ($('.button-dark').hover) */
+
 .button-dark {
     background-color: #343535;
 }
 
-    .button-dark.disabled-dark-bg {
-        opacity: 0.8;
-    }
+.button-dark.disabled-dark-bg {
+    opacity: 0.8;
+}
 
-    .button-dark.disabled-light-bg {
-        opacity: 0.4;
-    }
+.button-dark.disabled-light-bg {
+    opacity: 0.4;
+}
 
 /* The below color change should also be reflected in JS ($('.button-medium').hover) */
+
 .button-medium {
     background-color: #484847;
 }
 
-    .button-medium.disabled-dark-bg {
-        opacity: 0.8;
-    }
+.button-medium.disabled-dark-bg {
+    opacity: 0.8;
+}
 
-    .button-medium.disabled-light-bg {
-        opacity: 0.4;
-    }
+.button-medium.disabled-light-bg {
+    opacity: 0.4;
+}
 
 /* The below color change should also be reflected in JS ($('.button-light').hover) */
+
 .button-light {
     background-color: #E7E6E3;
     color: black;
 }
 
-    .button-light.disabled-dark-bg {
-        opacity: 0.8;
-    }
+.button-light.disabled-dark-bg {
+    opacity: 0.8;
+}
 
-    .button-light.disabled-light-bg {
-        opacity: 0.4;
-    }
+.button-light.disabled-light-bg {
+    opacity: 0.4;
+}
 
 /* The below color change should also be reflected in JS ($('.button-clear-dark').hover) */
+
 .button-clear-dark {
     background-color: transparent;
     color: white;
@@ -139,14 +182,15 @@ a.button {
 }
 
 /* The below color change should also be reflected in JS ($('.button-ed').hover) */
+
 .button-ed {
     background-color: #FF6201;
 }
 
-    .button-ed.disabled-dark-bg {
-        opacity: 0.8;
-    }
+.button-ed.disabled-dark-bg {
+    opacity: 0.8;
+}
 
-    .button-ed.disabled-light-bg {
-        opacity: 0.4;
-    }
+.button-ed.disabled-light-bg {
+    opacity: 0.4;
+}

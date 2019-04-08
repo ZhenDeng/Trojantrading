@@ -1,31 +1,28 @@
 <div class="top container">
-    <a href="https://st-group.net.au" id="logo">
-        <img src="https://st-group.net.au/img/stg-logo.png" alt="stg logo">
-        <span>ST Group</span>
-    </a>
-    <section id="welcome" class="container">
-        <p>Scandinavian Tobacco Group Australia Pty Ltd (STG AU) is Australia’s leading supplier of cigars, pipe
-            tobacco,
-            matches, lighters and tobacco accessories. Market leading brands available from STG AU include Macanudo,
-            Amanda,
-            Café Crème, Colts, Borkum Riff, Cricket and Ventti.</p>
-    </section>
-    <div class="bottom">
-        <div class="login-box" [formGroup]="userFormGroup">
-            <p>MEMBER LOGIN</p>
-            <mat-form-field [floatLabel]="'always'" class="col-md-12">
-                <input matInput formControlName="account" placeholder="USERNAME">
-            </mat-form-field>
-            <mat-form-field [floatLabel]="'always'" class="col-md-12">
-                <input matInput formControlName="password" placeholder="PASSWORD">
-            </mat-form-field>
-            <button class="button button-red botton-large" (click)="onSubmit()">LOGIN IN</button>
-            <button class="button button-red botton-large">FORGETTEN PASSWORD?</button>
-        </div>
+  <a href="https://st-group.net.au" id="logo">
+    <img src="/img/img-placeholder.jpg" alt="stg logo">
+    <span>ST Group</span>
+  </a>
+  <section id="welcome" class="container">
+    <p>Scandinavian Tobacco Group Australia Pty Ltd (STG AU) is Australia’s leading supplier of cigars, pipe
+      tobacco,
+      matches, lighters and tobacco accessories. Market leading brands available from STG AU include Macanudo,
+      Amanda,
+      Café Crème, Colts, Borkum Riff, Cricket and Ventti.</p>
+  </section>
+  <div class="bottom">
+    <div class="login-box" [formGroup]="userFormGroup">
+      <p>MEMBER LOGIN</p>
+      <mat-form-field [floatLabel]="'always'" class="col-md-12">
+        <input matInput formControlName="account" placeholder="USERNAME">
+      </mat-form-field>
+      <mat-form-field [floatLabel]="'always'" class="col-md-12">
+        <input matInput formControlName="password" placeholder="PASSWORD">
+      </mat-form-field>
+      <button class="btn btn-long" (click)="onSubmit()">LOGIN IN</button>
+      <button class="btn btn-long">FORGETTEN PASSWORD?</button>
     </div>
-    <footer>
-        <p>© Copyright 2017 Scandinavian Tobacco Group Australia Pty Ltd • <a href="//digitalbridge.com.au"
-                title="Digital Bridge">Website Management</a> by Digital Bridge</p>
-    </footer>
+  </div>
+  <p class="footer">© Copyright 2017 Scandinavian Tobacco Group Australia Pty Ltd • <a href="//digitalbridge.com.au"
+      title="Digital Bridge">Website Management</a> by Digital Bridge</p>
 </div>
-

@@ -12,7 +12,7 @@ Disable Angular Lazy Load Modules as it is not working in our application. Will 
 const appRoutes: Routes = [
   { path: 'home', component: HomeComponent, canActivate:[AuthGuard] },
   {
-    path: '', component: LoginComponent
+    path: 'login', component: LoginComponent
   },
   { path: '', redirectTo: '/login', pathMatch: 'full' }
 ];

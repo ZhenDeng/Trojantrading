@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { User } from '../Models/User';
 import { HttpErrorResponse, HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { UserResponse } from '../models/ApiResponse';
 
 @Injectable()
@@ -15,7 +15,7 @@ export class UserService {
 
   userAuthentication(user: any): Observable<UserResponse> {
     console.info(user);
-    return this.http.post(this.base_url + "/authenticate", user)
+    return this.http.post(this.base_url + "/authenticate", user, {headers: new HttpHeaders({'Content-Type':'application/json', 'No-Auth': 'True'})})
       .pipe(catchError(this.handleError));
   }
 

@@ -19,9 +19,9 @@ namespace Trojantrading.Controllers
         private readonly IUserRepository _userRepository;
         private readonly AppSettings _appSettings;
 
-        public UserController(UserRepository userRepository, IOptions<AppSettings> appSettings)
+        public UserController(IUserRepository userRepository, IOptions<AppSettings> appSettings)
         {
-            this._userRepository = userRepository;
+            _userRepository = userRepository;
             _appSettings = appSettings.Value;
         }
 

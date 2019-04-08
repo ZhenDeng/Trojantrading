@@ -28,11 +28,14 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
-    console.info(this.userFormGroup.value);
     this.userService.userAuthentication(this.userFormGroup.value).subscribe((data: UserResponse) => {
+      console.info(data);
       localStorage.setItem('userToken', data.token);
       this.router.navigate(['/home'])
-    });
+    },
+      (error: any) => {
+        console.info(error);
+      });
   }
 
 }
