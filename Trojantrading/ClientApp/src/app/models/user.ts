@@ -1,3 +1,7 @@
+import { ShoppingItem } from './shoppingItem';
+import { ShoppingCart } from "./shoppingCart";
+import { Order } from './order';
+
 export interface User {
     Id: number
     createdDate: Date
@@ -13,8 +17,8 @@ export interface User {
     phone: string
     status: string
     sendEmail: boolean
-    // shoppingCart: ShoppingCart
-    // orders: Order[]
+    shoppingCart: ShoppingCart
+    orders: Order[]
     // UserRoles: UserRole[]
-    // ShoppingItems: ShoppingItem[]
+    shoppingItems: ShoppingItem[]
 }
