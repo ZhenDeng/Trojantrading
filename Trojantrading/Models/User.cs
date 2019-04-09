@@ -46,7 +46,7 @@ namespace Trojantrading.Models
 
         public List<Order> Orders { get; set; }
 
-        public List<UserRole> UserRoles { get; set; }
+        public UserRole UserRole { get; set; }
 
         public List<ShoppingItem> ShoppingItems { get; set; }
     }

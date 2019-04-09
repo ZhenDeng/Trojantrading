@@ -78,8 +78,8 @@ namespace Trojantrading.Repositories
             //user role m:n
             modelBuilder.Entity<UserRole>()
                 .HasOne(ur=>ur.User)
-                .WithMany(u=>u.UserRoles)
-                .HasForeignKey(ur=>ur.UserId);
+                .WithOne(u=>u.UserRole)
+                .HasForeignKey<UserRole>(ur=>ur.UserId);
 
             modelBuilder.Entity<UserRole>()
                 .HasOne(ur=>ur.Role)

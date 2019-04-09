@@ -16,6 +16,11 @@
 								Home
 							</a>
 					</li>
+					<li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
+						<a [routerLink]='["/account"]'>
+							Your Account
+						</a>
+					</li>
 					<li [routerLinkActive]='["link-active"]'>
 							<a [routerLink]='["/about-us"]'>
 								About Us
