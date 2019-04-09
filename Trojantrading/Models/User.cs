@@ -24,7 +24,9 @@ namespace Trojantrading.Models
 
         public string BussinessName { get; set; }
 
-        public string Address { get; set; }
+        public string ShippingAddress { get; set; }
+
+        public string BillingAddress { get; set; }
 
         public string PostCode { get; set; }
 

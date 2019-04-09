@@ -10,4 +10,9 @@ namespace Trojantrading.Models
         public string UserName { get; set; }
         public string Token { get; set; }
     }
+
+    public class ApiResponse {
+        public string Status { get; set; }
+        public string Message { get; set; }
+    }
 }

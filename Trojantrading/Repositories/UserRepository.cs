@@ -5,6 +5,7 @@ using System.Linq;
 using Trojantrading.Util;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 namespace Trojantrading.Repositories
 {
@@ -14,9 +15,9 @@ namespace Trojantrading.Repositories
 
         void Delete(int id);
 
-        Task<User> Update(User user);
+        Task<ApiResponse> Update(User user);
 
-        Task<User> Get(int id);
+        Task<User> Get(string userName);
 
         Task<User> GetUserByAccount(string account);
 
@@ -50,10 +51,10 @@ namespace Trojantrading.Repositories
             trojantradingDbContext.SaveChanges();
         }
 
-        public async Task<User> Get(int id)
+        public async Task<User> Get(string userName)
         {
             var user = trojantradingDbContext.Users
-                .Where(u=>u.Id == id)
+                .Where(u=>u.Account == userName)
                 .FirstOrDefault();
             return user;
         }
@@ -82,11 +83,25 @@ namespace Trojantrading.Repositories
             return result;
         }
 
-        public async Task<User> Update(User user)
+        public async Task<ApiResponse> Update(User user)
         {
-            trojantradingDbContext.Users.Update(user);
-            await trojantradingDbContext.SaveChangesAsync();
-            return user;
+            try
+            {
+                trojantradingDbContext.Users.Update(user);
+                await trojantradingDbContext.SaveChangesAsync();
+                return new ApiResponse() {
+                    Status = "success",
+                    Message = "Successfully update user"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse()
+                {
+                    Status = "fail",
+                    Message = ex.Message
+                };
+            }
         }
 
         public IEnumerable<User> GetAll()

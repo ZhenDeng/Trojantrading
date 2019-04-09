@@ -14,7 +14,6 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
   userAuthentication(user: any): Observable<UserResponse> {
-    console.info(user);
     return this.http.post(this.base_url + "/authenticate", user, {headers: new HttpHeaders({'Content-Type':'application/json', 'No-Auth': 'True'})})
       .pipe(catchError(this.handleError));
   }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../services/user.service';
-import { NgForm, FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserResponse } from '../models/ApiResponse';
 
@@ -24,13 +24,13 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    this.userFormGroup.get("account").setValue(localStorage.getItem("userName"));
   }
 
   onSubmit() {
     this.userService.userAuthentication(this.userFormGroup.value).subscribe((data: UserResponse) => {
-      console.info(data);
       localStorage.setItem('userToken', data.token);
+      localStorage.setItem('userName', data.userName);
       this.router.navigate(['/home'])
     },
       (error: any) => {

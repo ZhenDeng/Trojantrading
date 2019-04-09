@@ -2,11 +2,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Trojantrading.Repositories;
+using Trojantrading.Util;
+using Trojantrading.Models;
 
 namespace Trojantrading.Controllers
 {
-    [Route("[Controller]")]
-    [Authorize(Roles = "Admin")]
+    [Produces("application/json")]
+    [Route("api/[controller]")]
     public class AdminController:Controller
     {
         private readonly IOrderRepository _orderRepository;
@@ -16,15 +18,15 @@ namespace Trojantrading.Controllers
         private readonly IPdfBoardRepository _pdfBoardRepository;
 
 
-        public AdminController(OrderRepository orderRepository, UserRepository userRepository,
-            ProductRepository productRepository,
-            HeadInformationRepository headInformationRepository, PdfBoardRepository pdfBoardRepository)
+        public AdminController(IOrderRepository orderRepository, IUserRepository userRepository,
+            IProductRepository productRepository,
+            IHeadInformationRepository headInformationRepository, IPdfBoardRepository pdfBoardRepository)
         {
-            this._orderRepository = orderRepository;
-            this._userRepository = userRepository;
-            this._productRepository = productRepository;
-            this._headInformationRepository = headInformationRepository;
-            this._pdfBoardRepository = pdfBoardRepository;
+            _orderRepository = orderRepository;
+            _userRepository = userRepository;
+            _productRepository = productRepository;
+            _headInformationRepository = headInformationRepository;
+            _pdfBoardRepository = pdfBoardRepository;
         }
         
 
@@ -44,10 +46,22 @@ namespace Trojantrading.Controllers
             return null;
         }
 
-
-        public async Task<IActionResult> GetUsers()
+        [HttpGet("GetUserByAccount")]
+        [NoCache]
+        [ProducesResponseType(typeof(User), 200)]
+        public async Task<IActionResult> GetUserByAccount(string userName)
         {
-            return null;
+            var userInfo = await _userRepository.Get(userName);
+            return Ok(userInfo);
+        }
+
+        [HttpPost("UpdateUser")]
+        [NoCache]
+        [ProducesResponseType(typeof(ApiResponse), 200)]
+        public async Task<IActionResult> UpdateUser([FromBody]User user)
+        {
+            var result = await _userRepository.Update(user);
+            return Ok(result);
         }
 
         public async Task<IActionResult> GetProducts()

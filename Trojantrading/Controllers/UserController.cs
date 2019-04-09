@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Trojantrading.Models;
 using Trojantrading.Repositories;
+using Trojantrading.Util;
 
 namespace Trojantrading.Controllers
 {
@@ -27,6 +28,8 @@ namespace Trojantrading.Controllers
 
         [AllowAnonymous]
         [HttpPost("authenticate")]
+        [NoCache]
+        [ProducesResponseType(typeof(UserResponse), 200)]
         public IActionResult Authenticate([FromBody]User userModel)
         {
             if (userModel.Account != "admin" || userModel.Password != "123")
@@ -62,18 +65,6 @@ namespace Trojantrading.Controllers
             return new JsonResult("123");
         }
 
-        [HttpPost("/register")]
-        public async Task<IActionResult> Register()
-        {
-            return StatusCode(201);
-        }
-
-        [HttpPost("/login")]
-        public async Task<IActionResult> Login()
-        {
-            return StatusCode(201);
-        }
-
         [HttpPost("/logout")]
         public async Task<IActionResult> Logout()
         {
@@ -94,17 +85,11 @@ namespace Trojantrading.Controllers
             return null;
         }
 
-        public async Task<IActionResult> Edit(int id)
-        {
-            var user = _userRepository.Get(id);
-            return null;
-        }
-
-        public async Task<IActionResult> Create(User user)
-        {
-            _userRepository.Add(user);
-            return null;
-        }
+        //public async Task<IActionResult> Edit(int id)
+        //{
+        //    var user = _userRepository.Get(id);
+        //    return null;
+        //}
 
         public async Task<IActionResult> GetAll()
         {

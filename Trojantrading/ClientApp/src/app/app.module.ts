@@ -12,12 +12,15 @@ import { AuthInterceptor } from './auth/auth.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { AccountDetailsComponent } from './account-details/account-details.component';
+import { AdminService } from './services/admin.service';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    LoginComponent
+    LoginComponent,
+    AccountDetailsComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -31,6 +34,7 @@ import { MatInputModule } from '@angular/material/input';
   ],
   providers: [
     UserService,
+    AdminService,
     AuthGuard,
     {
       provide: HTTP_INTERCEPTORS,
