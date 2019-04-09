@@ -14,13 +14,23 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { AccountDetailsComponent } from './account-details/account-details.component';
 import { AdminService } from './services/admin.service';
+import { NavMenuComponent } from './nav-menu/nav-menu.component';
+import { AboutUsComponent } from './about-us/about-us.component';
+import { ContactUsComponent } from './contact-us/contact-us.component';
+import { PromoSummaryComponent } from './promo-summary/promo-summary.component';
+import { TermsComponent } from './terms/terms.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     LoginComponent,
-    AccountDetailsComponent
+    AccountDetailsComponent,
+    NavMenuComponent,
+    AboutUsComponent,
+    ContactUsComponent,
+    PromoSummaryComponent,
+    TermsComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

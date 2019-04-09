@@ -4,6 +4,10 @@ import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { AuthGuard } from './auth/auth.guard';
 import { AccountDetailsComponent } from './account-details/account-details.component';
+import { AboutUsComponent } from './about-us/about-us.component';
+import { ContactUsComponent } from './contact-us/contact-us.component';
+import { PromoSummaryComponent } from './promo-summary/promo-summary.component';
+import { TermsComponent } from './terms/terms.component';
 
 /* 
 Don't use loadChildren: () => ProductDetailModule. 
@@ -16,6 +20,14 @@ const appRoutes: Routes = [
   {
     path: 'login', component: LoginComponent
   },
+
+  { path: 'about-us', component: AboutUsComponent },
+  { path: 'contact-us', component: ContactUsComponent },
+  { path: 'promo', component: PromoSummaryComponent },
+  { path: 'terms', component: TermsComponent },
+  // { path: 'counter', component: CounterComponent },
+  // { path: 'fetch-data', component: FetchDataComponent },
+
   {
     path: '',
     redirectTo: '/home',

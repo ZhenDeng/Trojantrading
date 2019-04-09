@@ -1,0 +1,46 @@
+.navbar {
+	border: 0;
+	border-radius: 0;
+	margin-bottom: 0;
+    font-size: 14px;
+}
+.navbar-button{
+	padding-top:10px;
+}
+
+.navbar-button button{
+	color: #0a0a0a88;;
+	background: transparent;
+	margin: 10px 5px;
+	padding: 5px 15px;
+	border-radius: 50px;
+	border: 0px;
+	box-shadow: 1px 1px 2px 0px rgba(77, 79, 80, 0.302), 0 1px 3px 1px rgba(41, 43, 43, 0.149);
+}
+.navbar-button button:hover{
+	box-shadow: 0px 1px 3px 0 rgba(138, 139, 140, 0.302), 0px 4px 8px 3px rgba(35, 35, 35, 0.149);
+}
+
+.navbar-button_flexWrapper{
+	display: -webkit-box;
+	display: -moz-box;
+	display: -ms-flexbox;
+	display: -webkit-flex;
+	display: flex;
+	justify-content: center;
+	-webkit-flex-flow: row wrap;
+	flex-flow: row wrap;
+}
+.navbar{
+	border-bottom: 1px solid rgba(0,0,0,.1);
+	box-shadow: 6px 3px 13px 0px rgba(43, 43, 43, 0.2);
+}
+.navbar-header{
+	border-right: 1px solid rgba(0,0,0,.1);
+}
+.navbar-toggle{
+	border: 1px solid #8888;
+}
+.navbar-toggle .icon-bar{
+	background-color: #8888;
+}

@@ -12,6 +12,7 @@ import { UserResponse } from '../models/ApiResponse';
 export class LoginComponent implements OnInit {
 
   userFormGroup: FormGroup;
+  showNav:string = 'login';
 
   constructor(
     private userService: UserService,

@@ -1,0 +1,48 @@
+<nav class="navbar">
+	<div class="container">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span> 
+			</button>
+			<a class="navbar-brand" href="#">Trojantrading</a>
+		</div>
+		<div class="collapse navbar-collapse" id="myNavbar">
+			<ul class="nav navbar-nav navbar-right">
+				<li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
+						<a [routerLink]='["/"]'>
+							Home
+						</a>
+				</li>
+				<li [routerLinkActive]='["link-active"]'>
+						<a [routerLink]='["/about-us"]'>
+							About Us
+						</a>
+				</li>
+				<li [routerLinkActive]='["link-active"]'>
+						<a [routerLink]='["/contact-us"]'>
+							Contact Us
+						</a>
+				</li>
+				<li [routerLinkActive]='["link-active"]'>
+						<a [routerLink]='["/promo"]'>
+							Promotion Sammary
+						</a>
+				</li>
+				<li [routerLinkActive]='["link-active"]'>
+						<a [routerLink]='["/terms"]'>
+							Terms
+						</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</nav>
+<section class="container-fluid">
+	<div class="row navbar-button">
+		<div class="col-sm-12 navbar-button_flexWrapper">
+			<button *ngFor="let cig of testJsonObj">{{cig?.type}}</button>
+		</div>
+	</div>
+</section>
