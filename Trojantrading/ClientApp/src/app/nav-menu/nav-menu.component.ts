@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NavbarService } from '../services/navbar.service';
 
 @Component({
   selector: 'app-nav-menu',
@@ -19,9 +20,12 @@ export class NavMenuComponent implements OnInit {
     {type: 'Lighters'},
     {type: 'Accessories'},
   ]
-  constructor() { }
+  constructor(
+    public nav: NavbarService
+  ) { }
 
   ngOnInit() {
+    this.nav.show();
   }
 
 }

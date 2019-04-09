@@ -19,6 +19,7 @@ import { AboutUsComponent } from './about-us/about-us.component';
 import { ContactUsComponent } from './contact-us/contact-us.component';
 import { PromoSummaryComponent } from './promo-summary/promo-summary.component';
 import { TermsComponent } from './terms/terms.component';
+import { NavbarService } from './services/navbar.service';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { TermsComponent } from './terms/terms.component';
   providers: [
     UserService,
     AdminService,
+    NavbarService,
     AuthGuard,
     {
       provide: HTTP_INTERCEPTORS,
