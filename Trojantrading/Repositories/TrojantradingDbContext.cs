@@ -20,7 +20,8 @@ namespace Trojantrading.Repositories
         public DbSet<PdfBoard> PdfBoards { get; set; }
         public DbSet<CompanyInfo> CompanyInfos { get; set; }
         public DbSet<Role> Roles { get; set; }
-
+        public DbSet<ShippingAddress> ShippingAddress { get; set; }
+        public DbSet<BillingAddress> BillingAddress { get; set; }
         public DbSet<ShoppingItem> ShoppingItems { get; set; }
 
 
@@ -55,9 +56,12 @@ namespace Trojantrading.Repositories
             modelBuilder.Entity<Role>()
                 .ToTable("role")
                 .HasKey(r => r.Id);
-            //modelBuilder.Entity<ShoppingItem>()
-            //    .ToTable("shoppingItem")
-            //    .HasKey(s => s.Id);
+            modelBuilder.Entity<ShippingAddress>()
+                .ToTable("ShippingAddress")
+                .HasKey(s => s.Id);
+            modelBuilder.Entity<BillingAddress>()
+                .ToTable("BillingAddress")
+                .HasKey(s => s.Id);
             modelBuilder.Entity<UserRole>()
                 .ToTable("userrole")
                 .HasKey(ur=>new{ur.UserId, ur.RoleId});
@@ -105,8 +109,18 @@ namespace Trojantrading.Repositories
                 .WithOne(s=>s.Product)
                 .HasForeignKey<Product>(p=>p.ShoppingItemId);
 
+            // user Ship address 1:1
+            modelBuilder.Entity<User>()
+                .HasOne(u => u.ShippingAddress)
+                .WithOne(s => s.User)
+                .HasForeignKey<ShippingAddress>(s => s.UserId);
+            // user Bill address 1:1
+            modelBuilder.Entity<User>()
+                .HasOne(u => u.BillingAddress)
+                .WithOne(s => s.User)
+                .HasForeignKey<BillingAddress>(s => s.UserId);
             //seed data into the databases
-  
+
             //seed data
             // modelBuilder.Entity<CompanyInfo>()
             //     .HasData(

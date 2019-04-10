@@ -1,55 +1,72 @@
 <ng-container *ngIf="nav.visible">
-	<nav class="navbar">
-		<div class="container">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span> 
-				</button>
-				<a class="navbar-brand" href="#">Trojantrading</a>
-			</div>
-			<div class="collapse navbar-collapse" id="myNavbar">
-				<ul class="nav navbar-nav navbar-right">
-					<li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
-							<a [routerLink]='["/"]'>
-								Home
-							</a>
-					</li>
-					<li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
-						<a [routerLink]='["/account"]'>
-							Your Account
-						</a>
-					</li>
-					<li [routerLinkActive]='["link-active"]'>
-							<a [routerLink]='["/about-us"]'>
-								About Us
-							</a>
-					</li>
-					<li [routerLinkActive]='["link-active"]'>
-							<a [routerLink]='["/contact-us"]'>
-								Contact Us
-							</a>
-					</li>
-					<li [routerLinkActive]='["link-active"]'>
-							<a [routerLink]='["/promo"]'>
-								Promotion Sammary
-							</a>
-					</li>
-					<li [routerLinkActive]='["link-active"]'>
-							<a [routerLink]='["/terms"]'>
-								Terms
-							</a>
-					</li>
-				</ul>
-			</div>
-		</div>
-	</nav>
-	<section class="container-fluid">
-		<div class="row navbar-button">
-			<div class="col-sm-12 navbar-button_flexWrapper">
-				<button *ngFor="let cig of testJsonObj">{{cig?.type}}</button>
-			</div>
-		</div>
-	</section>
+  <nav class="navbar">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">Trojantrading</a>
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav navbar-right">
+          <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
+            <a [routerLink]='["/"]'>
+              Home
+            </a>
+          </li>
+          <li [routerLinkActive]='["link-active"]'>
+            <a [routerLink]='["/about-us"]'>
+              About Us
+            </a>
+          </li>
+          <li [routerLinkActive]='["link-active"]'>
+            <a [routerLink]='["/contact-us"]'>
+              Contact Us
+            </a>
+          </li>
+          <li [routerLinkActive]='["link-active"]'>
+            <a [routerLink]='["/promo"]'>
+              Promotion Sammary
+            </a>
+          </li>
+          <li [routerLinkActive]='["link-active"]'>
+            <a [routerLink]='["/terms"]'>
+              Terms
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="navbar-header" style="height: 100%;">
+        <a class="navbar-brand" style="visibility: hidden;">Trojantrading</a>
+      </div>
+      <div class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
+            <a [routerLink]='["/account"]'>
+              <i class="fas fa-user fa-fw"></i> Your Account
+            </a>
+          </li>
+          <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
+            <a [routerLink]='["/account"]'>
+              <i class="fas fa-list fa-fw"></i> Order History
+            </a>
+          </li>
+          <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
+            <a (click)="logOut()">
+              <i class="fas fa-sign-out-alt fa-fw"></i> Log Out
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <section class="container-fluid">
+    <div class="row navbar-button">
+      <div class="col-sm-12 navbar-button_flexWrapper">
+        <button *ngFor="let cig of testJsonObj">{{cig?.type}}</button>
+      </div>
+    </div>
+  </section>
 </ng-container>

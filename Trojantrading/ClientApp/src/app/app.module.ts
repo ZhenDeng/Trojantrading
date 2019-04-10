@@ -20,6 +20,9 @@ import { ContactUsComponent } from './contact-us/contact-us.component';
 import { PromoSummaryComponent } from './promo-summary/promo-summary.component';
 import { TermsComponent } from './terms/terms.component';
 import { NavbarService } from './services/navbar.service';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTableModule } from '@angular/material/table';
+import { MatCardModule } from '@angular/material/card';
 
 @NgModule({
   declarations: [
@@ -41,7 +44,10 @@ import { NavbarService } from './services/navbar.service';
     BrowserAnimationsModule,
     MatFormFieldModule,
     ReactiveFormsModule,
-    MatInputModule
+    MatInputModule,
+    MatIconModule,
+    MatTableModule,
+    MatCardModule
   ],
   providers: [
     UserService,

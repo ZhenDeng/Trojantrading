@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NavbarService } from '../services/navbar.service';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-nav-menu',
@@ -21,11 +22,18 @@ export class NavMenuComponent implements OnInit {
     {type: 'Accessories'},
   ]
   constructor(
-    public nav: NavbarService
+    public nav: NavbarService,
+    private router: Router,
+    private activatedRouter: ActivatedRoute
   ) { }
 
   ngOnInit() {
     this.nav.show();
+  }
+
+  logOut(): void{
+    localStorage.clear();
+    this.router.navigate(['login'], { relativeTo: this.activatedRouter.parent })
   }
 
 }
