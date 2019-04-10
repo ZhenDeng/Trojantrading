@@ -23,6 +23,7 @@ import { NavbarService } from './services/navbar.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
+import { AuthRecovery } from './auth/auth.recovery';
 
 @NgModule({
   declarations: [
@@ -54,6 +55,7 @@ import { MatCardModule } from '@angular/material/card';
     AdminService,
     NavbarService,
     AuthGuard,
+    AuthRecovery,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
