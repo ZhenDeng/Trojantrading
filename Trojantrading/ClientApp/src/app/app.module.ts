@@ -24,6 +24,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
 import { AuthRecovery } from './auth/auth.recovery';
+import { ShareService } from './services/share.service';
+import { PasswordRecoveryComponent } from './password-recovery/password-recovery.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +37,8 @@ import { AuthRecovery } from './auth/auth.recovery';
     AboutUsComponent,
     ContactUsComponent,
     PromoSummaryComponent,
-    TermsComponent
+    TermsComponent,
+    PasswordRecoveryComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -56,6 +59,7 @@ import { AuthRecovery } from './auth/auth.recovery';
     NavbarService,
     AuthGuard,
     AuthRecovery,
+    ShareService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,

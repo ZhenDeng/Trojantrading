@@ -8,10 +8,11 @@ import {
 
 import { Observable } from 'rxjs/Observable';
 import { Router } from '@angular/router';
+import { ShareService } from '../services/share.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(private router: Router) {}
+  constructor(private router: Router, private shareService: ShareService) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
   
@@ -19,10 +20,10 @@ export class AuthInterceptor implements HttpInterceptor {
         return next.handle(request.clone());
     }
 
-    if(localStorage.getItem('userToken') != null) {
+    if(this.shareService.readCookie("userToken")) {
         return next.handle(
             request.clone(
-                { headers: request.headers.set("Authorization", "Bearer " + localStorage.getItem('userToken'))}
+                { headers: request.headers.set("Authorization", "Bearer " + this.shareService.readCookie("userToken"))}
             )
         );
     }

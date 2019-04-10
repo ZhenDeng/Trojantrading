@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NavbarService } from '../services/navbar.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { ShareService } from '../services/share.service';
 
 @Component({
   selector: 'app-nav-menu',
@@ -24,7 +25,8 @@ export class NavMenuComponent implements OnInit {
   constructor(
     public nav: NavbarService,
     private router: Router,
-    private activatedRouter: ActivatedRoute
+    private activatedRouter: ActivatedRoute,
+    private shareService: ShareService
   ) { }
 
   ngOnInit() {
@@ -32,7 +34,7 @@ export class NavMenuComponent implements OnInit {
   }
 
   logOut(): void{
-    localStorage.clear();
+    this.shareService.savecookies("userToken", "", 1);
     this.router.navigate(['login'], { relativeTo: this.activatedRouter.parent })
   }
 

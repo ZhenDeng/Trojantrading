@@ -1,0 +1,10 @@
+﻿using System.Collections.Generic;
+using System.Net.Mail;
+
+namespace Trojantrading.Service
+{
+    public interface IShare
+    {
+        bool SendEmail(string from, string to, string subject, string message, string cc = null, string bcc = null, bool isHTML = false, List<Attachment> attachments = null, string fromAddressDisplayName = "", string sendingApplication = "Email Service Application");
+    }
+}

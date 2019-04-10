@@ -17,6 +17,11 @@ export class UserService {
     return this.http.post(this.base_url + "/authenticate", user, {headers: new HttpHeaders({'Content-Type':'application/json', 'No-Auth': 'True'})})
       .pipe(catchError(this.handleError));
   }
+  
+  PasswordRecover(email: string): Observable<UserResponse> {
+    return this.http.get(this.base_url + "/PasswordRecover?email=" + email)
+      .pipe(catchError(this.handleError));
+  }
 
   private handleError(error: HttpErrorResponse) {
     console.error('server error:', error);

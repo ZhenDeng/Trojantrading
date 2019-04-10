@@ -8,6 +8,8 @@ import { AboutUsComponent } from './about-us/about-us.component';
 import { ContactUsComponent } from './contact-us/contact-us.component';
 import { PromoSummaryComponent } from './promo-summary/promo-summary.component';
 import { TermsComponent } from './terms/terms.component';
+import { PasswordRecoveryComponent } from './password-recovery/password-recovery.component';
+import { AuthRecovery } from './auth/auth.recovery';
 
 /* 
 Don't use loadChildren: () => ProductDetailModule. 
@@ -17,16 +19,15 @@ Disable Angular Lazy Load Modules as it is not working in our application. Will 
 const appRoutes: Routes = [
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
   { path: 'account', component: AccountDetailsComponent, canActivate: [AuthGuard] },
+  { path: 'recover', component: PasswordRecoveryComponent, canActivate: [AuthRecovery] },
   {
     path: 'login', component: LoginComponent
   },
 
-  { path: 'about-us', component: AboutUsComponent },
-  { path: 'contact-us', component: ContactUsComponent },
-  { path: 'promo', component: PromoSummaryComponent },
-  { path: 'terms', component: TermsComponent },
-  // { path: 'counter', component: CounterComponent },
-  // { path: 'fetch-data', component: FetchDataComponent },
+  { path: 'about-us', component: AboutUsComponent, canActivate: [AuthGuard] },
+  { path: 'contact-us', component: ContactUsComponent, canActivate: [AuthGuard] },
+  { path: 'promo', component: PromoSummaryComponent, canActivate: [AuthGuard] },
+  { path: 'terms', component: TermsComponent, canActivate: [AuthGuard] },
 
   {
     path: '',

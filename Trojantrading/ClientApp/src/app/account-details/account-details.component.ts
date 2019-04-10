@@ -6,6 +6,7 @@ import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms'
 import { ShoppingItem } from '../models/shoppingItem';
 import { Order } from '../models/order';
 import { ShoppingCart } from '../models/shoppingCart';
+import { ShareService } from '../services/share.service';
 
 @Component({
   selector: 'app-account-details',
@@ -25,7 +26,8 @@ export class AccountDetailsComponent implements OnInit {
 
   constructor(
     private adminService: AdminService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private shareService: ShareService
     ) { 
     this.userFormGroup = this.formBuilder.group({
       trn: new FormControl("", Validators.compose([Validators.required])),
@@ -75,7 +77,7 @@ export class AccountDetailsComponent implements OnInit {
     this.userFormGroup.get("email").setValue(this.user.email);
     this.userFormGroup.get("phone").setValue(this.user.phone);
     this.userFormGroup.get("mobile").setValue(this.user.mobile);
-    // this.adminService.GetUserByAccount(localStorage.getItem("userName")).subscribe((res: User) => {
+    // this.adminService.GetUserByAccount(this.shareService.readCookie("userName")).subscribe((res: User) => {
     //   this.user = res;
     //   console.info(this.user);
     // },
