@@ -3,6 +3,9 @@ import { AdminService } from '../services/admin.service';
 import { User } from '../models/user';
 import { UserAddress } from '../models/UserAddress';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { ShoppingItem } from '../models/shoppingItem';
+import { Order } from '../models/order';
+import { ShoppingCart } from '../models/shoppingCart';
 
 @Component({
   selector: 'app-account-details',
@@ -13,9 +16,12 @@ export class AccountDetailsComponent implements OnInit {
 
   user: User;
   address: UserAddress;
+  shoppingCart: ShoppingCart;
   title: string = "Your Account";
   userFormGroup: FormGroup;
   userPasswordGroup: FormGroup;
+  shoppingItems: ShoppingItem[];
+  orders: Order[];
 
   constructor(
     private adminService: AdminService,
@@ -59,7 +65,10 @@ export class AccountDetailsComponent implements OnInit {
       status: "active",
       sendEmail: true,
       shippingAddress: this.address,
-      billingAddress: this.address
+      billingAddress: this.address,
+      shoppingItems: this.shoppingItems,
+      orders: this.orders,
+      shoppingCart: this.shoppingCart
     };
 
     this.userFormGroup.get("trn").setValue(this.user.trn);

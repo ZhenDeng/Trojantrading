@@ -20,7 +20,6 @@ export interface User {
     orders: Order[]
     shippingAddress: UserAddress
     billingAddress: UserAddress
-    // shoppingCart: ShoppingCart
     // orders: Order[]
     // UserRoles: UserRole[]
     shoppingItems: ShoppingItem[]
