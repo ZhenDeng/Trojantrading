@@ -1,3 +1,7 @@
+import { ShoppingItem } from './shoppingItem';
+import { ShoppingCart } from "./shoppingCart";
+import { Order } from './order';
+
 import { UserAddress } from "./UserAddress";
 
 export interface User {
@@ -12,10 +16,12 @@ export interface User {
     mobile: string
     status: string
     sendEmail: boolean
+    shoppingCart: ShoppingCart
+    orders: Order[]
     shippingAddress: UserAddress
     billingAddress: UserAddress
     // shoppingCart: ShoppingCart
     // orders: Order[]
     // UserRoles: UserRole[]
-    // ShoppingItems: ShoppingItem[]
+    shoppingItems: ShoppingItem[]
 }
