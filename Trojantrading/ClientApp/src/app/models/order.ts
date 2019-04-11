@@ -11,5 +11,5 @@ export interface Order {
     adminMessage: string
     user: User
     userId: number
-    shoppingItems: ShoppingItem[]
+    shoppingItems: ShoppingItem[]  
 }
