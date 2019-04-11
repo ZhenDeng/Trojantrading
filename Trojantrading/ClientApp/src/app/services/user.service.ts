@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { User } from '../Models/User';
+import { User } from '../models/user';
 import { HttpErrorResponse, HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { Observable } from 'rxjs';
@@ -15,6 +15,11 @@ export class UserService {
 
   userAuthentication(user: any): Observable<UserResponse> {
     return this.http.post(this.base_url + "/authenticate", user, {headers: new HttpHeaders({'Content-Type':'application/json', 'No-Auth': 'True'})})
+      .pipe(catchError(this.handleError));
+  }
+  
+  PasswordRecover(email: string): Observable<UserResponse> {
+    return this.http.get(this.base_url + "/PasswordRecover?email=" + email)
       .pipe(catchError(this.handleError));
   }
 

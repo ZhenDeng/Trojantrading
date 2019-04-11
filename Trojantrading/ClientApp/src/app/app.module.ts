@@ -14,7 +14,18 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { AccountDetailsComponent } from './account-details/account-details.component';
 import { AdminService } from './services/admin.service';
-import { ProductsComponent } from './products/products.component';
+import { NavMenuComponent } from './nav-menu/nav-menu.component';
+import { AboutUsComponent } from './about-us/about-us.component';
+import { ContactUsComponent } from './contact-us/contact-us.component';
+import { PromoSummaryComponent } from './promo-summary/promo-summary.component';
+import { TermsComponent } from './terms/terms.component';
+import { NavbarService } from './services/navbar.service';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTableModule } from '@angular/material/table';
+import { MatCardModule } from '@angular/material/card';
+import { AuthRecovery } from './auth/auth.recovery';
+import { ShareService } from './services/share.service';
+import { PasswordRecoveryComponent } from './password-recovery/password-recovery.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +33,12 @@ import { ProductsComponent } from './products/products.component';
     HomeComponent,
     LoginComponent,
     AccountDetailsComponent,
-    ProductsComponent
+    NavMenuComponent,
+    AboutUsComponent,
+    ContactUsComponent,
+    PromoSummaryComponent,
+    TermsComponent,
+    PasswordRecoveryComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -32,12 +48,18 @@ import { ProductsComponent } from './products/products.component';
     BrowserAnimationsModule,
     MatFormFieldModule,
     ReactiveFormsModule,
-    MatInputModule
+    MatInputModule,
+    MatIconModule,
+    MatTableModule,
+    MatCardModule
   ],
   providers: [
     UserService,
     AdminService,
+    NavbarService,
     AuthGuard,
+    AuthRecovery,
+    ShareService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,

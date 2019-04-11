@@ -1,3 +1,106 @@
-<p>
-  account-details works!
-</p>
+<section class="topbar">
+  <div class="backproductbar">
+    <span class="backtoproduct"><i class="fas fa-arrow-left fa-fw"></i> Back to Product</span>
+  </div>
+</section>
+<div class="accountbody">
+  <div class="page-title-wrapper">
+    <div class="page-title-position">
+      {{title}}
+    </div>
+  </div>
+  <div class="accountinfo">
+    <div class="infobody">
+      <div class="card">
+        <div class="card-header">
+          Account Information
+        </div>
+        <div class="card-body">
+          <div class="detail">
+            <span><b>Customer Number:</b> {{user?.id}}</span>
+            <span><b>Trading Name</b>: {{user?.bussinessName}}</span>
+            <span><b>Tobacco Licence Number</b>: {{user?.trn}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="infobody">
+      <div class="card">
+        <div class="card-header">
+          Shipping Address
+        </div>
+        <div class="card-body">
+          <div class="detail">
+            <span>{{address?.customerName}}</span>
+            <span>{{address?.addressLine1}} {{address?.addressLine2}} {{address?.addressLine3}}</span>
+            <span>{{address?.suburb}} {{address?.state}} {{address?.postcode}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="infobody">
+      <div class="card">
+        <div class="card-header">
+          Billing Address
+        </div>
+        <div class="card-body">
+          <div class="detail">
+            <span>{{address?.customerName}}</span>
+            <span>{{address?.addressLine1}} {{address?.addressLine2}} {{address?.addressLine3}}</span>
+            <span>{{address?.suburb}} {{address?.state}} {{address?.postcode}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="editinfo">
+    <div class="infobody">
+      <div class="card">
+        <div class="card-header">
+          Edit Account Details
+        </div>
+        <div class="card-body">
+          <div class="detail" [formGroup]="userFormGroup">
+            <mat-form-field [floatLabel]="'always'">
+              <input matInput formControlName="trn" placeholder="Tobacco Licence Number" required>
+            </mat-form-field>
+            <mat-form-field [floatLabel]="'always'">
+              <input matInput formControlName="email" placeholder="Email Address" required>
+            </mat-form-field>
+            <mat-form-field [floatLabel]="'always'">
+              <input matInput formControlName="phone" placeholder="Phone" required>
+            </mat-form-field>
+            <mat-form-field [floatLabel]="'always'">
+              <input matInput formControlName="mobile" placeholder="Mobile">
+            </mat-form-field>
+            <button class="btn btn-long">UPDATE</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="infobody">
+      <div class="card">
+        <div class="card-header">
+          Update Your Password
+        </div>
+        <div class="card-body">
+          <div class="detail" [formGroup]="userPasswordGroup">
+            <mat-form-field [floatLabel]="'always'">
+              <input matInput formControlName="password" placeholder="Current Password" required>
+            </mat-form-field>
+            <p>
+              <b>Set a new password<br /></b> Your password Must be at least 6 characters long.
+            </p>
+            <mat-form-field [floatLabel]="'always'">
+              <input matInput formControlName="newpassord" placeholder="New Password" required>
+            </mat-form-field>
+            <mat-form-field [floatLabel]="'always'">
+              <input matInput formControlName="confirmpassord" placeholder="Confirm Password" required>
+            </mat-form-field>
+            <button class="btn btn-long">UPDATE</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

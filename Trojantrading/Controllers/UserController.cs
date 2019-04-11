@@ -43,9 +43,49 @@ namespace Trojantrading.Controllers
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                new Claim(ClaimTypes.Name, userModel.Account)
+                new Claim(ClaimTypes.Name, userModel.Account),
+                //new Claim(ClaimTypes.Role, userModel.UserRole.Role.Name)
                 }),
                 Expires = DateTime.UtcNow.AddMinutes(20),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            var tokenString = tokenHandler.WriteToken(token);
+
+            // return basic user info and token to store client side
+            return Ok(new UserResponse
+            {
+                UserName = userModel.Account,
+                Token = tokenString
+            });
+        }
+
+        [AllowAnonymous]
+        [HttpGet("PasswordRecover")]
+        [NoCache]
+        [ProducesResponseType(typeof(UserResponse), 200)]
+        public IActionResult PasswordRecover(string email)
+        {
+            User userModel = new User()
+            {
+                Account = "admin",
+                Password = "123",
+                Email = email
+            };
+            if (userModel.Account != "admin" || userModel.Password != "123")
+            {
+                return Unauthorized();
+            }
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                new Claim(ClaimTypes.Email, userModel.Email)
+                }),
+                Expires = DateTime.UtcNow.AddMinutes(5),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);

@@ -11,6 +11,7 @@ using System;
 using System.Text;
 using Trojantrading.Models;
 using Trojantrading.Repositories;
+using Trojantrading.Service;
 using Trojantrading.Util;
 
 namespace Trojantrading
@@ -63,6 +64,7 @@ namespace Trojantrading
             services.AddTransient<IPdfBoardRepository, PdfBoardRepository>();
             services.AddTransient<IEmailRepository, EmailRepository>();
             services.AddTransient<IShoppingItemRepository, ShoppingItemRepository>();
+            services.AddTransient<IShare, Share>();
 
             //service util
             services.AddTransient<SecurityUtil, SecurityUtil>();

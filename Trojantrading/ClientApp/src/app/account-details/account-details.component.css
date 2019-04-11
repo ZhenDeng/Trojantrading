@@ -1,0 +1,122 @@
+.topbar {
+  background: #eeede1;
+  color: #0a0a0a88;
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.accountbody{
+  padding: 20px;
+}
+
+.accountinfo{
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.editinfo{
+  display: flex;
+  flex-flow: row wrap;
+  margin-top:50px
+}
+
+.backproductbar{
+  height: 23px;
+  margin-left: 20px;
+  margin-top: 38px;
+}
+
+.backtoproduct {
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.backtoproduct:hover {
+  color: #337ab7;
+}
+
+.page-title-wrapper, .page-main-wrapper {
+  padding: 33px 5px 53px 53px;
+  font-size: 4.5rem;
+  line-height: 1.5rem;
+  vertical-align: middle;
+}
+
+.page-title-position {
+  padding-bottom: 0px;
+  width: 100%;
+  display: inline-block;
+  padding: 0px;
+  text-transform: capitalize;
+  font-weight: 300;
+}
+
+.infobody{
+  flex: 2;
+  padding-left: 55px;
+}
+
+.card{
+  width: 80%;
+  height: 100%;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: #fff;
+  background-clip: border-box;
+  border: 1px solid rgba(0,0,0,.125);
+  border-radius: .25rem;
+}
+
+.card-header {
+  padding: .75rem 1.25rem;
+  margin-bottom: 0;
+  background-color: rgba(0,0,0,.03);
+  border-bottom: 1px solid rgba(0,0,0,.125);
+  text-align: center;
+}
+
+.card-body {
+  -webkit-box-flex: 1;
+  -ms-flex: 1 1 auto;
+  flex: 1 1 auto;
+  padding: 1.25rem;
+  text-align: center;
+}
+
+.checkout-header-edit {
+  float: right;
+  margin-left: 5px;
+}
+
+.checkout-header-title {
+  color: white;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.detail{
+  color: #343535;
+  font-size: 17px;
+}
+
+.card-header{
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.detail span {
+  display: block;
+}
+
+:host /deep/ .mat-form-field{
+  width: 100%;
+}

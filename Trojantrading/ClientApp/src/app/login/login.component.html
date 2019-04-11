@@ -11,7 +11,7 @@
       Café Crème, Colts, Borkum Riff, Cricket and Ventti.</p>
   </section>
   <div class="bottom">
-    <div class="login-box" [formGroup]="userFormGroup">
+    <div class="login-box" [formGroup]="userFormGroup" *ngIf="!sentEmailField">
       <p>MEMBER LOGIN</p>
       <mat-form-field [floatLabel]="'always'" class="col-md-12">
         <input matInput formControlName="account" placeholder="USERNAME">
@@ -20,7 +20,13 @@
         <input matInput formControlName="password" placeholder="PASSWORD">
       </mat-form-field>
       <button class="btn btn-long" (click)="onSubmit()">LOGIN IN</button>
-      <button class="btn btn-long">FORGETTEN PASSWORD?</button>
+      <button class="btn btn-long" (click)="passwordRecover()">FORGETTEN PASSWORD?</button>
+    </div>
+    <div class="login-box" *ngIf="sentEmailField">
+      <mat-form-field [floatLabel]="'always'" class="col-md-12">
+        <input matInput [(ngModel)]="email" placeholder="Your Email" required>
+      </mat-form-field>
+      <button class="btn btn-long" (click)="sendPasswordRecoveryEmail()">SENT</button>
     </div>
   </div>
   <p class="footer">© Copyright 2017 Scandinavian Tobacco Group Australia Pty Ltd • <a href="//digitalbridge.com.au"

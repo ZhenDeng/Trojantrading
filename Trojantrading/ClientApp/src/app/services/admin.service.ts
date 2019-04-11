@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators/catchError';
-import { UserResponse, ApiResponse } from '../models/ApiResponse';
-import { User } from '../Models/User';
+import { ApiResponse } from '../models/ApiResponse';
+import { User } from '../models/user';
 
 @Injectable()
 export class AdminService {
@@ -12,7 +12,7 @@ export class AdminService {
 
   constructor(private http: HttpClient) { }
 
-  GetUserByAccount(userName: string): Observable<UserResponse> {
+  GetUserByAccount(userName: string): Observable<User> {
     return this.http.get(this.base_url + "/GetUserByAccount?userName=" + userName)
       .pipe(catchError(this.handleError));
   }

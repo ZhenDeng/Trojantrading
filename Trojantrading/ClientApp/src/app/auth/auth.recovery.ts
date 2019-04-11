@@ -4,13 +4,13 @@ import { Observable } from 'rxjs/Observable';
 import { ShareService } from '../services/share.service';
 
 @Injectable()
-export class AuthGuard implements CanActivate {
+export class AuthRecovery implements CanActivate {
   constructor(private router: Router, private shareService: ShareService){}
 
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): boolean {
-      if(this.shareService.readCookie("userToken")) {
+      if(this.shareService.readCookie("recoverToken")) {
         return true;
       }
       else{
@@ -18,6 +18,5 @@ export class AuthGuard implements CanActivate {
         return false;
       }
   }
-
 
 }
