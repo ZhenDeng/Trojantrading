@@ -194,3 +194,7 @@ a.button {
 .button-ed.disabled-light-bg {
     opacity: 0.4;
 }
+
+a:hover{
+    text-decoration: none !important;
+}
