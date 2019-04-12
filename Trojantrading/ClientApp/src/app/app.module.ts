@@ -12,6 +12,7 @@ import { AuthInterceptor } from './auth/auth.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatTabsModule } from '@angular/material';
 import { AccountDetailsComponent } from './account-details/account-details.component';
 import { AdminService } from './services/admin.service';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
@@ -26,6 +27,8 @@ import { MatCardModule } from '@angular/material/card';
 import { AuthRecovery } from './auth/auth.recovery';
 import { ShareService } from './services/share.service';
 import { PasswordRecoveryComponent } from './password-recovery/password-recovery.component';
+import { RouterModule } from '@angular/router';
+import { ProductsModule } from './products/products.module';
 
 @NgModule({
   declarations: [
@@ -51,7 +54,10 @@ import { PasswordRecoveryComponent } from './password-recovery/password-recovery
     MatInputModule,
     MatIconModule,
     MatTableModule,
-    MatCardModule
+    MatCardModule,
+    RouterModule,
+    MatTabsModule,
+    ProductsModule
   ],
   providers: [
     UserService,

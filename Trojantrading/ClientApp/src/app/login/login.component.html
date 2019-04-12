@@ -23,10 +23,21 @@
       <button class="btn btn-long" (click)="passwordRecover()">FORGETTEN PASSWORD?</button>
     </div>
     <div class="login-box" *ngIf="sentEmailField">
-      <mat-form-field [floatLabel]="'always'" class="col-md-12">
-        <input matInput [(ngModel)]="email" placeholder="Your Email" required>
-      </mat-form-field>
-      <button class="btn btn-long" (click)="sendPasswordRecoveryEmail()">SENT</button>
+      <ng-container *ngIf="!showResetText">
+        <p>Forgot your password?<br> Please enter your information below.</p>
+        <mat-form-field [floatLabel]="'always'" class="col-md-12">
+          <input matInput [(ngModel)]="email" placeholder="Your Email" required>
+        </mat-form-field>
+        <button class="btn btn-long sendresetemail" (click)="sendPasswordRecoveryEmail()">SENT</button>
+      </ng-container>
+      <ng-container *ngIf="showResetText">
+        <p>Email has been sent.</p> 
+        <p class="resettext">Email for password reset has been sent to your account:<br>
+            a@b.com<br>
+          Please follow the instructions in the Email to reset your password. If you do not receive an E-mail, check your spam mail box.
+        </p>
+        <button class="btn btn-long" (click)="backToLogin()">Back To Login</button>
+      </ng-container>
     </div>
   </div>
   <p class="footer">© Copyright 2017 Scandinavian Tobacco Group Australia Pty Ltd • <a href="//digitalbridge.com.au"
