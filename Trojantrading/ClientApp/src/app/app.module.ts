@@ -12,7 +12,7 @@ import { AuthInterceptor } from './auth/auth.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatTabsModule } from '@angular/material';
+import { MatTabsModule, MatTableModule } from '@angular/material';
 import { AccountDetailsComponent } from './account-details/account-details.component';
 import { AdminService } from './services/admin.service';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
@@ -22,7 +22,6 @@ import { PromoSummaryComponent } from './promo-summary/promo-summary.component';
 import { TermsComponent } from './terms/terms.component';
 import { NavbarService } from './services/navbar.service';
 import { MatIconModule } from '@angular/material/icon';
-import { MatTableModule } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
 import { AuthRecovery } from './auth/auth.recovery';
 import { ShareService } from './services/share.service';
@@ -52,8 +51,8 @@ import { ProductsModule } from './products/products.module';
     MatFormFieldModule,
     ReactiveFormsModule,
     MatInputModule,
-    MatIconModule,
     MatTableModule,
+    MatIconModule,
     MatCardModule,
     RouterModule,
     MatTabsModule,

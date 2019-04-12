@@ -1,3 +1,41 @@
 nav a{
 	width: 25%;
 }
+
+h4{
+	color: gray;
+	padding-bottom:15px;
+}
+.product-wrapper{
+	padding: 20px;
+	background: #eeede1;
+}
+/* Overwrite default google material styles */
+
+::ng-deep .mat-tab-link.mat-tab-label-active{
+	background: #eeede1!important;
+	opacity: 1!important;
+}
+
+::ng-deep .mat-cell, .mat-header-cell{
+	padding:15px;
+}
+
+.filter-wrapper{
+	width: 300px;
+	display: block;
+	padding-bottom:25px;
+}
+.mat-table_4fex{
+	flex:4
+}
+.example-container input{
+	width:50%;
+}
+.example-container button{
+	background-color: #C20047;
+	color: rgb(255, 255, 255);
+	padding: 5px;
+	line-height: 14px;
+	border: 1px solid #C20047;
+}
