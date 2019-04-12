@@ -13,8 +13,6 @@ import { AuthRecovery } from './auth/auth.recovery';
 
 /* 
 Don't use loadChildren: () => ProductDetailModule. 
-Don't do that, prod build will fail, this is just a workaround.
-Disable Angular Lazy Load Modules as it is not working in our application. Will inspect in the future if find solution to fix the bugs. 
 */
 const appRoutes: Routes = [
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
@@ -28,6 +26,7 @@ const appRoutes: Routes = [
   { path: 'contact-us', component: ContactUsComponent, canActivate: [AuthGuard] },
   { path: 'promo', component: PromoSummaryComponent, canActivate: [AuthGuard] },
   { path: 'terms', component: TermsComponent, canActivate: [AuthGuard] },
+  // {path: 'product', loadChildren: './products/product.module#ProductsModule'},
 
   {
     path: '',

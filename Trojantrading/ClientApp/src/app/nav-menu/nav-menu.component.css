@@ -36,6 +36,7 @@
 }
 
 .navbar {
+  background: #eeede1;
   border-bottom: 1px solid rgba(0, 0, 0, .1);
   box-shadow: 6px 3px 13px 0px rgba(43, 43, 43, 0.2);
 }
@@ -58,4 +59,14 @@
 
 .navbar-nav li {
   cursor: pointer;
+}
+
+/* overwrite defalut bootstrap styles */
+a{
+  color: #757575;
+}
+.nav>li>a:focus, .nav>li>a:hover {
+  color: #337ab7;
+  text-decoration: none;
+  background-color:transparent;
 }
