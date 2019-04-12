@@ -4,6 +4,6 @@ export interface UserResponse {
 }
 
 export interface ApiResponse {
-  Status: string
-  Message: string
+  status: string
+  message: string
 }

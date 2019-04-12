@@ -1,7 +1,9 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
 
@@ -10,10 +12,12 @@ namespace Trojantrading.Service
     public class Share : IShare
     {
         private readonly ILogger _logger;
+        private readonly IConfiguration _configuration;
 
-        public Share(ILogger logger)
+        public Share(ILogger<Share> logger, IConfiguration configuration)
         {
             _logger = logger;
+            _configuration = configuration;
         }
 
         public bool SendEmail(string from, string to, string subject, string message, string cc = null, string bcc = null, bool isHTML = false, List<Attachment> attachments = null, string fromAddressDisplayName = "", string sendingApplication = "Email Service Application")
@@ -22,7 +26,11 @@ namespace Trojantrading.Service
 
             try
             {
-                SmtpClient client = new SmtpClient("bulk-email.dickerdata.int.au");
+                SmtpClient client = new SmtpClient("smtp.gmail.com", 587)
+                {
+                    Credentials = new NetworkCredential("jxyctl@gmail.com", "328065420google"),
+                    EnableSsl = true
+                };
                 //MailMessage emailMessage = new MailMessage(from, to);
 
                 MailMessage emailMessage = new MailMessage();
@@ -96,6 +104,21 @@ namespace Trojantrading.Service
             }
 
             return isSent;
+        }
+
+        public string GetConfigKey(string keyName, string categoryName = "AppConfig")
+        {
+            string keyValue = null;
+            try
+            {
+                keyValue = _configuration.GetSection(categoryName)[keyName].ToString();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+
+            return keyValue;
         }
     }
 }

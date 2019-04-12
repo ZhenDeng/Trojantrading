@@ -31,7 +31,7 @@ namespace Trojantrading.Controllers
         
 
         [Route("/dashboard")]
-        public async Task<IActionResult> Dashboard()
+        public IActionResult Dashboard()
         {
             string totalUserNumber = _userRepository.GetTotalUserNumber().ToString();//user
             string totalNewUserNumber = _userRepository.GetNewUserNumber().ToString();
@@ -41,7 +41,7 @@ namespace Trojantrading.Controllers
             return null;
         }
 
-        public async Task<IActionResult> GetExcel()
+        public IActionResult GetExcel()
         {
             return null;
         }
@@ -49,18 +49,18 @@ namespace Trojantrading.Controllers
         [HttpGet("GetUserByAccount")]
         [NoCache]
         [ProducesResponseType(typeof(User), 200)]
-        public async Task<IActionResult> GetUserByAccount(string userName)
+        public IActionResult GetUserByAccount(string userName)
         {
-            var userInfo = await _userRepository.Get(userName);
+            var userInfo = _userRepository.Get(userName);
             return Ok(userInfo);
         }
 
         [HttpPost("UpdateUser")]
         [NoCache]
         [ProducesResponseType(typeof(ApiResponse), 200)]
-        public async Task<IActionResult> UpdateUser([FromBody]User user)
+        public IActionResult UpdateUser([FromBody]User user)
         {
-            var result = await _userRepository.Update(user);
+            var result = _userRepository.Update(user);
             return Ok(result);
         }
 

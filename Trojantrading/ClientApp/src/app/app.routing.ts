@@ -19,7 +19,7 @@ Disable Angular Lazy Load Modules as it is not working in our application. Will 
 const appRoutes: Routes = [
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
   { path: 'account', component: AccountDetailsComponent, canActivate: [AuthGuard] },
-  { path: 'recover', component: PasswordRecoveryComponent, canActivate: [AuthRecovery] },
+  { path: 'recover/:token', component: PasswordRecoveryComponent, canActivate: [AuthRecovery] },
   {
     path: 'login', component: LoginComponent
   },

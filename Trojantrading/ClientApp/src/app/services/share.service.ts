@@ -63,7 +63,6 @@ export class ShareService {
     confirmOptions?: string[],
     confirmTheme?: string
   ) => {
-    console.info($(selector));
     $(selector).showValidator(message, messageType, position, isStayOut, isStayAlive, finishTime, confirmCallback, confirmTheme, confirmOptions);
   }
 }
