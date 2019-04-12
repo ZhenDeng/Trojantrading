@@ -45,152 +45,220 @@
     background: white;
 }
 
-.button {
-    cursor: pointer;
-    vertical-align: middle;
+/*end button region*/
+
+/*#region Validator */
+
+.validator-container {
+    display: none;
+    position: absolute;
+    z-index: 9030;
+    background: transparent;
+}
+
+.validator-new {
+    font-size: 12px;
+    position: relative;
+    padding: 8px;
     text-align: center;
-    display: inline-block;
-    border: none;
-    white-space: nowrap;
-    /* IE7 Fix */
-    *zoom: 1;
-    *display: inline;
+    max-width: 200px;
 }
 
-.button.stretch {
-    display: block;
+.validator-new.validator-red {
+    color: white;
+    background: #CA1845;
+    border: 1px solid #A01B3C;
 }
 
-.button.disabled-dark-bg, .button.disabled-light-bg {
+.validator-new.validator-green {
+    color: white;
+    background: #459A45;
+    border: 1px solid #2B5E2B;
+}
+
+.validator-new.validator-dark {
+    color: white;
+    background-color: #343535;
+    border: 1px solid #2B5E2B;
+}
+
+.validator-new.validator-light {
+    color: black;
+    background-color: #E7E6E3;
+    border: 1px solid #2B5E2B;
+}
+
+.validator-new:before, .validator-new:after {
+    content: "";
+    position: absolute;
+    height: 0;
+    width: 0;
+    border: solid transparent;
     pointer-events: none;
 }
 
-a.button {
-    text-decoration: none;
+.validator-new.validator-top:before, .validator-new.validator-top:after {
+    top: 100%;
+    left: 50%;
 }
 
-.button-red, .button-dark, .button-ed, .button-medium {
-    color: white;
+.validator-new.validator-right:before, .validator-new.validator-right:after {
+    right: 100%;
+    top: 50%;
 }
 
-.button-large, .button-mid, .button-small {
-    line-height: normal;
-    min-width: 60px;
-    /* IE7 Fix */
-    min-width: 0;
+.validator-new.validator-bottom:before, .validator-new.validator-bottom:after {
+    bottom: 100%;
+    left: 50%;
 }
 
-.button-large, .button-mid {
-    font-size: 14px;
-    border-radius: 5px;
+.validator-new.validator-left:before, .validator-new.validator-left:after {
+    left: 100%;
+    top: 50%;
 }
 
-.button-large {
-    padding: 12px 24px;
+.validator-new.validator-top:after, .validator-new.validator-right:after, .validator-new.validator-bottom:after, .validator-new.validator-left:after {
+    border-width: 7px;
 }
 
-.button-mid {
-    padding: 9px 16px;
+.validator-new.validator-top:after, .validator-new.validator-bottom:after {
+    margin-left: -7px;
 }
 
-.button-small {
-    padding: 5px 10px;
-    font-size: 12px;
-    border-radius: 3px;
+.validator-new.validator-right:after, .validator-new.validator-left:after {
+    margin-top: -7px;
 }
 
-.button-tiny {
-    padding: 3px 10px;
-    font-size: 9px;
-    border-radius: 1px;
-    line-height: normal;
+.validator-new.validator-red:after {
+    border-color: rgba(202, 24, 69, 0);
 }
 
-/* The below color change should also be reflected in JS ($('.button-red').hover) */
-
-.button-red {
-    background-color: #CA1845;
-    border: 1px #CA1845 solid;
-    display: block;
-    margin: 0 auto;
+.validator-new.validator-red.validator-top:after {
+    border-top-color: #CA1845;
 }
 
-.button-red.disabled-dark-bg {
-    opacity: 0.8;
+.validator-new.validator-red.validator-right:after {
+    border-right-color: #CA1845;
 }
 
-.button-red.disabled-light-bg {
-    opacity: 0.4;
+.validator-new.validator-red.validator-bottom:after {
+    border-bottom-color: #CA1845;
 }
 
-/* The below color change should also be reflected in JS ($('.button-dark').hover) */
-
-.button-dark {
-    background-color: #343535;
+.validator-new.validator-red.validator-left:after {
+    border-left-color: #CA1845;
 }
 
-.button-dark.disabled-dark-bg {
-    opacity: 0.8;
+.validator-new.validator-green:after {
+    border-color: rgba(69, 154, 69, 0);
 }
 
-.button-dark.disabled-light-bg {
-    opacity: 0.4;
+.validator-new.validator-green.validator-top:after {
+    border-top-color: #459A45;
 }
 
-/* The below color change should also be reflected in JS ($('.button-medium').hover) */
-
-.button-medium {
-    background-color: #484847;
+.validator-new.validator-green.validator-right:after {
+    border-right-color: #459A45;
 }
 
-.button-medium.disabled-dark-bg {
-    opacity: 0.8;
+.validator-new.validator-green.validator-bottom:after {
+    border-bottom-color: #459A45;
 }
 
-.button-medium.disabled-light-bg {
-    opacity: 0.4;
+.validator-new.validator-green.validator-left:after {
+    border-left-color: #459A45;
 }
 
-/* The below color change should also be reflected in JS ($('.button-light').hover) */
-
-.button-light {
-    background-color: #E7E6E3;
-    color: black;
+.validator-new.validator-dark:after {
+    border-color: rgba(52, 53, 53, 0);
 }
 
-.button-light.disabled-dark-bg {
-    opacity: 0.8;
+.validator-new.validator-dark.validator-top:after {
+    border-top-color: #343535;
 }
 
-.button-light.disabled-light-bg {
-    opacity: 0.4;
+.validator-new.validator-dark.validator-right:after {
+    border-right-color: #343535;
 }
 
-/* The below color change should also be reflected in JS ($('.button-clear-dark').hover) */
-
-.button-clear-dark {
-    background-color: transparent;
-    color: white;
+.validator-new.validator-dark.validator-bottom:after {
+    border-bottom-color: #343535;
 }
 
-.button-clear.disabled-dark-bg {
-    opacity: 0.8;
+.validator-new.validator-dark.validator-left:after {
+    border-left-color: #343535;
 }
 
-.button-clear.disabled-light-bg {
-    opacity: 0.4;
+.validator-new.validator-light:after {
+    border-color: rgba(231, 230, 227, 0);
 }
 
-/* The below color change should also be reflected in JS ($('.button-ed').hover) */
-
-.button-ed {
-    background-color: #FF6201;
+.validator-new.validator-light.validator-top:after {
+    border-top-color: #E7E6E3;
 }
 
-.button-ed.disabled-dark-bg {
-    opacity: 0.8;
+.validator-new.validator-light.validator-right:after {
+    border-right-color: #E7E6E3;
 }
 
-.button-ed.disabled-light-bg {
-    opacity: 0.4;
+.validator-new.validator-light.validator-bottom:after {
+    border-bottom-color: #E7E6E3;
 }
+
+.validator-new.validator-light.validator-left:after {
+    border-left-color: #E7E6E3;
+}
+
+.validator-new.validator-top:before, .validator-new.validator-right:before, .validator-new.validator-bottom:before, .validator-new.validator-left:before {
+    border-width: 8px;
+}
+
+.validator-new.validator-top:before, .validator-new.validator-bottom:before {
+    margin-left: -8px;
+}
+
+.validator-new.validator-right:before, .validator-new.validator-left:before {
+    margin-top: -8px;
+}
+
+.validator-new.validator-red:before {
+    border-color: rgba(160, 27, 60, 0);
+}
+
+.validator-new.validator-red.validator-top:before {
+    border-top-color: #A01B3C;
+}
+
+.validator-new.validator-red.validator-right:before {
+    border-right-color: #A01B3C;
+}
+
+.validator-new.validator-red.validator-bottom:before {
+    border-bottom-color: #A01B3C;
+}
+
+.validator-new.validator-red.validator-left:before {
+    border-left-color: #A01B3C;
+}
+
+.validator-new.validator-green:before {
+    border-color: rgba(50, 109, 50, 0);
+}
+
+.validator-new.validator-green.validator-top:before {
+    border-top-color: #326D32;
+}
+
+.validator-new.validator-green.validator-right:before {
+    border-right-color: #326D32;
+}
+
+.validator-new.validator-green.validator-bottom:before {
+    border-bottom-color: #326D32;
+}
+
+.validator-new.validator-green.validator-left:before {
+    border-left-color: #326D32;
+}
+
+/*#endregion*/
