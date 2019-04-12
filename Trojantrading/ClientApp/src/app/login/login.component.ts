@@ -6,6 +6,9 @@ import { UserResponse } from '../models/ApiResponse';
 import { NavbarService } from '../services/navbar.service';
 import { ShareService } from '../services/share.service';
 
+declare var jquery: any;
+declare var $: any;
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -16,6 +19,7 @@ export class LoginComponent implements OnInit {
   userFormGroup: FormGroup;
   sentEmailField: boolean = false;
   email: string;
+  showResetText: boolean = false;
 
   constructor(
     private userService: UserService,
@@ -50,14 +54,22 @@ export class LoginComponent implements OnInit {
     this.sentEmailField = true;
   }
 
+  backToLogin(): void {
+    this.sentEmailField = false;
+    this.showResetText = false;
+  }
+
   sendPasswordRecoveryEmail(): void {
-    if(this.email){
+    if (this.email) {
+      this.showResetText = true;
       this.userService.PasswordRecover(this.email).subscribe((res: UserResponse) => {
-        this.sentEmailField = false;
+
       },
         (error: any) => {
           console.info(error);
         });
+    } else {
+      this.shareService.showError(".sendresetemail", "Please enter your email address", "right");
     }
   }
 

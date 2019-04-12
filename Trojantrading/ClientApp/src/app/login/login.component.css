@@ -11,7 +11,7 @@
   width: 100%;
   z-index: 2;
   text-align: center;
-  height: 1057px;
+  height: 1040px;
 }
 
 .bottom {
@@ -21,7 +21,7 @@
   min-height: 200px;
   z-index: 2;
   text-align: center;
-  height: 500px;
+  height: 480px;
 }
 
 #logo span {
@@ -74,6 +74,10 @@
 .footer {
   color: #eeede1;
   margin-top: 11px;
+}
+
+.resettext{
+  font-weight: 100 !important;
 }
 
 :host /deep/ .mat-form-field-underline {

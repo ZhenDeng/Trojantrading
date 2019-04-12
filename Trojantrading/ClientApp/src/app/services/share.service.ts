@@ -1,4 +1,11 @@
+/// <reference path="../../../node_modules/@types/jquery/index.d.ts" />
+/// <reference path="../../../node_modules/@types/jqueryui/index.d.ts" />
+/// <reference path="./jquery.extension.d.ts" />
+
 import { Injectable } from '@angular/core';
+
+declare var jquery: any;
+declare var $: any;
 
 @Injectable()
 export class ShareService {
@@ -26,5 +33,37 @@ export class ShareService {
       if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
     }
     return null;
+  }
+
+  showError = (
+    selector: string,
+    message: string,
+    position: 'top' | 'right' | 'bottom' | 'left',
+  ) => {
+    this.showValidator(selector, message, position, 'error', true, true);
+  }
+
+  showSuccess = (
+    selector: string,
+    message: string,
+    position: 'top' | 'right' | 'bottom' | 'left',
+  ) => {
+    this.showValidator(selector, message, position, 'success', true, false);
+  }
+
+  showValidator = (
+    selector: string,
+    message: string,
+    position: 'top' | 'right' | 'bottom' | 'left',
+    messageType: 'success' | 'error' | 'confirm' | 'warning',
+    isStayOut: boolean = false,
+    isStayAlive: boolean = false,
+    finishTime?: number,
+    confirmCallback?: Function,
+    confirmOptions?: string[],
+    confirmTheme?: string
+  ) => {
+    console.info($(selector));
+    $(selector).showValidator(message, messageType, position, isStayOut, isStayAlive, finishTime, confirmCallback, confirmTheme, confirmOptions);
   }
 }
