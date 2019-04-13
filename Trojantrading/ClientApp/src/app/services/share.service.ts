@@ -3,12 +3,26 @@
 /// <reference path="./jquery.extension.d.ts" />
 
 import { Injectable } from '@angular/core';
+import { Product } from '../models/Product';
 
 declare var jquery: any;
 declare var $: any;
 
 @Injectable()
 export class ShareService {
+
+  product: Product[] = [
+    {id: 1, name: "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.", originalPrice: 1.5, vipTwoPrice: 1.5, vipOnePrice: 1.0079, category: 'H', button: "Update Cart"},
+    {id: 1, name:  "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.", originalPrice: 1.5, vipTwoPrice: 1.5, vipOnePrice: 4.0026, category: 'He', button: "Update Cart"},
+    {id: 1, name:  "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.", originalPrice: 1.5, vipTwoPrice: 1.5, vipOnePrice: 6.941, category: 'Li', button: "Update Cart"},
+    {id: 1, name:  "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.", originalPrice: 1.5, vipTwoPrice: 1.5, vipOnePrice: 9.0122, category: 'Be', button: "Update Cart"},
+    {id: 1, name:  "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.", originalPrice: 1.5, vipTwoPrice: 1.5, vipOnePrice: 10.811, category: 'B', button: "Update Cart"},
+    {id: 1, name:  "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.", originalPrice: 1.5, vipTwoPrice: 1.5, vipOnePrice: 12.0107, category: 'C', button: "Update Cart"},
+    {id: 1, name:  "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.", originalPrice: 1.5, vipTwoPrice: 1.5, vipOnePrice: 14.0067, category: 'N', button: "Update Cart"},
+    {id: 1, name:  "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.", originalPrice: 1.5, vipTwoPrice: 1.5, vipOnePrice: 15.9994, category: 'O', button: "Update Cart"},
+    {id: 1, name:  "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.", originalPrice: 1.5, vipTwoPrice: 1.5, vipOnePrice: 18.9984, category: 'F', button: "Update Cart"},
+    {id: 1, name:  "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.", originalPrice: 1.5, vipTwoPrice: 1.5, vipOnePrice: 20.1797, category: 'Ne', button: "Update Cart"},
+  ]
 
   constructor() { }
 

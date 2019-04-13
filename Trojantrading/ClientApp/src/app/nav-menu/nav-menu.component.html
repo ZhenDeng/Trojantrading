@@ -45,8 +45,16 @@
         <ul class="nav navbar-nav navbar-right">
           <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
             <a [routerLink]='["/account"]'>
-              <i class="fas fa-user fa-fw"></i> Your Account
+              <i class="fas fa-user fa-fw"></i> My Account
             </a>
+          </li>
+          <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }' ngbDropdown #myDrop="ngbDropdown">
+            <a ngbDropdownToggle [routerLink]='["/cart"]' class="btn btn-outline-primary" id="dropdownConfig" (mouseenter)="myDrop.open()">
+              <i class="fas fa-shopping-cart fa-fw"></i> My Cart
+            </a>
+            <div ngbDropdownMenu aria-labelledby="dropdownConfig" (mouseleave)="myDrop.close()">
+
+            </div>
           </li>
           <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
             <a [routerLink]='["/account"]'>
@@ -62,7 +70,7 @@
       </div>
     </div>
   </nav>
-  <section class="container-fluid">
+  <section class="container-fluid" *ngIf="nav.tabVisible">
     <div class="row navbar-button">
       <div class="col-sm-12 navbar-button_flexWrapper">
         <button *ngFor="let cig of testJsonObj">{{cig?.type}}</button>

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NavbarService } from '../services/navbar.service';
 
 @Component({
   selector: 'app-promo-summary',
@@ -7,9 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PromoSummaryComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private nav: NavbarService
+  ) { }
 
   ngOnInit() {
+    this.nav.hideTab();
   }
 
 }
