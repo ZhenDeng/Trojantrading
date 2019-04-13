@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Trojantrading.Models;
 using Trojantrading.Repositories;
+using Trojantrading.Service;
 using Trojantrading.Util;
 
 namespace Trojantrading.Controllers
@@ -18,11 +19,16 @@ namespace Trojantrading.Controllers
     public class UserController : Controller
     {
         private readonly IUserRepository _userRepository;
+        private readonly IShare _share;
         private readonly AppSettings _appSettings;
 
-        public UserController(IUserRepository userRepository, IOptions<AppSettings> appSettings)
+        public UserController(
+            IUserRepository userRepository, 
+            IOptions<AppSettings> appSettings,
+            IShare share)
         {
             _userRepository = userRepository;
+            _share = share;
             _appSettings = appSettings.Value;
         }
 
@@ -90,13 +96,32 @@ namespace Trojantrading.Controllers
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var tokenString = tokenHandler.WriteToken(token);
-
+            bool isUpdated = _share.SendEmail(_share.GetConfigKey("EmailFrom"), email, "Trojantrading Password Reset", string.Format("Click url below to reset password:\r\n\r\n{0}", "http://localhost:56410/recover/"+tokenString));
             // return basic user info and token to store client side
             return Ok(new UserResponse
             {
                 UserName = userModel.Account,
                 Token = tokenString
             });
+        }
+
+        [AllowAnonymous]
+        [HttpGet("ValidateEmail")]
+        [NoCache]
+        [ProducesResponseType(typeof(ApiResponse), 200)]
+        public IActionResult ValidateEmail(string email)
+        {
+            var result = _userRepository.ValidateEmail(email);
+            return Ok(result);
+        }
+
+        [HttpGet("UpdatePassword")]
+        [NoCache]
+        [ProducesResponseType(typeof(ApiResponse), 200)]
+        public async Task<IActionResult> UpdatePassword(string userName, string password)
+        {
+            var result = await _userRepository.UpdatePassword(userName, password);
+            return Ok(result);
         }
 
         [Route("/info")]

@@ -17,8 +17,11 @@ Don't use loadChildren: () => ProductDetailModule.
 const appRoutes: Routes = [
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
   { path: 'account', component: AccountDetailsComponent, canActivate: [AuthGuard] },
-  { path: 'recover', component: PasswordRecoveryComponent, canActivate: [AuthRecovery] },
-  { path: 'login', component: LoginComponent },
+  { path: 'recover/:token', component: PasswordRecoveryComponent, canActivate: [AuthRecovery] },
+  {
+    path: 'login', component: LoginComponent
+  },
+
   { path: 'about-us', component: AboutUsComponent, canActivate: [AuthGuard] },
   { path: 'contact-us', component: ContactUsComponent, canActivate: [AuthGuard] },
   { path: 'promo', component: PromoSummaryComponent, canActivate: [AuthGuard] },

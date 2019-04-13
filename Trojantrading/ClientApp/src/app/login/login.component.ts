@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from '../services/user.service';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
-import { UserResponse } from '../models/ApiResponse';
+import { UserResponse, ApiResponse } from '../models/ApiResponse';
 import { NavbarService } from '../services/navbar.service';
 import { ShareService } from '../services/share.service';
 
@@ -17,8 +17,8 @@ declare var $: any;
 export class LoginComponent implements OnInit {
 
   userFormGroup: FormGroup;
+  userEmailGroup: FormGroup;
   sentEmailField: boolean = false;
-  email: string;
   showResetText: boolean = false;
 
   constructor(
@@ -30,6 +30,10 @@ export class LoginComponent implements OnInit {
     this.userFormGroup = this.formBuilder.group({
       account: new FormControl("", Validators.compose([Validators.required])),
       password: new FormControl("", Validators.compose([Validators.required]))
+    });
+
+    this.userEmailGroup = this.formBuilder.group({
+      email: new FormControl("", Validators.compose([Validators.required, Validators.email])),
     });
   }
 
@@ -60,17 +64,28 @@ export class LoginComponent implements OnInit {
   }
 
   sendPasswordRecoveryEmail(): void {
-    if (this.email) {
-      this.showResetText = true;
-      this.userService.PasswordRecover(this.email).subscribe((res: UserResponse) => {
-
+    if (this.userEmailGroup.get("email").valid) {
+      this.userService.ValidateEmail(this.userEmailGroup.get("email").value).subscribe((res: ApiResponse) => {
+        if(res && res.status == "success"){
+          console.info("aaa");
+          this.userService.PasswordRecover(this.userEmailGroup.get("email").value).subscribe((res: UserResponse) => {
+            this.shareService.createCookie("recoverToken", res.token, 5);
+            this.shareService.createCookie("recoverUser", res.userName, 5);
+            this.showResetText = true;
+          },
+            (error: any) => {
+              console.info(error);
+            });
+        }
+        else{
+          this.shareService.showError(".sendresetemail", res.message, "right");
+        }
       },
         (error: any) => {
           console.info(error);
         });
     } else {
-      this.shareService.showError(".sendresetemail", "Please enter your email address", "right");
+      this.shareService.showError(".sendresetemail", "Please enter valid email address", "right");
     }
   }
-
 }
