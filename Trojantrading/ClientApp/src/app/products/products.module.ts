@@ -7,6 +7,7 @@ import { NewProductComponent } from './new-product/new-product.component';
 import { PromotionComponent } from './promotion/promotion.component';
 import { SoldOutComponent } from './sold-out/sold-out.component';
 import { ProductsComponent } from './products.component';
+import { ProductService } from '../services/product.service';
 
 
 @NgModule({
@@ -23,6 +24,8 @@ import { ProductsComponent } from './products.component';
     PromotionComponent,
     SoldOutComponent
   ],
-  providers: []
+  providers: [
+    ProductService
+  ]
 })
 export class ProductsModule {}

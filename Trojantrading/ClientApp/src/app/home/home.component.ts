@@ -1,8 +1,9 @@
+import { Product } from './../models/Product';
+import { ProductService } from './../services/product.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Menu } from '../models/menu';
 import { Router } from '@angular/router';
 import { NavbarService } from '../services/navbar.service';
-import { Product } from '../models/Product';
 import { ShareService } from '../services/share.service';
 
 @Component({
@@ -12,6 +13,10 @@ import { ShareService } from '../services/share.service';
 
 })
 export class HomeComponent implements OnInit, OnDestroy {
+
+
+  allProducts: Product[] = [];
+  
 
   displayedColumns: string[] = ['name', 'category', 'originalPrice', 'button'];
 
@@ -45,17 +50,25 @@ export class HomeComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private shareService: ShareService,
-    public nav: NavbarService
+    public nav: NavbarService,
+    private productService: ProductService
   ) {}
 
   ngOnInit() {
-    this.dataSource = this.shareService.product;
-    this.nav.showTab();
+
     let currentURL = this.router.url;
     if(currentURL != '/home'){
       this.isHomeComponentDestroyed = true;
     }
     
+    this.getAllProducts();
+  }
+
+  getAllProducts() {
+    console.info('products');
+    this.productService.getAllProducts().subscribe((value: Product[]) =>{
+        this.allProducts = value;
+    });
   }
 
   ngOnDestroy(){

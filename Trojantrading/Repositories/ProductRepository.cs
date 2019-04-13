@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Trojantrading.Models;
 
@@ -8,6 +9,7 @@ namespace Trojantrading.Repositories
     {
         Product Add(Product product);
         Product Get(int id);
+        List<Product> GetAllProducts();
         void Delete(int id);
         int GetTotalProducts();
     }
@@ -35,6 +37,15 @@ namespace Trojantrading.Repositories
                 .Where(p => p.Id == id)
                 .FirstOrDefault();
             return product;
+        }
+
+        public List<Product> GetAllProducts()
+        {
+            List<Product> allProducts = new List<Product>();
+
+            allProducts = trojantradingDbContext.Products.ToList();
+
+            return allProducts;
         }
 
         public void Delete(int id)
