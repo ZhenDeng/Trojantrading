@@ -24,38 +24,38 @@
     </span>
 
     <div class="example-container mat-elevation-z8">
-      <mat-table #table [dataSource]="dataSource">
+      <mat-table #table [dataSource]="allProducts">
     
         <!--- Note that these columns can be defined in any order.
               The actual rendered columns are set as a property on the row definition" -->
     
         <!-- description Column -->
-        <ng-container matColumnDef="description">
+        <ng-container matColumnDef="name">
           <mat-header-cell *matHeaderCellDef class="mat-table_4fex">  </mat-header-cell>
-          <mat-cell *matCellDef="let element" class="mat-table_4fex"> {{element.description}} </mat-cell>
+          <mat-cell *matCellDef="let product" class="mat-table_4fex"> {{product.name}} </mat-cell>
         </ng-container>
     
         <!-- wlpPrice Column -->
-        <ng-container matColumnDef="wlpPrice">
+        <ng-container matColumnDef="vipOnePrice">
           <mat-header-cell *matHeaderCellDef> WLP ex. GST </mat-header-cell>
-          <mat-cell *matCellDef="let element"> {{element.wlpPrice}} </mat-cell>
+          <mat-cell *matCellDef="let product"> {{product.vipOnePrice}} </mat-cell>
         </ng-container>
     
         <!-- buyPrice Column -->
-        <ng-container matColumnDef="buyPrice">
+        <ng-container matColumnDef="originalPrice">
           <mat-header-cell *matHeaderCellDef> Buy Price ex. GST </mat-header-cell>
-          <mat-cell *matCellDef="let element"> {{element.buyPrice}} </mat-cell>
+          <mat-cell *matCellDef="let product"> {{product.originalPrice}} </mat-cell>
         </ng-container>
     
         <!-- qty Column -->
         <ng-container matColumnDef="qty">
           <mat-header-cell *matHeaderCellDef>Retail Qty</mat-header-cell>
-          <mat-cell *matCellDef="let element"><input type="text"></mat-cell>
+          <mat-cell *matCellDef="let product"><input type="text"></mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="button">
           <mat-header-cell *matHeaderCellDef>Retail Qty</mat-header-cell>
-          <mat-cell *matCellDef="let element"><button>Update Cart</button></mat-cell>
+          <mat-cell *matCellDef="let product"><button>Update Cart</button></mat-cell>
         </ng-container>
     
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

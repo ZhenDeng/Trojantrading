@@ -6,22 +6,62 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Trojantrading.Repositories;
 using Trojantrading.Models;
+using Trojantrading.Util;
 
 namespace Trojantrading.Controllers
 {
-    [Authorize(Roles = "Admin, User")]
+    [Produces("application/json")]
+    [Route("api/[controller]")]
     public class ProductController : Controller
     {
         private readonly IProductRepository _productRepository;
+        private readonly IOrderRepository _orderRepository;
+        private readonly IUserRepository _userRepository;
 
-        public ProductController(ProductRepository productRepository)
+        public ProductController(
+            IProductRepository productRepository,
+            IOrderRepository orderRepository,
+            IUserRepository userRepository
+            )
         {
-            this._productRepository = productRepository;
+            _productRepository = productRepository;
+            _orderRepository = orderRepository;
+            _userRepository = userRepository;
         }
 
-        public IActionResult GetProducts()
+
+        [HttpGet("GetAllProducts")]
+        [NoCache]
+        [ProducesResponseType(typeof(Product[]), 200)]
+        [ProducesResponseType(typeof(ApiResponse), 400)]
+        public IActionResult GetAllProducts()
         {
-            return null;
+            try
+            {
+                List<Product> products = new List<Product>();
+                //products = _productRepository.GetAllProducts();
+                //dummy data for testing, to be deleted..
+                if (products.Count <= 0)
+                {
+                    products.Add(new Product
+                    {
+                        Id = 10001,
+                        Name = "winfield",
+                        CreatedDate = new DateTime(),
+                        OriginalPrice = 35.05,
+                        VipOnePrice = 32.11,
+                        VipTwoPrice = 31.5,
+                        Category = "Winfield Blue",
+                        ShoppingItemId = 20001
+                    });
+                }
+                return Ok(products.ToArray());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ApiResponse { Status = "false", Message = ex.Message });
+
+            }
         }
         
         [Route("/addproduct")]

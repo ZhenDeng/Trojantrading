@@ -1,3 +1,5 @@
+import { Product } from './../models/Product';
+import { ProductService } from './../services/product.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Menu } from '../models/menu';
 import { Router } from '@angular/router';
@@ -31,9 +33,11 @@ const ELEMENT_DATA: PeriodicElement[] = [
 })
 export class HomeComponent implements OnInit, OnDestroy {
 
-  displayedColumns: string[] = ['description', 'wlpPrice', 'buyPrice', 'qty', 'button'];
+  displayedColumns: string[] = ['name', 'vipOnePrice', 'originalPrice', 'qty', 'button'];
 
   dataSource = ELEMENT_DATA;
+
+  allProducts: Product[] = [];
   
 
   navLinks:Menu[] = [
@@ -63,15 +67,24 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   constructor(
     private router: Router,
+    private productService: ProductService
   ) {}
 
   ngOnInit() {
-    this.dataSource = ELEMENT_DATA;
+    //this.dataSource = ELEMENT_DATA;
     let currentURL = this.router.url;
     if(currentURL != '/home'){
       this.isHomeComponentDestroyed = true;
     }
     
+    this.getAllProducts();
+  }
+
+  getAllProducts() {
+    console.info('products');
+    this.productService.getAllProducts().subscribe((value: Product[]) =>{
+        this.allProducts = value;
+    });
   }
 
   ngOnDestroy(){
