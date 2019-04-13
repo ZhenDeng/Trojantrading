@@ -4,7 +4,6 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Menu } from '../models/menu';
 import { Router } from '@angular/router';
 import { NavbarService } from '../services/navbar.service';
-import { Product } from '../models/Product';
 import { ShareService } from '../services/share.service';
 
 @Component({
@@ -15,9 +14,6 @@ import { ShareService } from '../services/share.service';
 })
 export class HomeComponent implements OnInit, OnDestroy {
 
-
-
-  dataSource = ELEMENT_DATA;
 
   allProducts: Product[] = [];
   
@@ -54,12 +50,12 @@ export class HomeComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private shareService: ShareService,
-    public nav: NavbarService
+    public nav: NavbarService,
     private productService: ProductService
   ) {}
 
   ngOnInit() {
-    this.dataSource = ELEMENT_DATA;
+
     let currentURL = this.router.url;
     if(currentURL != '/home'){
       this.isHomeComponentDestroyed = true;
