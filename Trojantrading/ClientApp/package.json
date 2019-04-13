@@ -25,6 +25,7 @@
     "@angular/platform-browser-dynamic": "^5.2.0",
     "@angular/platform-server": "^5.2.0",
     "@angular/router": "^5.2.0",
+    "@ng-bootstrap/ng-bootstrap": "^1.1.1",
     "@nguniversal/module-map-ngfactory-loader": "^5.0.0-beta.5",
     "@types/jquery": "^3.3.2",
     "@types/jqueryui": "^1.12.2",

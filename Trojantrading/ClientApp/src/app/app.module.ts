@@ -28,6 +28,8 @@ import { ShareService } from './services/share.service';
 import { PasswordRecoveryComponent } from './password-recovery/password-recovery.component';
 import { RouterModule } from '@angular/router';
 import { ProductsModule } from './products/products.module';
+import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -40,7 +42,8 @@ import { ProductsModule } from './products/products.module';
     ContactUsComponent,
     PromoSummaryComponent,
     TermsComponent,
-    PasswordRecoveryComponent
+    PasswordRecoveryComponent,
+    ShoppingCartComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -48,6 +51,7 @@ import { ProductsModule } from './products/products.module';
     FormsModule,
     RoutingModule,
     BrowserAnimationsModule,
+    NgbModule,
     MatFormFieldModule,
     ReactiveFormsModule,
     MatInputModule,

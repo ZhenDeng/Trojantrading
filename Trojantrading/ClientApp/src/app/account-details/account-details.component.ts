@@ -7,6 +7,8 @@ import { ShoppingItem } from '../models/shoppingItem';
 import { Order } from '../models/order';
 import { ShoppingCart } from '../models/shoppingCart';
 import { ShareService } from '../services/share.service';
+import { Router } from '@angular/router';
+import { NavbarService } from '../services/navbar.service';
 
 @Component({
   selector: 'app-account-details',
@@ -27,7 +29,9 @@ export class AccountDetailsComponent implements OnInit {
   constructor(
     private adminService: AdminService,
     private formBuilder: FormBuilder,
-    private shareService: ShareService
+    private shareService: ShareService,
+    private router: Router,
+    public nav: NavbarService
     ) { 
     this.userFormGroup = this.formBuilder.group({
       trn: new FormControl("", Validators.compose([Validators.required])),
@@ -44,6 +48,7 @@ export class AccountDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.nav.hideTab();
     this.address = {
       customerName: "admin",
       addressLine1: "asdasd",
@@ -86,4 +91,7 @@ export class AccountDetailsComponent implements OnInit {
     //   });
   }
 
+  backToProduct(): void{
+    this.router.navigate(["/home"]);
+  }
 }

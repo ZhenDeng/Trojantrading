@@ -10,10 +10,8 @@ import { PromoSummaryComponent } from './promo-summary/promo-summary.component';
 import { TermsComponent } from './terms/terms.component';
 import { PasswordRecoveryComponent } from './password-recovery/password-recovery.component';
 import { AuthRecovery } from './auth/auth.recovery';
+import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
 
-/* 
-Don't use loadChildren: () => ProductDetailModule. 
-*/
 const appRoutes: Routes = [
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
   { path: 'account', component: AccountDetailsComponent, canActivate: [AuthGuard] },
@@ -26,7 +24,7 @@ const appRoutes: Routes = [
   { path: 'contact-us', component: ContactUsComponent, canActivate: [AuthGuard] },
   { path: 'promo', component: PromoSummaryComponent, canActivate: [AuthGuard] },
   { path: 'terms', component: TermsComponent, canActivate: [AuthGuard] },
-  // {path: 'product', loadChildren: './products/product.module#ProductsModule'},
+  { path: 'cart', component: ShoppingCartComponent, canActivate: [AuthGuard] },
 
   {
     path: '',

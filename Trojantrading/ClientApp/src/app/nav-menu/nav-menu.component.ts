@@ -2,11 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { NavbarService } from '../services/navbar.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ShareService } from '../services/share.service';
+import { NgbDropdownConfig } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-nav-menu',
   templateUrl: './nav-menu.component.html',
-  styleUrls: ['./nav-menu.component.css']
+  styleUrls: ['./nav-menu.component.css'],
+  providers: [NgbDropdownConfig]
 })
 export class NavMenuComponent implements OnInit {
 
@@ -26,11 +28,13 @@ export class NavMenuComponent implements OnInit {
     public nav: NavbarService,
     private router: Router,
     private activatedRouter: ActivatedRoute,
-    private shareService: ShareService
+    private shareService: ShareService,
+    private config: NgbDropdownConfig
   ) { }
 
   ngOnInit() {
     this.nav.show();
+    this.nav.showTab();
   }
 
   logOut(): void{
