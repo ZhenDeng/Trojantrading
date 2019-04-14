@@ -25,7 +25,7 @@
                   The actual rendered columns are set as a property on the row definition" -->
 
         <ng-container matColumnDef="name">
-          <mat-header-cell *matHeaderCellDef class="mat-table_3fex"> </mat-header-cell>
+          <mat-header-cell *matHeaderCellDef class="mat-table_3fex"> Description </mat-header-cell>
           <mat-cell *matCellDef="let element" class="mat-table_3fex"> <span class="productid">#{{element.id}}</span>{{element.name}} </mat-cell>
         </ng-container>
 
@@ -38,12 +38,17 @@
         <!-- buyPrice Column -->
         <ng-container matColumnDef="originalPrice">
           <mat-header-cell *matHeaderCellDef> Original Price ex. GST </mat-header-cell>
-          <mat-cell *matCellDef="let element"> {{element.originalPrice}} </mat-cell>
+          <mat-cell *matCellDef="let element"> {{element.originalPrice | currency:'USD'}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="qty">
+          <mat-header-cell *matHeaderCellDef> Quantity </mat-header-cell>
+          <mat-cell *matCellDef="let element"> <input type="number" (keypress)="_keyPress($event)" value="{{element.quantity}}"> </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="button">
           <mat-header-cell *matHeaderCellDef></mat-header-cell>
-          <mat-cell *matCellDef="let element"><button>Update Cart</button></mat-cell>
+          <mat-cell *matCellDef="let element"><button class="btn btn-long">Add To Cart</button></mat-cell>
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

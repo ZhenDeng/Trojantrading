@@ -16,6 +16,8 @@ namespace Trojantrading.Models
 
         public double VipTwoPrice {get;set;}
 
+        public int Quantity { get; set; }
+
         public string Category { get; set; }
 
         public ShoppingItem ShoppingItem{get;set;}

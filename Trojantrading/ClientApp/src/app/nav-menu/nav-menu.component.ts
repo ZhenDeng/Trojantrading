@@ -3,6 +3,7 @@ import { NavbarService } from '../services/navbar.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ShareService } from '../services/share.service';
 import { NgbDropdownConfig } from '@ng-bootstrap/ng-bootstrap';
+import { Product } from '../models/Product';
 
 @Component({
   selector: 'app-nav-menu',
@@ -23,7 +24,10 @@ export class NavMenuComponent implements OnInit {
     {type: 'Papers'},
     {type: 'Lighters'},
     {type: 'Accessories'},
-  ]
+  ];
+
+  products: Product[];
+
   constructor(
     public nav: NavbarService,
     private router: Router,
@@ -35,6 +39,11 @@ export class NavMenuComponent implements OnInit {
   ngOnInit() {
     this.nav.show();
     this.nav.showTab();
+    this.products = this.shareService.product;
+  }
+
+  proceedToCheckout(): void{
+    this.router.navigate(["/cart"]);
   }
 
   logOut(): void{

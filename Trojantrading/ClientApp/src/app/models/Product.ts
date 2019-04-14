@@ -8,6 +8,7 @@ export interface Product {
     vipOnePrice: number
     vipTwoPrice: number
     category: string
+    quantity: number
     // shoppingItem: ShoppingItem
     // shoppingItemId: number
     button: string
