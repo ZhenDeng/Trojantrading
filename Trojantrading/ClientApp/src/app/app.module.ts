@@ -30,6 +30,7 @@ import { RouterModule } from '@angular/router';
 import { ProductsModule } from './products/products.module';
 import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { MatListModule } from '@angular/material/list';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 
 
@@ -63,7 +64,8 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     MatCheckboxModule,
     RouterModule,
     MatTabsModule,
-    ProductsModule
+    ProductsModule,
+    MatListModule
   ],
   providers: [
     UserService,

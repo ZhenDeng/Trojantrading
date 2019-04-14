@@ -3,6 +3,10 @@
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 /*#region Buttons */
 
+body{
+    font-family: "proxima-nova",sans-serif !important;
+}
+
 .btn {
     display: inline-block;
     font-weight: 400;
@@ -263,6 +267,7 @@
 }
 
 /*#endregion*/
+
 .button-ed.disabled-light-bg {
     opacity: 0.4;
 }
@@ -322,4 +327,21 @@ a:hover{
     box-shadow: 1px 1px 2px 0px rgba(77, 79, 80, 0.302), 0 1px 3px 1px rgba(41, 43, 43, 0.149);
     border-radius: 20px;
     padding-left: 30px;
+}
+
+input[type="number"] {
+	width: 100%;
+    border: solid 1px #2d2c26;
+    color: #2d2c26;
+    font-size: 1.1rem;
+    border-radius: 0.5em;
+    padding: 0.35em 0.65em;
+    box-shadow: inset 2px 2px 5px rgba(52, 55, 49, 0.2);
+    text-align: center;
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
 }

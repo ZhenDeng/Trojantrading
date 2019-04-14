@@ -5,6 +5,7 @@ import { Menu } from '../models/menu';
 import { Router } from '@angular/router';
 import { NavbarService } from '../services/navbar.service';
 import { ShareService } from '../services/share.service';
+import { MatTableDataSource } from '@angular/material';
 
 @Component({
   selector: 'app-home',
@@ -14,13 +15,13 @@ import { ShareService } from '../services/share.service';
 })
 export class HomeComponent implements OnInit, OnDestroy {
 
-
   allProducts: Product[] = [];
-  
 
-  displayedColumns: string[] = ['name', 'category', 'originalPrice', 'button'];
+  dataSource = new MatTableDataSource();
 
-  navLinks:Menu[] = [
+  displayedColumns: string[] = ['name', 'category', 'originalPrice', 'qty', 'button'];
+
+  navLinks: Menu[] = [
     {
       path: '/home',
       label: 'All Products',
@@ -43,33 +44,52 @@ export class HomeComponent implements OnInit, OnDestroy {
     },
   ];
 
-  dataSource: Product[];
 
-  isHomeComponentDestroyed:boolean = false;
+  isHomeComponentDestroyed: boolean = false;
 
   constructor(
     private router: Router,
     private shareService: ShareService,
     public nav: NavbarService,
     private productService: ProductService
-  ) {}
+  ) { }
 
   ngOnInit() {
 
     let currentURL = this.router.url;
-    if(currentURL != '/home'){
+    if (currentURL != '/home') {
       this.isHomeComponentDestroyed = true;
     }
-    
+
     this.getAllProducts();
   }
 
   getAllProducts() {
-    console.info('products');
     this.productService.getAllProducts().subscribe((value: Product[]) =>{
         this.allProducts = value;
+        this.dataSource = new MatTableDataSource(this.allProducts);
+
     });
   }
+
+  _keyPress(event: any) {
+    const pattern = /[0-9\+\-\ ]/;
+    let inputChar = String.fromCharCode(event.charCode);
+
+    if (!pattern.test(inputChar)) {
+      // invalid character, prevent input
+      event.preventDefault();
+    }
+  }
+
+
+  applyFilter(value: string) {
+    value = value.trim();
+    value = value.toLowerCase();
+    this.dataSource.filter = value;
+  }
+
+
 
   ngOnDestroy(){
     

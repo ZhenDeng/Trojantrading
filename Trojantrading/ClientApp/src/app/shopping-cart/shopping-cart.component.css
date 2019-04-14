@@ -8,7 +8,9 @@ nav a{
 h4{
 	color: gray;
 	padding-bottom:15px;
+	font-size: 30px !important;
 }
+
 .product-wrapper{
 	padding: 20px;
 	background: #eeede1;
@@ -24,27 +26,83 @@ h4{
 	padding:15px;
 }
 
+::ng-deep .mat-header-cell {
+    font-size: 13px !important;
+    font-weight: bold !important;
+}
+
 .filter-wrapper{
 	width: 300px;
 	display: block;
 	padding-bottom:25px;
 }
-.mat-table_3fex{
-	flex:3
+
+.mat-table {
+	overflow: auto;
+	max-height: 500px;
 }
+
 .example-container input{
 	width:50%;
-}
-.example-container button{
-	background-color: #C20047;
-	color: rgb(255, 255, 255);
-	padding: 5px;
-	line-height: 14px;
-	border: 1px solid #C20047;
 }
 
 .productid{
 	display: block;
     margin: 0;
     color: #cfcebb;
+}
+
+.totalrow{
+	background: white;
+	/* border-bottom: none; */
+	display: flex;
+    align-items: center;
+	padding: 0px 24px;
+	box-sizing: border-box;
+	border-bottom-color: rgba(0,0,0,.12);
+}
+
+.totalrow p{
+	text-align: right;
+	font-weight: bolder;
+}
+
+.totaltext{
+	flex: 8;
+}
+
+.totalprice{
+	flex: 1;
+}
+
+.pushright{
+	flex: 3;
+}
+
+.buttonrow{
+	max-height: 100px !important;
+}
+
+.btn-long{
+	margin-top: 20px !important;
+    margin-bottom: 20px !important;
+}
+
+.mat-table_1fex{
+	flex: 1 !important;
+	color: #C20047;
+	text-align: right;
+}
+
+.mat-table_4fex{
+	flex: 4 !important;
+}
+
+.mat-table_3fex{
+	flex: 3 !important;
+}
+
+.fa-2x {
+	font-size: 20px !important;
+	cursor: pointer;
 }
