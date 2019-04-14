@@ -5,6 +5,7 @@ import { Menu } from '../models/menu';
 import { Router } from '@angular/router';
 import { NavbarService } from '../services/navbar.service';
 import { ShareService } from '../services/share.service';
+import { MatTableDataSource } from '@angular/material';
 
 @Component({
   selector: 'app-home',
@@ -14,9 +15,9 @@ import { ShareService } from '../services/share.service';
 })
 export class HomeComponent implements OnInit, OnDestroy {
 
-
   allProducts: Product[] = [];
 
+  dataSource = new MatTableDataSource();
 
   displayedColumns: string[] = ['name', 'category', 'originalPrice', 'qty', 'button'];
 
@@ -43,7 +44,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     },
   ];
 
-  dataSource: Product[];
 
   isHomeComponentDestroyed: boolean = false;
 
@@ -65,10 +65,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   getAllProducts() {
-    console.info('products');
-    this.productService.getAllProducts().subscribe((value: Product[]) => {
-      this.allProducts = value;
-      this.allProducts.forEach(product => product.quantity = 1);
+    this.productService.getAllProducts().subscribe((value: Product[]) =>{
+        this.allProducts = value;
+        this.dataSource = new MatTableDataSource(this.allProducts);
+
     });
   }
 
@@ -83,8 +83,16 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
 
-  ngOnDestroy() {
+  applyFilter(value: string) {
+    value = value.trim();
+    value = value.toLowerCase();
+    this.dataSource.filter = value;
+  }
 
+
+
+  ngOnDestroy(){
+    
     console.log("destroy home page");
   }
 
