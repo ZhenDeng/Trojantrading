@@ -30,17 +30,17 @@ export class HomeComponent implements OnInit, OnDestroy {
       id: 'allProducts'
     },
     {
-      path: '/product/new',
+      path: '/productsview/new',
       label: 'New Product',
       id: 'newProduct'
     },
     {
-      path: '/product/promotion',
+      path: '/productsview/promotion',
       label: 'Promotions',
       id: 'promotions'
     },
     {
-      path: '/product/soldout',
+      path: '/productsview/soldout',
       label: 'Sold Out',
       id: 'soldout'
     },
