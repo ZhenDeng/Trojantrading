@@ -17,7 +17,7 @@
         <input matInput formControlName="account" placeholder="USERNAME">
       </mat-form-field>
       <mat-form-field [floatLabel]="'always'" class="col-md-12">
-        <input matInput formControlName="password" placeholder="PASSWORD">
+        <input type="password" matInput formControlName="password" placeholder="PASSWORD">
       </mat-form-field>
       <button class="btn btn-long" (click)="onSubmit()">LOGIN IN</button>
       <button class="btn btn-long" (click)="passwordRecover()">FORGETTEN PASSWORD?</button>

@@ -14,12 +14,12 @@
         <span class="searchIcon">
           <i class="fas fa-search fa-2x"></i>
         </span>
-        <input class="searchInput" type="text" placeholder="Search">
+        <input class="searchInput" (keyup)="applyFilter($event.target.value)" type="text" placeholder="Search">
       </span>
     </span>
 
     <div class="example-container mat-elevation-z8">
-      <mat-table #table [dataSource]="allProducts">
+      <mat-table #table [dataSource]="dataSource">
     
         <!--- Note that these columns can be defined in any order.
                   The actual rendered columns are set as a property on the row definition" -->
@@ -43,7 +43,7 @@
 
         <ng-container matColumnDef="button">
           <mat-header-cell *matHeaderCellDef></mat-header-cell>
-          <mat-cell *matCellDef="let element"><button>{{element.button}}</button></mat-cell>
+          <mat-cell *matCellDef="let element"><button>Update Cart</button></mat-cell>
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
