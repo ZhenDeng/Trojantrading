@@ -49,8 +49,7 @@ namespace Trojantrading.Controllers
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                new Claim(ClaimTypes.Name, userModel.Account),
-                //new Claim(ClaimTypes.Role, userModel.UserRole.Role.Name)
+                new Claim(ClaimTypes.Name, userModel.Account)
                 }),
                 Expires = DateTime.UtcNow.AddMinutes(20),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

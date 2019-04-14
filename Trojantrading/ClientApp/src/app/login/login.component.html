@@ -19,6 +19,9 @@
       <mat-form-field [floatLabel]="'always'" class="col-md-12">
         <input matInput formControlName="password" placeholder="PASSWORD">
       </mat-form-field>
+      <mat-form-field [floatLabel]="'always'" class="col-md-12">
+        <input matInput formControlName="role" placeholder="ROLE">
+      </mat-form-field>
       <button class="btn btn-long" (click)="onSubmit()">LOGIN IN</button>
       <button class="btn btn-long" (click)="passwordRecover()">FORGETTEN PASSWORD?</button>
     </div>
