@@ -46,13 +46,54 @@ namespace Trojantrading.Controllers
                     products.Add(new Product
                     {
                         Id = 10001,
-                        Name = "winfield",
+                        Name = "Winfield",
                         CreatedDate = new DateTime(),
                         OriginalPrice = 35.05,
                         VipOnePrice = 32.11,
                         VipTwoPrice = 31.5,
                         Category = "Winfield Blue",
-                        ShoppingItemId = 20001
+                        ShoppingItemId = 20001,
+                        Status = ""
+                    });
+
+                    products.Add(new Product
+                    {
+                        Id = 10002,
+                        Name = "Pall Mall",
+                        CreatedDate = new DateTime(),
+                        OriginalPrice = 36.05,
+                        VipOnePrice = 33.11,
+                        VipTwoPrice = 32.5,
+                        Category = "25pk",
+                        ShoppingItemId = 20002,
+                        Status = "New"
+
+                    });
+
+                    products.Add(new Product
+                    {
+                        Id = 10003,
+                        Name = "Rotherman",
+                        CreatedDate = new DateTime(),
+                        OriginalPrice = 27.05,
+                        VipOnePrice = 26.11,
+                        VipTwoPrice = 25.5,
+                        Category = "273pk",
+                        ShoppingItemId = 20001,
+                        Status = "Promotion"
+                    });
+
+                    products.Add(new Product
+                    {
+                        Id = 10004,
+                        Name = "Marlbro",
+                        CreatedDate = new DateTime(),
+                        OriginalPrice = 34.05,
+                        VipOnePrice = 33.11,
+                        VipTwoPrice = 32.5,
+                        Category = "Red 25pk",
+                        ShoppingItemId = 20001,
+                        Status = "SoldOut"
                     });
                 }
                 return Ok(products.ToArray());

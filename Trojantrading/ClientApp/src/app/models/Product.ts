@@ -11,5 +11,6 @@ export interface Product {
     quantity: number
     // shoppingItem: ShoppingItem
     // shoppingItemId: number
-    button: string
+    button: string,
+    status: string
 }

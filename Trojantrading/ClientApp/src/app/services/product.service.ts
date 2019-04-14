@@ -14,7 +14,6 @@ export class ProductService {
   ) { }
 
   getAllProducts(): Observable<Product[]> {
-    console.log('service');
     return this.http.get(this.base_url + "/GetAllProducts")
     .pipe(catchError(this.handleError));
   }
