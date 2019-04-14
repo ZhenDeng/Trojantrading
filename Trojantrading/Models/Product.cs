@@ -16,13 +16,10 @@ namespace Trojantrading.Models
 
         public double VipTwoPrice {get;set;}
 
-        public int Quantity { get; set; }
-
         public string Category { get; set; }
 
         public ShoppingItem ShoppingItem{get;set;}
 
-        public int ShoppingItemId {get;set;}
         public string Status { get; set; }  // 1.New 2.Promotion 3.SoldOut
     }
 

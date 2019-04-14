@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit {
     this.userFormGroup = this.formBuilder.group({
       account: new FormControl("", Validators.compose([Validators.required])),
       password: new FormControl("", Validators.compose([Validators.required])),
-      role: new FormControl("", Validators.compose([Validators.required]))
+      role: new FormControl("")
     });
 
     this.userEmailGroup = this.formBuilder.group({
@@ -44,16 +44,20 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
-    this.userService.userAuthentication(this.userFormGroup.value).subscribe((data: UserResponse) => {
-      this.shareService.createCookie("userToken", data.token, 20);
-      this.shareService.createCookie("userName", data.userName, 20);
-      this.shareService.createCookie("role", this.userFormGroup.get("role").value, 20);
-      this.nav.show();
-      this.router.navigate(['/home']);
-    },
-      (error: any) => {
-        console.info(error);
-      });
+    if(this.userFormGroup.valid){
+      this.userService.userAuthentication(this.userFormGroup.value).subscribe((data: UserResponse) => {
+        this.shareService.createCookie("userToken", data.token, 20);
+        this.shareService.createCookie("userName", data.userName, 20);
+        this.shareService.createCookie("role", this.userFormGroup.get("role").value, 20);
+        this.nav.show();
+        this.router.navigate(['/home']);
+      },
+        (error: any) => {
+          console.info(error);
+        });
+    }else{
+      this.shareService.showError(".loginbtn", "Input field can not be empty", "top");
+    }
   }
 
   passwordRecover(): void {

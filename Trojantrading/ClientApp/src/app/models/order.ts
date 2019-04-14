@@ -11,6 +11,5 @@ export interface Order {
     clientMessage: string
     adminMessage: string
     user: User
-    userId: number
     shoppingItems: ShoppingItem[]  
 }
