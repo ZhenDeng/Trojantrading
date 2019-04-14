@@ -45,17 +45,6 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
-    this.userService.userAuthentication(this.userFormGroup.value).subscribe((data: UserResponse) => {
-      this.shareService.createCookie("userToken", data.token, 20);
-      this.shareService.createCookie("userName", data.userName, 20);
-      this.shareService.createCookie("role", this.userFormGroup.get("role").value, 20);
-      this.nav.show();
-      this.router.navigate(['/home']);
-    },
-      (error: any) => {
-        console.info(error);
-      });
-  }
     if(!this.userFormGroup.get('account').valid){
       this.shareService.showError('#account', 'Please enter your account', "right");
     }
@@ -70,6 +59,7 @@ export class LoginComponent implements OnInit {
       this.userService.userAuthentication(this.userFormGroup.value).subscribe((data: UserResponse) => {
         this.shareService.createCookie("userToken", data.token, 20);
         this.shareService.createCookie("userName", data.userName, 20);
+        this.shareService.createCookie("role", this.userFormGroup.get("role").value, 20);
         this.nav.show();
         this.router.navigate(['/home']);
       },
