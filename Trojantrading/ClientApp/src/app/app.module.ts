@@ -30,6 +30,8 @@ import { RouterModule } from '@angular/router';
 import { ProductsModule } from './products/products.module';
 import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+
 
 @NgModule({
   declarations: [
@@ -58,6 +60,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     MatTableModule,
     MatIconModule,
     MatCardModule,
+    MatCheckboxModule,
     RouterModule,
     MatTabsModule,
     ProductsModule

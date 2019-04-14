@@ -54,7 +54,7 @@
 }
 
 .navbar-brand {
-  padding: 35px 15px 15px 15px !important;
+  padding: 35px 15px 15px 15px;
 }
 
 .navbar-nav li {
@@ -69,4 +69,10 @@ a{
   color: #337ab7;
   text-decoration: none;
   background-color:transparent;
+}
+
+@media (max-width: 768px){
+  .navbar-brand {
+    padding: 9px 10px;
+  }
 }
