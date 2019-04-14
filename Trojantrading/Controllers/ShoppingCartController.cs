@@ -4,11 +4,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Trojantrading.Models;
 using Trojantrading.Repositories;
+using Trojantrading.Util;
+using System.Collections.Generic;
 
 namespace Trojantrading.Controllers
 {
-    [Route("api/[Controller]")]
-    [Authorize(Roles = "Admin, User")]
+    [Produces("application/json")]
+    [Route("api/[controller]")]
+    [Authorize]
     public class ShoppingCartController:Controller
     {
         private readonly IShoppingCartRepository _shoppingCartRepository;
@@ -20,7 +23,11 @@ namespace Trojantrading.Controllers
             this._productRepository = productRepository;
         }
 
-        public IActionResult Get(int id)
+        [HttpGet("GetShoppingCart")]
+        [NoCache]
+        [ProducesResponseType(typeof(ShoppingCart), 200)]
+        [ProducesResponseType(typeof(ApiResponse), 400)]
+        public IActionResult GetShoppingCart(int id)
         {
             return Ok(_shoppingCartRepository.GetCart(id));
         }

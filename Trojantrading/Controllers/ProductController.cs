@@ -12,6 +12,7 @@ namespace Trojantrading.Controllers
 {
     [Produces("application/json")]
     [Route("api/[controller]")]
+    [Authorize]
     public class ProductController : Controller
     {
         private readonly IProductRepository _productRepository;
@@ -51,8 +52,7 @@ namespace Trojantrading.Controllers
                         OriginalPrice = 35.05,
                         VipOnePrice = 32.11,
                         VipTwoPrice = 31.5,
-                        Category = "Winfield Blue",
-                        ShoppingItemId = 20001
+                        Category = "Winfield Blue"
                     });
                 }
                 return Ok(products.ToArray());

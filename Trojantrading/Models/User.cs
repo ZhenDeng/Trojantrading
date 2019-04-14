@@ -14,9 +14,9 @@ namespace Trojantrading.Models
 
         public string Account { get; set; }
 
-        public byte[] PassswordHash { get; set; }
+        public string PassswordHash { get; set; }
 
-        public byte[] PasswordSalt { get; set; }
+        public string PasswordSalt { get; set; }
 
         public string Password { get; set; }
 
