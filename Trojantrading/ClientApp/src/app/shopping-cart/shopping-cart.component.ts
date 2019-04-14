@@ -11,7 +11,8 @@ import { ShareService } from '../services/share.service';
 export class ShoppingCartComponent implements OnInit {
 
   dataSource: Product[];
-  displayedColumns: string[] = ['name', 'category', 'originalPrice', 'button'];
+  totalPrice: number;
+  displayedColumns: string[] = ['name', 'category', 'originalPrice', 'qty', 'subTotal', 'remove'];
 
   constructor(
     private nav: NavbarService,
@@ -20,7 +21,22 @@ export class ShoppingCartComponent implements OnInit {
 
   ngOnInit() {
     this.nav.hideTab();
+    this.totalPrice = 0;
     this.dataSource = this.shareService.product;
+    this.dataSource.forEach(product => {
+      this.totalPrice += product.quantity * product.originalPrice;
+    });
   }
+
+  _keyPress(event: any) {
+    const pattern = /[0-9\+\-\ ]/;
+    let inputChar = String.fromCharCode(event.charCode);
+
+    if (!pattern.test(inputChar)) {
+      // invalid character, prevent input
+      event.preventDefault();
+    }
+  }
+
 
 }

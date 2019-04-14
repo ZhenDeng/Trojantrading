@@ -30,6 +30,7 @@ import { RouterModule } from '@angular/router';
 import { ProductsModule } from './products/products.module';
 import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
   declarations: [
@@ -60,7 +61,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     MatCardModule,
     RouterModule,
     MatTabsModule,
-    ProductsModule
+    ProductsModule,
+    MatListModule
   ],
   providers: [
     UserService,
