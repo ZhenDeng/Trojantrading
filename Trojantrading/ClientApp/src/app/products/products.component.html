@@ -1,14 +1,13 @@
-
 <div class="container">
-  <main class="row">
-    <div class='col-sm-12 body-content'>
+  <div class="row">
+    <div class="col-sm-12 body-content">
       <nav mat-tab-nav-bar>
         <a mat-tab-link *ngFor="let link of navLinks" [routerLink]="link.path" routerLinkActive #rla="routerLinkActive"
           [active]="rla.isActive">
           {{link.label}}
         </a>
       </nav>
-        
+      
       <ng-container *ngIf="!isHomeComponentDestroyed">
         <section class="product-wrapper">
           <h4>{{title}}</h4>
@@ -71,5 +70,5 @@
         </section>
       </ng-container>
     </div>
-  </main>
+  </div>
 </div>
