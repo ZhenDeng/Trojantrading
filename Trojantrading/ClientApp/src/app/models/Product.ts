@@ -7,4 +7,5 @@ export interface Product {
     category: string
     button: string
     quantity:number
+    status: string
 }
