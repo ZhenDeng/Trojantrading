@@ -5,6 +5,7 @@ import { PromotionComponent } from './promotion/promotion.component';
 import { SoldOutComponent } from './sold-out/sold-out.component';
 // import { ProductsComponent } from './products.component';
 import { HomeComponent } from '../home/home.component';
+import { ProductsComponent } from './products.component';
 
 const routes: Routes = [
     {
@@ -24,6 +25,10 @@ const routes: Routes = [
                 component: SoldOutComponent,
             }
         ]
+    },
+    {
+        path: 'productsview/:type',
+        component: ProductsComponent
     }
 ];
 

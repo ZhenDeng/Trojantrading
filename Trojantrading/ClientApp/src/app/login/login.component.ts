@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit {
     this.userFormGroup = this.formBuilder.group({
       account: new FormControl("", Validators.compose([Validators.required])),
       password: new FormControl("", Validators.compose([Validators.required])),
-      role: new FormControl("", Validators.compose([Validators.required]))
+      role: new FormControl("")
     });
 
     this.userEmailGroup = this.formBuilder.group({

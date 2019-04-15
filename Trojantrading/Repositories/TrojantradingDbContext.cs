@@ -104,10 +104,10 @@ namespace Trojantrading.Repositories
                 .OnDelete(DeleteBehavior.Restrict);
 
             //shopping item product 1:1
-            modelBuilder.Entity<Product>()
-                .HasOne(p=>p.ShoppingItem)
-                .WithOne(s=>s.Product)
-                .HasForeignKey<Product>(p=>p.ShoppingItemId);
+            modelBuilder.Entity<ShoppingItem>()
+                .HasOne(s=>s.Product)
+                .WithOne(p=>p.ShoppingItem)
+                .HasForeignKey<ShoppingItem>(p=>p.ProductId);
 
             // user Ship address 1:1
             modelBuilder.Entity<User>()

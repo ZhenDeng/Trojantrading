@@ -1,4 +1,68 @@
-<p>
-  products works!
-</p>
-<router-outlet></router-outlet>
+<nav mat-tab-nav-bar>
+  <a mat-tab-link *ngFor="let link of navLinks" [routerLink]="link.path" routerLinkActive #rla="routerLinkActive"
+    [active]="rla.isActive">
+    {{link.label}}
+  </a>
+</nav>
+
+<ng-container *ngIf="!isHomeComponentDestroyed">
+  <section class="product-wrapper">
+    <h4>{{title}}</h4>
+    <span class="filter-wrapper">
+      <span class="searchInputGroup">
+        <span class="searchIcon">
+          <i class="fas fa-search fa-2x"></i>
+        </span>
+        <input class="searchInput" (keyup)="applyFilter($event.target.value)" type="text" placeholder="Search">
+      </span>
+    </span>
+
+    <div class="example-container mat-elevation-z8">
+      <mat-table #table [dataSource]="dataSource">
+    
+        <!--- Note that these columns can be defined in any order.
+                  The actual rendered columns are set as a property on the row definition" -->
+
+        <ng-container matColumnDef="name">
+          <mat-header-cell *matHeaderCellDef class="mat-table_3fex"> Description </mat-header-cell>
+          <mat-cell *matCellDef="let element" class="mat-table_3fex"> <span class="productid">#{{element.id}}</span>{{element.name}} </mat-cell>
+        </ng-container>
+
+        <!-- wlpPrice Column -->
+        <ng-container matColumnDef="category">
+          <mat-header-cell *matHeaderCellDef> Category </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.category}} </mat-cell>
+        </ng-container>
+
+        <!-- buyPrice Column -->
+        <ng-container matColumnDef="originalPrice">
+          <mat-header-cell *matHeaderCellDef> Original Price ex. GST </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.originalPrice | currency:'USD'}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="qty">
+          <mat-header-cell *matHeaderCellDef> Quantity </mat-header-cell>
+          <mat-cell *matCellDef="let element"> <input type="number" (keypress)="_keyPress($event)" value="{{element.quantity}}"> </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="button">
+          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-cell *matCellDef="let element"><button class="btn btn-long">Add To Cart</button></mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      </mat-table>
+    </div>
+
+    <!-- <div class="row">
+    <div class="col-md-7"></div>
+    <div class="col-md-1">WLP
+        ex. GST</div>
+    <div class="col-md-1">Buy Price
+        ex. GST</div>
+    <div class="col-md-1">Retail Qty</div>
+    <div class="col-md-2"><button>Update Cart</button></div>
+  </div> -->
+  </section>
+</ng-container>

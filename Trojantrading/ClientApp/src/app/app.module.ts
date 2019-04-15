@@ -33,6 +33,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MatListModule } from '@angular/material/list';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 
+import { ShoppingCartServiceService } from './services/shopping-cart-service.service';
 
 @NgModule({
   declarations: [
@@ -74,6 +75,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     AuthGuard,
     AuthRecovery,
     ShareService,
+    ShoppingCartServiceService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
