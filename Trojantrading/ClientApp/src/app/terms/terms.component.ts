@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TermsComponent implements OnInit {
 
+  title:string = "Terms and Conditions";
+
   constructor() { }
 
   ngOnInit() {

@@ -1,0 +1,23 @@
+@import '../shopping-cart/shopping-cart.component.css';
+
+ul{
+	padding-left: 0px;
+}
+
+#contact-info-wrapper li {
+	height: 60px;
+	margin-bottom: 15px;
+	font-size: 14x;
+	position: relative;
+	border-bottom: 1px solid #E5E5E5;
+	list-style-type: none;
+}
+
+#contact-info-wrapper i {
+	width: 50px;
+	height: 50px;
+	line-height: 50px;
+	text-align: center;
+	font-size: 32px;
+	color: #CA1845 ;
+}
