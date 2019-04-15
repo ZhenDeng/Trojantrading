@@ -1,63 +1,69 @@
-<ng-container>
-  <section class="product-wrapper">
-    <h4>Checkout</h4>
-    <div class="example-container mat-elevation-z8">
-      <mat-table #table [dataSource]="dataSource">
-
-        <!--- Note that these columns can be defined in any order.
-                    The actual rendered columns are set as a property on the row definition" -->
-
-        <ng-container matColumnDef="name">
-          <mat-header-cell *matHeaderCellDef class="mat-table_4fex" class="mat-table_4fex"> Description </mat-header-cell>
-          <mat-cell *matCellDef="let element" class="mat-table_4fex" class="mat-table_4fex"> <span
-              class="productid">#{{element.id}}</span>{{element.name}} </mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="category">
-          <mat-header-cell *matHeaderCellDef class="mat-table_3fex"> Category </mat-header-cell>
-          <mat-cell *matCellDef="let element" class="mat-table_3fex"> {{element.category}} </mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="originalPrice">
-          <mat-header-cell *matHeaderCellDef class="mat-table_3fex"> Original Price ex. GST </mat-header-cell>
-          <mat-cell *matCellDef="let element" class="mat-table_3fex"> {{element.originalPrice | currency:'USD'}} </mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="qty">
-          <mat-header-cell *matHeaderCellDef class="mat-table_3fex"> Quantity </mat-header-cell>
-          <mat-cell *matCellDef="let element" class="mat-table_3fex"> <input type="number" (keypress)="_keyPress($event)"
-              [(ngModel)]="element.quantity"> </mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="subTotal">
-          <mat-header-cell *matHeaderCellDef class="mat-table_3fex">Line Amount ex. GST</mat-header-cell>
-          <mat-cell *matCellDef="let element" class="mat-table_3fex">{{element.quantity * element.originalPrice | currency:'USD'}}</mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="remove">
-          <mat-header-cell *matHeaderCellDef class="mat-table_1fex"></mat-header-cell>
-          <mat-cell *matCellDef="let element" class="mat-table_1fex"><i class="far fa-trash-alt fa-2x"></i></mat-cell>
-        </ng-container>
-        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-      </mat-table>
-      <div class="totalrow" style="padding-top: 20px;">
-        <p class="totaltext">You will pay Excl. GST</p>
-        <p class="totalprice">$48.3</p>
-      </div>
-      <div class="totalrow">
-        <p class="totaltext">GST</p>
-        <p class="totalprice">$488.3</p>
-      </div>
-      <div class="totalrow">
-        <p class="totaltext">You will pay Inc. GST</p>
-        <p class="totalprice">$4888.3</p>
-      </div>
-      <div class="totalrow buttonrow">
-        <button class="btn btn-long">Continue Shopping</button>
-        <div class="pushright"></div>
-        <button class="btn btn-long">Checkout</button>
-      </div>
+<div class="container">
+  <main class="row">
+    <div class='col-sm-12 body-content'>
+      <ng-container>
+        <section class="product-wrapper">
+          <h4>Checkout</h4>
+          <div class="example-container mat-elevation-z8">
+            <mat-table #table [dataSource]="dataSource">
+      
+              <!--- Note that these columns can be defined in any order.
+                          The actual rendered columns are set as a property on the row definition" -->
+      
+              <ng-container matColumnDef="name">
+                <mat-header-cell *matHeaderCellDef class="mat-table_4fex" class="mat-table_4fex"> Description </mat-header-cell>
+                <mat-cell *matCellDef="let element" class="mat-table_4fex" class="mat-table_4fex"> <span
+                    class="productid">#{{element.id}}</span>{{element.name}} </mat-cell>
+              </ng-container>
+      
+              <ng-container matColumnDef="category">
+                <mat-header-cell *matHeaderCellDef class="mat-table_3fex"> Category </mat-header-cell>
+                <mat-cell *matCellDef="let element" class="mat-table_3fex"> {{element.category}} </mat-cell>
+              </ng-container>
+      
+              <ng-container matColumnDef="originalPrice">
+                <mat-header-cell *matHeaderCellDef class="mat-table_3fex"> Original Price ex. GST </mat-header-cell>
+                <mat-cell *matCellDef="let element" class="mat-table_3fex"> {{element.originalPrice | currency:'USD'}} </mat-cell>
+              </ng-container>
+      
+              <ng-container matColumnDef="qty">
+                <mat-header-cell *matHeaderCellDef class="mat-table_3fex"> Quantity </mat-header-cell>
+                <mat-cell *matCellDef="let element" class="mat-table_3fex"> <input type="number" (keypress)="_keyPress($event)"
+                    [(ngModel)]="element.quantity"> </mat-cell>
+              </ng-container>
+      
+              <ng-container matColumnDef="subTotal">
+                <mat-header-cell *matHeaderCellDef class="mat-table_3fex">Line Amount ex. GST</mat-header-cell>
+                <mat-cell *matCellDef="let element" class="mat-table_3fex">{{element.quantity * element.originalPrice | currency:'USD'}}</mat-cell>
+              </ng-container>
+      
+              <ng-container matColumnDef="remove">
+                <mat-header-cell *matHeaderCellDef class="mat-table_1fex"></mat-header-cell>
+                <mat-cell *matCellDef="let element" class="mat-table_1fex"><i class="far fa-trash-alt fa-2x"></i></mat-cell>
+              </ng-container>
+              <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            </mat-table>
+            <div class="totalrow" style="padding-top: 20px;">
+              <p class="totaltext">You will pay Excl. GST</p>
+              <p class="totalprice">$48.3</p>
+            </div>
+            <div class="totalrow">
+              <p class="totaltext">GST</p>
+              <p class="totalprice">$488.3</p>
+            </div>
+            <div class="totalrow">
+              <p class="totaltext">You will pay Inc. GST</p>
+              <p class="totalprice">$4888.3</p>
+            </div>
+            <div class="totalrow buttonrow">
+              <button class="btn btn-long">Continue Shopping</button>
+              <div class="pushright"></div>
+              <button class="btn btn-long">Checkout</button>
+            </div>
+          </div>
+        </section>
+      </ng-container>
     </div>
-  </section>
-</ng-container>
+  </main>
+</div>
