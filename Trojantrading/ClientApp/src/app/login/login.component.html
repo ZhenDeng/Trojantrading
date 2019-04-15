@@ -28,7 +28,7 @@
     <div class="login-box" *ngIf="sentEmailField">
       <ng-container *ngIf="!showResetText">
         <p>Forgot your password?<br> Please enter your information below.</p>
-        <mat-form-field [floatLabel]="'always'" class="col-md-12" [formGroup]="userEmailGroup">
+        <mat-form-field [floatLabel]="'always'" [formGroup]="userEmailGroup">
           <input matInput formControlName="email" placeholder="Your Email" required>
         </mat-form-field>
         <button class="btn btn-long sendresetemail" (click)="sendPasswordRecoveryEmail()">SENT</button>

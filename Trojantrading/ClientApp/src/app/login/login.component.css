@@ -72,6 +72,11 @@
   margin-top: 15px !important;
 }
 
+.btn.btn-long{
+  display: block;
+  margin: 25px auto auto;
+}
+
 .footer {
   color: #eeede1;
   margin-top: 11px;
@@ -85,15 +90,12 @@
   background: gray;
 }
 
-:host /deep/ .mat-checkbox{
-  display: block;
-}
-
 :host /deep/ .mat-checkbox-label{
   color: rgba(0,0,0,.54);
   font-weight: normal;
 }
 
 :host /deep/ .mat-input-container{
-  width: 80%;
+  width: 100%;
+  max-width: 270px;
 }

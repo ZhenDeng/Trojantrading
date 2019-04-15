@@ -14,22 +14,22 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
   userAuthentication(user: any): Observable<UserResponse> {
-    return this.http.post(this.base_url + "/authenticate", user, {headers: new HttpHeaders({'Content-Type':'application/json', 'No-Auth': 'True'})})
+    return this.http.post(this.base_url + "/authenticate", user, { headers: new HttpHeaders({ 'Content-Type': 'application/json', 'No-Auth': 'True' }) })
       .pipe(catchError(this.handleError));
   }
-  
-  PasswordRecover(email: string): Observable<UserResponse> {
-    return this.http.get(this.base_url + "/PasswordRecover?email=" + email, {headers: new HttpHeaders({'Content-Type':'application/json', 'No-Auth': 'True'})})
+
+  PasswordRecover(email: string, userName: string): Observable<UserResponse> {
+    return this.http.get(this.base_url + "/PasswordRecover?email=" + email + "&userName=" + userName, { headers: new HttpHeaders({ 'Content-Type': 'application/json', 'No-Auth': 'True' }) })
       .pipe(catchError(this.handleError));
   }
 
   ValidateEmail(email: string): Observable<ApiResponse> {
-    return this.http.get(this.base_url + "/ValidateEmail?email=" + email, {headers: new HttpHeaders({'Content-Type':'application/json', 'No-Auth': 'True'})})
+    return this.http.get(this.base_url + "/ValidateEmail?email=" + email, { headers: new HttpHeaders({ 'Content-Type': 'application/json', 'No-Auth': 'True' }) })
       .pipe(catchError(this.handleError));
   }
 
   UpdatePassword(userName: string, password: string): Observable<ApiResponse> {
-    return this.http.get(this.base_url + "/UpdatePassword?userName=" + userName + "&password=" + password, {headers: new HttpHeaders({'Content-Type':'application/json', 'No-Auth': 'True'})})
+    return this.http.get(this.base_url + "/UpdatePassword?userName=" + userName + "&password=" + password, { headers: new HttpHeaders({ 'Content-Type': 'application/json', 'No-Auth': 'True' }) })
       .pipe(catchError(this.handleError));
   }
 
