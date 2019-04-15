@@ -6,8 +6,4 @@ export interface ShoppingItem {
     Id: number
     amount: number
     product: Product
-    order: Order
-    orderId: number
-    shoppingCart: ShoppingCart
-    shoppingCartId: number
 }

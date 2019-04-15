@@ -12,6 +12,7 @@ namespace Trojantrading.Controllers
 {
     [Produces("application/json")]
     [Route("api/[controller]")]
+    [Authorize]
     public class ProductController : Controller
     {
         private readonly IProductRepository _productRepository;

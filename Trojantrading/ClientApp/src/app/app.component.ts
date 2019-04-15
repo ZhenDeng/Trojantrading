@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NavbarService } from './services/navbar.service';
 
 @Component({
   selector: 'app-root',
@@ -9,10 +10,10 @@ export class AppComponent implements OnInit {
   
   title = 'app';
 
-  constructor() { }
+  constructor(
+  ) { }
 
   ngOnInit(): void {
-    
   }
   
 }

@@ -54,7 +54,7 @@
 }
 
 .navbar-brand {
-  padding: 35px 15px 15px 15px !important;
+  padding: 35px 15px 15px 15px;
 }
 
 .navbar-nav li {
@@ -104,4 +104,10 @@ a{
   flex: 2;
   font-size: 10px !important;
   text-align: center;
+}
+
+@media (max-width: 768px){
+  .navbar-brand {
+    padding: 9px 10px;
+  }
 }
