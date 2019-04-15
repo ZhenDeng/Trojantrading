@@ -8,6 +8,8 @@ import { NavbarService } from '../services/navbar.service';
 })
 export class AboutUsComponent implements OnInit {
 
+  title: string = 'About Us';
+
   constructor(
     private nav: NavbarService
   ) { }

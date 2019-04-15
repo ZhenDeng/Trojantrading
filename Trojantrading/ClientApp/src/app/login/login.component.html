@@ -1,5 +1,5 @@
 <div class="top container">
-  <a href="https://st-group.net.au" id="logo">
+  <a [routerLink]="['/home']" id="logo">
     <img src="/img/img-placeholder.jpg" alt="stg logo">
     <span>ST Group</span>
   </a>
@@ -11,24 +11,24 @@
       Café Crème, Colts, Borkum Riff, Cricket and Ventti.</p>
   </section>
   <div class="bottom">
-    <div class="login-box" [formGroup]="userFormGroup" *ngIf="!sentEmailField">
-      <p>MEMBER LOGIN</p>
-      <mat-form-field [floatLabel]="'always'" class="col-md-12">
-        <input matInput formControlName="account" placeholder="USERNAME">
-      </mat-form-field>
-      <mat-form-field [floatLabel]="'always'" class="col-md-12">
-        <input type="password" matInput formControlName="password" placeholder="PASSWORD">
-      </mat-form-field>
-      <mat-form-field [floatLabel]="'always'" class="col-md-12">
-        <input matInput formControlName="role" placeholder="ROLE">
-      </mat-form-field>
-      <button class="btn btn-long loginbtn" (click)="onSubmit()">LOGIN IN</button>
+    <div class="login-box" *ngIf="!sentEmailField">
+      <form [formGroup]="userFormGroup">
+        <p>MEMBER LOGIN</p>
+        <mat-form-field [floatLabel]="'always'">
+          <input matInput formControlName="account" placeholder="USERNAME" id="account">
+        </mat-form-field>
+        <mat-form-field [floatLabel]="'always'">
+          <input matInput formControlName="password" placeholder="PASSWORD" id="password">
+        </mat-form-field>
+      </form>
+      <mat-checkbox [(ngModel)]="checked" id="checkbox">I accept the terms and conditions</mat-checkbox>
+      <button class="btn btn-long" (click)="onSubmit()">LOGIN IN</button>
       <button class="btn btn-long" (click)="passwordRecover()">FORGETTEN PASSWORD?</button>
     </div>
     <div class="login-box" *ngIf="sentEmailField">
       <ng-container *ngIf="!showResetText">
         <p>Forgot your password?<br> Please enter your information below.</p>
-        <mat-form-field [floatLabel]="'always'" class="col-md-12" [formGroup]="userEmailGroup">
+        <mat-form-field [floatLabel]="'always'" [formGroup]="userEmailGroup">
           <input matInput formControlName="email" placeholder="Your Email" required>
         </mat-form-field>
         <button class="btn btn-long sendresetemail" (click)="sendPasswordRecoveryEmail()">SENT</button>
@@ -43,6 +43,5 @@
       </ng-container>
     </div>
   </div>
-  <p class="footer">© Copyright 2017 Scandinavian Tobacco Group Australia Pty Ltd • <a href="//digitalbridge.com.au"
-      title="Digital Bridge">Website Management</a> by Digital Bridge</p>
+  <p class="footer">© Copyright 2017 Scandinavian Tobacco Group Australia Pty Ltd.</p>
 </div>

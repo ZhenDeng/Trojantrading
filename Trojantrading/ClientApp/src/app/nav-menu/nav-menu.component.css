@@ -54,11 +54,15 @@
 }
 
 .navbar-brand {
-  padding: 35px 15px 15px 15px !important;
+  padding: 35px 15px 15px 15px;
 }
 
 .navbar-nav li {
   cursor: pointer;
+}
+
+.link-active a{
+  color: #C20047;
 }
 
 /* overwrite defalut bootstrap styles */
@@ -104,4 +108,10 @@ a{
   flex: 2;
   font-size: 10px !important;
   text-align: center;
+}
+
+@media (max-width: 768px){
+  .navbar-brand {
+    padding: 9px 10px;
+  }
 }

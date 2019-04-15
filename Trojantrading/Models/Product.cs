@@ -10,13 +10,15 @@ namespace Trojantrading.Models
 
         public string Name { get; set; }
 
-        public double OriginalPrice {get;set;}
+        public double OriginalPrice { get; set; }
 
-        public double VipOnePrice {get;set;}
+        public double VipOnePrice { get; set; }
 
-        public double VipTwoPrice {get;set;}
+        public double VipTwoPrice { get; set; }
 
         public string Category { get; set; }
+
+        public int ShoppingItemId { get; set;  }
 
         public ShoppingItem ShoppingItem{get;set;}
 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { UserService } from '../services/user.service';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -12,7 +12,7 @@ declare var $: any;
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
 
@@ -20,6 +20,7 @@ export class LoginComponent implements OnInit {
   userEmailGroup: FormGroup;
   sentEmailField: boolean = false;
   showResetText: boolean = false;
+  checked:boolean = false;
 
   constructor(
     private userService: UserService,
@@ -44,7 +45,19 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
-    if(this.userFormGroup.valid){
+    if(!this.userFormGroup.get('account').valid){
+      this.shareService.showError('#account', 'Please enter your account', "right");
+    }
+    if(!this.userFormGroup.get('password').valid){
+      this.shareService.showError('#password', 'Please enter your password', "right");
+    }
+    if(!this.checked){
+      this.shareService.showError('#checkbox', 'Please check the t&c to use our service', "right");
+    }
+
+
+    if(this.userFormGroup.get('account').valid && this.userFormGroup.get('password').valid && this.checked){
+      console.log("login service");
       this.userService.userAuthentication(this.userFormGroup.value).subscribe((data: UserResponse) => {
         this.shareService.createCookie("userToken", data.token, 20);
         this.shareService.createCookie("userName", data.userName, 20);
@@ -55,8 +68,6 @@ export class LoginComponent implements OnInit {
         (error: any) => {
           console.info(error);
         });
-    }else{
-      this.shareService.showError(".loginbtn", "Input field can not be empty", "top");
     }
   }
 

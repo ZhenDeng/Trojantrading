@@ -6,4 +6,6 @@ export interface Product {
     vipTwoPrice: number
     category: string
     button: string
+    quantity:number
+    status: string
 }
