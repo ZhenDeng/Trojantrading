@@ -28,7 +28,7 @@ namespace Trojantrading.Service
             {
                 SmtpClient client = new SmtpClient("smtp.gmail.com", 587)
                 {
-                    Credentials = new NetworkCredential("jxyctl@gmail.com", "328065420google"),
+                    Credentials = new NetworkCredential("", ""),
                     EnableSsl = true
                 };
                 //MailMessage emailMessage = new MailMessage(from, to);
