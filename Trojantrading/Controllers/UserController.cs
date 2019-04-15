@@ -38,7 +38,8 @@ namespace Trojantrading.Controllers
         [ProducesResponseType(typeof(UserResponse), 200)]
         public IActionResult Authenticate([FromBody]User userModel)
         {
-            if (userModel.Account != "admin" || userModel.Password != "123")
+            User user = _userRepository.Get(userModel.Account);
+            if (userModel.Account != user.Account || userModel.Password != user.Password)
             {
                 return Unauthorized();
             }
@@ -69,14 +70,9 @@ namespace Trojantrading.Controllers
         [HttpGet("PasswordRecover")]
         [NoCache]
         [ProducesResponseType(typeof(UserResponse), 200)]
-        public IActionResult PasswordRecover(string email)
+        public IActionResult PasswordRecover(string email, string userName)
         {
-            User userModel = new User()
-            {
-                Account = "admin",
-                Password = "123",
-                Email = email
-            };
+            User userModel = _userRepository.Get(userName);
             if (userModel.Account != "admin" || userModel.Password != "123")
             {
                 return Unauthorized();

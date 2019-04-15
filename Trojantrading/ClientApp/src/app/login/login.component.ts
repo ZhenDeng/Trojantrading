@@ -74,7 +74,7 @@ export class LoginComponent implements OnInit {
       this.userService.ValidateEmail(this.userEmailGroup.get("email").value).subscribe((res: ApiResponse) => {
         if(res && res.status == "success"){
           console.info("aaa");
-          this.userService.PasswordRecover(this.userEmailGroup.get("email").value).subscribe((res: UserResponse) => {
+          this.userService.PasswordRecover(this.userEmailGroup.get("email").value, this.shareService.readCookie("userName")).subscribe((res: UserResponse) => {
             this.shareService.createCookie("recoverToken", res.token, 5);
             this.shareService.createCookie("recoverUser", res.userName, 5);
             this.showResetText = true;
