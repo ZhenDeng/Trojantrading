@@ -1,3 +1,4 @@
+import { ProductService } from './../services/product.service';
 import { Component, OnInit } from '@angular/core';
 import { NavbarService } from '../services/navbar.service';
 import { Product } from '../models/Product';
@@ -16,15 +17,26 @@ export class ShoppingCartComponent implements OnInit {
 
   constructor(
     private nav: NavbarService,
-    private shareService: ShareService
+    private shareService: ShareService,
+    private productService: ProductService
   ) { }
 
   ngOnInit() {
     this.nav.hideTab();
     this.totalPrice = 0;
-    this.dataSource = this.shareService.product;
-    this.dataSource.forEach(product => {
-      this.totalPrice += product.quantity * product.originalPrice;
+    this.getAllProducts();
+  }
+
+  getAllProducts() {
+    this.productService.getAllProducts().subscribe((value: Product[]) =>{
+        this.dataSource = value;
+
+        this.dataSource.forEach(product => {
+          this.totalPrice += product.quantity * product.originalPrice;
+        },
+        (error: any) => {
+          console.info(error);
+        });
     });
   }
 

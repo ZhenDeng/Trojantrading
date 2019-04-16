@@ -1,3 +1,4 @@
+import { ProductService } from './../services/product.service';
 import { Component, OnInit } from '@angular/core';
 import { NavbarService } from '../services/navbar.service';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -33,13 +34,23 @@ export class NavMenuComponent implements OnInit {
     private router: Router,
     private activatedRouter: ActivatedRoute,
     private shareService: ShareService,
+    private productService: ProductService,
     private config: NgbDropdownConfig
   ) { }
 
   ngOnInit() {
     this.nav.show();
     this.nav.showTab();
-    this.products = this.shareService.product;
+    this.getAllProducts();
+  }
+
+  getAllProducts() {
+    this.productService.getAllProducts().subscribe((value: Product[]) =>{
+        this.products = value;
+    },
+    (error: any) => {
+      console.info(error);
+    });
   }
 
   proceedToCheckout(): void{

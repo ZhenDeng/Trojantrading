@@ -18,7 +18,6 @@ namespace Trojantrading.Models
 
         public string Category { get; set; }
 
-        public int ShoppingItemId { get; set;  }
 
         public ShoppingItem ShoppingItem{get;set;}
 

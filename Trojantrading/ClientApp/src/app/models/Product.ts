@@ -1,3 +1,4 @@
+import { ShoppingItem } from './shoppingItem';
 export interface Product {
     id: number
     name: string
@@ -8,4 +9,5 @@ export interface Product {
     button: string
     quantity:number
     status: string
+    shoppingItem: ShoppingItem
 }
