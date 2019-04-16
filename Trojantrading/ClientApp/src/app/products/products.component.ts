@@ -14,6 +14,8 @@ export class ProductsComponent implements OnInit {
 
   products: Product[] = [];
 
+  filteredProducts: Product[] = [];
+
   dataSource = new MatTableDataSource();
 
   viewType: string;
@@ -64,20 +66,29 @@ export class ProductsComponent implements OnInit {
         } else {
           this.title = 'Sold Out';
         }
-
-        this.getProducts(type);
+        
+        if (!this.products.length) {
+          this.getProducts(type);
+        } else {
+          this.filterProducts(type, this.products);
+        }
+          
     });
   }
 
   getProducts(type: string) {
     this.productService.getAllProducts().subscribe((value: Product[]) =>{
-        this.products = value.filter(x => x.status.toLowerCase().includes(type));
-        this.products.forEach(product => product.quantity = 1);
-        this.dataSource = new MatTableDataSource(this.products);
-
+      this.products = value;
+      this.filterProducts(type, value);
     });
   }
-
+ 
+  filterProducts(type: string, value: Product[]) {
+      this.filteredProducts = value.filter(x => x.status.toLowerCase().includes(type));
+      this.filteredProducts.forEach(product => product.quantity = 1);
+      this.dataSource = new MatTableDataSource(this.filteredProducts);
+  }
+ 
   applyFilter(value: string) {
     value = value.trim();
     value = value.toLowerCase();

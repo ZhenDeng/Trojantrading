@@ -15,16 +15,16 @@ import { Product } from '../models/Product';
 export class NavMenuComponent implements OnInit {
 
   testJsonObj = [
-    {type: 'Hand-Made Cigars'},
-    {type: 'Machine-Made Cigars'},
-    {type: 'Little Cigars'},
-    {type: 'Cigarettes'},
-    {type: 'Pipe Tobacco'},
-    {type: 'Roll Your Own'},
-    {type: 'Filters'},
-    {type: 'Papers'},
-    {type: 'Lighters'},
-    {type: 'Accessories'},
+    {type: 'Hand-Made Cigars', category: 'hand-made'},
+    {type: 'Machine-Made Cigars', category: 'machine-made'},
+    {type: 'Little Cigars', category: 'little-cigars'},
+    {type: 'Cigarettes', category: 'cigarettes'},
+    {type: 'Pipe Tobacco', category: 'pipe-tobacco'},
+    {type: 'Roll Your Own', category: 'roll-your-won'},
+    {type: 'Filters', category: 'filters'},
+    {type: 'Papers', category: 'papers'},
+    {type: 'Lighters', category: 'lighters'},
+    {type: 'Accessories', category: 'accessories'},
   ];
 
   products: Product[];
@@ -55,6 +55,16 @@ export class NavMenuComponent implements OnInit {
 
   proceedToCheckout(): void{
     this.router.navigate(["/cart"]);
+  }
+
+  manageRedirect(category: string) {
+
+    this.router.navigate(['home'], {
+      relativeTo: this.activatedRouter,
+      queryParams: {
+        category: category
+      }
+    });
   }
 
   logOut(): void{

@@ -34,6 +34,7 @@ import { MatListModule } from '@angular/material/list';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 
 import { ShoppingCartServiceService } from './services/shopping-cart-service.service';
+import { OrdersComponent } from './orders/orders.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { ShoppingCartServiceService } from './services/shopping-cart-service.ser
     PromoSummaryComponent,
     TermsComponent,
     PasswordRecoveryComponent,
-    ShoppingCartComponent
+    ShoppingCartComponent,
+    OrdersComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

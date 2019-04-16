@@ -57,7 +57,7 @@ export class LoginComponent implements OnInit {
 
 
     if(this.userFormGroup.get('account').valid && this.userFormGroup.get('password').valid && this.checked){
-      console.log("login service");
+      
       this.userService.userAuthentication(this.userFormGroup.value).subscribe((data: UserResponse) => {
         this.shareService.createCookie("userToken", data.token, 20);
         this.shareService.createCookie("userName", data.userName, 20);
