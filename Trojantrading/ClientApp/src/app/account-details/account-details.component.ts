@@ -49,46 +49,21 @@ export class AccountDetailsComponent implements OnInit {
 
   ngOnInit() {
     this.nav.hideTab();
-    this.address = {
-      customerName: "admin",
-      addressLine1: "asdasd",
-      addressLine2: "",
-      addressLine3: "",
-      suburb: "Kurnell",
-      state: "NSW",
-      postcode: "2000",
-      phone: "22222"
-    };
-    this.user={
-      id: 1,
-      account: "admin",
-      password: "123",
-      bussinessName: "CTC",
-      postCode: "2000",
-      trn: "222222",
-      email: "a@b.c",
-      phone: "22222",
-      mobile: "222222",
-      status: "active",
-      sendEmail: true,
-      shippingAddress: this.address,
-      billingAddress: this.address,
-      shoppingItems: this.shoppingItems,
-      orders: this.orders,
-      shoppingCart: this.shoppingCart
-    };
+    this.adminService.GetUserByAccount(this.shareService.readCookie("userName")).subscribe((res: User) => {
+      this.user = res;
+      console.info(this.user);
+      this.userFormGroup.get("trn").setValue(this.user.trn);
+      this.userFormGroup.get("email").setValue(this.user.email);
+      this.userFormGroup.get("phone").setValue(this.user.phone);
+      this.userFormGroup.get("mobile").setValue(this.user.mobile);
+    },
+      (error: any) => {
+        console.info(error);
+      });
 
-    this.userFormGroup.get("trn").setValue(this.user.trn);
-    this.userFormGroup.get("email").setValue(this.user.email);
-    this.userFormGroup.get("phone").setValue(this.user.phone);
-    this.userFormGroup.get("mobile").setValue(this.user.mobile);
-    // this.adminService.GetUserByAccount(this.shareService.readCookie("userName")).subscribe((res: User) => {
-    //   this.user = res;
-    //   console.info(this.user);
-    // },
-    //   (error: any) => {
-    //     console.info(error);
-    //   });
+    this.adminService.GetShippingAddress(1).subscribe((res: UserAddress) => {
+      console.info(res);
+    });
   }
 
   backToProduct(): void{

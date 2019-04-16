@@ -55,6 +55,15 @@ namespace Trojantrading.Controllers
             return Ok(userInfo);
         }
 
+        [HttpGet("GetShippingAddress")]
+        [NoCache]
+        [ProducesResponseType(typeof(ShippingAddress), 200)]
+        public IActionResult GetShippingAddress(int userId)
+        {
+            var result = _userRepository.GetShippingAddress(userId);
+            return Ok(result);
+        }
+
         [HttpPost("UpdateUser")]
         [NoCache]
         [ProducesResponseType(typeof(ApiResponse), 200)]

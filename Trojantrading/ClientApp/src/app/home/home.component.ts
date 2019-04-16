@@ -62,7 +62,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     if(currentURL != '/home'){
       this.isHomeComponentDestroyed = true;
     }
-    
+    this.nav.showTab();
     this.getAllProducts();
   }
 

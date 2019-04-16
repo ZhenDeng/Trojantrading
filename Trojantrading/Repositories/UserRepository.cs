@@ -29,7 +29,7 @@ namespace Trojantrading.Repositories
 
         ApiResponse ValidateEmail(string email);
         Task<ApiResponse> UpdatePassword(string userName, string newPassword);
-
+        ShippingAddress GetShippingAddress(int userId);
     }
 
     public class UserRepository:IUserRepository
@@ -85,6 +85,14 @@ namespace Trojantrading.Repositories
                 .Where(u => u.Status == Constrants.USER_STATUS_INACTIVE)
                 .Count();
             return result;
+        }
+
+        public ShippingAddress GetShippingAddress(int userId)
+        {
+            var shippingAddress = trojantradingDbContext.ShippingAddress
+                .Where(u => u.UserId == userId)
+                .FirstOrDefault();
+            return shippingAddress;
         }
 
         public async Task<ApiResponse> Update(User user)

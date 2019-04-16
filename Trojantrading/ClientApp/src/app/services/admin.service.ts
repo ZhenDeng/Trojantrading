@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators/catchError';
 import { ApiResponse } from '../models/ApiResponse';
 import { User } from '../models/user';
+import { UserAddress } from '../models/UserAddress';
 
 @Injectable()
 export class AdminService {
@@ -19,6 +20,11 @@ export class AdminService {
 
   UpdateUser(user: User): Observable<ApiResponse> {
     return this.http.post(this.base_url + "/UpdateUser", user)
+      .pipe(catchError(this.handleError));
+  }
+
+  GetShippingAddress(userId: number): Observable<UserAddress> {
+    return this.http.get(this.base_url + "/GetShippingAddress?userId=" + userId)
       .pipe(catchError(this.handleError));
   }
 

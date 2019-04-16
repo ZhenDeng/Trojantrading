@@ -1,10 +1,10 @@
 <div class="top container">
   <a [routerLink]="['/home']" id="logo">
     <img src="/img/img-placeholder.jpg" alt="stg logo">
-    <span>ST Group</span>
+    <h1 style="text-transform:uppercase;color:#eeede1;">TrojanTrading Tobacco Group</h1>
   </a>
   <section id="welcome" class="container">
-    <p>Scandinavian Tobacco Group Australia Pty Ltd (STG AU) is Australia’s leading supplier of cigars, pipe
+    <p>TrojanTrading Tobacco Group is Australia’s leading supplier of cigars, pipe
       tobacco,
       matches, lighters and tobacco accessories. Market leading brands available from STG AU include Macanudo,
       Amanda,
@@ -22,7 +22,7 @@
         </mat-form-field>
       </form>
       <mat-checkbox [(ngModel)]="checked" id="checkbox">I accept the terms and conditions</mat-checkbox>
-      <button class="btn btn-long" (click)="onSubmit()">LOGIN IN</button>
+      <button class="btn btn-long loginbtn" (click)="onSubmit()">LOGIN IN</button>
       <button class="btn btn-long" (click)="passwordRecover()">FORGETTEN PASSWORD?</button>
     </div>
     <div class="login-box" *ngIf="sentEmailField">
@@ -43,5 +43,5 @@
       </ng-container>
     </div>
   </div>
-  <p class="footer">© Copyright 2017 Scandinavian Tobacco Group Australia Pty Ltd.</p>
+  <p class="footer">© Copyright 2019 TrojanTrading Tobacco Group Australia Pty Ltd.</p>
 </div>

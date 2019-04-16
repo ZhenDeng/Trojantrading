@@ -56,14 +56,18 @@ export class LoginComponent implements OnInit {
     }
 
 
-    if(this.userFormGroup.get('account').valid && this.userFormGroup.get('password').valid && this.checked){
+    if(this.userFormGroup.valid && this.checked){
       console.log("login service");
       this.userService.userAuthentication(this.userFormGroup.value).subscribe((data: UserResponse) => {
-        this.shareService.createCookie("userToken", data.token, 20);
-        this.shareService.createCookie("userName", data.userName, 20);
-        this.shareService.createCookie("role", this.userFormGroup.get("role").value, 20);
-        this.nav.show();
-        this.router.navigate(['/home']);
+        if(data && data.token){
+          this.shareService.createCookie("userToken", data.token, 20);
+          this.shareService.createCookie("userName", data.userName, 20);
+          this.shareService.createCookie("role", this.userFormGroup.get("role").value, 20);
+          this.nav.show();
+          this.router.navigate(['/home']);
+        }else{
+          this.shareService.showError(".loginbtn", "Your Account Has Been Suspended", "right");
+        }
       },
         (error: any) => {
           console.info(error);
@@ -84,11 +88,15 @@ export class LoginComponent implements OnInit {
     if (this.userEmailGroup.get("email").valid) {
       this.userService.ValidateEmail(this.userEmailGroup.get("email").value).subscribe((res: ApiResponse) => {
         if(res && res.status == "success"){
-          console.info("aaa");
           this.userService.PasswordRecover(this.userEmailGroup.get("email").value, this.shareService.readCookie("userName")).subscribe((res: UserResponse) => {
-            this.shareService.createCookie("recoverToken", res.token, 5);
-            this.shareService.createCookie("recoverUser", res.userName, 5);
-            this.showResetText = true;
+            if(res && res.token){
+              this.shareService.createCookie("recoverToken", res.token, 5);
+              this.shareService.createCookie("recoverUser", res.userName, 5);
+              this.showResetText = true;
+            }
+            else{
+              this.shareService.showError(".sendresetemail", "Your Account Has Been Suspended", "right");
+            }
           },
             (error: any) => {
               console.info(error);
