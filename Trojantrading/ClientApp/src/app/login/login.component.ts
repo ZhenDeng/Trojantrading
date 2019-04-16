@@ -30,8 +30,7 @@ export class LoginComponent implements OnInit {
     private shareService: ShareService) {
     this.userFormGroup = this.formBuilder.group({
       account: new FormControl("", Validators.compose([Validators.required])),
-      password: new FormControl("", Validators.compose([Validators.required])),
-      role: new FormControl("")
+      password: new FormControl("", Validators.compose([Validators.required]))
     });
 
     this.userEmailGroup = this.formBuilder.group({
@@ -62,7 +61,6 @@ export class LoginComponent implements OnInit {
         if(data && data.token){
           this.shareService.createCookie("userToken", data.token, 20);
           this.shareService.createCookie("userName", data.userName, 20);
-          this.shareService.createCookie("role", this.userFormGroup.get("role").value, 20);
           this.nav.show();
           this.router.navigate(['/home']);
         }else{

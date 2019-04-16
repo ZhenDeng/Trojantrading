@@ -165,17 +165,5 @@ namespace Trojantrading.Controllers
             _userRepository.Delete(id);
             return null;
         }
-
-        //public async Task<IActionResult> Edit(int id)
-        //{
-        //    var user = _userRepository.Get(id);
-        //    return null;
-        //}
-
-        public async Task<IActionResult> GetAll()
-        {
-            var users = _userRepository.GetAll();
-            return null;
-        }
     }
 }

@@ -23,8 +23,8 @@ export class AdminService {
       .pipe(catchError(this.handleError));
   }
 
-  GetShippingAddress(userId: number): Observable<UserAddress> {
-    return this.http.get(this.base_url + "/GetShippingAddress?userId=" + userId)
+  GetUserWithAddress(userName: string): Observable<User> {
+    return this.http.get(this.base_url + "/GetUserWithAddress?userName=" + userName)
       .pipe(catchError(this.handleError));
   }
 

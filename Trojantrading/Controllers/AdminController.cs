@@ -28,23 +28,6 @@ namespace Trojantrading.Controllers
             _headInformationRepository = headInformationRepository;
             _pdfBoardRepository = pdfBoardRepository;
         }
-        
-
-        [Route("/dashboard")]
-        public IActionResult Dashboard()
-        {
-            string totalUserNumber = _userRepository.GetTotalUserNumber().ToString();//user
-            string totalNewUserNumber = _userRepository.GetNewUserNumber().ToString();
-            string totalProduct = _productRepository.GetTotalProducts().ToString();//product
-            string totalOrder = _orderRepository.GetToatalOrderNumber().ToString();//order
-            string totalNewOrder = _orderRepository.GetNewOrderNumber().ToString();//new order
-            return null;
-        }
-
-        public IActionResult GetExcel()
-        {
-            return null;
-        }
 
         [HttpGet("GetUserByAccount")]
         [NoCache]
@@ -55,13 +38,13 @@ namespace Trojantrading.Controllers
             return Ok(userInfo);
         }
 
-        [HttpGet("GetShippingAddress")]
+        [HttpGet("GetUserWithAddress")]
         [NoCache]
-        [ProducesResponseType(typeof(ShippingAddress), 200)]
-        public IActionResult GetShippingAddress(int userId)
+        [ProducesResponseType(typeof(User), 200)]
+        public IActionResult GetUserWithAddress(string userName)
         {
-            var result = _userRepository.GetShippingAddress(userId);
-            return Ok(result);
+            var userInfo = _userRepository.GetUserWithAddress(userName);
+            return Ok(userInfo);
         }
 
         [HttpPost("UpdateUser")]
@@ -71,16 +54,6 @@ namespace Trojantrading.Controllers
         {
             var result = _userRepository.Update(user);
             return Ok(result);
-        }
-
-        public async Task<IActionResult> GetProducts()
-        {
-            return null;
-        }
-
-        public async Task<IActionResult> GetOrders()
-        {
-            return null;
         }
     }
 }

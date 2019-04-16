@@ -1,8 +1,5 @@
-using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
 
 namespace Trojantrading.Models
 {
@@ -38,8 +35,8 @@ namespace Trojantrading.Models
         public ShoppingCart ShoppingCart { get; set; }
 
         public List<Order> Orders { get; set; }
-
-        public UserRole UserRole { get; set; }
+        public int RoleId { get; set; }
+        public Role Role { get; set; }
         public ShippingAddress ShippingAddress { get; set; }
         public BillingAddress BillingAddress { get; set; }
 

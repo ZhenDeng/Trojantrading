@@ -5,6 +5,6 @@ export interface UserAddress {
     addressLine3: string
     suburb: string
     state: string
-    postcode: string
+    postCode: string
     phone: string
 }

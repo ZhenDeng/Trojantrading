@@ -15,21 +15,15 @@ namespace Trojantrading.Repositories
 
         void Delete(int id);
 
-        Task<ApiResponse> Update(User user);
+        ApiResponse Update(User user);
 
         User Get(string userName);
+        User GetUserWithAddress(string userName);
 
         User GetUserByAccount(string account);
 
-        int GetTotalUserNumber();
-
-        int GetNewUserNumber();
-
-        IEnumerable<User> GetAll();
-
         ApiResponse ValidateEmail(string email);
         Task<ApiResponse> UpdatePassword(string userName, string newPassword);
-        ShippingAddress GetShippingAddress(int userId);
     }
 
     public class UserRepository:IUserRepository
@@ -63,6 +57,63 @@ namespace Trojantrading.Repositories
             return user;
         }
 
+        public User GetUserWithAddress(string userName)
+        {
+            var user = trojantradingDbContext.Users
+                        .Join(trojantradingDbContext.BillingAddress, x => x.Id, y => y.UserId, (userModel, billingAddress) => new { User = userModel, BillingAddress = billingAddress })
+                        .Join(trojantradingDbContext.ShippingAddress, x => x.User.Id, y => y.UserId, (userModel, shippingAddress) => new { JoinUser = userModel, ShippingAddress = shippingAddress })
+                        .Where(x => x.JoinUser.User.Account == userName)
+                        .Select(join => new User
+                        {
+                            Id = join.JoinUser.User.Id,
+                            CreatedDate = join.JoinUser.User.CreatedDate,
+                            Account = join.JoinUser.User.Account,
+                            PassswordHash = join.JoinUser.User.PassswordHash,
+                            PasswordSalt = join.JoinUser.User.PasswordSalt,
+                            Password = join.JoinUser.User.Password,
+                            BussinessName = join.JoinUser.User.BussinessName,
+                            PostCode = join.JoinUser.User.PostCode,
+                            Trn = join.JoinUser.User.Trn,
+                            Email = join.JoinUser.User.Email,
+                            Mobile = join.JoinUser.User.Mobile,
+                            Phone = join.JoinUser.User.Phone,
+                            Status = join.JoinUser.User.Status,
+                            SendEmail = join.JoinUser.User.SendEmail,
+                            ShippingAddress = join.ShippingAddress,
+                            BillingAddress = join.JoinUser.BillingAddress
+                        }).FirstOrDefault();
+            return user;
+        }
+
+        //public User GetUserWithRole(string userName)
+        //{
+        //    var user = trojantradingDbContext.Users
+        //                   .Join(trojantradingDbContext, x => x.Id, y => y.UserId, (userModel, billingAddress) => new { User = userModel, BillingAddress = billingAddress })
+        //                   .Join(trojantradingDbContext.ShippingAddress, x => x.User.Id, y => y.UserId, (userModel, shippingAddress) => new { JoinUser = userModel, ShippingAddress = shippingAddress })
+        //                   .Where(x => x.JoinUser.User.Account == userName)
+        //                   .Select(join => new User
+        //                   {
+        //                       Id = join.JoinUser.User.Id,
+        //                       CreatedDate = join.JoinUser.User.CreatedDate,
+        //                       Account = join.JoinUser.User.Account,
+        //                       PassswordHash = join.JoinUser.User.PassswordHash,
+        //                       PasswordSalt = join.JoinUser.User.PasswordSalt,
+        //                       Password = join.JoinUser.User.Password,
+        //                       BussinessName = join.JoinUser.User.BussinessName,
+        //                       PostCode = join.JoinUser.User.PostCode,
+        //                       Trn = join.JoinUser.User.Trn,
+        //                       Email = join.JoinUser.User.Email,
+        //                       Mobile = join.JoinUser.User.Mobile,
+        //                       Phone = join.JoinUser.User.Phone,
+        //                       Status = join.JoinUser.User.Status,
+        //                       SendEmail = join.JoinUser.User.SendEmail,
+        //                       ShippingAddress = join.ShippingAddress,
+        //                       BillingAddress = join.JoinUser.BillingAddress
+        //                   }).FirstOrDefault();
+        //    return user;
+
+        //}
+
         public User GetUserByAccount(string account)
         {
             var user = trojantradingDbContext.Users
@@ -71,36 +122,12 @@ namespace Trojantrading.Repositories
             return user;
         }
 
-        public int GetTotalUserNumber()
-        {
-            var result = trojantradingDbContext.Users
-                .Where(u => u.Status == Constrants.USER_STATUS_ACTIVE)
-                .Count();
-            return result;
-        }
-
-        public int GetNewUserNumber()
-        {
-            var result = trojantradingDbContext.Users
-                .Where(u => u.Status == Constrants.USER_STATUS_INACTIVE)
-                .Count();
-            return result;
-        }
-
-        public ShippingAddress GetShippingAddress(int userId)
-        {
-            var shippingAddress = trojantradingDbContext.ShippingAddress
-                .Where(u => u.UserId == userId)
-                .FirstOrDefault();
-            return shippingAddress;
-        }
-
-        public async Task<ApiResponse> Update(User user)
+        public ApiResponse Update(User user)
         {
             try
             {
                 trojantradingDbContext.Users.Update(user);
-                await trojantradingDbContext.SaveChangesAsync();
+                trojantradingDbContext.SaveChanges();
                 return new ApiResponse() {
                     Status = "success",
                     Message = "Successfully update user"
@@ -173,12 +200,5 @@ namespace Trojantrading.Repositories
                 };
             }
         }
-
-        public IEnumerable<User> GetAll()
-        {
-            var users = trojantradingDbContext.Users;
-            return users;
-        }
     }
-    
 }

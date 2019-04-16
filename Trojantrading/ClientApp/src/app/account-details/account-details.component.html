@@ -31,9 +31,9 @@
         </div>
         <div class="card-body">
           <div class="detail">
-            <span>{{address?.customerName}}</span>
-            <span>{{address?.addressLine1}} {{address?.addressLine2}} {{address?.addressLine3}}</span>
-            <span>{{address?.suburb}} {{address?.state}} {{address?.postcode}}</span>
+            <span>{{user?.shippingAddress?.customerName}}</span>
+            <span>{{user?.shippingAddress?.addressLine1}} {{user?.shippingAddress?.addressLine2}} {{user?.shippingAddress?.addressLine3}}</span>
+            <span>{{user?.shippingAddress?.suburb}} {{user?.shippingAddress?.state}} {{user?.shippingAddress?.postCode}}</span>
           </div>
         </div>
       </div>
@@ -45,9 +45,9 @@
         </div>
         <div class="card-body">
           <div class="detail">
-            <span>{{address?.customerName}}</span>
-            <span>{{address?.addressLine1}} {{address?.addressLine2}} {{address?.addressLine3}}</span>
-            <span>{{address?.suburb}} {{address?.state}} {{address?.postcode}}</span>
+            <span>{{user?.billingAddress?.customerName}}</span>
+            <span>{{user?.billingAddress?.addressLine1}} {{user?.billingAddress?.addressLine2}} {{user?.billingAddress?.addressLine3}}</span>
+            <span>{{user?.billingAddress?.suburb}} {{user?.billingAddress?.state}} {{user?.billingAddress?.postCode}}</span>
           </div>
         </div>
       </div>
@@ -62,18 +62,18 @@
         <div class="card-body">
           <div class="detail" [formGroup]="userFormGroup">
             <mat-form-field [floatLabel]="'always'">
-              <input matInput formControlName="trn" placeholder="Tobacco Licence Number" required>
+              <input matInput class="trn" formControlName="trn" placeholder="Tobacco Licence Number" required>
             </mat-form-field>
             <mat-form-field [floatLabel]="'always'">
-              <input matInput formControlName="email" placeholder="Email Address" required>
+              <input matInput class="email" formControlName="email" placeholder="Email Address" required>
             </mat-form-field>
             <mat-form-field [floatLabel]="'always'">
-              <input matInput formControlName="phone" placeholder="Phone" required>
+              <input matInput class="phone" formControlName="phone" placeholder="Phone" required>
             </mat-form-field>
             <mat-form-field [floatLabel]="'always'">
-              <input matInput formControlName="mobile" placeholder="Mobile">
+              <input matInput class="mobile" formControlName="mobile" placeholder="Mobile">
             </mat-form-field>
-            <button class="btn btn-long">UPDATE</button>
+            <button class="btn btn-long updateinfo" (click)="updateInfo()">UPDATE</button>
           </div>
         </div>
       </div>
@@ -86,7 +86,7 @@
         <div class="card-body">
           <div class="detail" [formGroup]="userPasswordGroup">
             <mat-form-field [floatLabel]="'always'">
-              <input matInput formControlName="password" placeholder="Current Password" required>
+              <input matInput formControlName="password" placeholder="Current Password" (blur)="validateOldPassword()" required>
             </mat-form-field>
             <p>
               <b>Set a new password<br /></b> Your password Must be at least 6 characters long.
@@ -97,7 +97,7 @@
             <mat-form-field [floatLabel]="'always'">
               <input matInput formControlName="confirmpassord" placeholder="Confirm Password" required>
             </mat-form-field>
-            <button class="btn btn-long">UPDATE</button>
+            <button class="btn btn-long" (click)="updatePassword()">UPDATE</button>
           </div>
         </div>
       </div>
