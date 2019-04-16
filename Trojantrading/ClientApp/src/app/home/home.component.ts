@@ -72,6 +72,9 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.allProducts.forEach(product => product.quantity = 1);
         this.dataSource = new MatTableDataSource(this.allProducts);
 
+    },
+    (error: any) => {
+      console.info(error);
     });
   }
 

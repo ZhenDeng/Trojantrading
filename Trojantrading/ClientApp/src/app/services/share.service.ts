@@ -11,19 +11,6 @@ declare var $: any;
 @Injectable()
 export class ShareService {
 
-  product: Product[] = [
-    {id: 1, name: "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.", originalPrice: 1.5, vipTwoPrice: 1.5, vipOnePrice: 1.0079, quantity: 1, category: 'H', button: "Update Cart", status: 'New'},
-    {id: 1, name:  "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.", originalPrice: 1.5, vipTwoPrice: 1.5, vipOnePrice: 4.0026, quantity: 1, category: 'He', button: "Update Cart", status: 'New'},
-    {id: 1, name:  "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.", originalPrice: 1.5, vipTwoPrice: 1.5, vipOnePrice: 6.941, quantity: 1, category: 'Li', button: "Update Cart", status: 'New'},
-    {id: 1, name:  "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.", originalPrice: 1.5, vipTwoPrice: 1.5, vipOnePrice: 9.0122, quantity: 1, category: 'Be', button: "Update Cart", status: 'New'},
-    {id: 1, name:  "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.", originalPrice: 1.5, vipTwoPrice: 1.5, vipOnePrice: 10.811, quantity: 1, category: 'B', button: "Update Cart", status: 'New'},
-    {id: 1, name:  "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.", originalPrice: 1.5, vipTwoPrice: 1.5, vipOnePrice: 12.0107, quantity: 1, category: 'C', button: "Update Cart", status: 'New'},
-    {id: 1, name:  "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.", originalPrice: 1.5, vipTwoPrice: 1.5, vipOnePrice: 14.0067, quantity: 1, category: 'N', button: "Update Cart", status: 'New'},
-    {id: 1, name:  "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.", originalPrice: 1.5, vipTwoPrice: 1.5, vipOnePrice: 15.9994, quantity: 1, category: 'O', button: "Update Cart", status: 'New'},
-    {id: 1, name:  "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.", originalPrice: 1.5, vipTwoPrice: 1.5, vipOnePrice: 18.9984, quantity: 1, category: 'F', button: "Update Cart", status: 'New'},
-    {id: 1, name:  "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.", originalPrice: 1.5, vipTwoPrice: 1.5, vipOnePrice: 20.1797, quantity: 1, category: 'Ne', button: "Update Cart", status: 'New'}
-  ]
-
   constructor() { }
 
   savecookies(name: string, value: string, mins: number) {
