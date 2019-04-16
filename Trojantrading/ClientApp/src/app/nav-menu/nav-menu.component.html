@@ -63,7 +63,7 @@
             </div>
           </li>
           <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
-            <a [routerLink]='["/home"]'>
+            <a [routerLink]='["/orders"]'>
               <i class="fas fa-list fa-fw"></i> Order History
             </a>
           </li>
@@ -79,7 +79,7 @@
   <section class="container-fluid" *ngIf="nav.tabVisible">
     <div class="row navbar-button">
       <div class="col-sm-12 navbar-button_flexWrapper">
-        <button *ngFor="let cig of testJsonObj">{{cig?.type}}</button>
+        <button *ngFor="let cig of testJsonObj" (click)="manageRedirect(cig.category);">{{cig?.type}}</button>
       </div>
     </div>
   </section>

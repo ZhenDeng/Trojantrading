@@ -6,10 +6,6 @@ import { ProductsComponent } from './products.component';
 
 const routes: Routes = [
     {
-        path: 'product',
-        component: HomeComponent,
-    },
-    {
         path: 'productsview/:type',
         component: ProductsComponent
     }
