@@ -23,7 +23,7 @@ namespace Trojantrading.Controllers
         private readonly AppSettings _appSettings;
 
         public UserController(
-            IUserRepository userRepository, 
+            IUserRepository userRepository,
             IOptions<AppSettings> appSettings,
             IShare share)
         {
@@ -38,7 +38,7 @@ namespace Trojantrading.Controllers
         [ProducesResponseType(typeof(UserResponse), 200)]
         public IActionResult Authenticate([FromBody]User userModel)
         {
-            User user = _userRepository.Get(userModel.Account);
+            User user = _userRepository.GetUserWithRole(userModel.Account);
             if (user.Status.ToLower() == "active")
             {
                 if (userModel.Account != user.Account || userModel.Password != user.Password)
@@ -63,15 +63,18 @@ namespace Trojantrading.Controllers
                 // return basic user info and token to store client side
                 return Ok(new UserResponse
                 {
-                    UserName = userModel.Account,
-                    Token = tokenString
+                    UserName = user.Account,
+                    Token = tokenString,
+                    Role = user.Role.Name
                 });
             }
-            else {
+            else
+            {
                 return Ok(new UserResponse
                 {
                     UserName = "",
-                    Token = ""
+                    Token = "",
+                    Role = ""
                 });
             }
         }
@@ -111,7 +114,8 @@ namespace Trojantrading.Controllers
                     Token = tokenString
                 });
             }
-            else {
+            else
+            {
                 return Ok(new UserResponse
                 {
                     UserName = "",

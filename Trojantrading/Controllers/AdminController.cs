@@ -1,6 +1,4 @@
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
 using Trojantrading.Repositories;
 using Trojantrading.Util;
 using Trojantrading.Models;
@@ -54,6 +52,15 @@ namespace Trojantrading.Controllers
         {
             var result = _userRepository.Update(user);
             return Ok(result);
+        }
+
+        [HttpGet("GetUserWithRole")]
+        [NoCache]
+        [ProducesResponseType(typeof(User), 200)]
+        public IActionResult GetUserWithRole(string userName)
+        {
+            var userInfo = _userRepository.GetUserWithRole(userName);
+            return Ok(userInfo);
         }
     }
 }

@@ -28,6 +28,11 @@ export class AdminService {
       .pipe(catchError(this.handleError));
   }
 
+  GetUserWithRole(userName: string): Observable<User> {
+    return this.http.get(this.base_url + "/GetUserWithRole?userName=" + userName)
+      .pipe(catchError(this.handleError));
+  }
+
   private handleError(error: HttpErrorResponse) {
     console.error('server error:', error);
     if (error.error instanceof ErrorEvent) {

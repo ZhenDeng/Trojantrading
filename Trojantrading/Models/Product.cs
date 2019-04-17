@@ -12,17 +12,14 @@ namespace Trojantrading.Models
 
         public double OriginalPrice { get; set; }
 
-        public double VipOnePrice { get; set; }
+        public double AgentPrice { get; set; }
 
-        public double VipTwoPrice { get; set; }
+        public double ResellerPrice { get; set; }
 
         public string Category { get; set; }
-
 
         public ShoppingItem ShoppingItem{get;set;}
 
         public string Status { get; set; }  // 1.New 2.Promotion 3.SoldOut
     }
-
-   
 }

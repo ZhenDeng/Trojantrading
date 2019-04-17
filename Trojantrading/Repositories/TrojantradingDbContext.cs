@@ -14,14 +14,13 @@ namespace Trojantrading.Repositories
         public DbSet<User> Users { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Order> Orders { get; set; }
-
         public DbSet<HeadInformation> HeadInformations { get; set; }
         public DbSet<ShoppingCart> ShoppingCarts { get; set; }
         public DbSet<PdfBoard> PdfBoards { get; set; }
         public DbSet<CompanyInfo> CompanyInfos { get; set; }
         public DbSet<Role> Roles { get; set; }
-        public DbSet<ShippingAddress> ShippingAddress { get; set; }
-        public DbSet<BillingAddress> BillingAddress { get; set; }
+        public DbSet<ShippingAddress> ShippingAddresses { get; set; }
+        public DbSet<BillingAddress> BillingAddresses { get; set; }
         public DbSet<ShoppingItem> ShoppingItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -102,13 +101,14 @@ namespace Trojantrading.Repositories
             // user Ship address 1:1
             modelBuilder.Entity<User>()
                 .HasOne(u => u.ShippingAddress)
-                .WithOne(s => s.User)
-                .HasForeignKey<ShippingAddress>(s => s.UserId);
+                .WithMany(s => s.Users)
+                .HasForeignKey(s => s.ShippingAddressId);
+
             // user Bill address 1:1
             modelBuilder.Entity<User>()
                 .HasOne(u => u.BillingAddress)
-                .WithOne(s => s.User)
-                .HasForeignKey<BillingAddress>(s => s.UserId);
+                .WithMany(s => s.Users)
+                .HasForeignKey(s => s.BillingAddressId);
         }
     }
 }

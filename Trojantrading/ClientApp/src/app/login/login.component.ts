@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { UserService } from '../services/user.service';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -54,13 +54,12 @@ export class LoginComponent implements OnInit {
       this.shareService.showError('#checkbox', 'Please check the t&c to use our service', "right");
     }
 
-
     if(this.userFormGroup.valid && this.checked){
-      console.log("login service");
       this.userService.userAuthentication(this.userFormGroup.value).subscribe((data: UserResponse) => {
         if(data && data.token){
           this.shareService.createCookie("userToken", data.token, 20);
           this.shareService.createCookie("userName", data.userName, 20);
+          this.shareService.createCookie("role", data.role, 20);
           this.nav.show();
           this.router.navigate(['/home']);
         }else{
