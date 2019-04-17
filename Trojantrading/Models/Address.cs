@@ -8,7 +8,6 @@ namespace Trojantrading.Models
     public class ShippingAddress
     {
         public int Id { get; set; }
-        public int UserId { get; set; }
         public string CustomerName { get; set; }
         public string AddressLine1 { get; set; }
         public string AddressLine2 { get; set; }
@@ -17,13 +16,12 @@ namespace Trojantrading.Models
         public string State { get; set; }
         public string PostCode { get; set; }
         public string Phone { get; set; }
-        public User User { get; set; }
+        public List<User> Users { get; set; }
     }
 
     public class BillingAddress
     {
         public int Id { get; set; }
-        public int UserId { get; set; }
         public string CustomerName { get; set; }
         public string AddressLine1 { get; set; }
         public string AddressLine2 { get; set; }
@@ -32,6 +30,6 @@ namespace Trojantrading.Models
         public string State { get; set; }
         public string PostCode { get; set; }
         public string Phone { get; set; }
-        public User User { get; set; }
+        public List<User> Users { get; set; }
     }
 }

@@ -12,7 +12,7 @@ import { AuthInterceptor } from './auth/auth.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatTabsModule, MatTableModule } from '@angular/material';
+import { MatTabsModule, MatTableModule, MatDialogModule } from '@angular/material';
 import { AccountDetailsComponent } from './account-details/account-details.component';
 import { AdminService } from './services/admin.service';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
@@ -31,10 +31,10 @@ import { ProductsModule } from './products/products.module';
 import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MatListModule } from '@angular/material/list';
-import {MatCheckboxModule} from '@angular/material/checkbox';
-
-import { ShoppingCartServiceService } from './services/shopping-cart-service.service';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { OrdersComponent } from './orders/orders.component';
+import { TermsAndConditionsComponent } from './popup-collection/terms-and-conditions/terms-and-conditions.component';
+import { ShoppingCartService } from './services/shopping-cart.service';
 
 @NgModule({
   declarations: [
@@ -49,7 +49,8 @@ import { OrdersComponent } from './orders/orders.component';
     TermsComponent,
     PasswordRecoveryComponent,
     ShoppingCartComponent,
-    OrdersComponent
+    OrdersComponent,
+    TermsAndConditionsComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -68,7 +69,8 @@ import { OrdersComponent } from './orders/orders.component';
     RouterModule,
     MatTabsModule,
     ProductsModule,
-    MatListModule
+    MatListModule,
+    MatDialogModule
   ],
   providers: [
     UserService,
@@ -77,12 +79,15 @@ import { OrdersComponent } from './orders/orders.component';
     AuthGuard,
     AuthRecovery,
     ShareService,
-    ShoppingCartServiceService,
+    ShoppingCartService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true
     }],
+  entryComponents: [
+    TermsAndConditionsComponent
+  ],
   bootstrap: [AppComponent]
 })
 

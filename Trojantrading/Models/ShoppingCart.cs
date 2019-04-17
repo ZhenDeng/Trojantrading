@@ -12,7 +12,6 @@ namespace Trojantrading.Models
         public double TotalPrice {get;set;}
 
         public double OriginalPrice {get;set;}
-        
 
         public int UserId { get; set; }
 

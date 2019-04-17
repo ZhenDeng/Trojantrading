@@ -6,7 +6,6 @@ using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 using Trojantrading.Models;
 using Trojantrading.Repositories;
 using Trojantrading.Service;
@@ -23,7 +22,7 @@ namespace Trojantrading.Controllers
         private readonly AppSettings _appSettings;
 
         public UserController(
-            IUserRepository userRepository, 
+            IUserRepository userRepository,
             IOptions<AppSettings> appSettings,
             IShare share)
         {
@@ -38,32 +37,45 @@ namespace Trojantrading.Controllers
         [ProducesResponseType(typeof(UserResponse), 200)]
         public IActionResult Authenticate([FromBody]User userModel)
         {
-            User user = _userRepository.Get(userModel.Account);
-            if (userModel.Account != user.Account || userModel.Password != user.Password)
+            User user = _userRepository.GetUserWithRole(userModel.Account);
+            if (user.Status.ToLower() == "active")
             {
-                return Unauthorized();
-            }
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new Claim[]
+                if (userModel.Account != user.Account || userModel.Password != user.Password)
                 {
-                new Claim(ClaimTypes.Name, userModel.Account)
-                }),
-                Expires = DateTime.UtcNow.AddMinutes(20),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            var tokenString = tokenHandler.WriteToken(token);
+                    return Unauthorized();
+                }
 
-            // return basic user info and token to store client side
-            return Ok(new UserResponse
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+                var tokenDescriptor = new SecurityTokenDescriptor
+                {
+                    Subject = new ClaimsIdentity(new Claim[]
+                    {
+                new Claim(ClaimTypes.Name, userModel.Account)
+                    }),
+                    Expires = DateTime.UtcNow.AddMinutes(20),
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                };
+                var token = tokenHandler.CreateToken(tokenDescriptor);
+                var tokenString = tokenHandler.WriteToken(token);
+
+                // return basic user info and token to store client side
+                return Ok(new UserResponse
+                {
+                    UserName = user.Account,
+                    Token = tokenString,
+                    Role = user.Role.Name
+                });
+            }
+            else
             {
-                UserName = userModel.Account,
-                Token = tokenString
-            });
+                return Ok(new UserResponse
+                {
+                    UserName = "",
+                    Token = "",
+                    Role = ""
+                });
+            }
         }
 
         [AllowAnonymous]
@@ -72,32 +84,43 @@ namespace Trojantrading.Controllers
         [ProducesResponseType(typeof(UserResponse), 200)]
         public IActionResult PasswordRecover(string email, string userName)
         {
-            User userModel = _userRepository.Get(userName);
-            if (userModel.Account != "admin" || userModel.Password != "123")
+            User userModel = _userRepository.GetUserByAccount(userName);
+            if (userModel.Status.ToLower() == "active")
             {
-                return Unauthorized();
-            }
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new Claim[]
+                if (userModel.Account != userName)
                 {
+                    return Unauthorized();
+                }
+
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+                var tokenDescriptor = new SecurityTokenDescriptor
+                {
+                    Subject = new ClaimsIdentity(new Claim[]
+                    {
                 new Claim(ClaimTypes.Email, userModel.Email)
-                }),
-                Expires = DateTime.UtcNow.AddMinutes(5),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            var tokenString = tokenHandler.WriteToken(token);
-            bool isUpdated = _share.SendEmail(_share.GetConfigKey("EmailFrom"), email, "Trojantrading Password Reset", string.Format("Click url below to reset password:\r\n\r\n{0}", "http://localhost:56410/recover/"+tokenString));
-            // return basic user info and token to store client side
-            return Ok(new UserResponse
+                    }),
+                    Expires = DateTime.UtcNow.AddMinutes(5),
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                };
+                var token = tokenHandler.CreateToken(tokenDescriptor);
+                var tokenString = tokenHandler.WriteToken(token);
+                bool isUpdated = _share.SendEmail(_share.GetConfigKey("EmailFrom"), email, "Trojantrading Password Reset", string.Format("Click url below to reset password:\r\n\r\n{0}", "http://localhost:56410/recover/" + tokenString));
+                // return basic user info and token to store client side
+                return Ok(new UserResponse
+                {
+                    UserName = userModel.Account,
+                    Token = tokenString
+                });
+            }
+            else
             {
-                UserName = userModel.Account,
-                Token = tokenString
-            });
+                return Ok(new UserResponse
+                {
+                    UserName = "",
+                    Token = ""
+                });
+            }
         }
 
         [AllowAnonymous]
@@ -108,53 +131,6 @@ namespace Trojantrading.Controllers
         {
             var result = _userRepository.ValidateEmail(email);
             return Ok(result);
-        }
-
-        [HttpGet("UpdatePassword")]
-        [NoCache]
-        [ProducesResponseType(typeof(ApiResponse), 200)]
-        public async Task<IActionResult> UpdatePassword(string userName, string password)
-        {
-            var result = await _userRepository.UpdatePassword(userName, password);
-            return Ok(result);
-        }
-
-        [Route("/info")]
-        public async Task<IActionResult> Info()
-        {
-            return new JsonResult("123");
-        }
-
-        [HttpPost("/logout")]
-        public async Task<IActionResult> Logout()
-        {
-            return StatusCode(201);
-        }
-
-        [Route("/update")]
-        public async Task<IActionResult> Update(User user)
-        {
-            _userRepository.Update(user);
-            return null;
-        }
-
-        [Route("/delete")]
-        public async Task<IActionResult> Remove(int id)
-        {
-            _userRepository.Delete(id);
-            return null;
-        }
-
-        //public async Task<IActionResult> Edit(int id)
-        //{
-        //    var user = _userRepository.Get(id);
-        //    return null;
-        //}
-
-        public async Task<IActionResult> GetAll()
-        {
-            var users = _userRepository.GetAll();
-            return null;
         }
     }
 }

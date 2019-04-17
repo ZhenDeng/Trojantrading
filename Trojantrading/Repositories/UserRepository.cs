@@ -1,9 +1,6 @@
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using Trojantrading.Models;
 using System.Linq;
-using Trojantrading.Util;
-using System.Collections;
 using System.Collections.Generic;
 using System;
 
@@ -11,25 +8,16 @@ namespace Trojantrading.Repositories
 {
     public interface IUserRepository
     {
-        Task<User> Add(User user);
-
-        void Delete(int id);
-
-        Task<ApiResponse> Update(User user);
-
-        User Get(string userName);
-
+        ApiResponse Add(User user);
+        ApiResponse Delete(int id);
+        ApiResponse Update(User user);
+        User GetUserWithAddress(string userName);
         User GetUserByAccount(string account);
-
-        int GetTotalUserNumber();
-
-        int GetNewUserNumber();
-
-        IEnumerable<User> GetAll();
-
+        User GetUserWithCompanyInfo(string userName);
+        User GetUserWithRole(string userName);
         ApiResponse ValidateEmail(string email);
-        Task<ApiResponse> UpdatePassword(string userName, string newPassword);
-
+        ApiResponse UpdatePassword(string userName, string newPassword);
+        ApiResponse ValidatePassword(string userName, string password);
     }
 
     public class UserRepository:IUserRepository
@@ -41,26 +29,135 @@ namespace Trojantrading.Repositories
             this.trojantradingDbContext = trojantradingDbContext;
         }
 
-        public async Task<User> Add(User user)
+        public ApiResponse Add(User user)
         {
-            await trojantradingDbContext.Users.AddAsync(user);  
-            await trojantradingDbContext.SaveChangesAsync();
-            return user;
+            try
+            {
+                trojantradingDbContext.Users.Add(user);
+                trojantradingDbContext.SaveChanges();
+                return new ApiResponse() {
+                    Status = "success",
+                    Message = "Successfully add user"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse()
+                {
+                    Status = "fail",
+                    Message = "Fail to add user"
+                };
+            }
+            
         }
 
-        public void Delete(int id)
+        public ApiResponse Delete(int id)
         {
-            var user = new User();
-            trojantradingDbContext.Users.Remove(user);
-            trojantradingDbContext.SaveChanges();
+            try
+            {
+                var user = trojantradingDbContext.Users.Where(u => u.Id == id).FirstOrDefault();
+                trojantradingDbContext.Users.Remove(user);
+                trojantradingDbContext.SaveChanges();
+                return new ApiResponse()
+                {
+                    Status = "success",
+                    Message = "Successfully delete user"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse()
+                {
+                    Status = "fail",
+                    Message = "Fail to delete user"
+                };
+            }
         }
 
-        public User Get(string userName)
+        public User GetUserWithAddress(string userName)
         {
             var user = trojantradingDbContext.Users
-                .Where(u=>u.Account == userName)
-                .FirstOrDefault();
+                        .Join(trojantradingDbContext.BillingAddresses, x => x.BillingAddressId, y => y.Id, (userModel, billingAddress) => new { User = userModel, BillingAddress = billingAddress })
+                        .Join(trojantradingDbContext.ShippingAddresses, x => x.User.ShippingAddressId, y => y.Id, (userModel, shippingAddress) => new { JoinUser = userModel, ShippingAddress = shippingAddress })
+                        .Where(x => x.JoinUser.User.Account == userName)
+                        .Select(join => new User
+                        {
+                            Id = join.JoinUser.User.Id,
+                            CreatedDate = join.JoinUser.User.CreatedDate,
+                            Account = join.JoinUser.User.Account,
+                            PassswordHash = join.JoinUser.User.PassswordHash,
+                            PasswordSalt = join.JoinUser.User.PasswordSalt,
+                            Password = join.JoinUser.User.Password,
+                            BussinessName = join.JoinUser.User.BussinessName,
+                            PostCode = join.JoinUser.User.PostCode,
+                            Trn = join.JoinUser.User.Trn,
+                            Email = join.JoinUser.User.Email,
+                            Mobile = join.JoinUser.User.Mobile,
+                            Phone = join.JoinUser.User.Phone,
+                            Status = join.JoinUser.User.Status,
+                            SendEmail = join.JoinUser.User.SendEmail,
+                            ShippingAddress = join.ShippingAddress,
+                            BillingAddress = join.JoinUser.BillingAddress,
+                            ShippingAddressId = join.ShippingAddress.Id,
+                            BillingAddressId = join.JoinUser.BillingAddress.Id
+                        }).FirstOrDefault();
             return user;
+        }
+
+        public User GetUserWithRole(string userName)
+        {
+            var user = trojantradingDbContext.Users
+                           .Join(trojantradingDbContext.Roles, x => x.RoleId, y => y.Id, (userModel, role) => new { User = userModel, Role = role })
+                           .Where(x => x.User.Account == userName)
+                           .Select(join => new User
+                           {
+                               Id = join.User.Id,
+                               CreatedDate = join.User.CreatedDate,
+                               Account = join.User.Account,
+                               PassswordHash = join.User.PassswordHash,
+                               PasswordSalt = join.User.PasswordSalt,
+                               Password = join.User.Password,
+                               BussinessName = join.User.BussinessName,
+                               PostCode = join.User.PostCode,
+                               Trn = join.User.Trn,
+                               Email = join.User.Email,
+                               Mobile = join.User.Mobile,
+                               Phone = join.User.Phone,
+                               Status = join.User.Status,
+                               SendEmail = join.User.SendEmail,
+                               Role = join.Role,
+                               RoleId = join.Role.Id
+                           }).FirstOrDefault();
+            return user;
+
+        }
+
+        public User GetUserWithCompanyInfo(string userName)
+        {
+            var user = trojantradingDbContext.Users
+                           .Join(trojantradingDbContext.CompanyInfos, x => x.CompanyInfoId, y => y.Id, (userModel, companyInfo) => new { User = userModel, CompanyInfo = companyInfo })
+                           .Where(x => x.User.Account == userName)
+                           .Select(join => new User
+                           {
+                               Id = join.User.Id,
+                               CreatedDate = join.User.CreatedDate,
+                               Account = join.User.Account,
+                               PassswordHash = join.User.PassswordHash,
+                               PasswordSalt = join.User.PasswordSalt,
+                               Password = join.User.Password,
+                               BussinessName = join.User.BussinessName,
+                               PostCode = join.User.PostCode,
+                               Trn = join.User.Trn,
+                               Email = join.User.Email,
+                               Mobile = join.User.Mobile,
+                               Phone = join.User.Phone,
+                               Status = join.User.Status,
+                               SendEmail = join.User.SendEmail,
+                               CompanyInfo = join.CompanyInfo,
+                               CompanyInfoId = join.CompanyInfo.Id
+                           }).FirstOrDefault();
+            return user;
+
         }
 
         public User GetUserByAccount(string account)
@@ -71,28 +168,17 @@ namespace Trojantrading.Repositories
             return user;
         }
 
-        public int GetTotalUserNumber()
-        {
-            var result = trojantradingDbContext.Users
-                .Where(u => u.Status == Constrants.USER_STATUS_ACTIVE)
-                .Count();
-            return result;
-        }
-
-        public int GetNewUserNumber()
-        {
-            var result = trojantradingDbContext.Users
-                .Where(u => u.Status == Constrants.USER_STATUS_INACTIVE)
-                .Count();
-            return result;
-        }
-
-        public async Task<ApiResponse> Update(User user)
+        public ApiResponse Update(User user)
         {
             try
             {
-                trojantradingDbContext.Users.Update(user);
-                await trojantradingDbContext.SaveChangesAsync();
+                User userModel = trojantradingDbContext.Users.Where(item => item.Id == user.Id).FirstOrDefault();
+                userModel.Trn = user.Trn;
+                userModel.Email = user.Email;
+                userModel.Phone = user.Phone;
+                userModel.Mobile = user.Mobile;
+                trojantradingDbContext.Users.Update(userModel);
+                trojantradingDbContext.SaveChanges();
                 return new ApiResponse() {
                     Status = "success",
                     Message = "Successfully update user"
@@ -108,14 +194,14 @@ namespace Trojantrading.Repositories
             }
         }
 
-        public async Task<ApiResponse> UpdatePassword(string userName, string newPassword)
+        public ApiResponse UpdatePassword(string userName, string newPassword)
         {
             try
             {
                 User user = trojantradingDbContext.Users.Where(item => item.Account == userName).FirstOrDefault();
                 user.Password = newPassword;
                 trojantradingDbContext.Users.Update(user);
-                await trojantradingDbContext.SaveChangesAsync();
+                trojantradingDbContext.SaveChanges();
 
                 return new ApiResponse()
                 {
@@ -166,11 +252,37 @@ namespace Trojantrading.Repositories
             }
         }
 
-        public IEnumerable<User> GetAll()
+        public ApiResponse ValidatePassword(string userName, string password)
         {
-            var users = trojantradingDbContext.Users;
-            return users;
+            try
+            {
+                var userModel = trojantradingDbContext.Users.Where(user => user.Account == userName).FirstOrDefault();
+                if (userModel.Password == password)
+                {
+                    return new ApiResponse()
+                    {
+                        Status = "success",
+                        Message = "Successfully validate your password"
+                    };
+                }
+                else
+                {
+                    return new ApiResponse()
+                    {
+                        Status = "fail",
+                        Message = "Please input validate password"
+                    };
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse()
+                {
+                    Status = "fail",
+                    Message = ex.Message
+                };
+            }
         }
     }
-    
 }

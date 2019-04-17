@@ -1,9 +1,13 @@
 using System;
+using System.Collections.Generic;
+
 namespace Trojantrading.Models
 {
     public class CompanyInfo
     {
         public int Id { get; set; }
+
+        public string CompanyName { get; set; }
 
         public string CompanyAddress { get; set; }
 
@@ -27,6 +31,6 @@ namespace Trojantrading.Models
 
         public string Acn {get;set;}
 
-
+        public List<User> Users { get; set; }
     }
 }

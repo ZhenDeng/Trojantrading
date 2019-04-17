@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Trojantrading.Models
 {
@@ -11,6 +8,12 @@ namespace Trojantrading.Models
 
         public string Name { get; set; }
 
-        public List<UserRole> UserRoles {get;set;}
+        public List<User> Users { get; set; }
+    }
+
+    public enum RoleName {
+        admin,
+        agent,
+        reseller
     }
 }

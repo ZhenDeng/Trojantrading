@@ -1,14 +1,14 @@
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
 using Trojantrading.Repositories;
 using Trojantrading.Util;
 using Trojantrading.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Trojantrading.Controllers
 {
     [Produces("application/json")]
     [Route("api/[controller]")]
+    [Authorize]
     public class AdminController:Controller
     {
         private readonly IOrderRepository _orderRepository;
@@ -28,30 +28,22 @@ namespace Trojantrading.Controllers
             _headInformationRepository = headInformationRepository;
             _pdfBoardRepository = pdfBoardRepository;
         }
-        
-
-        [Route("/dashboard")]
-        public IActionResult Dashboard()
-        {
-            string totalUserNumber = _userRepository.GetTotalUserNumber().ToString();//user
-            string totalNewUserNumber = _userRepository.GetNewUserNumber().ToString();
-            string totalProduct = _productRepository.GetTotalProducts().ToString();//product
-            string totalOrder = _orderRepository.GetToatalOrderNumber().ToString();//order
-            string totalNewOrder = _orderRepository.GetNewOrderNumber().ToString();//new order
-            return null;
-        }
-
-        public IActionResult GetExcel()
-        {
-            return null;
-        }
 
         [HttpGet("GetUserByAccount")]
         [NoCache]
         [ProducesResponseType(typeof(User), 200)]
         public IActionResult GetUserByAccount(string userName)
         {
-            var userInfo = _userRepository.Get(userName);
+            var userInfo = _userRepository.GetUserByAccount(userName);
+            return Ok(userInfo);
+        }
+
+        [HttpGet("GetUserWithAddress")]
+        [NoCache]
+        [ProducesResponseType(typeof(User), 200)]
+        public IActionResult GetUserWithAddress(string userName)
+        {
+            var userInfo = _userRepository.GetUserWithAddress(userName);
             return Ok(userInfo);
         }
 
@@ -64,14 +56,31 @@ namespace Trojantrading.Controllers
             return Ok(result);
         }
 
-        public async Task<IActionResult> GetProducts()
+        [HttpGet("GetUserWithRole")]
+        [NoCache]
+        [ProducesResponseType(typeof(User), 200)]
+        public IActionResult GetUserWithRole(string userName)
         {
-            return null;
+            var userInfo = _userRepository.GetUserWithRole(userName);
+            return Ok(userInfo);
         }
 
-        public async Task<IActionResult> GetOrders()
+        [HttpGet("ValidatePassword")]
+        [NoCache]
+        [ProducesResponseType(typeof(ApiResponse), 200)]
+        public IActionResult ValidatePassword(string userName, string password)
         {
-            return null;
+            var result = _userRepository.ValidatePassword(userName, password);
+            return Ok(result);
+        }
+
+        [HttpGet("UpdatePassword")]
+        [NoCache]
+        [ProducesResponseType(typeof(ApiResponse), 200)]
+        public IActionResult UpdatePassword(string userName, string password)
+        {
+            var result = _userRepository.UpdatePassword(userName, password);
+            return Ok(result);
         }
     }
 }

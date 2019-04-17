@@ -51,17 +51,32 @@ namespace Trojantrading.Controllers
         }
         
         [Route("/addproduct")]
-        public async Task<IActionResult> AddProduct(string name, double originalPrice, double vipOnePrice, 
-            double vipTwoPrice, string category)
+        public IActionResult AddProduct(string name, double originalPrice, double agentPrice, 
+            double resellerPrice, string category)
         {
-            var product = new Product();
-            product.Name = name;
-            product.OriginalPrice = originalPrice;
-            product.CreatedDate = new DateTime();
-            product.VipOnePrice = vipOnePrice;
-            product.VipTwoPrice = vipTwoPrice;
-            _productRepository.Add(product);
-            return null;
+            try
+            {
+                var product = new Product();
+                product.Name = name;
+                product.OriginalPrice = originalPrice;
+                product.CreatedDate = new DateTime();
+                product.AgentPrice = agentPrice;
+                product.ResellerPrice = resellerPrice;
+                _productRepository.Add(product);
+                return Ok(new ApiResponse
+                {
+                    Status = "success",
+                    Message = "Successfully add product"
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ApiResponse
+                {
+                    Status = "fail",
+                    Message = "Fail to add product"
+                });
+            }
         }
         
     }

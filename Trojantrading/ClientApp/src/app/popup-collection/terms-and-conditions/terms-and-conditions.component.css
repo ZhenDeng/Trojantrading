@@ -1,0 +1,90 @@
+:host {
+  height: 60%;
+  display: flex;
+  flex-direction: column;
+}
+
+.poptitle {
+  min-height: 120px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: baseline;
+}
+
+.subbanner {
+  background: #333333;
+  color: white;
+  text-align: center;
+  height: 30px;
+  line-height: 30px;
+  font-size: 1em;
+  clear: both;
+  width: 96%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.description {
+  width: 96%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: 20px;
+  border: 1px solid #ddd;
+  background: white;
+  box-sizing: border-box;
+  padding: 15px;
+  font-size: 13px;
+}
+
+.poptitle .register-logo {
+  flex: 3;
+  padding-left: 27px;
+}
+
+.mat-dialog-actions {
+  margin: 20px auto 0 !important;
+}
+
+.poptitle .register-logo img {
+  height: 86.5px;
+  width: 192px;
+}
+
+.poptitle .company-info, .poptitle .company-contact {
+  box-sizing: border-box;
+  font-weight: bold;
+  flex: 2;
+}
+
+.mat-dialog-title {
+  line-height: 20px !important;
+  font-size: 12px !important;
+}
+
+.saveupdate {
+  margin-right: 20px;
+}
+
+.saveupdate, .declinebutton {
+  background-color: rgb(202, 24, 69);
+  color: rgb(255, 255, 255);
+}
+
+.saveupdate:hover, .declinebutton:hover {
+  background-color: rgb(72, 72, 71);
+}
+
+.close-button {
+  color: #808080;
+  cursor: pointer;
+  background: #fff;
+  font-weight: 700;
+  line-height: 1;
+  align-self: flex-end;
+  font-size: 1.5em;
+}
+
+.close-button:hover {
+  color: #C20047;
+}

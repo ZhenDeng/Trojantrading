@@ -6,6 +6,11 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { NavbarService } from '../services/navbar.service';
 import { ShareService } from '../services/share.service';
 import { MatTableDataSource } from '@angular/material';
+import { ShoppingCartService } from '../services/shopping-cart.service';
+import { AdminService } from '../services/admin.service';
+import { User } from '../models/user';
+import { ApiResponse } from '../models/ApiResponse';
+import { ShoppingItem } from '../models/shoppingItem';
 
 @Component({
   selector: 'app-home',
@@ -22,10 +27,12 @@ export class HomeComponent implements OnInit, OnDestroy {
   role: string;
   category: string = '';
   dataSource = new MatTableDataSource();
+  user: User;
+  shoppingItem: ShoppingItem;
 
-  displayedColumns: string[] = ['name', 'category', 'originalPrice', 'qty', 'button'];
+  displayedColumns: string[] = ['name', 'category', 'originalPrice', 'agentPrice', 'resellerPrice', 'qty', 'button'];
 
-  navLinks:Menu[] = [
+  navLinks: Menu[] = [
     {
       path: '/home',
       label: 'All Products',
@@ -49,57 +56,70 @@ export class HomeComponent implements OnInit, OnDestroy {
   ];
 
 
-  isHomeComponentDestroyed:boolean = false;
+  isHomeComponentDestroyed: boolean = false;
 
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private shareService: ShareService,
     public nav: NavbarService,
-    private productService: ProductService
-  ) {}
+    private productService: ProductService,
+    private shoppingCartService: ShoppingCartService,
+    private adminService: AdminService
+  ) { }
 
   ngOnInit() {
 
     this.activatedRoute.queryParamMap.subscribe(param => {
-        this.category = param.get('category');
+      this.category = param.get('category');
 
-        this.title = 'Products in All Categories';
+      this.title = 'Products in All Categories';
 
-        this.dataSource = new MatTableDataSource();
+      this.dataSource = new MatTableDataSource();
 
-        this.getAllProducts();
-        
+      this.getAllProducts();
+
     });
 
     let currentURL = this.router.url;
-    if(!currentURL.includes('/home')){
+    if (!currentURL.includes('/home')) {
       this.isHomeComponentDestroyed = true;
     }
-
     this.role = this.shareService.readCookie("role");
-
-    console.log(this.role);
-    
-    
+    this.nav.showTab();
+    this.getAllProducts();
+    this.adminService.GetUserByAccount(this.shareService.readCookie("userName")).subscribe((res: User) => {
+      if (res) {
+        this.user = res;
+        this.shoppingCartService.AddShoppingCart(res.id).subscribe((res: ApiResponse) => {
+          console.info(res);
+        },
+          (error: any) => {
+            console.info(error);
+          });
+      }
+    },
+      (error: any) => {
+        console.info(error);
+      });
   }
 
 
   getAllProducts() {
-    this.productService.getAllProducts().subscribe((value: Product[]) =>{
-        this.allProducts = value;
-        this.allProducts.forEach(product => product.quantity = 1);
+    this.productService.getAllProducts().subscribe((value: Product[]) => {
+      this.allProducts = value;
+      this.allProducts.forEach(product => product.quantity = 1);
 
-        if(value.length && this.category != null && this.category != '') {
-          this.filterProductsByCategory();
-        } else {
-          this.dataSource = new MatTableDataSource(this.allProducts);
-        }
+      if (value.length && this.category != null && this.category != '') {
+        this.filterProductsByCategory();
+      } else {
+        this.dataSource = new MatTableDataSource(this.allProducts);
+      }
 
     },
-    (error: any) => {
-      console.info(error);
-    });
+      (error: any) => {
+        console.info(error);
+      });
   }
 
   filterProductsByCategory() {
@@ -125,10 +145,24 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
+  addToCart(product: Product): void {
+    this.shoppingItem = {
+      amount: product.quantity,
+      product: product
+    }
+    this.shoppingCartService.UpdateShoppingCart(this.user.id, this.shoppingItem).subscribe((res: ApiResponse) => {
+      if (res.status == "success") {
+        this.shareService.showSuccess("#" + product.id, res.message, "right");
+      }else{
+        this.shareService.showError("#" + product.id, res.message, "right");
+      }
+    },
+      (error: any) => {
+        console.info(error);
+      });
+  }
 
-
-  ngOnDestroy(){
-    
+  ngOnDestroy() {
     console.log("destroy home page");
   }
 

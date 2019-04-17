@@ -12,7 +12,7 @@ namespace Trojantrading.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [Authorize]
-    public class ShoppingCartController:Controller
+    public class ShoppingCartController : Controller
     {
         private readonly IShoppingCartRepository _shoppingCartRepository;
         private readonly IProductRepository _productRepository;
@@ -27,40 +27,27 @@ namespace Trojantrading.Controllers
         [NoCache]
         [ProducesResponseType(typeof(ShoppingCart), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
-        public IActionResult GetShoppingCart(int id)
+        public IActionResult GetShoppingCart(int userId)
         {
-            return Ok(_shoppingCartRepository.GetCart(id));
+            return Ok(_shoppingCartRepository.GetCart(userId));
         }
 
-        public IActionResult Add(int productId, int number)
+        [HttpGet("AddShoppingCart")]
+        [NoCache]
+        [ProducesResponseType(typeof(ApiResponse), 200)]
+        [ProducesResponseType(typeof(ApiResponse), 400)]
+        public IActionResult AddShoppingCart(int userId)
         {
-            var shoppingCartId = 12;
-            var shoppingCart = _shoppingCartRepository.GetCart(shoppingCartId);
-            var shoppingItem = new ShoppingItem();
-            var product = _productRepository.Get(productId);
-            shoppingItem.Product = product;
-            shoppingItem.Amount = number;
-            _shoppingCartRepository.UpdateShoppingItems(shoppingCart);
-            return null;
+            return Ok(_shoppingCartRepository.AddShoppingCart(userId));
         }
 
-        public IActionResult Update(int shoppingItemId, int number)
+        [HttpPost("UpdateShoppingCartUpdateShoppingCart")]
+        [NoCache]
+        [ProducesResponseType(typeof(ApiResponse), 200)]
+        [ProducesResponseType(typeof(ApiResponse), 400)]
+        public IActionResult UpdateShoppingCart(int userId, [FromBody]ShoppingItem shoppingItem)
         {
-           
-            return null;
-        }
-
-        public IActionResult Remove(int productId)
-        {
-            var product = _productRepository.ToString();
-            return null;
-        }
-
-        public IActionResult Empty()
-        {
-            var shoppingCardId = 12;
-            _shoppingCartRepository.Empty(shoppingCardId);
-            return null;
+            return Ok(_shoppingCartRepository.UpdateShoppingCart(userId, shoppingItem));
         }
     }
 }

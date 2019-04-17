@@ -1,10 +1,12 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { UserService } from '../services/user.service';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserResponse, ApiResponse } from '../models/ApiResponse';
 import { NavbarService } from '../services/navbar.service';
 import { ShareService } from '../services/share.service';
+import { MatDialog } from '@angular/material';
+import { TermsAndConditionsComponent } from '../popup-collection/terms-and-conditions/terms-and-conditions.component';
 
 declare var jquery: any;
 declare var $: any;
@@ -21,17 +23,18 @@ export class LoginComponent implements OnInit {
   sentEmailField: boolean = false;
   showResetText: boolean = false;
   checked:boolean = false;
+  hidePassword: boolean = true;
 
   constructor(
     private userService: UserService,
     private router: Router,
     private formBuilder: FormBuilder,
     private nav: NavbarService,
-    private shareService: ShareService) {
+    private shareService: ShareService,
+    public dialog: MatDialog) {
     this.userFormGroup = this.formBuilder.group({
       account: new FormControl("", Validators.compose([Validators.required])),
-      password: new FormControl("", Validators.compose([Validators.required])),
-      role: new FormControl("")
+      password: new FormControl("", Validators.compose([Validators.required]))
     });
 
     this.userEmailGroup = this.formBuilder.group({
@@ -55,15 +58,17 @@ export class LoginComponent implements OnInit {
       this.shareService.showError('#checkbox', 'Please check the t&c to use our service', "right");
     }
 
-
-    if(this.userFormGroup.get('account').valid && this.userFormGroup.get('password').valid && this.checked){
-      
+    if(this.userFormGroup.valid && this.checked){
       this.userService.userAuthentication(this.userFormGroup.value).subscribe((data: UserResponse) => {
-        this.shareService.createCookie("userToken", data.token, 20);
-        this.shareService.createCookie("userName", data.userName, 20);
-        this.shareService.createCookie("role", this.userFormGroup.get("role").value, 20);
-        this.nav.show();
-        this.router.navigate(['/home']);
+        if(data && data.token){
+          this.shareService.createCookie("userToken", data.token, 20);
+          this.shareService.createCookie("userName", data.userName, 20);
+          this.shareService.createCookie("role", data.role, 20);
+          this.nav.show();
+          this.router.navigate(['/home']);
+        }else{
+          this.shareService.showError(".loginbtn", "Your Account Has Been Suspended", "right");
+        }
       },
         (error: any) => {
           console.info(error);
@@ -84,11 +89,15 @@ export class LoginComponent implements OnInit {
     if (this.userEmailGroup.get("email").valid) {
       this.userService.ValidateEmail(this.userEmailGroup.get("email").value).subscribe((res: ApiResponse) => {
         if(res && res.status == "success"){
-          console.info("aaa");
           this.userService.PasswordRecover(this.userEmailGroup.get("email").value, this.shareService.readCookie("userName")).subscribe((res: UserResponse) => {
-            this.shareService.createCookie("recoverToken", res.token, 5);
-            this.shareService.createCookie("recoverUser", res.userName, 5);
-            this.showResetText = true;
+            if(res && res.token){
+              this.shareService.createCookie("recoverToken", res.token, 5);
+              this.shareService.createCookie("recoverUser", res.userName, 5);
+              this.showResetText = true;
+            }
+            else{
+              this.shareService.showError(".sendresetemail", "Your Account Has Been Suspended", "right");
+            }
           },
             (error: any) => {
               console.info(error);
@@ -104,5 +113,11 @@ export class LoginComponent implements OnInit {
     } else {
       this.shareService.showError(".sendresetemail", "Please enter valid email address", "right");
     }
+  }
+
+  showTerms(): void{
+    this.dialog.open(TermsAndConditionsComponent, {
+      width: '800px'
+    });
   }
 }

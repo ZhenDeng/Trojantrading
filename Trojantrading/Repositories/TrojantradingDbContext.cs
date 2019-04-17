@@ -14,16 +14,14 @@ namespace Trojantrading.Repositories
         public DbSet<User> Users { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Order> Orders { get; set; }
-
         public DbSet<HeadInformation> HeadInformations { get; set; }
         public DbSet<ShoppingCart> ShoppingCarts { get; set; }
         public DbSet<PdfBoard> PdfBoards { get; set; }
         public DbSet<CompanyInfo> CompanyInfos { get; set; }
         public DbSet<Role> Roles { get; set; }
-        public DbSet<ShippingAddress> ShippingAddress { get; set; }
-        public DbSet<BillingAddress> BillingAddress { get; set; }
+        public DbSet<ShippingAddress> ShippingAddresses { get; set; }
+        public DbSet<BillingAddress> BillingAddresses { get; set; }
         public DbSet<ShoppingItem> ShoppingItems { get; set; }
-
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -62,10 +60,6 @@ namespace Trojantrading.Repositories
             modelBuilder.Entity<BillingAddress>()
                 .ToTable("BillingAddress")
                 .HasKey(s => s.Id);
-            modelBuilder.Entity<UserRole>()
-                .ToTable("userrole")
-                .HasKey(ur=>new{ur.UserId, ur.RoleId});
-
 
             //user shoppingcart 1:1
             modelBuilder.Entity<User>()
@@ -79,22 +73,17 @@ namespace Trojantrading.Repositories
                 .WithMany(u => u.Orders)
                 .HasForeignKey(o => o.UserId);
 
-            //user role m:n
-            modelBuilder.Entity<UserRole>()
-                .HasOne(ur=>ur.User)
-                .WithOne(u=>u.UserRole)
-                .HasForeignKey<UserRole>(ur=>ur.UserId);
-
-            modelBuilder.Entity<UserRole>()
-                .HasOne(ur=>ur.Role)
-                .WithMany(r=>r.UserRoles)
-                .HasForeignKey(ur=>ur.RoleId);
+            //role user 1:m
+            modelBuilder.Entity<User>()
+                .HasOne(ur => ur.Role)
+                .WithMany(r => r.Users)
+                .HasForeignKey(ur => ur.RoleId);
 
             //order shoppingitem 1:m
             modelBuilder.Entity<ShoppingItem>()
-                .HasOne(s=>s.Order)
-                .WithMany(o=>o.ShoppingItems)
-                .HasForeignKey(s=>s.OrderId);
+                .HasOne(s => s.Order)
+                .WithMany(o => o.ShoppingItems)
+                .HasForeignKey(s => s.OrderId);
 
             //shopping Cart Shopping Item 1:m
             modelBuilder.Entity<ShoppingItem>()
@@ -105,27 +94,21 @@ namespace Trojantrading.Repositories
 
             //shopping item product 1:1
             modelBuilder.Entity<ShoppingItem>()
-                .HasOne(s=>s.Product)
-                .WithOne(p=>p.ShoppingItem)
-                .HasForeignKey<ShoppingItem>(p=>p.ProductId);
+                .HasOne(s => s.Product)
+                .WithOne(p => p.ShoppingItem)
+                .HasForeignKey<ShoppingItem>(p => p.ProductId);
 
             // user Ship address 1:1
             modelBuilder.Entity<User>()
                 .HasOne(u => u.ShippingAddress)
-                .WithOne(s => s.User)
-                .HasForeignKey<ShippingAddress>(s => s.UserId);
+                .WithMany(s => s.Users)
+                .HasForeignKey(s => s.ShippingAddressId);
+
             // user Bill address 1:1
             modelBuilder.Entity<User>()
                 .HasOne(u => u.BillingAddress)
-                .WithOne(s => s.User)
-                .HasForeignKey<BillingAddress>(s => s.UserId);
-            //seed data into the databases
-
-            //seed data
-            // modelBuilder.Entity<CompanyInfo>()
-            //     .HasData(
-            //         new {}
-            //     );
+                .WithMany(s => s.Users)
+                .HasForeignKey(s => s.BillingAddressId);
         }
     }
 }

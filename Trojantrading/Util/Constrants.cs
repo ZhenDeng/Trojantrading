@@ -2,9 +2,6 @@ namespace Trojantrading.Util
 {
     public class Constrants
     {
-
-        public const int ID_ONE = 1;
-
         //email
         public const string EMAIL_REGISTERATION_SUCCESS_TITLE = "";
         public const string EMAIL_REGISTERATION_SUCCESS_CONTENT = "";
@@ -20,6 +17,5 @@ namespace Trojantrading.Util
         public const string ORDER_STATUS_RECEIVED = "received";
         public const string ORDER_STATUS_FINISHED = "finished";
         public const string ORDER_STATUS_REJECTED = "rejected";
-        
     }
 }

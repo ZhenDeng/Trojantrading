@@ -22,6 +22,26 @@ export class AdminService {
       .pipe(catchError(this.handleError));
   }
 
+  GetUserWithAddress(userName: string): Observable<User> {
+    return this.http.get(this.base_url + "/GetUserWithAddress?userName=" + userName)
+      .pipe(catchError(this.handleError));
+  }
+
+  GetUserWithRole(userName: string): Observable<User> {
+    return this.http.get(this.base_url + "/GetUserWithRole?userName=" + userName)
+      .pipe(catchError(this.handleError));
+  }
+
+  ValidatePassword(userName: string, password: string): Observable<ApiResponse> {
+    return this.http.get(this.base_url + "/ValidatePassword?userName=" + userName + "&password=" + password)
+      .pipe(catchError(this.handleError));
+  }
+
+  UpdatePassword(userName: string, password: string): Observable<ApiResponse> {
+    return this.http.get(this.base_url + "/UpdatePassword?userName=" + userName + "&password=" + password)
+      .pipe(catchError(this.handleError));
+  }
+
   private handleError(error: HttpErrorResponse) {
     console.error('server error:', error);
     if (error.error instanceof ErrorEvent) {
