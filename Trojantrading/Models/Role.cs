@@ -10,4 +10,10 @@ namespace Trojantrading.Models
 
         public List<User> Users { get; set; }
     }
+
+    public enum RoleName {
+        admin,
+        agent,
+        reseller
+    }
 }

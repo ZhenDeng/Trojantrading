@@ -31,11 +31,10 @@ import { ProductsModule } from './products/products.module';
 import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MatListModule } from '@angular/material/list';
-import {MatCheckboxModule} from '@angular/material/checkbox';
-
-import { ShoppingCartServiceService } from './services/shopping-cart-service.service';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { OrdersComponent } from './orders/orders.component';
 import { TermsAndConditionsComponent } from './popup-collection/terms-and-conditions/terms-and-conditions.component';
+import { ShoppingCartService } from './services/shopping-cart.service';
 
 @NgModule({
   declarations: [
@@ -80,7 +79,7 @@ import { TermsAndConditionsComponent } from './popup-collection/terms-and-condit
     AuthGuard,
     AuthRecovery,
     ShareService,
-    ShoppingCartServiceService,
+    ShoppingCartService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,

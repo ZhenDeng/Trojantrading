@@ -6,7 +6,6 @@ using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 using Trojantrading.Models;
 using Trojantrading.Repositories;
 using Trojantrading.Service;
@@ -85,7 +84,7 @@ namespace Trojantrading.Controllers
         [ProducesResponseType(typeof(UserResponse), 200)]
         public IActionResult PasswordRecover(string email, string userName)
         {
-            User userModel = _userRepository.Get(userName);
+            User userModel = _userRepository.GetUserByAccount(userName);
             if (userModel.Status.ToLower() == "active")
             {
                 if (userModel.Account != userName)

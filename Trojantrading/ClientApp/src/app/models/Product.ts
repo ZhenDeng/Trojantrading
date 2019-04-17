@@ -3,8 +3,8 @@ export interface Product {
     id: number
     name: string
     originalPrice: number
-    vipOnePrice: number
-    vipTwoPrice: number
+    agentPrice: number
+    resellerPrice: number
     category: string
     button: string
     quantity:number

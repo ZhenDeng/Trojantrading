@@ -9,8 +9,6 @@ namespace Trojantrading.Models
         public string Content {get;set;}
 
         public string ImagePath {get; set;}
-
-        
     }
    
 }

@@ -2,11 +2,13 @@ using Microsoft.AspNetCore.Mvc;
 using Trojantrading.Repositories;
 using Trojantrading.Util;
 using Trojantrading.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Trojantrading.Controllers
 {
     [Produces("application/json")]
     [Route("api/[controller]")]
+    [Authorize]
     public class AdminController:Controller
     {
         private readonly IOrderRepository _orderRepository;
@@ -32,7 +34,7 @@ namespace Trojantrading.Controllers
         [ProducesResponseType(typeof(User), 200)]
         public IActionResult GetUserByAccount(string userName)
         {
-            var userInfo = _userRepository.Get(userName);
+            var userInfo = _userRepository.GetUserByAccount(userName);
             return Ok(userInfo);
         }
 

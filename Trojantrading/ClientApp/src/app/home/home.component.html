@@ -41,7 +41,19 @@
               <!-- buyPrice Column -->
               <ng-container matColumnDef="originalPrice">
                 <mat-header-cell *matHeaderCellDef> Original Price ex. GST </mat-header-cell>
-                <mat-cell *matCellDef="let element"> {{element.originalPrice | currency:'USD'}} </mat-cell>
+                <mat-cell *matCellDef="let element"> {{element.originalPrice | currency:'AUD':'symbol-narrow':'.2-2'}} </mat-cell>
+              </ng-container>
+
+              <!-- buyPrice Column -->
+              <ng-container matColumnDef="agentPrice" *ngIf="role=='admin' || role=='agent'">
+                <mat-header-cell *matHeaderCellDef> Original Price ex. GST </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.agentPrice | currency:'AUD':'symbol-narrow':'.2-2'}} </mat-cell>
+              </ng-container>
+
+              <!-- buyPrice Column -->
+              <ng-container matColumnDef="resellerPrice" *ngIf="role=='admin' || role=='reseller'">
+                <mat-header-cell *matHeaderCellDef> Original Price ex. GST </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.resellerPrice | currency:'AUD':'symbol-narrow':'.2-2'}} </mat-cell>
               </ng-container>
       
               <ng-container matColumnDef="qty">
@@ -51,23 +63,13 @@
       
               <ng-container matColumnDef="button">
                 <mat-header-cell *matHeaderCellDef></mat-header-cell>
-                <mat-cell *matCellDef="let element"><button class="btn btn-long">Add To Cart</button></mat-cell>
+                <mat-cell *matCellDef="let element"><button id="{{element.id}}" class="btn btn-long" (click)="addToCart(element)">Add To Cart</button></mat-cell>
               </ng-container>
       
               <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
               <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
             </mat-table>
           </div>
-      
-          <!-- <div class="row">
-          <div class="col-md-7"></div>
-          <div class="col-md-1">WLP
-              ex. GST</div>
-          <div class="col-md-1">Buy Price
-              ex. GST</div>
-          <div class="col-md-1">Retail Qty</div>
-          <div class="col-md-2"><button>Update Cart</button></div>
-        </div> -->
         </section>
       </ng-container>
     </div>

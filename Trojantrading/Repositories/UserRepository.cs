@@ -11,7 +11,6 @@ namespace Trojantrading.Repositories
         ApiResponse Add(User user);
         ApiResponse Delete(int id);
         ApiResponse Update(User user);
-        User Get(string userName);
         User GetUserWithAddress(string userName);
         User GetUserByAccount(string account);
         User GetUserWithCompanyInfo(string userName);
@@ -73,14 +72,6 @@ namespace Trojantrading.Repositories
                     Message = "Fail to delete user"
                 };
             }
-        }
-
-        public User Get(string userName)
-        {
-            var user = trojantradingDbContext.Users
-                .Where(u=>u.Account == userName)
-                .FirstOrDefault();
-            return user;
         }
 
         public User GetUserWithAddress(string userName)
