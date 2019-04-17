@@ -104,7 +104,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   filterProductsByCategory() {
     
-    this.title = `Products ${this.category}`;
+    this.title = `Products in ${this.category}`;
     this.filteredProducts = this.allProducts.filter(x => x.category.toLowerCase().includes(this.category.toLowerCase()));
     this.dataSource = new MatTableDataSource(this.filteredProducts);
   }
