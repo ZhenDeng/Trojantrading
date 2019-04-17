@@ -62,5 +62,23 @@ namespace Trojantrading.Controllers
             var userInfo = _userRepository.GetUserWithRole(userName);
             return Ok(userInfo);
         }
+
+        [HttpGet("ValidatePassword")]
+        [NoCache]
+        [ProducesResponseType(typeof(ApiResponse), 200)]
+        public IActionResult ValidatePassword(string userName, string password)
+        {
+            var result = _userRepository.ValidatePassword(userName, password);
+            return Ok(result);
+        }
+
+        [HttpGet("UpdatePassword")]
+        [NoCache]
+        [ProducesResponseType(typeof(ApiResponse), 200)]
+        public IActionResult UpdatePassword(string userName, string password)
+        {
+            var result = _userRepository.UpdatePassword(userName, password);
+            return Ok(result);
+        }
     }
 }

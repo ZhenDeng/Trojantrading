@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators/catchError';
 import { ApiResponse } from '../models/ApiResponse';
 import { User } from '../models/user';
-import { UserAddress } from '../models/UserAddress';
 
 @Injectable()
 export class AdminService {
@@ -30,6 +29,16 @@ export class AdminService {
 
   GetUserWithRole(userName: string): Observable<User> {
     return this.http.get(this.base_url + "/GetUserWithRole?userName=" + userName)
+      .pipe(catchError(this.handleError));
+  }
+
+  ValidatePassword(userName: string, password: string): Observable<ApiResponse> {
+    return this.http.get(this.base_url + "/ValidatePassword?userName=" + userName + "&password=" + password)
+      .pipe(catchError(this.handleError));
+  }
+
+  UpdatePassword(userName: string, password: string): Observable<ApiResponse> {
+    return this.http.get(this.base_url + "/UpdatePassword?userName=" + userName + "&password=" + password)
       .pipe(catchError(this.handleError));
   }
 

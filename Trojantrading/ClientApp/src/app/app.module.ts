@@ -12,7 +12,7 @@ import { AuthInterceptor } from './auth/auth.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatTabsModule, MatTableModule } from '@angular/material';
+import { MatTabsModule, MatTableModule, MatDialogModule } from '@angular/material';
 import { AccountDetailsComponent } from './account-details/account-details.component';
 import { AdminService } from './services/admin.service';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
@@ -35,6 +35,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 
 import { ShoppingCartServiceService } from './services/shopping-cart-service.service';
 import { OrdersComponent } from './orders/orders.component';
+import { TermsAndConditionsComponent } from './popup-collection/terms-and-conditions/terms-and-conditions.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { OrdersComponent } from './orders/orders.component';
     TermsComponent,
     PasswordRecoveryComponent,
     ShoppingCartComponent,
-    OrdersComponent
+    OrdersComponent,
+    TermsAndConditionsComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -68,7 +70,8 @@ import { OrdersComponent } from './orders/orders.component';
     RouterModule,
     MatTabsModule,
     ProductsModule,
-    MatListModule
+    MatListModule,
+    MatDialogModule
   ],
   providers: [
     UserService,
@@ -83,6 +86,9 @@ import { OrdersComponent } from './orders/orders.component';
       useClass: AuthInterceptor,
       multi: true
     }],
+  entryComponents: [
+    TermsAndConditionsComponent
+  ],
   bootstrap: [AppComponent]
 })
 

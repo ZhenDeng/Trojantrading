@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { UserResponse, ApiResponse } from '../models/ApiResponse';
 import { NavbarService } from '../services/navbar.service';
 import { ShareService } from '../services/share.service';
+import { MatDialog } from '@angular/material';
+import { TermsAndConditionsComponent } from '../popup-collection/terms-and-conditions/terms-and-conditions.component';
 
 declare var jquery: any;
 declare var $: any;
@@ -21,13 +23,15 @@ export class LoginComponent implements OnInit {
   sentEmailField: boolean = false;
   showResetText: boolean = false;
   checked:boolean = false;
+  hidePassword: boolean = true;
 
   constructor(
     private userService: UserService,
     private router: Router,
     private formBuilder: FormBuilder,
     private nav: NavbarService,
-    private shareService: ShareService) {
+    private shareService: ShareService,
+    public dialog: MatDialog) {
     this.userFormGroup = this.formBuilder.group({
       account: new FormControl("", Validators.compose([Validators.required])),
       password: new FormControl("", Validators.compose([Validators.required]))
@@ -109,5 +113,11 @@ export class LoginComponent implements OnInit {
     } else {
       this.shareService.showError(".sendresetemail", "Please enter valid email address", "right");
     }
+  }
+
+  showTerms(): void{
+    this.dialog.open(TermsAndConditionsComponent, {
+      width: '800px'
+    });
   }
 }

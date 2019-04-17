@@ -133,41 +133,5 @@ namespace Trojantrading.Controllers
             var result = _userRepository.ValidateEmail(email);
             return Ok(result);
         }
-
-        [HttpGet("UpdatePassword")]
-        [NoCache]
-        [ProducesResponseType(typeof(ApiResponse), 200)]
-        public async Task<IActionResult> UpdatePassword(string userName, string password)
-        {
-            var result = await _userRepository.UpdatePassword(userName, password);
-            return Ok(result);
-        }
-
-
-        [Route("/info")]
-        public async Task<IActionResult> Info()
-        {
-            return new JsonResult("123");
-        }
-
-        [HttpPost("/logout")]
-        public async Task<IActionResult> Logout()
-        {
-            return StatusCode(201);
-        }
-
-        [Route("/update")]
-        public async Task<IActionResult> Update(User user)
-        {
-            _userRepository.Update(user);
-            return null;
-        }
-
-        [Route("/delete")]
-        public async Task<IActionResult> Remove(int id)
-        {
-            _userRepository.Delete(id);
-            return null;
-        }
     }
 }

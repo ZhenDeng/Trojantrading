@@ -26,6 +26,9 @@ export class AccountDetailsComponent implements OnInit {
   userPasswordGroup: FormGroup;
   shoppingItems: ShoppingItem[];
   orders: Order[];
+  hidePassword: boolean = true;
+  hideNewPassword: boolean = true;
+  hideConfirmPassword: boolean = true;
 
   constructor(
     private adminService: AdminService,
@@ -94,11 +97,44 @@ export class AccountDetailsComponent implements OnInit {
   }
 
   updatePassword(): void {
-
-  }
-
-  validateOldPassword(): void {
-    
+    if (!this.userPasswordGroup.get("password").valid) {
+      this.shareService.showError(".password", "Current password can not be empty", "right");
+    }
+    if (!this.userPasswordGroup.get("newpassord").valid) {
+      this.shareService.showError(".newpassord", "New password can not be empty", "right");
+    }
+    if (!this.userPasswordGroup.get("confirmpassord").valid) {
+      this.shareService.showError(".confirmpassord", "Confirm password can not be empty", "right");
+    }
+    if (this.userPasswordGroup.valid) {
+      if (this.userPasswordGroup.get("confirmpassord").value == this.userPasswordGroup.get("newpassord").value) {
+        if(this.userPasswordGroup.get("newpassord").value.length>5){
+          this.adminService.ValidatePassword(this.shareService.readCookie("userName"), this.userPasswordGroup.get("password").value).subscribe((res: ApiResponse) => {
+            if (res && res.status == "success") {
+              this.adminService.UpdatePassword(this.shareService.readCookie("userName"), this.userPasswordGroup.get("newpassord").value).subscribe((res: ApiResponse) => {
+                if(res && res.status == "success"){
+                  this.shareService.showSuccess(".updatepassword", res.message, "right");
+                }else{
+                  this.shareService.showError(".updatepassword", res.message, "right");
+                }
+              },
+                (error: any) => {
+                  console.info(error);
+                });
+            } else {
+              this.shareService.showError(".updatepassword", res.message, "right");
+            }
+          },
+            (error: any) => {
+              console.info(error);
+            });
+        }else{
+          this.shareService.showError(".newpassord", "Your password Must be at least 6 characters long", "right");
+        }
+      } else {
+        this.shareService.showError(".confirmpassord", "Confirm password must be the same as new password", "right");
+      }
+    }
   }
 
   backToProduct(): void {

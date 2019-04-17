@@ -86,18 +86,18 @@
         <div class="card-body">
           <div class="detail" [formGroup]="userPasswordGroup">
             <mat-form-field [floatLabel]="'always'">
-              <input matInput formControlName="password" placeholder="Current Password" (blur)="validateOldPassword()" required>
-            </mat-form-field>
-            <p>
-              <b>Set a new password<br /></b> Your password Must be at least 6 characters long.
-            </p>
-            <mat-form-field [floatLabel]="'always'">
-              <input matInput formControlName="newpassord" placeholder="New Password" required>
+              <input matInput class="password" formControlName="password" placeholder="Current Password" [type]="hidePassword ? 'password' : 'text'" required>
+              <mat-icon matSuffix class="passwordeye" (click)="hidePassword = !hidePassword">{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
             </mat-form-field>
             <mat-form-field [floatLabel]="'always'">
-              <input matInput formControlName="confirmpassord" placeholder="Confirm Password" required>
+              <input matInput class="newpassord" formControlName="newpassord" placeholder="New Password" [type]="hideNewPassword ? 'password' : 'text'" required>
+              <mat-icon matSuffix class="passwordeye" (click)="hideNewPassword = !hideNewPassword">{{hideNewPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
             </mat-form-field>
-            <button class="btn btn-long" (click)="updatePassword()">UPDATE</button>
+            <mat-form-field [floatLabel]="'always'">
+              <input matInput class="confirmpassord" formControlName="confirmpassord" placeholder="Confirm Password" [type]="hideConfirmPassword ? 'password' : 'text'" required>
+              <mat-icon matSuffix class="passwordeye" (click)="hideConfirmPassword = !hideConfirmPassword">{{hideConfirmPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </mat-form-field>
+            <button class="btn btn-long updatepassword" (click)="updatePassword()">UPDATE</button>
           </div>
         </div>
       </div>
