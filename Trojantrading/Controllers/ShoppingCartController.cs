@@ -17,10 +17,10 @@ namespace Trojantrading.Controllers
         private readonly IShoppingCartRepository _shoppingCartRepository;
         private readonly IProductRepository _productRepository;
 
-        public ShoppingCartController(ShoppingCartRepository shoppingCartRepository, ProductRepository productRepository)
+        public ShoppingCartController(IShoppingCartRepository shoppingCartRepository, IProductRepository productRepository)
         {
-            this._shoppingCartRepository = shoppingCartRepository;
-            this._productRepository = productRepository;
+            _shoppingCartRepository = shoppingCartRepository;
+            _productRepository = productRepository;
         }
 
         [HttpGet("GetShoppingCart")]
@@ -29,7 +29,7 @@ namespace Trojantrading.Controllers
         [ProducesResponseType(typeof(ApiResponse), 400)]
         public IActionResult GetShoppingCart(int userId)
         {
-            return Ok(_shoppingCartRepository.GetCart(userId));
+            return Ok(_shoppingCartRepository.GetCartWithShoppingItems(userId));
         }
 
         [HttpGet("AddShoppingCart")]
@@ -41,7 +41,7 @@ namespace Trojantrading.Controllers
             return Ok(_shoppingCartRepository.AddShoppingCart(userId));
         }
 
-        [HttpPost("UpdateShoppingCartUpdateShoppingCart")]
+        [HttpPost("UpdateShoppingCart")]
         [NoCache]
         [ProducesResponseType(typeof(ApiResponse), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]

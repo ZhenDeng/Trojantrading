@@ -12,7 +12,7 @@ using System.Text;
 using Trojantrading.Models;
 using Trojantrading.Repositories;
 using Trojantrading.Service;
-using Trojantrading.Util;
+
 
 namespace Trojantrading
 {
@@ -57,18 +57,13 @@ namespace Trojantrading
                 };
             });
             //Repositoires
-            services.AddTransient<IHeadInformationRepository, HeadInformationRepository>();
+            
             services.AddTransient<IOrderRepository, OrderRepository>();
             services.AddTransient<IProductRepository, ProductRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IPdfBoardRepository, PdfBoardRepository>();
-            services.AddTransient<IEmailRepository, EmailRepository>();
-            services.AddTransient<IShoppingItemRepository, ShoppingItemRepository>();
+            services.AddTransient<IShoppingCartRepository, ShoppingCartRepository>();
             services.AddTransient<IShare, Share>();
-
-            //service util
-            services.AddTransient<SecurityUtil, SecurityUtil>();
-            services.AddTransient<EmailUtil, EmailUtil>();
 
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>

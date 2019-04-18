@@ -41,16 +41,6 @@ export class NavMenuComponent implements OnInit {
   ngOnInit() {
     this.nav.show();
     this.nav.showTab();
-    this.getAllProducts();
-  }
-
-  getAllProducts() {
-    this.productService.getAllProducts().subscribe((value: Product[]) =>{
-        this.products = value;
-    },
-    (error: any) => {
-      console.info(error);
-    });
   }
 
   proceedToCheckout(): void{
@@ -58,7 +48,6 @@ export class NavMenuComponent implements OnInit {
   }
 
   manageRedirect(category: string) {
-
     this.router.navigate(['home'], {
       relativeTo: this.activatedRouter,
       queryParams: {

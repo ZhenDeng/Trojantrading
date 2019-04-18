@@ -79,11 +79,12 @@ namespace Trojantrading.Repositories
                 .WithMany(r => r.Users)
                 .HasForeignKey(ur => ur.RoleId);
 
-            //order shoppingitem 1:m
-            modelBuilder.Entity<ShoppingItem>()
+            //order shoppingcart 1:1
+            modelBuilder.Entity<ShoppingCart>()
                 .HasOne(s => s.Order)
-                .WithMany(o => o.ShoppingItems)
-                .HasForeignKey(s => s.OrderId);
+                .WithOne(o => o.ShoppingCart)
+                .HasForeignKey<Order>(o => o.ShoppingCartId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             //shopping Cart Shopping Item 1:m
             modelBuilder.Entity<ShoppingItem>()
@@ -95,8 +96,8 @@ namespace Trojantrading.Repositories
             //shopping item product 1:1
             modelBuilder.Entity<ShoppingItem>()
                 .HasOne(s => s.Product)
-                .WithOne(p => p.ShoppingItem)
-                .HasForeignKey<ShoppingItem>(p => p.ProductId);
+                .WithMany(p => p.ShoppingItems)
+                .HasForeignKey(s => s.ProductId);
 
             // user Ship address 1:1
             modelBuilder.Entity<User>()
