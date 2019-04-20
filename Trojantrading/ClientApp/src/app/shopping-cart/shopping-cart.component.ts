@@ -7,6 +7,7 @@ import { ShoppingCart } from '../models/shoppingCart';
 import { AdminService } from '../services/admin.service';
 import { User } from '../models/user';
 import { Router } from '@angular/router';
+import { ShoppingItem } from '../models/shoppingItem';
 
 @Component({
   selector: 'app-shopping-cart',
@@ -15,10 +16,16 @@ import { Router } from '@angular/router';
 })
 export class ShoppingCartComponent implements OnInit {
 
-  dataSource: Product[];
-  totalPrice: number;
+  dataSource: ShoppingItem[];
   displayedColumns: string[] = ['name', 'category', 'originalPrice', 'qty', 'subTotal', 'remove'];
   shoppingCart: ShoppingCart;
+  priceExclGst: number;
+  oringinalPriceIncGst: number;
+  oringinalPriceExclGst: number;
+  gst: number;
+  priceIncGst: number;
+  discount: number;
+  role: string;
 
   constructor(
     private nav: NavbarService,
@@ -30,11 +37,38 @@ export class ShoppingCartComponent implements OnInit {
 
   ngOnInit() {
     this.nav.hideTab();
-    this.totalPrice = 0;
-    this.adminService.GetUserByAccount(this.shareService.readCookie("role")).subscribe((user: User) => {
+    if(this.shareService.readCookie("role") && this.shareService.readCookie("role") == "admin"){
+      this.router.navigate(["/home"]);
+    }
+    if(this.shareService.readCookie("role") && this.shareService.readCookie("role") == "agent"){
+      this.displayedColumns = ['name', 'category', 'originalPrice', 'agentPrice', 'qty', 'subTotal', 'remove'];
+    }
+    else if(this.shareService.readCookie("role") && this.shareService.readCookie("role") == "reseller"){
+      this.displayedColumns = ['name', 'category', 'originalPrice', 'resellerPrice', 'qty', 'subTotal', 'remove'];
+    }
+    this.adminService.GetUserByAccount(this.shareService.readCookie("userName")).subscribe((user: User) => {
       this.shoppingCartService.GetShoppingCart(user.id).subscribe((res: ShoppingCart) => {
-        this.shoppingCart = res;
-        console.info(this.shoppingCart);
+        this.priceExclGst = 0;
+        this.gst = 0;
+        this.priceIncGst = 0;
+        if (res && res.shoppingItems.length) {
+          this.shoppingCart = res;
+          this.dataSource = this.shoppingCart.shoppingItems;
+          this.dataSource.forEach(si => {
+            this.oringinalPriceExclGst = si.amount * si.product.originalPrice;
+            if (this.role == "agent") {
+              si.subTotal = si.amount * si.product.agentPrice;
+              this.priceExclGst += si.amount * si.product.agentPrice;
+            } else if (this.role == "reseller") {
+              si.subTotal = si.amount * si.product.agentPrice;
+              this.priceExclGst += si.amount * si.product.resellerPrice;
+            }
+          });
+          this.gst = this.priceExclGst * 0.1;
+          this.oringinalPriceIncGst = this.oringinalPriceExclGst + this.oringinalPriceExclGst * 0.1;
+          this.priceIncGst = this.gst + this.priceExclGst;
+          this.discount = this.oringinalPriceIncGst - this.priceIncGst;
+        }
       },
         (error: any) => {
           console.info(error);
@@ -46,7 +80,7 @@ export class ShoppingCartComponent implements OnInit {
 
   }
 
-  continueShopping(): void{
+  continueShopping(): void {
     this.router.navigate(['/home']);
   }
 

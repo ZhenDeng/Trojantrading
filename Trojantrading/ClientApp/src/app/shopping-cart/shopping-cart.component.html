@@ -13,28 +13,40 @@
               <ng-container matColumnDef="name">
                 <mat-header-cell *matHeaderCellDef class="mat-table_4fex" class="mat-table_4fex"> Description </mat-header-cell>
                 <mat-cell *matCellDef="let element" class="mat-table_4fex" class="mat-table_4fex"> <span
-                    class="productid">#{{element.id}}</span>{{element.name}} </mat-cell>
+                    class="productid">#{{element.product.id}}</span>{{element.product.name}} </mat-cell>
               </ng-container>
       
               <ng-container matColumnDef="category">
                 <mat-header-cell *matHeaderCellDef class="mat-table_3fex"> Category </mat-header-cell>
-                <mat-cell *matCellDef="let element" class="mat-table_3fex"> {{element.category}} </mat-cell>
+                <mat-cell *matCellDef="let element" class="mat-table_3fex"> {{element.product.category}} </mat-cell>
               </ng-container>
       
               <ng-container matColumnDef="originalPrice">
                 <mat-header-cell *matHeaderCellDef class="mat-table_3fex"> Original Price ex. GST </mat-header-cell>
-                <mat-cell *matCellDef="let element" class="mat-table_3fex"> {{element.originalPrice | currency:'USD'}} </mat-cell>
+                <mat-cell *matCellDef="let element" class="mat-table_3fex"> {{element.product.originalPrice | currency:'AUD':'symbol-narrow':'.2-2'}} </mat-cell>
+              </ng-container>
+
+              <!-- buyPrice Column -->
+              <ng-container matColumnDef="agentPrice" *ngIf="role=='admin' || role=='agent'">
+                <mat-header-cell *matHeaderCellDef> Agent Price ex. GST </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.product.agentPrice | currency:'AUD':'symbol-narrow':'.2-2'}} </mat-cell>
+              </ng-container>
+
+              <!-- buyPrice Column -->
+              <ng-container matColumnDef="resellerPrice" *ngIf="role=='admin' || role=='reseller'">
+                <mat-header-cell *matHeaderCellDef> Reseller Price ex. GST </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.product.resellerPrice | currency:'AUD':'symbol-narrow':'.2-2'}} </mat-cell>
               </ng-container>
       
               <ng-container matColumnDef="qty">
                 <mat-header-cell *matHeaderCellDef class="mat-table_3fex"> Quantity </mat-header-cell>
                 <mat-cell *matCellDef="let element" class="mat-table_3fex"> <input type="number" (keypress)="_keyPress($event)"
-                    [(ngModel)]="element.quantity"> </mat-cell>
+                    [(ngModel)]="element.amount"> </mat-cell>
               </ng-container>
       
               <ng-container matColumnDef="subTotal">
                 <mat-header-cell *matHeaderCellDef class="mat-table_3fex">Line Amount ex. GST</mat-header-cell>
-                <mat-cell *matCellDef="let element" class="mat-table_3fex">{{element.quantity * element.originalPrice | currency:'USD'}}</mat-cell>
+                <mat-cell *matCellDef="let element" class="mat-table_3fex">{{element.subTotal | currency:'AUD':'symbol-narrow':'.2-2'}}</mat-cell>
               </ng-container>
       
               <ng-container matColumnDef="remove">
@@ -46,15 +58,19 @@
             </mat-table>
             <div class="totalrow" style="padding-top: 20px;">
               <p class="totaltext">You will pay Excl. GST</p>
-              <p class="totalprice">$48.3</p>
+              <p class="totalprice">{{priceExclGst | currency:'AUD':'symbol-narrow':'.2-2'}}</p>
             </div>
             <div class="totalrow">
               <p class="totaltext">GST</p>
-              <p class="totalprice">$488.3</p>
+              <p class="totalprice">{{gst | currency:'AUD':'symbol-narrow':'.2-2'}}</p>
             </div>
             <div class="totalrow">
               <p class="totaltext">You will pay Inc. GST</p>
-              <p class="totalprice">$4888.3</p>
+              <p class="totalprice">{{priceIncGst | currency:'AUD':'symbol-narrow':'.2-2'}}</p>
+            </div>
+            <div class="totalrow">
+              <p class="totaltext">Total Discount Earned</p>
+              <p class="totalprice">{{discount | currency:'AUD':'symbol-narrow':'.2-2'}}</p>
             </div>
             <div class="totalrow buttonrow">
               <button class="btn btn-long" (click)="continueShopping()">Continue Shopping</button>

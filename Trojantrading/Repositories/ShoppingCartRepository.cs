@@ -15,10 +15,14 @@ namespace Trojantrading.Repositories
     public class ShoppingCartRepository:IShoppingCartRepository
     {
         private readonly TrojantradingDbContext trojantradingDbContext;
+        private readonly IUserRepository userRepository;
 
-        public ShoppingCartRepository(TrojantradingDbContext trojantradingDbContext)
+        public ShoppingCartRepository(
+            TrojantradingDbContext trojantradingDbContext,
+            IUserRepository userRepository)
         {
             this.trojantradingDbContext= trojantradingDbContext;
+            this.userRepository = userRepository;
         }
 
         public ApiResponse AddShoppingCart(int userId) {
@@ -82,6 +86,15 @@ namespace Trojantrading.Repositories
                                     OriginalPrice = join.ShoppingCart.OriginalPrice
                                 }).FirstOrDefault();
 
+            shoppingCart.ShoppingItems = shoppingCart.ShoppingItems
+                            .Join(trojantradingDbContext.Products, si => si.ProductId, p => p.Id, (shoppingItem, product) => new ShoppingItem
+                            {
+                                Id = shoppingItem.Id,
+                                Amount = shoppingItem.Amount,
+                                Product = product,
+                                ProductId = product.Id,
+                            }).ToList();
+
             return shoppingCart;
         }
 
@@ -92,6 +105,8 @@ namespace Trojantrading.Repositories
                 var shoppingCart = GetCart(userId);
 
                 var user = trojantradingDbContext.Users.Where(u => u.Id == userId).FirstOrDefault();
+
+                user = userRepository.GetUserWithRole(user.Account);
 
                 int shoppingItemExists = trojantradingDbContext.ShoppingItems.Where(si => si.ShoppingCartId == shoppingCart.Id && si.ProductId == shoppingItem.Product.Id).Count();
 

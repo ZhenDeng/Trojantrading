@@ -40,7 +40,7 @@
               <!-- buyPrice Column -->
               <ng-container matColumnDef="originalPrice">
                 <mat-header-cell *matHeaderCellDef> Original Price ex. GST </mat-header-cell>
-                <mat-cell *matCellDef="let element"> {{element.originalPrice | currency:'USD'}} </mat-cell>
+                <mat-cell *matCellDef="let element"> {{element.originalPrice | currency:'AUD':'symbol-narrow':'.2-2'}} </mat-cell>
               </ng-container>
       
               <ng-container matColumnDef="qty">

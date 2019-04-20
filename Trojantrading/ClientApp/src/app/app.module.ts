@@ -35,6 +35,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { OrdersComponent } from './orders/orders.component';
 import { TermsAndConditionsComponent } from './popup-collection/terms-and-conditions/terms-and-conditions.component';
 import { ShoppingCartService } from './services/shopping-cart.service';
+import { AdministrationComponent } from './administration/administration.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import { ShoppingCartService } from './services/shopping-cart.service';
     PasswordRecoveryComponent,
     ShoppingCartComponent,
     OrdersComponent,
-    TermsAndConditionsComponent
+    TermsAndConditionsComponent,
+    AdministrationComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
