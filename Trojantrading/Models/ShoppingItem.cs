@@ -11,10 +11,6 @@ namespace Trojantrading.Models
 
         public Product Product { get; set; }
 
-        public Order Order {get;set;}
-
-        public int OrderId {get;set;}
-
         public ShoppingCart ShoppingCart { get; set; }
 
         public int ShoppingCartId { get; set; }

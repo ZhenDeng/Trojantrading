@@ -51,6 +51,19 @@ GO
 INSERT INTO [trojantrading].[role]
            ([Name])
      VALUES
+           ('admin')
+GO
+
+INSERT INTO [trojantrading].[role]
+           ([Name])
+     VALUES
+           ('agent')
+GO
+
+
+INSERT INTO [trojantrading].[role]
+           ([Name])
+     VALUES
            ('reseller')
 GO
 

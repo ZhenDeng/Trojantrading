@@ -36,15 +36,13 @@ export class LoginComponent implements OnInit {
       account: new FormControl("", Validators.compose([Validators.required])),
       password: new FormControl("", Validators.compose([Validators.required]))
     });
-
-    this.userEmailGroup = this.formBuilder.group({
-      email: new FormControl("", Validators.compose([Validators.required, Validators.email])),
-    });
   }
 
   ngOnInit() {
     this.nav.hide();
-    this.userFormGroup.get("account").setValue(this.shareService.readCookie("userName"));
+    if(this.shareService.readCookie("userName")){
+      this.userFormGroup.get("account").setValue(this.shareService.readCookie("userName"));
+    }
   }
 
   onSubmit() {
@@ -78,6 +76,9 @@ export class LoginComponent implements OnInit {
 
   passwordRecover(): void {
     this.sentEmailField = true;
+    this.userEmailGroup = this.formBuilder.group({
+      email: new FormControl("", Validators.compose([Validators.required, Validators.email])),
+    });
   }
 
   backToLogin(): void {

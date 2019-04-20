@@ -30,7 +30,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   user: User;
   shoppingItem: ShoppingItem;
 
-  displayedColumns: string[] = ['name', 'category', 'originalPrice', 'agentPrice', 'resellerPrice', 'qty', 'button'];
+  displayedColumns: string[];
 
   navLinks: Menu[] = [
     {
@@ -74,7 +74,18 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.category = param.get('category');
 
       this.title = 'Products in All Categories';
-
+      if(this.shareService.readCookie("role") && this.shareService.readCookie("role") == "admin"){
+        this.displayedColumns = ['name', 'category', 'originalPrice', 'agentPrice', 'resellerPrice', 'qty', 'button']
+      }
+      else if(this.shareService.readCookie("role") && this.shareService.readCookie("role") == "agent"){
+        this.displayedColumns = ['name', 'category', 'originalPrice', 'agentPrice', 'qty', 'button']
+      }
+      else if(this.shareService.readCookie("role") && this.shareService.readCookie("role") == "reseller"){
+        this.displayedColumns = ['name', 'category', 'originalPrice', 'resellerPrice', 'qty', 'button']
+      }else{
+        this.displayedColumns = ['name', 'category', 'originalPrice', 'qty', 'button']
+      }
+      
       this.dataSource = new MatTableDataSource();
 
       this.getAllProducts();

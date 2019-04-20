@@ -14,18 +14,16 @@ namespace Trojantrading.Controllers
         private readonly IOrderRepository _orderRepository;
         private readonly IUserRepository _userRepository;
         private readonly IProductRepository _productRepository;
-        private readonly IHeadInformationRepository _headInformationRepository;
         private readonly IPdfBoardRepository _pdfBoardRepository;
 
 
         public AdminController(IOrderRepository orderRepository, IUserRepository userRepository,
             IProductRepository productRepository,
-            IHeadInformationRepository headInformationRepository, IPdfBoardRepository pdfBoardRepository)
+            IPdfBoardRepository pdfBoardRepository)
         {
             _orderRepository = orderRepository;
             _userRepository = userRepository;
             _productRepository = productRepository;
-            _headInformationRepository = headInformationRepository;
             _pdfBoardRepository = pdfBoardRepository;
         }
 

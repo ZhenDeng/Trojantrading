@@ -10,6 +10,7 @@ namespace Trojantrading.Repositories
         ApiResponse UpdateShoppingCart(int userId, ShoppingItem shoppingItem);
         void Empty(int userId);
         ApiResponse AddShoppingCart(int userId);
+        ShoppingCart GetCartWithShoppingItems(int userId);
     }
     public class ShoppingCartRepository:IShoppingCartRepository
     {
@@ -28,10 +29,14 @@ namespace Trojantrading.Repositories
                 {
                     ShoppingCart sc = new ShoppingCart()
                     {
+                        TotalItems = 0,
+                        OriginalPrice = 0,
+                        TotalPrice = 0,
                         UserId = userId
                     };
 
                     trojantradingDbContext.ShoppingCarts.Add(sc);
+                    trojantradingDbContext.SaveChanges();
                     return new ApiResponse()
                     {
                         Status = "success",
@@ -65,6 +70,21 @@ namespace Trojantrading.Repositories
             return shoppingCart;
         }
 
+        public ShoppingCart GetCartWithShoppingItems(int userId)
+        {
+            var shoppingCart = trojantradingDbContext.ShoppingCarts
+                                .GroupJoin(trojantradingDbContext.ShoppingItems, sc => sc.Id, si => si.ShoppingCartId, (shoppingCartModel, shoppingItems) => new {  ShoppingCart = shoppingCartModel, ShoppingItems = shoppingItems})
+                                .Select(join => new ShoppingCart() {
+                                    Id = join.ShoppingCart.Id,
+                                    TotalItems = join.ShoppingCart.TotalItems,
+                                    TotalPrice = join.ShoppingCart.TotalPrice,
+                                    ShoppingItems = join.ShoppingItems.ToList(),
+                                    OriginalPrice = join.ShoppingCart.OriginalPrice
+                                }).FirstOrDefault();
+
+            return shoppingCart;
+        }
+
         public ApiResponse UpdateShoppingCart(int userId, ShoppingItem shoppingItem)
         {
             try
@@ -73,17 +93,29 @@ namespace Trojantrading.Repositories
 
                 var user = trojantradingDbContext.Users.Where(u => u.Id == userId).FirstOrDefault();
 
-                int shoppingItemExists = shoppingCart.ShoppingItems.Where(si => si.Id == shoppingItem.Id).Count();
+                int shoppingItemExists = trojantradingDbContext.ShoppingItems.Where(si => si.ShoppingCartId == shoppingCart.Id && si.ProductId == shoppingItem.Product.Id).Count();
 
-                if (shoppingItemExists > 0) {
-                    shoppingCart.ShoppingItems.Where(si => si.Id == shoppingItem.Id).FirstOrDefault().Amount += shoppingItem.Amount;
-                    updateShoppingCartPrice(shoppingCart, user, shoppingItem);
+                if (shoppingItemExists > 0)
+                {
+                    var shoppingItemModel = trojantradingDbContext.ShoppingItems.Where(si => si.ShoppingCartId == shoppingCart.Id && si.ProductId == shoppingItem.Product.Id).FirstOrDefault();
+                    shoppingItemModel.Amount += shoppingItem.Amount;
+                    trojantradingDbContext.ShoppingItems.Update(shoppingItemModel);
+                    trojantradingDbContext.SaveChanges();
                 }
-                else {
-                    shoppingCart.ShoppingItems.Add(shoppingItem);
-                    shoppingCart.TotalItems += 1;
-                    updateShoppingCartPrice(shoppingCart, user, shoppingItem);
+                else
+                {
+                    ShoppingItem si = new ShoppingItem()
+                    {
+                        Amount = shoppingItem.Amount,
+                        ProductId = shoppingItem.Product.Id,
+                        ShoppingCartId = shoppingCart.Id,
+                    };
+                    trojantradingDbContext.ShoppingItems.Add(si);
+                    trojantradingDbContext.SaveChanges();
                 }
+
+                shoppingCart.TotalItems += shoppingItem.Amount;
+                updateShoppingCartPrice(shoppingCart, user, shoppingItem);
                 trojantradingDbContext.ShoppingCarts.Update(shoppingCart);
                 trojantradingDbContext.SaveChanges();
                 return new ApiResponse()
@@ -92,7 +124,7 @@ namespace Trojantrading.Repositories
                     Message = "Successfully add "+ shoppingItem.Product.Name +" to shopping cart"
                 };
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return new ApiResponse()
                 {

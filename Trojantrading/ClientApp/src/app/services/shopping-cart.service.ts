@@ -14,7 +14,7 @@ export class ShoppingCartService {
   constructor(private http: HttpClient) { }
 
   AddShoppingCart(userId: number): Observable<ApiResponse>{
-    return this.http.get(this.base_url + "/GetUserWithAddress?userId=" + userId)
+    return this.http.get(this.base_url + "/AddShoppingCart?userId=" + userId)
       .pipe(catchError(this.handleError));
   }
 
