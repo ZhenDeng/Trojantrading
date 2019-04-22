@@ -159,7 +159,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   addToCart(product: Product): void {
     this.shoppingItem = {
       amount: product.quantity,
-      product: product
+      product: product,
+      subTotal: 0
     }
     this.shoppingCartService.UpdateShoppingCart(this.user.id, this.shoppingItem).subscribe((res: ApiResponse) => {
       if (res.status == "success") {

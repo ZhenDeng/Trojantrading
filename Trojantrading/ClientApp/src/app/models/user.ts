@@ -1,7 +1,6 @@
 import { ShoppingItem } from './shoppingItem';
 import { ShoppingCart } from "./shoppingCart";
 import { Order } from './order';
-
 import { UserAddress } from "./UserAddress";
 
 export interface User {
@@ -20,7 +19,5 @@ export interface User {
     orders: Order[]
     shippingAddress: UserAddress
     billingAddress: UserAddress
-    // orders: Order[]
-    // UserRoles: UserRole[]
     shoppingItems: ShoppingItem[]
 }

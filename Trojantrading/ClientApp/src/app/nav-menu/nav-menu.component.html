@@ -48,21 +48,33 @@
               <i class="fas fa-user fa-fw"></i> My Account
             </a>
           </li>
-          <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }' ngbDropdown #myDrop="ngbDropdown">
+          <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }' ngbDropdown #myDrop="ngbDropdown" *ngIf="role !='admin'">
             <a ngbDropdownToggle [routerLink]='["/cart"]' class="btn btn-outline-primary" id="dropdownConfig" (mouseenter)="myDrop.open()">
               <i class="fas fa-shopping-cart fa-fw"></i> My Cart
             </a>
-            <div ngbDropdownMenu aria-labelledby="dropdownConfig" (mouseleave)="myDrop.close()">
-              <mat-list role="list">
+            <div ngbDropdownMenu aria-labelledby="dropdownConfig" (mouseleave)="myDrop.close()" *ngIf="role !='admin'">
+              <mat-list role="list" *ngIf="role =='agent'">
                 <h3 mat-subheader>Your Order</h3>
-                <mat-list-item role="listitem" *ngFor="let product of products">
-                  <span class="carttext">{{product.name}}</span><span class="cartprice">{{product.quantity * product.originalPrice | currency:'USD'}}</span><span class="carticon"><i class="far fa-trash-alt fa-1x"></i></span>
+                <mat-list-item role="listitem" *ngFor="let shoppingItem of shoppingItems">
+                  <span class="carttext">{{shoppingItem?.product?.name}}</span><span class="cartprice">{{shoppingItem?.amount * shoppingItem?.product?.agentPrice | currency:'AUD':'symbol-narrow':'.2-2'}}</span><span class="carticon"><i class="far fa-trash-alt fa-1x"></i></span>
+                </mat-list-item>
+                <button class="btn btn-long" (click)="proceedToCheckout()">Procees To Checkout</button>
+              </mat-list>
+              <mat-list role="list" *ngIf="role =='reseller'">
+                <h3 mat-subheader>Your Order</h3>
+                <mat-list-item role="listitem" *ngFor="let shoppingItem of shoppingItems">
+                  <span class="carttext">{{shoppingItem?.product?.name}}</span><span class="cartprice">{{shoppingItem?.amount * shoppingItem?.product?.resellerPrice | currency:'AUD':'symbol-narrow':'.2-2'}}</span><span class="carticon"><i class="far fa-trash-alt fa-1x"></i></span>
                 </mat-list-item>
                 <button class="btn btn-long" (click)="proceedToCheckout()">Procees To Checkout</button>
               </mat-list>              
             </div>
           </li>
-          <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
+          <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }' *ngIf="role =='admin'">
+            <a [routerLink]='["/admin"]'>
+              <i class="fas fa-list fa-fw"></i> Administration
+            </a>
+          </li>
+          <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }' *ngIf="role !='admin'">
             <a [routerLink]='["/orders"]'>
               <i class="fas fa-list fa-fw"></i> Order History
             </a>

@@ -12,6 +12,7 @@ import { PasswordRecoveryComponent } from './password-recovery/password-recovery
 import { AuthRecovery } from './auth/auth.recovery';
 import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
 import { OrdersComponent } from './orders/orders.component';
+import { AdministrationComponent } from './administration/administration.component';
 
 const appRoutes: Routes = [
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
@@ -27,6 +28,7 @@ const appRoutes: Routes = [
   { path: 'terms', component: TermsComponent, canActivate: [AuthGuard] },
   { path: 'cart', component: ShoppingCartComponent, canActivate: [AuthGuard] },
   { path: 'orders', component: OrdersComponent, canActivate: [AuthGuard]},
+  { path: 'admin', component: AdministrationComponent, canActivate: [AuthGuard]},
   {
     path: '',
     redirectTo: '/home',

@@ -1,10 +1,13 @@
-import { ProductService } from './../services/product.service';
 import { Component, OnInit } from '@angular/core';
 import { NavbarService } from '../services/navbar.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ShareService } from '../services/share.service';
 import { NgbDropdownConfig } from '@ng-bootstrap/ng-bootstrap';
-import { Product } from '../models/Product';
+import { ShoppingCartService } from '../services/shopping-cart.service';
+import { AdminService } from '../services/admin.service';
+import { User } from '../models/user';
+import { ShoppingCart } from '../models/shoppingCart';
+import { ShoppingItem } from '../models/shoppingItem';
 
 @Component({
   selector: 'app-nav-menu',
@@ -26,21 +29,40 @@ export class NavMenuComponent implements OnInit {
     {type: 'Lighters', category: 'lighters'},
     {type: 'Accessories', category: 'accessories'},
   ];
-
-  products: Product[];
+  role: string;
+  shoppingItems: ShoppingItem[];
 
   constructor(
     public nav: NavbarService,
     private router: Router,
     private activatedRouter: ActivatedRoute,
     private shareService: ShareService,
-    private productService: ProductService,
-    private config: NgbDropdownConfig
+    private shoppingCartService: ShoppingCartService,
+    private adminService: AdminService,
+    private activeRouter: ActivatedRoute
   ) { }
 
   ngOnInit() {
     this.nav.show();
     this.nav.showTab();
+    this.role = this.shareService.readCookie("role");
+    this.activeRouter.url.subscribe(value => {
+      if(value && value[0].path){
+        this.adminService.GetUserByAccount(this.shareService.readCookie("userName")).subscribe((user: User) => {
+          this.shoppingCartService.GetShoppingCart(user.id).subscribe((res: ShoppingCart) => {
+            if(res && res.shoppingItems){
+              this.shoppingItems = res.shoppingItems
+            }
+          },
+            (error: any) => {
+              console.info(error);
+            });
+        },
+          (error: any) => {
+            console.info(error);
+          });
+      }
+    });
   }
 
   proceedToCheckout(): void{
