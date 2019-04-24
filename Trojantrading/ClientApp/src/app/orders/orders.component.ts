@@ -21,9 +21,8 @@ export class OrdersComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    if(this.shareService.readCookie("role") && this.shareService.readCookie("role") == "admin"){
-      this.router.navigate(["/home"]);
-    }
+    this.nav.hideTab();
+    this.nav.show();
   }
 
 }

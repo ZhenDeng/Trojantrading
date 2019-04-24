@@ -11,6 +11,7 @@ import { AdminService } from '../services/admin.service';
 import { User } from '../models/user';
 import { ApiResponse } from '../models/ApiResponse';
 import { ShoppingItem } from '../models/shoppingItem';
+import { ShoppingCart } from '../models/shoppingCart';
 
 @Component({
   selector: 'app-home',
@@ -29,6 +30,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   dataSource = new MatTableDataSource();
   user: User;
   shoppingItem: ShoppingItem;
+  shoppingItems: ShoppingItem[];
 
   displayedColumns: string[];
 
@@ -69,23 +71,22 @@ export class HomeComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-
     this.activatedRoute.queryParamMap.subscribe(param => {
       this.category = param.get('category');
 
       this.title = 'Products in All Categories';
-      if(this.shareService.readCookie("role") && this.shareService.readCookie("role") == "admin"){
+      if (this.shareService.readCookie("role") && this.shareService.readCookie("role") == "admin") {
         this.displayedColumns = ['name', 'category', 'originalPrice', 'agentPrice', 'resellerPrice', 'qty', 'button']
       }
-      else if(this.shareService.readCookie("role") && this.shareService.readCookie("role") == "agent"){
+      else if (this.shareService.readCookie("role") && this.shareService.readCookie("role") == "agent") {
         this.displayedColumns = ['name', 'category', 'originalPrice', 'agentPrice', 'qty', 'button']
       }
-      else if(this.shareService.readCookie("role") && this.shareService.readCookie("role") == "reseller"){
+      else if (this.shareService.readCookie("role") && this.shareService.readCookie("role") == "reseller") {
         this.displayedColumns = ['name', 'category', 'originalPrice', 'resellerPrice', 'qty', 'button']
-      }else{
+      } else {
         this.displayedColumns = ['name', 'category', 'originalPrice', 'qty', 'button']
       }
-      
+
       this.dataSource = new MatTableDataSource();
 
       this.getAllProducts();
@@ -97,6 +98,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.isHomeComponentDestroyed = true;
     }
     this.role = this.shareService.readCookie("role");
+    this.nav.show();
     this.nav.showTab();
     this.getAllProducts();
     this.adminService.GetUserByAccount(this.shareService.readCookie("userName")).subscribe((res: User) => {
@@ -158,20 +160,37 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   addToCart(product: Product): void {
     this.shoppingItem = {
+      id: 0,
       amount: product.quantity,
       product: product,
       subTotal: 0
     }
     this.shoppingCartService.UpdateShoppingCart(this.user.id, this.shoppingItem).subscribe((res: ApiResponse) => {
       if (res.status == "success") {
+        this.adminService.GetUserByAccount(this.shareService.readCookie("userName")).subscribe((user: User) => {
+          this.shoppingCartService.GetShoppingCart(user.id).subscribe((res: ShoppingCart) => {
+            this.shoppingItems = res.shoppingItems;
+            this.shoppingCartService.MonitorShoppingItemLength(this.shoppingItems.length);
+          },
+            (error: any) => {
+              console.info(error);
+            });
+        },
+          (error: any) => {
+            console.info(error);
+          });
         this.shareService.showSuccess("#" + product.id, res.message, "right");
-      }else{
+      } else {
         this.shareService.showError("#" + product.id, res.message, "right");
       }
     },
       (error: any) => {
         console.info(error);
       });
+  }
+
+  editProduct(product: Product): void {
+
   }
 
   ngOnDestroy() {

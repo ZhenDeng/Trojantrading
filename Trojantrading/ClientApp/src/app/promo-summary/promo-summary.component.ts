@@ -14,6 +14,7 @@ export class PromoSummaryComponent implements OnInit {
 
   ngOnInit() {
     this.nav.hideTab();
+    this.nav.show();
   }
 
 }

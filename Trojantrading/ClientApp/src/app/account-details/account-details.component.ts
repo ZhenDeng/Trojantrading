@@ -53,6 +53,7 @@ export class AccountDetailsComponent implements OnInit {
 
   ngOnInit() {
     this.nav.hideTab();
+    this.nav.show();
     this.adminService.GetUserWithAddress(this.shareService.readCookie("userName")).subscribe((res: User) => {
       this.user = res;
       this.userFormGroup.get("trn").setValue(this.user.trn);

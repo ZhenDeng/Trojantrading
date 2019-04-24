@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../services/user.service';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { UserResponse, ApiResponse } from '../models/ApiResponse';
 import { NavbarService } from '../services/navbar.service';
 import { ShareService } from '../services/share.service';
@@ -31,7 +31,8 @@ export class LoginComponent implements OnInit {
     private formBuilder: FormBuilder,
     private nav: NavbarService,
     private shareService: ShareService,
-    public dialog: MatDialog) {
+    public dialog: MatDialog,
+    private activatedRouter: ActivatedRoute) {
     this.userFormGroup = this.formBuilder.group({
       account: new FormControl("", Validators.compose([Validators.required])),
       password: new FormControl("", Validators.compose([Validators.required]))
@@ -62,7 +63,7 @@ export class LoginComponent implements OnInit {
           this.shareService.createCookie("userToken", data.token, 20);
           this.shareService.createCookie("userName", data.userName, 20);
           this.shareService.createCookie("role", data.role, 20);
-          this.nav.show();
+          console.info(data.role);
           this.router.navigate(['/home']);
         }else{
           this.shareService.showError(".loginbtn", "Your Account Has Been Suspended", "right");

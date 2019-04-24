@@ -84,6 +84,10 @@ a{
   margin-bottom: 10px;
 }
 
+::ng-deep .dropdown-menu{
+  cursor: auto !important;
+}
+
 .btn-long{
 	width: auto !important;
 	margin: 15px 54px 0 !important;

@@ -1,10 +1,18 @@
+<app-nav-menu></app-nav-menu>
+
 <div class="container">
   <main class="row">
     <div class='col-sm-12 body-content'>
       <ng-container>
         <section class="product-wrapper">
           <h4>Checkout</h4>
-          <div class="example-container mat-elevation-z8">
+
+          <div class="emptycart" *ngIf="!dataSource?.length">
+            <p>Your Cart Is Empty</p>
+            <button class="btn btn-long" (click)="continueShopping()">Start Shopping</button>
+          </div>
+
+          <div class="example-container mat-elevation-z8" *ngIf="dataSource?.length">
             <mat-table #table [dataSource]="dataSource">
       
               <!--- Note that these columns can be defined in any order.
@@ -27,13 +35,13 @@
               </ng-container>
 
               <!-- buyPrice Column -->
-              <ng-container matColumnDef="agentPrice" *ngIf="role=='admin' || role=='agent'">
+              <ng-container matColumnDef="agentPrice" *ngIf="role=='agent'">
                 <mat-header-cell *matHeaderCellDef> Agent Price ex. GST </mat-header-cell>
                 <mat-cell *matCellDef="let element"> {{element.product.agentPrice | currency:'AUD':'symbol-narrow':'.2-2'}} </mat-cell>
               </ng-container>
 
               <!-- buyPrice Column -->
-              <ng-container matColumnDef="resellerPrice" *ngIf="role=='admin' || role=='reseller'">
+              <ng-container matColumnDef="resellerPrice" *ngIf="role=='reseller'">
                 <mat-header-cell *matHeaderCellDef> Reseller Price ex. GST </mat-header-cell>
                 <mat-cell *matCellDef="let element"> {{element.product.resellerPrice | currency:'AUD':'symbol-narrow':'.2-2'}} </mat-cell>
               </ng-container>
@@ -51,7 +59,7 @@
       
               <ng-container matColumnDef="remove">
                 <mat-header-cell *matHeaderCellDef class="mat-table_1fex"></mat-header-cell>
-                <mat-cell *matCellDef="let element" class="mat-table_1fex"><i class="far fa-trash-alt fa-2x"></i></mat-cell>
+                <mat-cell *matCellDef="let element" class="mat-table_1fex"><i id="shoppingitem{{element.id}}" class="far fa-trash-alt fa-2x" (click)="deleteShoppingItem(element)"></i></mat-cell>
               </ng-container>
               <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
               <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>

@@ -7,6 +7,7 @@ import { MatAutocompleteModule, MatTabsModule } from '@angular/material';
 import { productsRoutingModule } from './products-routing.module.';
 import { ProductsComponent } from './products.component';
 import { ProductService } from '../services/product.service';
+import { NavMenuModule } from '../nav-menu/nav-menu.module';
 
 
 @NgModule({
@@ -19,9 +20,10 @@ import { ProductService } from '../services/product.service';
     MatTableModule,
     MatInputModule,
     MatTabsModule,
+    NavMenuModule
   ],
   declarations: [
-    ProductsComponent,
+    ProductsComponent
   ],
   providers: [
     ProductService

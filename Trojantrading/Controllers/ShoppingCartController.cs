@@ -49,5 +49,14 @@ namespace Trojantrading.Controllers
         {
             return Ok(_shoppingCartRepository.UpdateShoppingCart(userId, shoppingItem));
         }
+
+        [HttpDelete("deleteShoppingItem")]
+        [NoCache]
+        [ProducesResponseType(typeof(ApiResponse), 200)]
+        [ProducesResponseType(typeof(ApiResponse), 400)]
+        public IActionResult deleteShoppingItem(int shoppingItemId)
+        {
+            return Ok(_shoppingCartRepository.deleteShoppingItem(shoppingItemId));
+        }
     }
 }
