@@ -15,12 +15,10 @@ namespace Trojantrading.Controllers
     public class ShoppingCartController : Controller
     {
         private readonly IShoppingCartRepository _shoppingCartRepository;
-        private readonly IProductRepository _productRepository;
 
-        public ShoppingCartController(IShoppingCartRepository shoppingCartRepository, IProductRepository productRepository)
+        public ShoppingCartController(IShoppingCartRepository shoppingCartRepository)
         {
             _shoppingCartRepository = shoppingCartRepository;
-            _productRepository = productRepository;
         }
 
         [HttpGet("GetShoppingCart")]

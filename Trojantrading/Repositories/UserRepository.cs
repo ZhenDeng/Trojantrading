@@ -11,13 +11,13 @@ namespace Trojantrading.Repositories
         ApiResponse Add(User user);
         ApiResponse Delete(int id);
         ApiResponse Update(User user);
-        User GetUserWithAddress(string userName);
-        User GetUserByAccount(string account);
-        User GetUserWithCompanyInfo(string userName);
-        User GetUserWithRole(string userName);
+        User GetUserWithAddress(int userId);
+        User GetUserByAccount(int userId);
+        User GetUserWithCompanyInfo(int userId);
+        User GetUserWithRole(int userId);
         ApiResponse ValidateEmail(string email);
-        ApiResponse UpdatePassword(string userName, string newPassword);
-        ApiResponse ValidatePassword(string userName, string password);
+        ApiResponse UpdatePassword(int userId, string newPassword);
+        ApiResponse ValidatePassword(int userId, string password);
     }
 
     public class UserRepository:IUserRepository
@@ -45,7 +45,7 @@ namespace Trojantrading.Repositories
                 return new ApiResponse()
                 {
                     Status = "fail",
-                    Message = "Fail to add user"
+                    Message = ex.Message
                 };
             }
             
@@ -69,17 +69,17 @@ namespace Trojantrading.Repositories
                 return new ApiResponse()
                 {
                     Status = "fail",
-                    Message = "Fail to delete user"
+                    Message = ex.Message
                 };
             }
         }
 
-        public User GetUserWithAddress(string userName)
+        public User GetUserWithAddress(int userId)
         {
             var user = trojantradingDbContext.Users
                         .Join(trojantradingDbContext.BillingAddresses, x => x.BillingAddressId, y => y.Id, (userModel, billingAddress) => new { User = userModel, BillingAddress = billingAddress })
                         .Join(trojantradingDbContext.ShippingAddresses, x => x.User.ShippingAddressId, y => y.Id, (userModel, shippingAddress) => new { JoinUser = userModel, ShippingAddress = shippingAddress })
-                        .Where(x => x.JoinUser.User.Account == userName)
+                        .Where(x => x.JoinUser.User.Id == userId)
                         .Select(join => new User
                         {
                             Id = join.JoinUser.User.Id,
@@ -104,11 +104,11 @@ namespace Trojantrading.Repositories
             return user;
         }
 
-        public User GetUserWithRole(string userName)
+        public User GetUserWithRole(int userId)
         {
             var user = trojantradingDbContext.Users
                            .Join(trojantradingDbContext.Roles, x => x.RoleId, y => y.Id, (userModel, role) => new { User = userModel, Role = role })
-                           .Where(x => x.User.Account == userName)
+                           .Where(x => x.User.Id == userId)
                            .Select(join => new User
                            {
                                Id = join.User.Id,
@@ -132,11 +132,11 @@ namespace Trojantrading.Repositories
 
         }
 
-        public User GetUserWithCompanyInfo(string userName)
+        public User GetUserWithCompanyInfo(int userId)
         {
             var user = trojantradingDbContext.Users
                            .Join(trojantradingDbContext.CompanyInfos, x => x.CompanyInfoId, y => y.Id, (userModel, companyInfo) => new { User = userModel, CompanyInfo = companyInfo })
-                           .Where(x => x.User.Account == userName)
+                           .Where(x => x.User.Id == userId)
                            .Select(join => new User
                            {
                                Id = join.User.Id,
@@ -160,10 +160,10 @@ namespace Trojantrading.Repositories
 
         }
 
-        public User GetUserByAccount(string account)
+        public User GetUserByAccount(int userId)
         {
             var user = trojantradingDbContext.Users
-                .Where(u=>u.Account == account)
+                .Where(u=>u.Id == userId)
                 .FirstOrDefault();
             return user;
         }
@@ -194,11 +194,11 @@ namespace Trojantrading.Repositories
             }
         }
 
-        public ApiResponse UpdatePassword(string userName, string newPassword)
+        public ApiResponse UpdatePassword(int userId, string newPassword)
         {
             try
             {
-                User user = trojantradingDbContext.Users.Where(item => item.Account == userName).FirstOrDefault();
+                User user = trojantradingDbContext.Users.Where(item => item.Id == userId).FirstOrDefault();
                 user.Password = newPassword;
                 trojantradingDbContext.Users.Update(user);
                 trojantradingDbContext.SaveChanges();
@@ -252,11 +252,11 @@ namespace Trojantrading.Repositories
             }
         }
 
-        public ApiResponse ValidatePassword(string userName, string password)
+        public ApiResponse ValidatePassword(int userId, string password)
         {
             try
             {
-                var userModel = trojantradingDbContext.Users.Where(user => user.Account == userName).FirstOrDefault();
+                var userModel = trojantradingDbContext.Users.Where(user => user.Id == userId).FirstOrDefault();
                 if (userModel.Password == password)
                 {
                     return new ApiResponse()

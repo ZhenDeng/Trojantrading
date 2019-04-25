@@ -62,7 +62,7 @@ namespace Trojantrading.Repositories
                 return new ApiResponse()
                 {
                     Status = "fail",
-                    Message = "fail to add shopping cart"
+                    Message = ex.Message
                 };
             }
 
@@ -86,7 +86,8 @@ namespace Trojantrading.Repositories
                                     TotalItems = join.ShoppingCart.TotalItems,
                                     TotalPrice = join.ShoppingCart.TotalPrice,
                                     ShoppingItems = join.ShoppingItems.ToList(),
-                                    OriginalPrice = join.ShoppingCart.OriginalPrice
+                                    OriginalPrice = join.ShoppingCart.OriginalPrice,
+                                    UserId = userId
                                 }).FirstOrDefault();
 
             shoppingCart.ShoppingItems = shoppingCart.ShoppingItems
@@ -108,9 +109,7 @@ namespace Trojantrading.Repositories
             {
                 var shoppingCart = GetCart(userId);
 
-                var user = trojantradingDbContext.Users.Where(u => u.Id == userId).FirstOrDefault();
-
-                user = userRepository.GetUserWithRole(user.Account);
+                var user = userRepository.GetUserWithRole(userId);
 
                 int shoppingItemExists = trojantradingDbContext.ShoppingItems.Where(si => si.ShoppingCartId == shoppingCart.Id && si.ProductId == shoppingItem.Product.Id).Count();
 
@@ -148,7 +147,7 @@ namespace Trojantrading.Repositories
                 return new ApiResponse()
                 {
                     Status = "fail",
-                    Message = "fail to add " + shoppingItem.Product.Name + " to shopping cart"
+                    Message = ex.Message
                 };
             }
         }
@@ -167,12 +166,12 @@ namespace Trojantrading.Repositories
                     Status = "success"
                 };
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return new ApiResponse()
                 {
                     Status = "fail",
-                    Message = "fail to remove this shopping item"
+                    Message = ex.Message
                 };
             }
         }

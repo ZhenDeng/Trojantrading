@@ -12,6 +12,7 @@ import { User } from '../models/user';
 import { ApiResponse } from '../models/ApiResponse';
 import { ShoppingItem } from '../models/shoppingItem';
 import { ShoppingCart } from '../models/shoppingCart';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-home',
@@ -101,7 +102,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.nav.show();
     this.nav.showTab();
     this.getAllProducts();
-    this.adminService.GetUserByAccount(this.shareService.readCookie("userName")).subscribe((res: User) => {
+    this.adminService.GetUserByAccount(_.toNumber(this.shareService.readCookie("userId"))).subscribe((res: User) => {
       if (res) {
         this.user = res;
         this.shoppingCartService.AddShoppingCart(res.id).subscribe((res: ApiResponse) => {
@@ -167,7 +168,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
     this.shoppingCartService.UpdateShoppingCart(this.user.id, this.shoppingItem).subscribe((res: ApiResponse) => {
       if (res.status == "success") {
-        this.adminService.GetUserByAccount(this.shareService.readCookie("userName")).subscribe((user: User) => {
+        this.adminService.GetUserByAccount(_.toNumber(this.shareService.readCookie("userId"))).subscribe((user: User) => {
           this.shoppingCartService.GetShoppingCart(user.id).subscribe((res: ShoppingCart) => {
             this.shoppingItems = res.shoppingItems;
             this.shoppingCartService.MonitorShoppingItemLength(this.shoppingItems.length);

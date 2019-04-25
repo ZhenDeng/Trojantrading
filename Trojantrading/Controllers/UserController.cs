@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using Trojantrading.Models;
@@ -19,15 +20,18 @@ namespace Trojantrading.Controllers
     {
         private readonly IUserRepository _userRepository;
         private readonly IShare _share;
+        private readonly TrojantradingDbContext trojantradingDbContext;
         private readonly AppSettings _appSettings;
 
         public UserController(
             IUserRepository userRepository,
             IOptions<AppSettings> appSettings,
-            IShare share)
+            IShare share,
+            TrojantradingDbContext trojantradingDbContext)
         {
             _userRepository = userRepository;
             _share = share;
+            this.trojantradingDbContext = trojantradingDbContext;
             _appSettings = appSettings.Value;
         }
 
@@ -37,7 +41,8 @@ namespace Trojantrading.Controllers
         [ProducesResponseType(typeof(UserResponse), 200)]
         public IActionResult Authenticate([FromBody]User userModel)
         {
-            User user = _userRepository.GetUserWithRole(userModel.Account);
+            int userId = trojantradingDbContext.Users.Where(u => u.Account == userModel.Account && u.Password == userModel.Password).FirstOrDefault().Id;
+            User user = _userRepository.GetUserWithRole(userId);
             if (user.Status.ToLower() == "active")
             {
                 if (userModel.Account != user.Account || userModel.Password != user.Password)
@@ -51,7 +56,7 @@ namespace Trojantrading.Controllers
                 {
                     Subject = new ClaimsIdentity(new Claim[]
                     {
-                new Claim(ClaimTypes.Name, userModel.Account)
+                        new Claim(ClaimTypes.Name, userModel.Account)
                     }),
                     Expires = DateTime.UtcNow.AddMinutes(20),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
@@ -62,6 +67,7 @@ namespace Trojantrading.Controllers
                 // return basic user info and token to store client side
                 return Ok(new UserResponse
                 {
+                    UserId = user.Id,
                     UserName = user.Account,
                     Token = tokenString,
                     Role = user.Role.Name
@@ -82,12 +88,12 @@ namespace Trojantrading.Controllers
         [HttpGet("PasswordRecover")]
         [NoCache]
         [ProducesResponseType(typeof(UserResponse), 200)]
-        public IActionResult PasswordRecover(string email, string userName)
+        public IActionResult PasswordRecover(string email, int userId)
         {
-            User userModel = _userRepository.GetUserByAccount(userName);
+            User userModel = _userRepository.GetUserByAccount(userId);
             if (userModel.Status.ToLower() == "active")
             {
-                if (userModel.Account != userName)
+                if (userModel.Id != userId)
                 {
                     return Unauthorized();
                 }
@@ -98,7 +104,7 @@ namespace Trojantrading.Controllers
                 {
                     Subject = new ClaimsIdentity(new Claim[]
                     {
-                new Claim(ClaimTypes.Email, userModel.Email)
+                        new Claim(ClaimTypes.Email, userModel.Email)
                     }),
                     Expires = DateTime.UtcNow.AddMinutes(5),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
@@ -109,6 +115,7 @@ namespace Trojantrading.Controllers
                 // return basic user info and token to store client side
                 return Ok(new UserResponse
                 {
+                    UserId = userModel.Id,
                     UserName = userModel.Account,
                     Token = tokenString
                 });

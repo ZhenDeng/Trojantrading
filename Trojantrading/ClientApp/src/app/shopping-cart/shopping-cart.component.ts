@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { NavbarService } from '../services/navbar.service';
-import { Product } from '../models/Product';
 import { ShareService } from '../services/share.service';
 import { ShoppingCartService } from '../services/shopping-cart.service';
 import { ShoppingCart } from '../models/shoppingCart';
@@ -9,6 +8,8 @@ import { User } from '../models/user';
 import { Router } from '@angular/router';
 import { ShoppingItem } from '../models/shoppingItem';
 import { ApiResponse } from '../models/ApiResponse';
+import { OrderService } from '../services/order.service';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-shopping-cart',
@@ -33,7 +34,8 @@ export class ShoppingCartComponent implements OnInit {
     private shareService: ShareService,
     private shoppingCartService: ShoppingCartService,
     private adminService: AdminService,
-    private router: Router
+    private router: Router,
+    private orderService: OrderService
   ) {
     if (this.shareService.readCookie("role") && this.shareService.readCookie("role") == "agent") {
       this.displayedColumns = ['name', 'category', 'originalPrice', 'agentPrice', 'qty', 'subTotal', 'remove'];
@@ -48,7 +50,7 @@ export class ShoppingCartComponent implements OnInit {
     this.nav.show();
 
     this.shoppingCartService.currentShoppingItemLength.subscribe((length: number) => {
-      this.adminService.GetUserByAccount(this.shareService.readCookie("userName")).subscribe((user: User) => {
+      this.adminService.GetUserByAccount(_.toNumber(this.shareService.readCookie("userId"))).subscribe((user: User) => {
         this.shoppingCartService.GetShoppingCart(user.id).subscribe((res: ShoppingCart) => {
           this.priceExclGst = 0;
           this.gst = 0;
@@ -87,7 +89,7 @@ export class ShoppingCartComponent implements OnInit {
         console.info(error);
       });
 
-    this.adminService.GetUserByAccount(this.shareService.readCookie("userName")).subscribe((user: User) => {
+    this.adminService.GetUserByAccount(_.toNumber(this.shareService.readCookie("userId"))).subscribe((user: User) => {
       this.shoppingCartService.GetShoppingCart(user.id).subscribe((res: ShoppingCart) => {
         this.priceExclGst = 0;
         this.gst = 0;
@@ -128,10 +130,41 @@ export class ShoppingCartComponent implements OnInit {
     this.router.navigate(['/home']);
   }
 
-  deleteShoppingItem(shoppingItem: ShoppingItem): void{
-    this.shoppingCartService.DeleteShoppingItem(shoppingItem.id).subscribe((res: ApiResponse) => {
+  checkoutShoppingItems(): void {
+    this.orderService.AddOrder(this.shoppingCart).subscribe((res: ApiResponse) => {
       if(res && res.status == "success"){
-        this.adminService.GetUserByAccount(this.shareService.readCookie("userName")).subscribe((user: User) => {
+        this.adminService.GetUserByAccount(_.toNumber(this.shareService.readCookie("userId"))).subscribe((user: User) => {
+          this.shoppingCartService.GetShoppingCart(user.id).subscribe((res: ShoppingCart) => {
+            this.priceExclGst = 0;
+            this.gst = 0;
+            this.priceIncGst = 0;
+            this.discount = 0;
+            this.shoppingCart = res;
+            this.dataSource = this.shoppingCart.shoppingItems;
+            this.shoppingCartService.MonitorShoppingItemLength(this.dataSource.length);
+          },
+            (error: any) => {
+              console.info(error);
+            });
+        },
+          (error: any) => {
+            console.info(error);
+          });
+        
+        this.shareService.showSuccess(".checkoutbtn", res.message, "right");
+      }else{
+        this.shareService.showError(".checkoutbtn", res.message, "right");
+      }
+    },
+      (error: any) => {
+        console.info(error);
+      });
+  }
+
+  deleteShoppingItem(shoppingItem: ShoppingItem): void {
+    this.shoppingCartService.DeleteShoppingItem(shoppingItem.id).subscribe((res: ApiResponse) => {
+      if (res && res.status == "success") {
+        this.adminService.GetUserByAccount(_.toNumber(this.shareService.readCookie("userId"))).subscribe((user: User) => {
           this.shoppingCartService.GetShoppingCart(user.id).subscribe((res: ShoppingCart) => {
             this.priceExclGst = 0;
             this.gst = 0;
@@ -164,8 +197,8 @@ export class ShoppingCartComponent implements OnInit {
           (error: any) => {
             console.info(error);
           });
-      }else{
-        this.shareService.showError("shoppingItem"+shoppingItem.id, res.message, "right");
+      } else {
+        this.shareService.showError(".shoppingItem" + shoppingItem.id, res.message, "right");
       }
     },
       (error: any) => {

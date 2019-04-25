@@ -19,8 +19,8 @@ export class UserService {
       .pipe(catchError(this.handleError));
   }
 
-  PasswordRecover(email: string, userName: string): Observable<UserResponse> {
-    return this.http.get(this.base_url + "/PasswordRecover?email=" + email + "&userName=" + userName, { headers: new HttpHeaders({ 'Content-Type': 'application/json', 'No-Auth': 'True' }) })
+  PasswordRecover(email: string, userId: Number): Observable<UserResponse> {
+    return this.http.get(this.base_url + "/PasswordRecover?email=" + email + "&userId=" + userId, { headers: new HttpHeaders({ 'Content-Type': 'application/json', 'No-Auth': 'True' }) })
       .pipe(catchError(this.handleError));
   }
 
@@ -29,8 +29,8 @@ export class UserService {
       .pipe(catchError(this.handleError));
   }
 
-  UpdatePassword(userName: string, password: string): Observable<ApiResponse> {
-    return this.http.get(this.base_url + "/UpdatePassword?userName=" + userName + "&password=" + password, { headers: new HttpHeaders({ 'Content-Type': 'application/json', 'No-Auth': 'True' }) })
+  UpdatePassword(userId: Number, password: string): Observable<ApiResponse> {
+    return this.http.get(this.base_url + "/UpdatePassword?userId=" + userId + "&password=" + password, { headers: new HttpHeaders({ 'Content-Type': 'application/json', 'No-Auth': 'True' }) })
       .pipe(catchError(this.handleError));
   }
 

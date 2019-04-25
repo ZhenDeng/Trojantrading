@@ -7,6 +7,7 @@ import { NavbarService } from '../services/navbar.service';
 import { ShareService } from '../services/share.service';
 import { MatDialog } from '@angular/material';
 import { TermsAndConditionsComponent } from '../popup-collection/terms-and-conditions/terms-and-conditions.component';
+import * as _ from 'lodash';
 
 declare var jquery: any;
 declare var $: any;
@@ -41,8 +42,8 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.nav.hide();
-    if(this.shareService.readCookie("userName")){
-      this.userFormGroup.get("account").setValue(this.shareService.readCookie("userName"));
+    if(_.toNumber(this.shareService.readCookie("userId"))){
+      this.userFormGroup.get("account").setValue(_.toNumber(this.shareService.readCookie("userId")));
     }
   }
 
@@ -62,6 +63,7 @@ export class LoginComponent implements OnInit {
         if(data && data.token){
           this.shareService.createCookie("userToken", data.token, 20);
           this.shareService.createCookie("userName", data.userName, 20);
+          this.shareService.createCookie("userId", data.userId.toString(), 20);
           this.shareService.createCookie("role", data.role, 20);
           console.info(data.role);
           this.router.navigate(['/home']);
@@ -91,10 +93,11 @@ export class LoginComponent implements OnInit {
     if (this.userEmailGroup.get("email").valid) {
       this.userService.ValidateEmail(this.userEmailGroup.get("email").value).subscribe((res: ApiResponse) => {
         if(res && res.status == "success"){
-          this.userService.PasswordRecover(this.userEmailGroup.get("email").value, this.shareService.readCookie("userName")).subscribe((res: UserResponse) => {
+          this.userService.PasswordRecover(this.userEmailGroup.get("email").value, _.toNumber(this.shareService.readCookie("userId"))).subscribe((res: UserResponse) => {
             if(res && res.token){
               this.shareService.createCookie("recoverToken", res.token, 5);
               this.shareService.createCookie("recoverUser", res.userName, 5);
+              this.shareService.createCookie("recoverUserId", res.userId.toString(), 5);
               this.showResetText = true;
             }
             else{

@@ -37,6 +37,7 @@ import { TermsAndConditionsComponent } from './popup-collection/terms-and-condit
 import { ShoppingCartService } from './services/shopping-cart.service';
 import { AdministrationComponent } from './administration/administration.component';
 import { NavMenuModule } from './nav-menu/nav-menu.module';
+import { OrderService } from './services/order.service';
 
 @NgModule({
   declarations: [
@@ -83,6 +84,7 @@ import { NavMenuModule } from './nav-menu/nav-menu.module';
     AuthRecovery,
     ShareService,
     ShoppingCartService,
+    OrderService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,

@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { NavbarService } from '../services/navbar.service';
 import { ShareService } from '../services/share.service';
 import { ApiResponse } from '../models/ApiResponse';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-password-recovery',
@@ -34,7 +35,7 @@ export class PasswordRecoveryComponent implements OnInit {
 
   resetPassword(): void {
     if (this.userFormGroup.valid) {
-      this.userService.UpdatePassword(this.shareService.readCookie("recoverUser"), this.userFormGroup.get("newPassword").value).subscribe((res: ApiResponse) => {
+      this.userService.UpdatePassword(_.toNumber(this.shareService.readCookie("recoverUserId")), this.userFormGroup.get("newPassword").value).subscribe((res: ApiResponse) => {
         if(res && res.status == "success"){
           this.shareService.showSuccess(".btn-long", res.message, "right");
           this.shareService.createCookie("recoverToken", "", 1);
