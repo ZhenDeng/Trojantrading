@@ -29,7 +29,7 @@ namespace Trojantrading.Repositories
         {
             try
             {
-                var shoppingCart = trojantradingDbContext.ShoppingCarts.Where(sc => sc.UserId == userId).FirstOrDefault();
+                var shoppingCart = trojantradingDbContext.ShoppingCarts.Where(sc => sc.UserId == userId && sc.Status == "0").FirstOrDefault();
                 if (shoppingCart == null)
                 {
                     ShoppingCart sc = new ShoppingCart()
@@ -37,7 +37,8 @@ namespace Trojantrading.Repositories
                         TotalItems = 0,
                         OriginalPrice = 0,
                         TotalPrice = 0,
-                        UserId = userId
+                        UserId = userId,
+                        Status = "0"
                     };
 
                     trojantradingDbContext.ShoppingCarts.Add(sc);
@@ -71,14 +72,14 @@ namespace Trojantrading.Repositories
         public ShoppingCart GetCart(int userId)
         {
             var shoppingCart = trojantradingDbContext.ShoppingCarts
-                .Where(s => s.UserId == userId)
+                .Where(s => s.UserId == userId && s.Status == "0")
                 .FirstOrDefault();
             return shoppingCart;
         }
 
         public ShoppingCart GetCartWithShoppingItems(int userId)
         {
-            var shoppingCart = trojantradingDbContext.ShoppingCarts.Where(sc => sc.UserId == userId)
+            var shoppingCart = trojantradingDbContext.ShoppingCarts.Where(sc => sc.UserId == userId && sc.Status == "0")
                                 .GroupJoin(trojantradingDbContext.ShoppingItems, sc => sc.Id, si => si.ShoppingCartId, (shoppingCartModel, shoppingItems) => new { ShoppingCart = shoppingCartModel, ShoppingItems = shoppingItems })
                                 .Select(join => new ShoppingCart()
                                 {
@@ -87,10 +88,13 @@ namespace Trojantrading.Repositories
                                     TotalPrice = join.ShoppingCart.TotalPrice,
                                     ShoppingItems = join.ShoppingItems.ToList(),
                                     OriginalPrice = join.ShoppingCart.OriginalPrice,
-                                    UserId = userId
+                                    UserId = userId,
+                                    Status = "0"
                                 }).FirstOrDefault();
 
-            shoppingCart.ShoppingItems = shoppingCart.ShoppingItems
+            if (trojantradingDbContext.ShoppingItems.Count() > 0)
+            {
+                shoppingCart.ShoppingItems = shoppingCart.ShoppingItems
                             .Join(trojantradingDbContext.Products, si => si.ProductId, p => p.Id, (shoppingItem, product) => new { ShoppingItem = shoppingItem, Product = product })
                             .Select(join => new ShoppingItem
                             {
@@ -98,7 +102,10 @@ namespace Trojantrading.Repositories
                                 Amount = join.ShoppingItem.Amount,
                                 Product = join.Product,
                                 ProductId = join.Product.Id,
+                                Status = "0"
                             }).ToList();
+            }
+
 
             return shoppingCart;
         }
@@ -111,11 +118,11 @@ namespace Trojantrading.Repositories
 
                 var user = userRepository.GetUserWithRole(userId);
 
-                int shoppingItemExists = trojantradingDbContext.ShoppingItems.Where(si => si.ShoppingCartId == shoppingCart.Id && si.ProductId == shoppingItem.Product.Id).Count();
+                int shoppingItemExists = trojantradingDbContext.ShoppingItems.Where(si => si.ShoppingCartId == shoppingCart.Id && si.ProductId == shoppingItem.Product.Id && si.Status == "0").Count();
 
                 if (shoppingItemExists > 0)
                 {
-                    var shoppingItemModel = trojantradingDbContext.ShoppingItems.Where(si => si.ShoppingCartId == shoppingCart.Id && si.ProductId == shoppingItem.Product.Id).FirstOrDefault();
+                    var shoppingItemModel = trojantradingDbContext.ShoppingItems.Where(si => si.ShoppingCartId == shoppingCart.Id && si.ProductId == shoppingItem.Product.Id && si.Status == "0").FirstOrDefault();
                     shoppingItemModel.Amount += shoppingItem.Amount;
                     trojantradingDbContext.ShoppingItems.Update(shoppingItemModel);
                     trojantradingDbContext.SaveChanges();
@@ -127,6 +134,7 @@ namespace Trojantrading.Repositories
                         Amount = shoppingItem.Amount,
                         ProductId = shoppingItem.Product.Id,
                         ShoppingCartId = shoppingCart.Id,
+                        Status = "0"
                     };
                     trojantradingDbContext.ShoppingItems.Add(si);
                     trojantradingDbContext.SaveChanges();

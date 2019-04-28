@@ -61,11 +61,11 @@ namespace Trojantrading.Repositories
                 .ToTable("BillingAddress")
                 .HasKey(s => s.Id);
 
-            //user shoppingcart 1:1
+            //user shoppingcart 1:m
             modelBuilder.Entity<User>()
-                .HasOne(u => u.ShoppingCart)
+                .HasMany(u => u.ShoppingCarts)
                 .WithOne(s => s.User)
-                .HasForeignKey<ShoppingCart>(s => s.UserId);
+                .HasForeignKey(s => s.UserId);
 
             //user order 1:m
             modelBuilder.Entity<Order>()

@@ -50,7 +50,9 @@ export class NavMenuComponent implements OnInit {
     this.shoppingCartService.currentShoppingItemLength.subscribe((length: number) => {
       this.adminService.GetUserByAccount(_.toNumber(this.shareService.readCookie("userId"))).subscribe((user: User) => {
         this.shoppingCartService.GetShoppingCart(user.id).subscribe((res: ShoppingCart) => {
-          this.shoppingItems = res.shoppingItems;
+          if(res && res.shoppingItems.length){
+            this.shoppingItems = res.shoppingItems;
+          }
         },
           (error: any) => {
             console.info(error);
@@ -63,24 +65,6 @@ export class NavMenuComponent implements OnInit {
       (error: any) => {
         console.info(error);
       });
-
-    this.activeRouter.url.subscribe(value => {
-      if (value && value[0].path) {
-        this.adminService.GetUserByAccount(_.toNumber(this.shareService.readCookie("userId"))).subscribe((user: User) => {
-          this.shoppingCartService.GetShoppingCart(user.id).subscribe((res: ShoppingCart) => {
-            if (res && res.shoppingItems) {
-              this.shoppingItems = res.shoppingItems
-            }
-          },
-            (error: any) => {
-              console.info(error);
-            });
-        },
-          (error: any) => {
-            console.info(error);
-          });
-      }
-    });
   }
 
   proceedToCheckout(): void {

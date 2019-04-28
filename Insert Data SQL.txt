@@ -154,8 +154,62 @@ INSERT INTO [trojantrading].[product]
            (GETDATE()
            ,'Dunhill 23'
            ,23.95
-           ,22.95
            ,21.95
-           ,'Dunhill'
+           ,22.95
+           ,'hand-made'
+           ,'')
+GO
+
+INSERT INTO [trojantrading].[product]
+           ([CreatedDate]
+           ,[Name]
+           ,[OriginalPrice]
+           ,[AgentPrice]
+           ,[ResellerPrice]
+           ,[Category]
+           ,[Status])
+     VALUES
+           (GETDATE()
+           ,'Winfield 23'
+           ,33.95
+           ,31.95
+           ,32.95
+           ,'machine-made'
+           ,'New')
+GO
+
+INSERT INTO [trojantrading].[product]
+           ([CreatedDate]
+           ,[Name]
+           ,[OriginalPrice]
+           ,[AgentPrice]
+           ,[ResellerPrice]
+           ,[Category]
+           ,[Status])
+     VALUES
+           (GETDATE()
+           ,'Malboro 23'
+           ,43.95
+           ,41.95
+           ,42.95
+           ,'little-cigars'
+           ,'Promotion')
+GO
+
+INSERT INTO [trojantrading].[product]
+           ([CreatedDate]
+           ,[Name]
+           ,[OriginalPrice]
+           ,[AgentPrice]
+           ,[ResellerPrice]
+           ,[Category]
+           ,[Status])
+     VALUES
+           (GETDATE()
+           ,'DoulbeHappiness 23'
+           ,53.95
+           ,51.95
+           ,52.95
+           ,'cigarettes'
            ,'SoldOut')
 GO
