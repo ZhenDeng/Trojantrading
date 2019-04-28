@@ -1,3 +1,4 @@
+import { ProductService } from './../services/product.service';
 import { Component, OnInit } from '@angular/core';
 import { NavbarService } from '../services/navbar.service';
 import { ShareService } from '../services/share.service';
@@ -15,6 +16,7 @@ export class OrdersComponent implements OnInit {
   constructor(
     private nav: NavbarService,
     private shareService: ShareService,
+    private productService: ProductService,
     private shoppingCartService: ShoppingCartService,
     private adminService: AdminService,
     private router: Router
@@ -24,6 +26,10 @@ export class OrdersComponent implements OnInit {
     if(this.shareService.readCookie("role") && this.shareService.readCookie("role") == "admin"){
       this.router.navigate(["/home"]);
     }
+
+
   }
+
+  //getAllOrders()
 
 }

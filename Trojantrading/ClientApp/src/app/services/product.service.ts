@@ -3,18 +3,25 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Product } from '../models/Product';
 import { catchError } from 'rxjs/operators';
+import { Order } from '../models/order';
 
 @Injectable()
 export class ProductService {
 
-  base_url: string = "api/Product";
+  product_url: string = "api/Product";
+  order_url: string = "api/Order";
 
   constructor(
     private http: HttpClient
   ) { }
 
   getAllProducts(): Observable<Product[]> {
-    return this.http.get(this.base_url + "/GetAllProducts")
+    return this.http.get(this.product_url + "/GetAllProducts")
+    .pipe(catchError(this.handleError));
+  }
+
+  getOrdersByUserID(id: string): Observable<Order[]> {
+    return this.http.get(this.order_url + '/GetOrdersByUserID?userId=' + id)
     .pipe(catchError(this.handleError));
   }
 

@@ -20,6 +20,24 @@ namespace Trojantrading.Controllers
             this._orderRepository = orderRepository;
         }
 
+        [HttpGet("GetOrdersByUserID")]
+        [ProducesResponseType(typeof(Order[]), 200)]
+        [ProducesResponseType(typeof(ApiResponse), 400)]
+        public IActionResult GetOrdersByUserID(string userId)
+        {
+            try
+            {
+                int id = int.Parse(userId);
+                var results = _orderRepository.GetOrdersByUserID(id);
+
+                return Ok(results.ToArray());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ApiResponse { Status = "false", Message = ex.Message });
+            }
+        }
+
         public IActionResult CreateOrder()
         {
             var order = new Order();

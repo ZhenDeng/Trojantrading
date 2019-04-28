@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Trojantrading.Models;
 using Trojantrading.Util;
@@ -13,6 +14,7 @@ namespace Trojantrading.Repositories
         Order Get(int id);
         int GetToatalOrderNumber();
         int GetNewOrderNumber();
+        List<Order> GetOrdersByUserID(int userId);
     }
     
     public class OrderRepository:IOrderRepository
@@ -43,6 +45,16 @@ namespace Trojantrading.Repositories
             var result = trojantradingDbContext.Orders
                 .Where(o => o.OrderStatus == Constrants.ORDER_STATUS_RECEIVED).Count();
             return result;
+        }
+
+        public List<Order> GetOrdersByUserID(int userId)
+        {
+            List<Order> orders = new List<Order>();
+
+            orders = trojantradingDbContext.Orders
+                .Where(x => x.UserId == userId).ToList();
+
+            return orders;
         }
 
         public void Add(Order order)
