@@ -2,6 +2,7 @@ import { ShoppingItem } from './shoppingItem';
 import { ShoppingCart } from "./shoppingCart";
 import { Order } from './order';
 import { UserAddress } from "./UserAddress";
+import { Role } from './Role';
 
 export interface User {
     id: number
@@ -20,4 +21,5 @@ export interface User {
     shippingAddress: UserAddress
     billingAddress: UserAddress
     shoppingItems: ShoppingItem[]
+    role: Role
 }

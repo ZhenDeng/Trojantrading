@@ -1,11 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Trojantrading.Models;
-using Trojantrading.Util;
 
 namespace Trojantrading.Repositories
 {
-    
+
     public interface IOrderRepository
     {
         void Add(Order order);
@@ -15,31 +15,77 @@ namespace Trojantrading.Repositories
         int GetToatalOrderNumber();
         int GetNewOrderNumber();
         List<Order> GetOrdersByUserID(int userId);
+        ApiResponse AddOrder(ShoppingCart cart);
+        List<Order> GetOrderWithUser(int userId);
     }
-    
-    public class OrderRepository:IOrderRepository
+
+    public class OrderRepository : IOrderRepository
     {
         private readonly TrojantradingDbContext trojantradingDbContext;
-        
-        public OrderRepository(TrojantradingDbContext trojantradingDbContext)
+        private readonly IUserRepository userRepository;
+        private readonly IShoppingCartRepository shoppingCartRepository;
+
+        public OrderRepository(
+            TrojantradingDbContext trojantradingDbContext,
+            IUserRepository userRepository,
+            IShoppingCartRepository shoppingCartRepository)
         {
             this.trojantradingDbContext = trojantradingDbContext;
+            this.userRepository = userRepository;
+            this.shoppingCartRepository = shoppingCartRepository;
         }
 
-        public Order Get(int id)
+        public ApiResponse AddOrder(ShoppingCart cart)
         {
-            var order = trojantradingDbContext.Orders
-                .Where(o => o.Id == id)
-                .FirstOrDefault();
-            return order;
-        }
+            try
+            {
+                Order order = new Order()
+                {
+                    CreatedDate = DateTime.Now,
+                    TotalItems = cart.TotalItems,
+                    TotalPrice = cart.TotalPrice,
+                    OrderStatus = "Order Submitted",
+                    UserId = cart.UserId,
+                    ShoppingCartId = cart.Id,
+                    ClientMessage = "",
+                    AdminMessage = "",
+                    Balance = 0
+                };
+                trojantradingDbContext.Orders.Add(order);
+                foreach (var si in cart.ShoppingItems)
+                {
+                    si.Status = "1";
+                    si.Product = null;
+                }
 
-        public int GetToatalOrderNumber()
-        {
-            var result = trojantradingDbContext.Orders.Count();
-            return result;
-        }
+                trojantradingDbContext.ShoppingItems.UpdateRange(cart.ShoppingItems);
+                cart.Status = "1";
+                trojantradingDbContext.ShoppingCarts.Update(cart);
+                ShoppingCart sc = new ShoppingCart()
+                {
+                    TotalItems = 0,
+                    OriginalPrice = 0,
+                    TotalPrice = 0,
+                    UserId = order.UserId,
+                    Status = "0"
+                };
 
+                trojantradingDbContext.ShoppingCarts.Add(sc);
+                trojantradingDbContext.SaveChanges();
+                return new ApiResponse()
+                {
+                    Status = "success",
+                    Message = "Successfully create order"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse()
+                {
+                    Status = "fail",
+                    Message = ex.Message
+                };
+            }
         public int GetNewOrderNumber()
         {
             var result = trojantradingDbContext.Orders
@@ -63,19 +109,22 @@ namespace Trojantrading.Repositories
             trojantradingDbContext.SaveChanges();
         }
 
-        public void Delete(int id)
-        {
-            var order = Get(id);
-            trojantradingDbContext.Orders.Remove(order);
-            trojantradingDbContext.SaveChanges();
         }
 
-        public void Update(Order order)
+        public List<Order> GetOrderWithUser(int userId)
         {
-            trojantradingDbContext.Orders.Update(order);
-            trojantradingDbContext.SaveChanges();
+
+            var user = userRepository.GetUserWithAddress(userId);
+
+            var joinOrders = trojantradingDbContext.Users.Where(u => u.Id == userId)
+                        .GroupJoin(trojantradingDbContext.Orders, o => o.Id, u => u.UserId, (u, orders) => new { Orders = orders })
+                        .SelectMany(selectOrders => selectOrders.Orders).ToList();
+
+            foreach (var order in joinOrders)
+            {
+                order.User = user;
+            }
+            return joinOrders;
         }
-        
-        
     }
 }

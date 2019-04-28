@@ -36,6 +36,8 @@ import { OrdersComponent } from './orders/orders.component';
 import { TermsAndConditionsComponent } from './popup-collection/terms-and-conditions/terms-and-conditions.component';
 import { ShoppingCartService } from './services/shopping-cart.service';
 import { AdministrationComponent } from './administration/administration.component';
+import { NavMenuModule } from './nav-menu/nav-menu.module';
+import { OrderService } from './services/order.service';
 
 @NgModule({
   declarations: [
@@ -43,7 +45,6 @@ import { AdministrationComponent } from './administration/administration.compone
     HomeComponent,
     LoginComponent,
     AccountDetailsComponent,
-    NavMenuComponent,
     AboutUsComponent,
     ContactUsComponent,
     PromoSummaryComponent,
@@ -72,7 +73,8 @@ import { AdministrationComponent } from './administration/administration.compone
     MatTabsModule,
     ProductsModule,
     MatListModule,
-    MatDialogModule
+    MatDialogModule,
+    NavMenuModule
   ],
   providers: [
     UserService,
@@ -82,6 +84,7 @@ import { AdministrationComponent } from './administration/administration.compone
     AuthRecovery,
     ShareService,
     ShoppingCartService,
+    OrderService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,

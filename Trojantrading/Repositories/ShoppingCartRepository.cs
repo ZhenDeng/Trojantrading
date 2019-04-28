@@ -8,11 +8,11 @@ namespace Trojantrading.Repositories
     {
         ShoppingCart GetCart(int userId);
         ApiResponse UpdateShoppingCart(int userId, ShoppingItem shoppingItem);
-        void Empty(int userId);
         ApiResponse AddShoppingCart(int userId);
         ShoppingCart GetCartWithShoppingItems(int userId);
+        ApiResponse deleteShoppingItem(int shoppingItemId);
     }
-    public class ShoppingCartRepository:IShoppingCartRepository
+    public class ShoppingCartRepository : IShoppingCartRepository
     {
         private readonly TrojantradingDbContext trojantradingDbContext;
         private readonly IUserRepository userRepository;
@@ -21,14 +21,15 @@ namespace Trojantrading.Repositories
             TrojantradingDbContext trojantradingDbContext,
             IUserRepository userRepository)
         {
-            this.trojantradingDbContext= trojantradingDbContext;
+            this.trojantradingDbContext = trojantradingDbContext;
             this.userRepository = userRepository;
         }
 
-        public ApiResponse AddShoppingCart(int userId) {
+        public ApiResponse AddShoppingCart(int userId)
+        {
             try
             {
-                var shoppingCart = trojantradingDbContext.ShoppingCarts.Where(sc => sc.UserId == userId).FirstOrDefault();
+                var shoppingCart = trojantradingDbContext.ShoppingCarts.Where(sc => sc.UserId == userId && sc.Status == "0").FirstOrDefault();
                 if (shoppingCart == null)
                 {
                     ShoppingCart sc = new ShoppingCart()
@@ -36,7 +37,8 @@ namespace Trojantrading.Repositories
                         TotalItems = 0,
                         OriginalPrice = 0,
                         TotalPrice = 0,
-                        UserId = userId
+                        UserId = userId,
+                        Status = "0"
                     };
 
                     trojantradingDbContext.ShoppingCarts.Add(sc);
@@ -47,7 +49,8 @@ namespace Trojantrading.Repositories
                         Message = "Successfully add shopping cart"
                     };
                 }
-                else {
+                else
+                {
                     return new ApiResponse()
                     {
                         Status = "fail",
@@ -60,40 +63,49 @@ namespace Trojantrading.Repositories
                 return new ApiResponse()
                 {
                     Status = "fail",
-                    Message = "fail to add shopping cart"
+                    Message = ex.Message
                 };
             }
-            
+
         }
 
         public ShoppingCart GetCart(int userId)
         {
             var shoppingCart = trojantradingDbContext.ShoppingCarts
-                .Where(s=>s.UserId == userId)
+                .Where(s => s.UserId == userId && s.Status == "0")
                 .FirstOrDefault();
             return shoppingCart;
         }
 
         public ShoppingCart GetCartWithShoppingItems(int userId)
         {
-            var shoppingCart = trojantradingDbContext.ShoppingCarts
-                                .GroupJoin(trojantradingDbContext.ShoppingItems, sc => sc.Id, si => si.ShoppingCartId, (shoppingCartModel, shoppingItems) => new {  ShoppingCart = shoppingCartModel, ShoppingItems = shoppingItems})
-                                .Select(join => new ShoppingCart() {
+            var shoppingCart = trojantradingDbContext.ShoppingCarts.Where(sc => sc.UserId == userId && sc.Status == "0")
+                                .GroupJoin(trojantradingDbContext.ShoppingItems, sc => sc.Id, si => si.ShoppingCartId, (shoppingCartModel, shoppingItems) => new { ShoppingCart = shoppingCartModel, ShoppingItems = shoppingItems })
+                                .Select(join => new ShoppingCart()
+                                {
                                     Id = join.ShoppingCart.Id,
                                     TotalItems = join.ShoppingCart.TotalItems,
                                     TotalPrice = join.ShoppingCart.TotalPrice,
                                     ShoppingItems = join.ShoppingItems.ToList(),
-                                    OriginalPrice = join.ShoppingCart.OriginalPrice
+                                    OriginalPrice = join.ShoppingCart.OriginalPrice,
+                                    UserId = userId,
+                                    Status = "0"
                                 }).FirstOrDefault();
 
-            shoppingCart.ShoppingItems = shoppingCart.ShoppingItems
-                            .Join(trojantradingDbContext.Products, si => si.ProductId, p => p.Id, (shoppingItem, product) => new ShoppingItem
+            if (trojantradingDbContext.ShoppingItems.Count() > 0)
+            {
+                shoppingCart.ShoppingItems = shoppingCart.ShoppingItems
+                            .Join(trojantradingDbContext.Products, si => si.ProductId, p => p.Id, (shoppingItem, product) => new { ShoppingItem = shoppingItem, Product = product })
+                            .Select(join => new ShoppingItem
                             {
-                                Id = shoppingItem.Id,
-                                Amount = shoppingItem.Amount,
-                                Product = product,
-                                ProductId = product.Id,
+                                Id = join.ShoppingItem.Id,
+                                Amount = join.ShoppingItem.Amount,
+                                Product = join.Product,
+                                ProductId = join.Product.Id,
+                                Status = "0"
                             }).ToList();
+            }
+
 
             return shoppingCart;
         }
@@ -104,15 +116,13 @@ namespace Trojantrading.Repositories
             {
                 var shoppingCart = GetCart(userId);
 
-                var user = trojantradingDbContext.Users.Where(u => u.Id == userId).FirstOrDefault();
+                var user = userRepository.GetUserWithRole(userId);
 
-                user = userRepository.GetUserWithRole(user.Account);
-
-                int shoppingItemExists = trojantradingDbContext.ShoppingItems.Where(si => si.ShoppingCartId == shoppingCart.Id && si.ProductId == shoppingItem.Product.Id).Count();
+                int shoppingItemExists = trojantradingDbContext.ShoppingItems.Where(si => si.ShoppingCartId == shoppingCart.Id && si.ProductId == shoppingItem.Product.Id && si.Status == "0").Count();
 
                 if (shoppingItemExists > 0)
                 {
-                    var shoppingItemModel = trojantradingDbContext.ShoppingItems.Where(si => si.ShoppingCartId == shoppingCart.Id && si.ProductId == shoppingItem.Product.Id).FirstOrDefault();
+                    var shoppingItemModel = trojantradingDbContext.ShoppingItems.Where(si => si.ShoppingCartId == shoppingCart.Id && si.ProductId == shoppingItem.Product.Id && si.Status == "0").FirstOrDefault();
                     shoppingItemModel.Amount += shoppingItem.Amount;
                     trojantradingDbContext.ShoppingItems.Update(shoppingItemModel);
                     trojantradingDbContext.SaveChanges();
@@ -124,6 +134,7 @@ namespace Trojantrading.Repositories
                         Amount = shoppingItem.Amount,
                         ProductId = shoppingItem.Product.Id,
                         ShoppingCartId = shoppingCart.Id,
+                        Status = "0"
                     };
                     trojantradingDbContext.ShoppingItems.Add(si);
                     trojantradingDbContext.SaveChanges();
@@ -136,7 +147,7 @@ namespace Trojantrading.Repositories
                 return new ApiResponse()
                 {
                     Status = "success",
-                    Message = "Successfully add "+ shoppingItem.Product.Name +" to shopping cart"
+                    Message = "Successfully add " + shoppingItem.Product.Name + " to shopping cart"
                 };
             }
             catch (Exception ex)
@@ -144,20 +155,37 @@ namespace Trojantrading.Repositories
                 return new ApiResponse()
                 {
                     Status = "fail",
-                    Message = "fail to add " + shoppingItem.Product.Name + " to shopping cart"
+                    Message = ex.Message
                 };
             }
         }
 
-        public void Empty(int userId)
+        public ApiResponse deleteShoppingItem(int shoppingItemId)
         {
-            trojantradingDbContext.ShoppingCarts
-                    .Where(s => s.UserId == userId)
-                    .FirstOrDefault().ShoppingItems.Clear();
-            trojantradingDbContext.SaveChanges();
+            try
+            {
+                var shoppingItem = trojantradingDbContext.ShoppingItems
+                                    .Where(s => s.Id == shoppingItemId)
+                                    .FirstOrDefault();
+                trojantradingDbContext.ShoppingItems.Remove(shoppingItem);
+                trojantradingDbContext.SaveChanges();
+                return new ApiResponse()
+                {
+                    Status = "success"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse()
+                {
+                    Status = "fail",
+                    Message = ex.Message
+                };
+            }
         }
 
-        private void updateShoppingCartPrice(ShoppingCart shoppingCart, User user, ShoppingItem shoppingItem) {
+        private void updateShoppingCartPrice(ShoppingCart shoppingCart, User user, ShoppingItem shoppingItem)
+        {
             shoppingCart.OriginalPrice += (shoppingItem.Amount * shoppingItem.Product.OriginalPrice);
             if (user.Role.Name == RoleName.agent.ToString())
             {

@@ -6,18 +6,20 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Trojantrading.Repositories;
 using Trojantrading.Models;
+using Trojantrading.Util;
 
 namespace Trojantrading.Controllers
 {
-    [Route("[Controller]")]
-    [Authorize(Roles="Admin, User")]
+    [Produces("application/json")]
+    [Route("api/[controller]")]
+    [Authorize]
     public class OrderController:Controller
     {
         private readonly IOrderRepository _orderRepository;
 
-        public OrderController(OrderRepository orderRepository)
+        public OrderController(IOrderRepository orderRepository)
         {
-            this._orderRepository = orderRepository;
+            _orderRepository = orderRepository;
         }
 
         [HttpGet("GetOrdersByUserID")]
@@ -39,30 +41,22 @@ namespace Trojantrading.Controllers
         }
 
         public IActionResult CreateOrder()
+        [HttpPost("AddOrder")]
+        [NoCache]
+        [ProducesResponseType(typeof(ApiResponse), 200)]
+        [ProducesResponseType(typeof(ApiResponse), 400)]
+        public IActionResult AddOrder([FromBody]ShoppingCart cart)
         {
-            var order = new Order();
-            var shoppingCart = new ShoppingCart();
-            return null;
+            return Ok(_orderRepository.AddOrder(cart));
         }
 
-        public IActionResult DeleteOrder()
+        [HttpGet("GetOrderWithUser")]
+        [NoCache]
+        [ProducesResponseType(typeof(List<Order>), 200)]
+        [ProducesResponseType(typeof(ApiResponse), 400)]
+        public IActionResult GetOrderWithUser(int userId)
         {
-            return null;
-        }
-
-        public IActionResult UpdateOrder()
-        {
-            return null;
-        }
-
-        public IActionResult EditOrder()
-        {
-            return null;
-        }
-
-        public IActionResult GetOrders()
-        {
-            return null;
+            return Ok(_orderRepository.GetOrderWithUser(userId));
         }
     }
 }

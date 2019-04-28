@@ -8,6 +8,8 @@ import { AdminService } from '../services/admin.service';
 import { User } from '../models/user';
 import { ShoppingCart } from '../models/shoppingCart';
 import { ShoppingItem } from '../models/shoppingItem';
+import { ApiResponse } from '../models/ApiResponse';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-nav-menu',
@@ -18,19 +20,19 @@ import { ShoppingItem } from '../models/shoppingItem';
 export class NavMenuComponent implements OnInit {
 
   testJsonObj = [
-    {type: 'Hand-Made Cigars', category: 'hand-made'},
-    {type: 'Machine-Made Cigars', category: 'machine-made'},
-    {type: 'Little Cigars', category: 'little-cigars'},
-    {type: 'Cigarettes', category: 'cigarettes'},
-    {type: 'Pipe Tobacco', category: 'pipe-tobacco'},
-    {type: 'Roll Your Own', category: 'roll-your-won'},
-    {type: 'Filters', category: 'filters'},
-    {type: 'Papers', category: 'papers'},
-    {type: 'Lighters', category: 'lighters'},
-    {type: 'Accessories', category: 'accessories'},
+    { type: 'Hand-Made Cigars', category: 'hand-made' },
+    { type: 'Machine-Made Cigars', category: 'machine-made' },
+    { type: 'Little Cigars', category: 'little-cigars' },
+    { type: 'Cigarettes', category: 'cigarettes' },
+    { type: 'Pipe Tobacco', category: 'pipe-tobacco' },
+    { type: 'Roll Your Own', category: 'roll-your-won' },
+    { type: 'Filters', category: 'filters' },
+    { type: 'Papers', category: 'papers' },
+    { type: 'Lighters', category: 'lighters' },
+    { type: 'Accessories', category: 'accessories' },
   ];
-  role: string;
   shoppingItems: ShoppingItem[];
+  role: string;
 
   constructor(
     public nav: NavbarService,
@@ -43,29 +45,29 @@ export class NavMenuComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.nav.show();
-    this.nav.showTab();
     this.role = this.shareService.readCookie("role");
-    this.activeRouter.url.subscribe(value => {
-      if(value && value[0].path){
-        this.adminService.GetUserByAccount(this.shareService.readCookie("userName")).subscribe((user: User) => {
-          this.shoppingCartService.GetShoppingCart(user.id).subscribe((res: ShoppingCart) => {
-            if(res && res.shoppingItems){
-              this.shoppingItems = res.shoppingItems
-            }
-          },
-            (error: any) => {
-              console.info(error);
-            });
+
+    this.shoppingCartService.currentShoppingItemLength.subscribe((length: number) => {
+      this.adminService.GetUserByAccount(_.toNumber(this.shareService.readCookie("userId"))).subscribe((user: User) => {
+        this.shoppingCartService.GetShoppingCart(user.id).subscribe((res: ShoppingCart) => {
+          if(res && res.shoppingItems.length){
+            this.shoppingItems = res.shoppingItems;
+          }
         },
           (error: any) => {
             console.info(error);
           });
-      }
-    });
+      },
+        (error: any) => {
+          console.info(error);
+        });
+    },
+      (error: any) => {
+        console.info(error);
+      });
   }
 
-  proceedToCheckout(): void{
+  proceedToCheckout(): void {
     this.router.navigate(["/cart"]);
   }
 
@@ -78,7 +80,36 @@ export class NavMenuComponent implements OnInit {
     });
   }
 
-  logOut(): void{
+  deleteShoppingItem(shoppingItem: ShoppingItem): void {
+    this.shoppingCartService.DeleteShoppingItem(shoppingItem.id).subscribe((res: ApiResponse) => {
+      if (res && res.status == "success") {
+        this.adminService.GetUserByAccount(_.toNumber(this.shareService.readCookie("userId"))).subscribe((user: User) => {
+          this.shoppingCartService.GetShoppingCart(user.id).subscribe((res: ShoppingCart) => {
+            this.shoppingItems = res.shoppingItems;
+            this.shoppingCartService.MonitorShoppingItemLength(this.shoppingItems.length);
+          },
+            (error: any) => {
+              console.info(error);
+            });
+        },
+          (error: any) => {
+            console.info(error);
+          });
+      } else {
+        this.shareService.showError("shoppingItem" + shoppingItem.id, res.message, "right");
+      }
+    },
+      (error: any) => {
+        console.info(error);
+      });
+  }
+
+  continueShopping(): void {
+    this.router.navigate(['/home']);
+  }
+
+
+  logOut(): void {
     this.shareService.savecookies("userToken", "", 1);
     this.router.navigate(['login'], { relativeTo: this.activatedRouter.parent })
   }

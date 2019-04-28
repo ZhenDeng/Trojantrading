@@ -10,6 +10,7 @@ import { ShareService } from '../services/share.service';
 import { Router } from '@angular/router';
 import { NavbarService } from '../services/navbar.service';
 import { ApiResponse } from '../models/ApiResponse';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-account-details',
@@ -53,7 +54,8 @@ export class AccountDetailsComponent implements OnInit {
 
   ngOnInit() {
     this.nav.hideTab();
-    this.adminService.GetUserWithAddress(this.shareService.readCookie("userName")).subscribe((res: User) => {
+    this.nav.show();
+    this.adminService.GetUserWithAddress(_.toNumber(this.shareService.readCookie("userId"))).subscribe((res: User) => {
       this.user = res;
       this.userFormGroup.get("trn").setValue(this.user.trn);
       this.userFormGroup.get("email").setValue(this.user.email);
@@ -109,9 +111,9 @@ export class AccountDetailsComponent implements OnInit {
     if (this.userPasswordGroup.valid) {
       if (this.userPasswordGroup.get("confirmpassord").value == this.userPasswordGroup.get("newpassord").value) {
         if(this.userPasswordGroup.get("newpassord").value.length>5){
-          this.adminService.ValidatePassword(this.shareService.readCookie("userName"), this.userPasswordGroup.get("password").value).subscribe((res: ApiResponse) => {
+          this.adminService.ValidatePassword(_.toNumber(this.shareService.readCookie("userId")), this.userPasswordGroup.get("password").value).subscribe((res: ApiResponse) => {
             if (res && res.status == "success") {
-              this.adminService.UpdatePassword(this.shareService.readCookie("userName"), this.userPasswordGroup.get("newpassord").value).subscribe((res: ApiResponse) => {
+              this.adminService.UpdatePassword(_.toNumber(this.shareService.readCookie("userId")), this.userPasswordGroup.get("newpassord").value).subscribe((res: ApiResponse) => {
                 if(res && res.status == "success"){
                   this.shareService.showSuccess(".updatepassword", res.message, "right");
                 }else{

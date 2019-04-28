@@ -30,18 +30,18 @@ namespace Trojantrading.Controllers
         [HttpGet("GetUserByAccount")]
         [NoCache]
         [ProducesResponseType(typeof(User), 200)]
-        public IActionResult GetUserByAccount(string userName)
+        public IActionResult GetUserByAccount(int userId)
         {
-            var userInfo = _userRepository.GetUserByAccount(userName);
+            var userInfo = _userRepository.GetUserByAccount(userId);
             return Ok(userInfo);
         }
 
         [HttpGet("GetUserWithAddress")]
         [NoCache]
         [ProducesResponseType(typeof(User), 200)]
-        public IActionResult GetUserWithAddress(string userName)
+        public IActionResult GetUserWithAddress(int userId)
         {
-            var userInfo = _userRepository.GetUserWithAddress(userName);
+            var userInfo = _userRepository.GetUserWithAddress(userId);
             return Ok(userInfo);
         }
 
@@ -57,27 +57,27 @@ namespace Trojantrading.Controllers
         [HttpGet("GetUserWithRole")]
         [NoCache]
         [ProducesResponseType(typeof(User), 200)]
-        public IActionResult GetUserWithRole(string userName)
+        public IActionResult GetUserWithRole(int userId)
         {
-            var userInfo = _userRepository.GetUserWithRole(userName);
+            var userInfo = _userRepository.GetUserWithRole(userId);
             return Ok(userInfo);
         }
 
         [HttpGet("ValidatePassword")]
         [NoCache]
         [ProducesResponseType(typeof(ApiResponse), 200)]
-        public IActionResult ValidatePassword(string userName, string password)
+        public IActionResult ValidatePassword(int userId, string password)
         {
-            var result = _userRepository.ValidatePassword(userName, password);
+            var result = _userRepository.ValidatePassword(userId, password);
             return Ok(result);
         }
 
         [HttpGet("UpdatePassword")]
         [NoCache]
         [ProducesResponseType(typeof(ApiResponse), 200)]
-        public IActionResult UpdatePassword(string userName, string password)
+        public IActionResult UpdatePassword(int userId, string password)
         {
-            var result = _userRepository.UpdatePassword(userName, password);
+            var result = _userRepository.UpdatePassword(userId, password);
             return Ok(result);
         }
     }

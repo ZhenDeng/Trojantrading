@@ -14,5 +14,7 @@ namespace Trojantrading.Models
         public ShoppingCart ShoppingCart { get; set; }
 
         public int ShoppingCartId { get; set; }
+
+        public string Status { get; set; } // checkout -- 1, not check out -- 0
     }
 }

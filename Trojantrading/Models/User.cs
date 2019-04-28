@@ -19,7 +19,7 @@ namespace Trojantrading.Models
         public string Phone { get; set; }
         public string Status { get; set; }
         public bool SendEmail { get; set; }
-        public ShoppingCart ShoppingCart { get; set; }
+        public List<ShoppingCart> ShoppingCarts { get; set; }
         public List<Order> Orders { get; set; }
         public int RoleId { get; set; }
         public Role Role { get; set; }

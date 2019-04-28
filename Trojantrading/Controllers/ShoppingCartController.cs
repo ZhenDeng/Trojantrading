@@ -15,12 +15,10 @@ namespace Trojantrading.Controllers
     public class ShoppingCartController : Controller
     {
         private readonly IShoppingCartRepository _shoppingCartRepository;
-        private readonly IProductRepository _productRepository;
 
-        public ShoppingCartController(IShoppingCartRepository shoppingCartRepository, IProductRepository productRepository)
+        public ShoppingCartController(IShoppingCartRepository shoppingCartRepository)
         {
             _shoppingCartRepository = shoppingCartRepository;
-            _productRepository = productRepository;
         }
 
         [HttpGet("GetShoppingCart")]
@@ -48,6 +46,15 @@ namespace Trojantrading.Controllers
         public IActionResult UpdateShoppingCart(int userId, [FromBody]ShoppingItem shoppingItem)
         {
             return Ok(_shoppingCartRepository.UpdateShoppingCart(userId, shoppingItem));
+        }
+
+        [HttpDelete("deleteShoppingItem")]
+        [NoCache]
+        [ProducesResponseType(typeof(ApiResponse), 200)]
+        [ProducesResponseType(typeof(ApiResponse), 400)]
+        public IActionResult deleteShoppingItem(int shoppingItemId)
+        {
+            return Ok(_shoppingCartRepository.deleteShoppingItem(shoppingItemId));
         }
     }
 }

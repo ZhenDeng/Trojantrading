@@ -12,8 +12,8 @@ export class AdminService {
 
   constructor(private http: HttpClient) { }
 
-  GetUserByAccount(userName: string): Observable<User> {
-    return this.http.get(this.base_url + "/GetUserByAccount?userName=" + userName)
+  GetUserByAccount(userId: Number): Observable<User> {
+    return this.http.get(this.base_url + "/GetUserByAccount?userId=" + userId)
       .pipe(catchError(this.handleError));
   }
 
@@ -22,23 +22,23 @@ export class AdminService {
       .pipe(catchError(this.handleError));
   }
 
-  GetUserWithAddress(userName: string): Observable<User> {
-    return this.http.get(this.base_url + "/GetUserWithAddress?userName=" + userName)
+  GetUserWithAddress(userId: Number): Observable<User> {
+    return this.http.get(this.base_url + "/GetUserWithAddress?userId=" + userId)
       .pipe(catchError(this.handleError));
   }
 
-  GetUserWithRole(userName: string): Observable<User> {
-    return this.http.get(this.base_url + "/GetUserWithRole?userName=" + userName)
+  GetUserWithRole(userId: Number): Observable<User> {
+    return this.http.get(this.base_url + "/GetUserWithRole?userId=" + userId)
       .pipe(catchError(this.handleError));
   }
 
-  ValidatePassword(userName: string, password: string): Observable<ApiResponse> {
-    return this.http.get(this.base_url + "/ValidatePassword?userName=" + userName + "&password=" + password)
+  ValidatePassword(userId: Number, password: string): Observable<ApiResponse> {
+    return this.http.get(this.base_url + "/ValidatePassword?userId=" + userId + "&password=" + password)
       .pipe(catchError(this.handleError));
   }
 
-  UpdatePassword(userName: string, password: string): Observable<ApiResponse> {
-    return this.http.get(this.base_url + "/UpdatePassword?userName=" + userName + "&password=" + password)
+  UpdatePassword(userId: Number, password: string): Observable<ApiResponse> {
+    return this.http.get(this.base_url + "/UpdatePassword?userId=" + userId + "&password=" + password)
       .pipe(catchError(this.handleError));
   }
 

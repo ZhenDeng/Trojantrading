@@ -4,6 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatTableDataSource } from '@angular/material';
 import { Menu } from '../models/menu';
+import { ShareService } from '../services/share.service';
 
 @Component({
   selector: 'app-products',
@@ -24,6 +25,7 @@ export class ProductsComponent implements OnInit {
 
   displayedColumns: string[] = ['name', 'category', 'originalPrice', 'qty', 'button'];
 
+  role: string;
   
   navLinks:Menu[] = [
     {
@@ -51,11 +53,12 @@ export class ProductsComponent implements OnInit {
   constructor(
     private router: Router,
     private activatedRouter: ActivatedRoute,
-    private productService: ProductService
+    private productService: ProductService,
+    private shareService: ShareService
   ) { }
 
   ngOnInit() {
-
+    this.role = this.shareService.readCookie("role");
     this.activatedRouter.paramMap.subscribe(param => {
         this.viewType = param.get('type');
         const type = this.viewType.toLowerCase();

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { ApiResponse } from '../models/ApiResponse';
 import { catchError } from 'rxjs/operators';
 import { ShoppingCart } from '../models/shoppingCart';
@@ -10,8 +10,16 @@ import { ShoppingItem } from '../models/shoppingItem';
 export class ShoppingCartService {
 
   base_url: string = "api/ShoppingCart";
+  shoppingItemLength: number;
+
+  private shoppingItemLengthSource = new BehaviorSubject<number>(this.shoppingItemLength);
+  currentShoppingItemLength = this.shoppingItemLengthSource.asObservable();
 
   constructor(private http: HttpClient) { }
+
+  MonitorShoppingItemLength(shoppingItemsLength: number): void{
+    this.shoppingItemLengthSource.next(shoppingItemsLength);
+  }
 
   AddShoppingCart(userId: number): Observable<ApiResponse>{
     return this.http.get(this.base_url + "/AddShoppingCart?userId=" + userId)
@@ -25,6 +33,11 @@ export class ShoppingCartService {
 
   UpdateShoppingCart(userId: number, shoppingCartItem: ShoppingItem): Observable<ApiResponse>{
     return this.http.post(this.base_url + "/UpdateShoppingCart?userId=" + userId, shoppingCartItem)
+      .pipe(catchError(this.handleError));
+  }
+
+  DeleteShoppingItem(shoppingItemId: number): Observable<ApiResponse>{
+    return this.http.delete(this.base_url + "/deleteShoppingItem?shoppingItemId=" + shoppingItemId)
       .pipe(catchError(this.handleError));
   }
 

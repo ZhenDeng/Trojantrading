@@ -16,6 +16,7 @@ export class AboutUsComponent implements OnInit {
 
   ngOnInit() {
     this.nav.hideTab();
+    this.nav.show();
   }
 
 }
