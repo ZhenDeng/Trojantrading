@@ -10,6 +10,8 @@ import { ShoppingCart } from '../models/shoppingCart';
 import { ShoppingItem } from '../models/shoppingItem';
 import { ApiResponse } from '../models/ApiResponse';
 import * as _ from 'lodash';
+import { Category } from '../models/Product';
+import { ProductService } from '../services/product.service';
 
 @Component({
   selector: 'app-nav-menu',
@@ -19,20 +21,9 @@ import * as _ from 'lodash';
 })
 export class NavMenuComponent implements OnInit {
 
-  testJsonObj = [
-    { type: 'Hand-Made Cigars', category: 'hand-made' },
-    { type: 'Machine-Made Cigars', category: 'machine-made' },
-    { type: 'Little Cigars', category: 'little-cigars' },
-    { type: 'Cigarettes', category: 'cigarettes' },
-    { type: 'Pipe Tobacco', category: 'pipe-tobacco' },
-    { type: 'Roll Your Own', category: 'roll-your-won' },
-    { type: 'Filters', category: 'filters' },
-    { type: 'Papers', category: 'papers' },
-    { type: 'Lighters', category: 'lighters' },
-    { type: 'Accessories', category: 'accessories' },
-  ];
   shoppingItems: ShoppingItem[];
   role: string;
+  categoryList: Category[];
 
   constructor(
     public nav: NavbarService,
@@ -41,15 +32,17 @@ export class NavMenuComponent implements OnInit {
     private shareService: ShareService,
     private shoppingCartService: ShoppingCartService,
     private adminService: AdminService,
-    private activeRouter: ActivatedRoute
+    private activeRouter: ActivatedRoute,
+    private productService: ProductService
   ) { }
 
   ngOnInit() {
     this.role = this.shareService.readCookie("role");
+    this.categoryList = this.productService.categoryList;
 
     this.shoppingCartService.currentShoppingItemLength.subscribe((length: number) => {
-      this.adminService.GetUserByAccount(_.toNumber(this.shareService.readCookie("userId"))).subscribe((user: User) => {
-        this.shoppingCartService.GetShoppingCart(user.id).subscribe((res: ShoppingCart) => {
+      this.shoppingCartService.AddShoppingCart(_.toNumber(this.shareService.readCookie("userId"))).subscribe((sc: ApiResponse) => {
+        this.shoppingCartService.GetShoppingCart(_.toNumber(this.shareService.readCookie("userId"))).subscribe((res: ShoppingCart) => {
           if(res && res.shoppingItems.length){
             this.shoppingItems = res.shoppingItems;
           }

@@ -58,7 +58,7 @@
                 <mat-cell *matCellDef="let element"> {{element.resellerPrice | currency:'AUD':'symbol-narrow':'.2-2'}} </mat-cell>
               </ng-container>
       
-              <ng-container matColumnDef="qty">
+              <ng-container matColumnDef="qty" *ngIf="role!='admin'">
                 <mat-header-cell *matHeaderCellDef> Quantity </mat-header-cell>
                 <mat-cell *matCellDef="let element"> <input type="number" (keypress)="_keyPress($event)" value="{{element.quantity}}"> </mat-cell>
               </ng-container>

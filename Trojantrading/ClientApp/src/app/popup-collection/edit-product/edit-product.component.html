@@ -1,0 +1,25 @@
+<h1 mat-dialog-title>Edit Product Details</h1>
+<div mat-dialog-content>
+  <mat-form-field>
+    <input matInput placeholder="Input">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Category</mat-label>
+    <mat-select [(value)]="selectedCategory">
+      <mat-option value="option1">Option 1</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput placeholder="Input">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput placeholder="Input">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput placeholder="Input">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">No Thanks</button>
+  <button mat-button [mat-dialog-close]="data.animal" cdkFocusInitial>Ok</button>
+</div>

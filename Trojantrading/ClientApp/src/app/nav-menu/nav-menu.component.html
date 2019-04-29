@@ -93,7 +93,7 @@
   <section class="container-fluid" *ngIf="nav.tabVisible">
     <div class="row navbar-button">
       <div class="col-sm-12 navbar-button_flexWrapper">
-        <button *ngFor="let cig of testJsonObj" (click)="manageRedirect(cig.category);">{{cig?.type}}</button>
+        <button *ngFor="let cig of categoryList" (click)="manageRedirect(cig?.category);">{{cig?.type}}</button>
       </div>
     </div>
   </section>

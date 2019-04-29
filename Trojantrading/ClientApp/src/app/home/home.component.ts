@@ -5,7 +5,7 @@ import { Menu } from '../models/menu';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NavbarService } from '../services/navbar.service';
 import { ShareService } from '../services/share.service';
-import { MatTableDataSource } from '@angular/material';
+import { MatTableDataSource, MatDialog } from '@angular/material';
 import { ShoppingCartService } from '../services/shopping-cart.service';
 import { AdminService } from '../services/admin.service';
 import { User } from '../models/user';
@@ -13,6 +13,7 @@ import { ApiResponse } from '../models/ApiResponse';
 import { ShoppingItem } from '../models/shoppingItem';
 import { ShoppingCart } from '../models/shoppingCart';
 import * as _ from 'lodash';
+import { EditProductComponent } from '../popup-collection/edit-product/edit-product.component';
 
 @Component({
   selector: 'app-home',
@@ -68,7 +69,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     public nav: NavbarService,
     private productService: ProductService,
     private shoppingCartService: ShoppingCartService,
-    private adminService: AdminService
+    private adminService: AdminService,
+    public dialog: MatDialog
   ) { }
 
   ngOnInit() {
@@ -77,7 +79,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
       this.title = 'Products in All Categories';
       if (this.shareService.readCookie("role") && this.shareService.readCookie("role") == "admin") {
-        this.displayedColumns = ['name', 'category', 'originalPrice', 'agentPrice', 'resellerPrice', 'qty', 'button']
+        this.displayedColumns = ['name', 'category', 'originalPrice', 'agentPrice', 'resellerPrice', 'button']
       }
       else if (this.shareService.readCookie("role") && this.shareService.readCookie("role") == "agent") {
         this.displayedColumns = ['name', 'category', 'originalPrice', 'agentPrice', 'qty', 'button']
@@ -191,7 +193,14 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   editProduct(product: Product): void {
+    const dialogRef = this.dialog.open(EditProductComponent, {
+      width: '700px',
+      data: {product: product}
+    });
 
+    dialogRef.afterClosed().subscribe(result => {
+
+    });
   }
 
   ngOnDestroy() {

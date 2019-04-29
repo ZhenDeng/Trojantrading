@@ -1,4 +1,5 @@
 import { ShoppingItem } from './shoppingItem';
+
 export interface Product {
     id: number
     name: string
@@ -7,7 +8,12 @@ export interface Product {
     resellerPrice: number
     category: string
     button: string
-    quantity:number
+    quantity: number
     status: string
     shoppingItem: ShoppingItem
+}
+
+export interface Category{
+    type: string
+    category: string
 }

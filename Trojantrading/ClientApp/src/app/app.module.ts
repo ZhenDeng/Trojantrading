@@ -38,6 +38,8 @@ import { ShoppingCartService } from './services/shopping-cart.service';
 import { AdministrationComponent } from './administration/administration.component';
 import { NavMenuModule } from './nav-menu/nav-menu.module';
 import { OrderService } from './services/order.service';
+import { EditProductComponent } from './popup-collection/edit-product/edit-product.component';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -53,7 +55,8 @@ import { OrderService } from './services/order.service';
     ShoppingCartComponent,
     OrdersComponent,
     TermsAndConditionsComponent,
-    AdministrationComponent
+    AdministrationComponent,
+    EditProductComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -74,7 +77,8 @@ import { OrderService } from './services/order.service';
     ProductsModule,
     MatListModule,
     MatDialogModule,
-    NavMenuModule
+    NavMenuModule,
+    MatSelectModule
   ],
   providers: [
     UserService,
@@ -91,7 +95,8 @@ import { OrderService } from './services/order.service';
       multi: true
     }],
   entryComponents: [
-    TermsAndConditionsComponent
+    TermsAndConditionsComponent,
+    EditProductComponent
   ],
   bootstrap: [AppComponent]
 })

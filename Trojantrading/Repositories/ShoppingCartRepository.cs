@@ -92,7 +92,8 @@ namespace Trojantrading.Repositories
                                     Status = "0"
                                 }).FirstOrDefault();
 
-            if (trojantradingDbContext.ShoppingItems.Count() > 0)
+
+            if (shoppingCart.TotalItems > 0)
             {
                 shoppingCart.ShoppingItems = shoppingCart.ShoppingItems
                             .Join(trojantradingDbContext.Products, si => si.ProductId, p => p.Id, (shoppingItem, product) => new { ShoppingItem = shoppingItem, Product = product })

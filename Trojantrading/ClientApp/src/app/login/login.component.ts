@@ -42,8 +42,8 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.nav.hide();
-    if(_.toNumber(this.shareService.readCookie("userId"))){
-      this.userFormGroup.get("account").setValue(_.toNumber(this.shareService.readCookie("userId")));
+    if(_.toNumber(this.shareService.readCookie("userName"))){
+      this.userFormGroup.get("account").setValue(_.toNumber(this.shareService.readCookie("userName")));
     }
   }
 
