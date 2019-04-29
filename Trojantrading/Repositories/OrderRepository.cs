@@ -8,12 +8,7 @@ namespace Trojantrading.Repositories
 
     public interface IOrderRepository
     {
-        void Add(Order order);
-        void Delete(int id);
-        void Update(Order order);
-        Order Get(int id);
-        int GetToatalOrderNumber();
-        int GetNewOrderNumber();
+
         List<Order> GetOrdersByUserID(int userId);
         ApiResponse AddOrder(ShoppingCart cart);
         List<Order> GetOrderWithUser(int userId);
@@ -86,11 +81,6 @@ namespace Trojantrading.Repositories
                     Message = ex.Message
                 };
             }
-        public int GetNewOrderNumber()
-        {
-            var result = trojantradingDbContext.Orders
-                .Where(o => o.OrderStatus == Constrants.ORDER_STATUS_RECEIVED).Count();
-            return result;
         }
 
         public List<Order> GetOrdersByUserID(int userId)
@@ -101,14 +91,6 @@ namespace Trojantrading.Repositories
                 .Where(x => x.UserId == userId).ToList();
 
             return orders;
-        }
-
-        public void Add(Order order)
-        {
-            trojantradingDbContext.Orders.Add(order);
-            trojantradingDbContext.SaveChanges();
-        }
-
         }
 
         public List<Order> GetOrderWithUser(int userId)

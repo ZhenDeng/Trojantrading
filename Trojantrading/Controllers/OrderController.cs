@@ -40,7 +40,6 @@ namespace Trojantrading.Controllers
             }
         }
 
-        public IActionResult CreateOrder()
         [HttpPost("AddOrder")]
         [NoCache]
         [ProducesResponseType(typeof(ApiResponse), 200)]
