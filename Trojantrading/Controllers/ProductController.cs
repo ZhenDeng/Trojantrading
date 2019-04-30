@@ -50,36 +50,13 @@ namespace Trojantrading.Controllers
             }
         }
         
-        [HttpGet("addproduct")]
+        [HttpPost("AddProduct")]
         [NoCache]
         [ProducesResponseType(typeof(ApiResponse), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
-        public IActionResult AddProduct(string name, double originalPrice, double agentPrice, 
-            double resellerPrice, string category)
+        public IActionResult AddProduct([FromBody]Product product)
         {
-            try
-            {
-                var product = new Product();
-                product.Name = name;
-                product.OriginalPrice = originalPrice;
-                product.CreatedDate = new DateTime();
-                product.AgentPrice = agentPrice;
-                product.ResellerPrice = resellerPrice;
-                _productRepository.Add(product);
-                return Ok(new ApiResponse
-                {
-                    Status = "success",
-                    Message = "Successfully add product"
-                });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new ApiResponse
-                {
-                    Status = "fail",
-                    Message = "Fail to add product"
-                });
-            }
+            return Ok(_productRepository.Add(product));
         }
 
         [HttpPost("UpdateProduct")]

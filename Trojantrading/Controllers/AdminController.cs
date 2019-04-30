@@ -55,6 +55,15 @@ namespace Trojantrading.Controllers
             return Ok(result);
         }
 
+        [HttpPost("AddUser")]
+        [NoCache]
+        [ProducesResponseType(typeof(ApiResponse), 200)]
+        public IActionResult AddUser([FromBody]User user)
+        {
+            var result = _userRepository.AddUser(user);
+            return Ok(result);
+        }
+
         [HttpGet("GetUserWithRole")]
         [NoCache]
         [ProducesResponseType(typeof(User), 200)]

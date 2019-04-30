@@ -4,9 +4,9 @@ import { AdminService } from '../services/admin.service';
 import { MatDialog } from '@angular/material';
 import { User } from '../models/user';
 import * as _ from 'lodash';
-import { EditUserComponent } from '../popup-collection/edit-user/edit-user.component';
 import { ApiResponse } from '../models/ApiResponse';
 import { ShareService } from '../services/share.service';
+import { EditUserComponent } from '../popup-collection/edit-user/edit-user.component';
 
 @Component({
   selector: 'app-administration',
@@ -19,6 +19,7 @@ export class AdministrationComponent implements OnInit {
   displayedColumns: string[] = ["UserName", "BusinessName", "Role", "Email", "Status", "EditButton", "DeleteButton"];
   dataSource: User[];
   dataSourceFilter: User[];
+  role: string;
 
   constructor(
     public nav: NavbarService,
@@ -29,49 +30,51 @@ export class AdministrationComponent implements OnInit {
 
   ngOnInit() {
     this.nav.show();
+    this.role = this.shareSevice.readCookie("role");
     this.adminService.GetUsersWithRole().subscribe((res: User[]) => {
-      if(res){
+      if (res) {
         this.dataSource = res;
         this.dataSourceFilter = this.dataSource;
       }
     });
   }
 
-  editUser(user: User): void{
+  addNewUser(): void {
     const dialogRef = this.dialog.open(EditUserComponent, {
-      width: '700px',
-      data: {user: user}
+      width: '700px'
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if(result){
+      if (result) {
+        let user = {} as User;
         user.bussinessName = result.bussinessName;
         user.email = result.email;
         user.account = result.account;
-        switch(result.role){
+        user.status = result.status;
+        switch (result.role) {
           case "admin":
-          user.roleId = 1;
-          break;
+            user.roleId = 1;
+            break;
           case "agent":
-          user.roleId = 2;
-          break;
+            user.roleId = 2;
+            break;
           case "reseller":
-          user.roleId = 3;
-          break;
-        }
-        this.adminService.UpdateUser(user).subscribe((res: ApiResponse) => {
-          if(res.status == "success"){
-            this.shareSevice.showSuccess("#edit"+user.id, res.message, "right");
+            user.roleId = 3;
+            break;
+        };
+        this.adminService.AddUser(user).subscribe((res: ApiResponse) => {
+          if (res.status == "success") {
+            this.shareSevice.showSuccess(".addnewuser", res.message, "right");
             setTimeout(() => {
               this.adminService.GetUsersWithRole().subscribe((res: User[]) => {
-                if(res){
+                if (res) {
                   this.dataSource = res;
                   this.dataSourceFilter = this.dataSource;
                 }
               });
             }, 2000);
-          }else{
-            this.shareSevice.showError("#edit"+user.id, res.message, "right");
+          } else {
+            this.shareSevice.showError(".addnewuser", res.message, "right");
           }
         },
           (error: any) => {
@@ -81,11 +84,56 @@ export class AdministrationComponent implements OnInit {
     });
   }
 
-  deleteUser(user: User): void{
-    
+  editUser(user: User): void {
+    const dialogRef = this.dialog.open(EditUserComponent, {
+      width: '700px',
+      data: { user: user }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        user.bussinessName = result.bussinessName;
+        user.email = result.email;
+        user.account = result.account;
+        user.status = result.status;
+        switch (result.role) {
+          case "admin":
+            user.roleId = 1;
+            break;
+          case "agent":
+            user.roleId = 2;
+            break;
+          case "reseller":
+            user.roleId = 3;
+            break;
+        }
+        this.adminService.UpdateUser(user).subscribe((res: ApiResponse) => {
+          if (res.status == "success") {
+            this.shareSevice.showSuccess("#edit" + user.id, res.message, "right");
+            setTimeout(() => {
+              this.adminService.GetUsersWithRole().subscribe((res: User[]) => {
+                if (res) {
+                  this.dataSource = res;
+                  this.dataSourceFilter = this.dataSource;
+                }
+              });
+            }, 2000);
+          } else {
+            this.shareSevice.showError("#edit" + user.id, res.message, "right");
+          }
+        },
+          (error: any) => {
+            console.info(error);
+          });
+      }
+    });
   }
 
-  applyFilter(value: string): void{
+  deleteUser(user: User): void {
+
+  }
+
+  applyFilter(value: string): void {
     this.dataSourceFilter = this.dataSource.filter(user => user.account.toLowerCase().trim().includes(value.toLowerCase().trim()) || user.bussinessName.toLowerCase().trim().includes(value.toLowerCase().trim()));
   }
 }

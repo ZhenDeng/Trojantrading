@@ -8,7 +8,7 @@ namespace Trojantrading.Repositories
 
     public interface IProductRepository
     {
-        Product Add(Product product);
+        ApiResponse Add(Product product);
         Product Get(int id);
         List<Product> GetAllProducts();
         void Delete(int id);
@@ -26,11 +26,26 @@ namespace Trojantrading.Repositories
         }
 
 
-        public Product Add(Product product)
+        public ApiResponse Add(Product product)
         {
-            trojantradingDbContext.Products.Add(product);
-            trojantradingDbContext.SaveChanges();
-            return product;
+            try
+            {
+                trojantradingDbContext.Products.Add(product);
+                trojantradingDbContext.SaveChanges();
+                return new ApiResponse
+                {
+                    Status = "success",
+                    Message = "Successfully add product"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse
+                {
+                    Status = "fail",
+                    Message = ex.Message
+                };
+            }
         }
 
         public Product Get(int id)

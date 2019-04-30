@@ -3,12 +3,13 @@ using Trojantrading.Models;
 using System.Linq;
 using System.Collections.Generic;
 using System;
+using System.Text;
 
 namespace Trojantrading.Repositories
 {
     public interface IUserRepository
     {
-        ApiResponse Add(User user);
+        ApiResponse AddUser(User user);
         ApiResponse Delete(int id);
         ApiResponse Update(User user);
         User GetUserWithAddress(int userId);
@@ -30,10 +31,14 @@ namespace Trojantrading.Repositories
             this.trojantradingDbContext = trojantradingDbContext;
         }
 
-        public ApiResponse Add(User user)
+        public ApiResponse AddUser(User user)
         {
             try
             {
+                user.Password = CreatePassword(6);
+                user.ShippingAddressId = 1;
+                user.BillingAddressId = 1;
+                user.CompanyInfoId = 1;
                 trojantradingDbContext.Users.Add(user);
                 trojantradingDbContext.SaveChanges();
                 return new ApiResponse() {
@@ -314,6 +319,18 @@ namespace Trojantrading.Repositories
                     Message = ex.Message
                 };
             }
+        }
+
+        private string CreatePassword(int length)
+        {
+            const string valid = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+            StringBuilder res = new StringBuilder();
+            Random rnd = new Random();
+            while (0 < length--)
+            {
+                res.Append(valid[rnd.Next(valid.Length)]);
+            }
+            return res.ToString();
         }
     }
 }

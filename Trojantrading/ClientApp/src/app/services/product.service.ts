@@ -37,6 +37,11 @@ export class ProductService {
     .pipe(catchError(this.handleError));
   }
 
+  AddProduct(product: Product): Observable<ApiResponse> {
+    return this.http.post(this.base_url + "/AddProduct", product)
+    .pipe(catchError(this.handleError));
+  }
+
   private handleError(error: HttpErrorResponse) {
     console.error('server error:', error);
 

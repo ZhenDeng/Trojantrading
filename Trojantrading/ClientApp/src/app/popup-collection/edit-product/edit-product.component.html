@@ -21,6 +21,15 @@
     <input matInput class="resellerPriceValidate" type="number" formControlName="resellerPrice" placeholder="Reseller Price">
     <span matPrefix>$&nbsp;</span>
   </mat-form-field>
+  <mat-form-field>
+    <mat-label>Status</mat-label>
+    <mat-select formControlName="status">
+      <mat-option value="">&nbsp;</mat-option>
+      <mat-option value="New">New</mat-option>
+      <mat-option value="Promotion">Promotion</mat-option>
+      <mat-option value="SoldOut">SoldOut</mat-option>
+    </mat-select>
+  </mat-form-field>
 </div>
 <div mat-dialog-actions>
   <button mat-button class="btn btn-long" (click)="updateProductDetails()">Update</button>

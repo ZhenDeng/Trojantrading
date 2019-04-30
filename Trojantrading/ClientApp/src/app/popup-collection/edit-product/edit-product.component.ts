@@ -38,16 +38,20 @@ export class EditProductComponent implements OnInit {
       category: new FormControl("", Validators.compose([Validators.required])),
       originalPrice: new FormControl("", Validators.compose([Validators.required])),
       agentPrice: new FormControl("", Validators.compose([Validators.required])),
-      resellerPrice: new FormControl("", Validators.compose([Validators.required]))
+      resellerPrice: new FormControl("", Validators.compose([Validators.required])),
+      status: new FormControl("")
     });
   }
 
   ngOnInit() {
-    this.userFormGroup.get("name").setValue(this.data.product.name);
-    this.userFormGroup.get("category").setValue(this.data.product.category);
-    this.userFormGroup.get("originalPrice").setValue(this.data.product.originalPrice);
-    this.userFormGroup.get("agentPrice").setValue(this.data.product.agentPrice);
-    this.userFormGroup.get("resellerPrice").setValue(this.data.product.resellerPrice);
+    if(this.data.product){
+      this.userFormGroup.get("name").setValue(this.data.product.name);
+      this.userFormGroup.get("category").setValue(this.data.product.category);
+      this.userFormGroup.get("originalPrice").setValue(this.data.product.originalPrice);
+      this.userFormGroup.get("agentPrice").setValue(this.data.product.agentPrice);
+      this.userFormGroup.get("resellerPrice").setValue(this.data.product.resellerPrice);
+      this.userFormGroup.get("status").setValue(this.data.product.status);
+    }
   }
 
   updateProductDetails(): void {

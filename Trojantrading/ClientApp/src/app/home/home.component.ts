@@ -79,15 +79,15 @@ export class HomeComponent implements OnInit, OnDestroy {
 
       this.title = 'Products in All Categories';
       if (this.shareService.readCookie("role") && this.shareService.readCookie("role") == "admin") {
-        this.displayedColumns = ['name', 'category', 'originalPrice', 'agentPrice', 'resellerPrice', 'button']
+        this.displayedColumns = ['name', 'category', 'originalPrice', 'agentPrice', 'resellerPrice', 'status', 'button']
       }
       else if (this.shareService.readCookie("role") && this.shareService.readCookie("role") == "agent") {
-        this.displayedColumns = ['name', 'category', 'originalPrice', 'agentPrice', 'qty', 'button']
+        this.displayedColumns = ['name', 'category', 'originalPrice', 'agentPrice', 'qty', 'status', 'button']
       }
       else if (this.shareService.readCookie("role") && this.shareService.readCookie("role") == "reseller") {
-        this.displayedColumns = ['name', 'category', 'originalPrice', 'resellerPrice', 'qty', 'button']
+        this.displayedColumns = ['name', 'category', 'originalPrice', 'resellerPrice', 'qty', 'status', 'button']
       } else {
-        this.displayedColumns = ['name', 'category', 'originalPrice', 'qty', 'button']
+        this.displayedColumns = ['name', 'category', 'originalPrice', 'qty', 'status', 'button']
       }
 
       this.dataSource = new MatTableDataSource();
@@ -192,27 +192,52 @@ export class HomeComponent implements OnInit, OnDestroy {
       });
   }
 
-  editProduct(product: Product): void {
+  addNewProduct(): void {
     const dialogRef = this.dialog.open(EditProductComponent, {
       width: '700px',
-      data: {product: product, categorys: this.productService.categoryList}
+      data: { categorys: this.productService.categoryList }
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if(result){
+      if (result) {
+        this.productService.AddProduct(result).subscribe((res: ApiResponse) => {
+          if (res.status == "success") {
+            this.shareService.showSuccess(".addnewproduct", res.message, "right");
+            setTimeout(() => {
+              this.getAllProducts();
+            }, 2000);
+          } else {
+            this.shareService.showError(".addnewproduct", res.message, "right");
+          }
+        },
+          (error: any) => {
+            console.info(error);
+          });
+      }
+    });
+  }
+
+  editProduct(product: Product): void {
+    const dialogRef = this.dialog.open(EditProductComponent, {
+      width: '700px',
+      data: { product: product, categorys: this.productService.categoryList }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
         product.name = result.name;
         product.category = result.category;
         product.agentPrice = result.agentPrice;
         product.originalPrice = result.originalPrice;
         product.resellerPrice = result.resellerPrice;
         this.productService.UpdateProduct(product).subscribe((res: ApiResponse) => {
-          if(res.status == "success"){
-            this.shareService.showSuccess("#"+product.id, res.message, "right");
+          if (res.status == "success") {
+            this.shareService.showSuccess("#" + product.id, res.message, "right");
             setTimeout(() => {
               this.getAllProducts();
             }, 2000);
-          }else{
-            this.shareService.showError("#"+product.id, res.message, "right");
+          } else {
+            this.shareService.showError("#" + product.id, res.message, "right");
           }
         },
           (error: any) => {

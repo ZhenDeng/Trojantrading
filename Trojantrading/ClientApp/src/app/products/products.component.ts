@@ -67,15 +67,15 @@ export class ProductsComponent implements OnInit {
     this.nav.showTab();
     this.role = this.shareService.readCookie("role");
     if (this.shareService.readCookie("role") && this.shareService.readCookie("role") == "admin") {
-      this.displayedColumns = ['name', 'category', 'originalPrice', 'agentPrice', 'resellerPrice', 'button']
+      this.displayedColumns = ['name', 'category', 'originalPrice', 'agentPrice', 'resellerPrice', 'status', 'button']
     }
     else if (this.shareService.readCookie("role") && this.shareService.readCookie("role") == "agent") {
-      this.displayedColumns = ['name', 'category', 'originalPrice', 'agentPrice', 'qty', 'button']
+      this.displayedColumns = ['name', 'category', 'originalPrice', 'agentPrice', 'qty', 'status', 'button']
     }
     else if (this.shareService.readCookie("role") && this.shareService.readCookie("role") == "reseller") {
-      this.displayedColumns = ['name', 'category', 'originalPrice', 'resellerPrice', 'qty', 'button']
+      this.displayedColumns = ['name', 'category', 'originalPrice', 'resellerPrice', 'qty', 'status', 'button']
     } else {
-      this.displayedColumns = ['name', 'category', 'originalPrice', 'qty', 'button']
+      this.displayedColumns = ['name', 'category', 'originalPrice', 'qty', 'status', 'button']
     }
     this.activatedRouter.paramMap.subscribe(param => {
       this.viewType = param.get('type');
@@ -105,7 +105,7 @@ export class ProductsComponent implements OnInit {
   }
 
   filterProducts(type: string, value: Product[]) {
-    this.filteredProducts = value.filter(x => x.status.toLowerCase().includes(type));
+    this.filteredProducts = value.filter(x => x.status && x.status.toLowerCase().trim().includes(type.toLowerCase().trim()));
     this.filteredProducts.forEach(product => product.quantity = 1);
     this.dataSource = new MatTableDataSource(this.filteredProducts);
   }
@@ -126,6 +126,46 @@ export class ProductsComponent implements OnInit {
     }
   }
 
+  addNewProduct(): void {
+    const dialogRef = this.dialog.open(EditProductComponent, {
+      width: '700px',
+      data: { categorys: this.productService.categoryList }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.productService.AddProduct(result).subscribe((res: ApiResponse) => {
+          if (res.status == "success") {
+            this.shareService.showSuccess(".addnewproduct", res.message, "right");
+            setTimeout(() => {
+              this.activatedRouter.paramMap.subscribe(param => {
+                this.viewType = param.get('type');
+                const type = this.viewType.toLowerCase();
+                if (type === 'new') {
+                  this.title = 'New Products';
+                } else if (type.includes('promotion')) {
+                  this.title = 'Promotions';
+                } else {
+                  this.title = 'Sold Out';
+                }
+                if (!this.products.length) {
+                  this.getProducts(type);
+                } else {
+                  this.filterProducts(type, this.products);
+                }
+              });
+            }, 2000);
+          } else {
+            this.shareService.showError(".addnewproduct", res.message, "right");
+          }
+        },
+          (error: any) => {
+            console.info(error);
+          });
+      }
+    });
+  }
+
   editProduct(product: Product): void {
     const dialogRef = this.dialog.open(EditProductComponent, {
       width: '700px',
@@ -133,41 +173,41 @@ export class ProductsComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      product.name = result.name;
-      product.category = result.category;
-      product.agentPrice = result.agentPrice;
-      product.originalPrice = result.originalPrice;
-      product.resellerPrice = result.resellerPrice;
-      this.productService.UpdateProduct(product).subscribe((res: ApiResponse) => {
-        if (res.status == "success") {
-          this.shareService.showSuccess("#" + product.id, res.message, "right");
-          setTimeout(() => {
-            this.activatedRouter.paramMap.subscribe(param => {
-              this.viewType = param.get('type');
-              const type = this.viewType.toLowerCase();
-              if (type === 'new') {
-                this.title = 'New Products';
-              } else if (type.includes('promotion')) {
-                this.title = 'Promotions';
-              } else {
-                this.title = 'Sold Out';
-              }
-
-              if (!this.products.length) {
-                this.getProducts(type);
-              } else {
-                this.filterProducts(type, this.products);
-              }
-
-            });
-          }, 2000);
-        } else {
-          this.shareService.showError("#" + product.id, res.message, "right");
-        }
-      },
-        (error: any) => {
-          console.info(error);
-        });
+      if (result) {
+        product.name = result.name;
+        product.category = result.category;
+        product.agentPrice = result.agentPrice;
+        product.originalPrice = result.originalPrice;
+        product.resellerPrice = result.resellerPrice;
+        this.productService.UpdateProduct(product).subscribe((res: ApiResponse) => {
+          if (res.status == "success") {
+            this.shareService.showSuccess("#" + product.id, res.message, "right");
+            setTimeout(() => {
+              this.activatedRouter.paramMap.subscribe(param => {
+                this.viewType = param.get('type');
+                const type = this.viewType.toLowerCase();
+                if (type === 'new') {
+                  this.title = 'New Products';
+                } else if (type.includes('promotion')) {
+                  this.title = 'Promotions';
+                } else {
+                  this.title = 'Sold Out';
+                }
+                if (!this.products.length) {
+                  this.getProducts(type);
+                } else {
+                  this.filterProducts(type, this.products);
+                }
+              });
+            }, 2000);
+          } else {
+            this.shareService.showError("#" + product.id, res.message, "right");
+          }
+        },
+          (error: any) => {
+            console.info(error);
+          });
+      }
     });
   }
 

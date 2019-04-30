@@ -49,7 +49,11 @@ h4{
     color: #cfcebb;
 }
 
-.btn-long{
+.btn-long, .btn-green{
 	width: auto !important;
 	margin-top: 0 !important;
+}
+
+.addnewuser{
+	float: right;
 }

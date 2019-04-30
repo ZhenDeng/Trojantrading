@@ -13,6 +13,7 @@
       <ng-container *ngIf="!isHomeComponentDestroyed">
         <section class="product-wrapper">
           <h4>{{title}}</h4>
+          <button class="btn btn-green addnewproduct" (click)="addNewProduct()" *ngIf="role =='admin'">Add New Product</button>
           <span class="filter-wrapper">
             <span class="searchInputGroup">
               <span class="searchIcon">
@@ -29,8 +30,8 @@
                         The actual rendered columns are set as a property on the row definition" -->
       
               <ng-container matColumnDef="name">
-                <mat-header-cell *matHeaderCellDef class="mat-table_3fex"> Description </mat-header-cell>
-                <mat-cell *matCellDef="let element" class="mat-table_3fex"> <span class="productid">#{{element.id}}</span>{{element.name}} </mat-cell>
+                <mat-header-cell *matHeaderCellDef> Description </mat-header-cell>
+                <mat-cell *matCellDef="let element"> <span class="productid">#{{element.id}}</span>{{element.name}} </mat-cell>
               </ng-container>
       
               <!-- wlpPrice Column -->
@@ -41,26 +42,31 @@
       
               <!-- buyPrice Column -->
               <ng-container matColumnDef="originalPrice">
-                  <mat-header-cell *matHeaderCellDef> Original Price ex. GST </mat-header-cell>
-                  <mat-cell *matCellDef="let element"> {{element.originalPrice | currency:'AUD':'symbol-narrow':'.2-2'}} </mat-cell>
-                </ng-container>
-  
-                <!-- buyPrice Column -->
-                <ng-container matColumnDef="agentPrice" *ngIf="role=='admin' || role=='agent'">
-                  <mat-header-cell *matHeaderCellDef> Agent Price ex. GST </mat-header-cell>
-                  <mat-cell *matCellDef="let element"> {{element.agentPrice | currency:'AUD':'symbol-narrow':'.2-2'}} </mat-cell>
-                </ng-container>
-  
-                <!-- buyPrice Column -->
-                <ng-container matColumnDef="resellerPrice" *ngIf="role=='admin' || role=='reseller'">
-                  <mat-header-cell *matHeaderCellDef> Reseller Price ex. GST </mat-header-cell>
-                  <mat-cell *matCellDef="let element"> {{element.resellerPrice | currency:'AUD':'symbol-narrow':'.2-2'}} </mat-cell>
-                </ng-container>
-        
-                <ng-container matColumnDef="qty" *ngIf="role!='admin'">
-                  <mat-header-cell *matHeaderCellDef> Quantity </mat-header-cell>
-                  <mat-cell *matCellDef="let element"> <input type="number" (keypress)="_keyPress($event)" value="{{element.quantity}}"> </mat-cell>
-                </ng-container>
+                <mat-header-cell *matHeaderCellDef> Original Price ex. GST </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.originalPrice | currency:'AUD':'symbol-narrow':'.2-2'}} </mat-cell>
+              </ng-container>
+
+              <!-- buyPrice Column -->
+              <ng-container matColumnDef="agentPrice" *ngIf="role=='admin' || role=='agent'">
+                <mat-header-cell *matHeaderCellDef> Agent Price ex. GST </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.agentPrice | currency:'AUD':'symbol-narrow':'.2-2'}} </mat-cell>
+              </ng-container>
+
+              <!-- buyPrice Column -->
+              <ng-container matColumnDef="resellerPrice" *ngIf="role=='admin' || role=='reseller'">
+                <mat-header-cell *matHeaderCellDef> Reseller Price ex. GST </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.resellerPrice | currency:'AUD':'symbol-narrow':'.2-2'}} </mat-cell>
+              </ng-container>
+      
+              <ng-container matColumnDef="qty" *ngIf="role!='admin'">
+                <mat-header-cell *matHeaderCellDef> Quantity </mat-header-cell>
+                <mat-cell *matCellDef="let element"> <input type="number" (keypress)="_keyPress($event)" value="{{element.quantity}}"> </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="status">
+                <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.status}} </mat-cell>
+              </ng-container>
       
               <ng-container matColumnDef="button">
                 <mat-header-cell *matHeaderCellDef></mat-header-cell>

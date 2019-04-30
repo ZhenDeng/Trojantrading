@@ -14,6 +14,7 @@
       <ng-container *ngIf="!isHomeComponentDestroyed">
         <section class="product-wrapper">
           <h4 style="text-transform:capitalize;">{{title}}</h4>
+          <button class="btn btn-green addnewproduct" (click)="addNewProduct()" *ngIf="role =='admin'">Add New Product</button>
           <span class="filter-wrapper">
             <span class="searchInputGroup">
               <span class="searchIcon">
@@ -22,7 +23,6 @@
               <input class="searchInput" (keyup)="applyFilter($event.target.value)" type="text" placeholder="Search">
             </span>
           </span>
-      
           <div class="example-container mat-elevation-z8">
             <mat-table #table [dataSource]="dataSource">
           
@@ -30,8 +30,8 @@
                         The actual rendered columns are set as a property on the row definition" -->
       
               <ng-container matColumnDef="name">
-                <mat-header-cell *matHeaderCellDef class="mat-table_3fex"> Description </mat-header-cell>
-                <mat-cell *matCellDef="let element" class="mat-table_3fex"> <span class="productid">#{{element.id}}</span>{{element.name}} </mat-cell>
+                <mat-header-cell *matHeaderCellDef> Description </mat-header-cell>
+                <mat-cell *matCellDef="let element"> <span class="productid">#{{element.id}}</span>{{element.name}} </mat-cell>
               </ng-container>
       
               <!-- wlpPrice Column -->
@@ -61,6 +61,11 @@
               <ng-container matColumnDef="qty" *ngIf="role!='admin'">
                 <mat-header-cell *matHeaderCellDef> Quantity </mat-header-cell>
                 <mat-cell *matCellDef="let element"> <input type="number" (keypress)="_keyPress($event)" value="{{element.quantity}}"> </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="status">
+                <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.status}} </mat-cell>
               </ng-container>
       
               <ng-container matColumnDef="button">
