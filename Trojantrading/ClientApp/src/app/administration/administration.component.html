@@ -1,5 +1,68 @@
 <app-nav-menu></app-nav-menu>
 
-<p>
-  administration works!
-</p>
+<div class="container">
+  <main class="row">
+    <div class='col-sm-12 body-content'>
+      <ng-container>
+        <section class="product-wrapper">
+          <h4 style="text-transform:capitalize;">{{title}}</h4>
+          <span class="filter-wrapper">
+            <span class="searchInputGroup">
+              <span class="searchIcon">
+                <i class="fas fa-search fa-2x"></i>
+              </span>
+              <input class="searchInput" (keyup)="applyFilter($event.target.value)" type="text" placeholder="Search">
+            </span>
+          </span>
+      
+          <div class="example-container mat-elevation-z8">
+            <mat-table #table [dataSource]="dataSourceFilter">
+      
+              <ng-container matColumnDef="UserName">
+                <mat-header-cell *matHeaderCellDef> User Name </mat-header-cell>
+                <mat-cell *matCellDef="let element"> <span class="userid">#{{element.id}}</span>{{element.account}} </mat-cell>
+              </ng-container>
+      
+              <ng-container matColumnDef="BusinessName">
+                <mat-header-cell *matHeaderCellDef> Business Name </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.bussinessName}} </mat-cell>
+              </ng-container>
+      
+              <ng-container matColumnDef="Role">
+                <mat-header-cell *matHeaderCellDef> Role </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.role.name}} </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="Email">
+                <mat-header-cell *matHeaderCellDef> Email </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.email}} </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="Status">
+                <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.status}} </mat-cell>
+              </ng-container>
+      
+              <ng-container matColumnDef="EditButton">
+                <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                  <button id="edit{{element.id}}" class="btn btn-long" (click)="editUser(element)">Edit</button>
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="DeleteButton">
+                  <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                  <mat-cell *matCellDef="let element">
+                    <button id="delete{{element.id}}" class="btn btn-long" (click)="deleteUser(element)">Delete</button>
+                  </mat-cell>
+                </ng-container>
+      
+              <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            </mat-table>
+          </div>
+        </section>
+      </ng-container>
+    </div>
+  </main>
+</div>

@@ -18,6 +18,7 @@ namespace Trojantrading.Repositories
         ApiResponse ValidateEmail(string email);
         ApiResponse UpdatePassword(int userId, string newPassword);
         ApiResponse ValidatePassword(int userId, string password);
+        List<User> GetUsersWithRole();
     }
 
     public class UserRepository:IUserRepository
@@ -132,6 +133,32 @@ namespace Trojantrading.Repositories
 
         }
 
+        public List<User> GetUsersWithRole()
+        {
+            var users = trojantradingDbContext.Users
+                           .Join(trojantradingDbContext.Roles, x => x.RoleId, y => y.Id, (userModel, role) => new { User = userModel, Role = role })
+                           .Select(join => new User
+                           {
+                               Id = join.User.Id,
+                               CreatedDate = join.User.CreatedDate,
+                               Account = join.User.Account,
+                               PassswordHash = join.User.PassswordHash,
+                               PasswordSalt = join.User.PasswordSalt,
+                               Password = join.User.Password,
+                               BussinessName = join.User.BussinessName,
+                               PostCode = join.User.PostCode,
+                               Trn = join.User.Trn,
+                               Email = join.User.Email,
+                               Mobile = join.User.Mobile,
+                               Phone = join.User.Phone,
+                               Status = join.User.Status,
+                               SendEmail = join.User.SendEmail,
+                               Role = join.Role,
+                               RoleId = join.Role.Id
+                           }).ToList();
+            return users;
+        }
+
         public User GetUserWithCompanyInfo(int userId)
         {
             var user = trojantradingDbContext.Users
@@ -177,6 +204,10 @@ namespace Trojantrading.Repositories
                 userModel.Email = user.Email;
                 userModel.Phone = user.Phone;
                 userModel.Mobile = user.Mobile;
+                userModel.Account = user.Account;
+                userModel.RoleId = user.RoleId;
+                userModel.BussinessName = user.BussinessName;
+                userModel.Status = user.Status;
                 trojantradingDbContext.Users.Update(userModel);
                 trojantradingDbContext.SaveChanges();
                 return new ApiResponse() {

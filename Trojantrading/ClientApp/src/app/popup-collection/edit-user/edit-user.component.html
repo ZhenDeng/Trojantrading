@@ -1,0 +1,37 @@
+<h1 mat-dialog-title>Edit User Details</h1>
+<div mat-dialog-content [formGroup]="userFormGroup">
+  <mat-form-field>
+    <input matInput class="accountValidate" formControlName="account" placeholder="User Name">
+  </mat-form-field>
+  <mat-form-field *ngIf="roleName != 'admin'">
+    <mat-label>Role</mat-label>
+    <mat-select class="roleValidate" formControlName="role">
+      <mat-option value="admin">Admin</mat-option>
+      <mat-option value="agent">Agent</mat-option>
+      <mat-option value="reseller">Reseller</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field *ngIf="roleName == 'admin'">
+    <input matInput class="roleValidate" formControlName="role" placeholder="Role">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput class="bussinessNameValidate" formControlName="bussinessName" placeholder="Business Name">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput class="emailValidate" formControlName="email" placeholder="Email">
+  </mat-form-field>
+  <mat-form-field *ngIf="roleName != 'admin'">
+    <mat-label>Status</mat-label>
+    <mat-select class="statusValidate" formControlName="status">
+      <mat-option value="active">Active</mat-option>
+      <mat-option value="inactive">Inactive</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field *ngIf="roleName == 'admin'">
+    <input matInput class="statusValidate" formControlName="status" placeholder="Status">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button class="btn btn-long" (click)="updateUserDetails()">Update</button>
+  <button mat-button class="btn btn-long" (click)="onNoClick()">No Thanks</button>
+</div>

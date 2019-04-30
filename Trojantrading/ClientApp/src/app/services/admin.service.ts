@@ -32,6 +32,11 @@ export class AdminService {
       .pipe(catchError(this.handleError));
   }
 
+  GetUsersWithRole(): Observable<User[]> {
+    return this.http.get(this.base_url + "/GetUsersWithRole")
+      .pipe(catchError(this.handleError));
+  }
+
   ValidatePassword(userId: Number, password: string): Observable<ApiResponse> {
     return this.http.get(this.base_url + "/ValidatePassword?userId=" + userId + "&password=" + password)
       .pipe(catchError(this.handleError));

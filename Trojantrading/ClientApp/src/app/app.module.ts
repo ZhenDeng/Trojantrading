@@ -40,6 +40,7 @@ import { NavMenuModule } from './nav-menu/nav-menu.module';
 import { OrderService } from './services/order.service';
 import { EditProductComponent } from './popup-collection/edit-product/edit-product.component';
 import { MatSelectModule } from '@angular/material/select';
+import { EditUserComponent } from './popup-collection/edit-user/edit-user.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import { MatSelectModule } from '@angular/material/select';
     OrdersComponent,
     TermsAndConditionsComponent,
     AdministrationComponent,
-    EditProductComponent
+    EditProductComponent,
+    EditUserComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -96,7 +98,8 @@ import { MatSelectModule } from '@angular/material/select';
     }],
   entryComponents: [
     TermsAndConditionsComponent,
-    EditProductComponent
+    EditProductComponent,
+    EditUserComponent
   ],
   bootstrap: [AppComponent]
 })

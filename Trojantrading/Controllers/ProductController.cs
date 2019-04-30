@@ -50,7 +50,10 @@ namespace Trojantrading.Controllers
             }
         }
         
-        [Route("/addproduct")]
+        [HttpGet("addproduct")]
+        [NoCache]
+        [ProducesResponseType(typeof(ApiResponse), 200)]
+        [ProducesResponseType(typeof(ApiResponse), 400)]
         public IActionResult AddProduct(string name, double originalPrice, double agentPrice, 
             double resellerPrice, string category)
         {
@@ -78,6 +81,14 @@ namespace Trojantrading.Controllers
                 });
             }
         }
-        
+
+        [HttpPost("UpdateProduct")]
+        [NoCache]
+        [ProducesResponseType(typeof(ApiResponse), 200)]
+        [ProducesResponseType(typeof(ApiResponse), 400)]
+        public IActionResult UpdateProduct([FromBody]Product product)
+        {
+            return Ok(_productRepository.UpdateProduct(product));
+        }
     }
 }

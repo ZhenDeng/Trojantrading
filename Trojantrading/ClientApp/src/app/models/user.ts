@@ -19,7 +19,10 @@ export interface User {
     shoppingCart: ShoppingCart
     orders: Order[]
     shippingAddress: UserAddress
+    shippingAddressId: number
     billingAddress: UserAddress
+    billingAddressId: number
     shoppingItems: ShoppingItem[]
     role: Role
+    roleId: number
 }

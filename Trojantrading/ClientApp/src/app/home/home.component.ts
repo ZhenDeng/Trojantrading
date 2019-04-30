@@ -195,11 +195,30 @@ export class HomeComponent implements OnInit, OnDestroy {
   editProduct(product: Product): void {
     const dialogRef = this.dialog.open(EditProductComponent, {
       width: '700px',
-      data: {product: product}
+      data: {product: product, categorys: this.productService.categoryList}
     });
 
     dialogRef.afterClosed().subscribe(result => {
-
+      if(result){
+        product.name = result.name;
+        product.category = result.category;
+        product.agentPrice = result.agentPrice;
+        product.originalPrice = result.originalPrice;
+        product.resellerPrice = result.resellerPrice;
+        this.productService.UpdateProduct(product).subscribe((res: ApiResponse) => {
+          if(res.status == "success"){
+            this.shareService.showSuccess("#"+product.id, res.message, "right");
+            setTimeout(() => {
+              this.getAllProducts();
+            }, 2000);
+          }else{
+            this.shareService.showError("#"+product.id, res.message, "right");
+          }
+        },
+          (error: any) => {
+            console.info(error);
+          });
+      }
     });
   }
 

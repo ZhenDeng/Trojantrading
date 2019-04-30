@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Product, Category } from '../models/Product';
 import { catchError } from 'rxjs/operators';
+import { ApiResponse } from '../models/ApiResponse';
 
 @Injectable()
 export class ProductService {
@@ -28,6 +29,11 @@ export class ProductService {
 
   getAllProducts(): Observable<Product[]> {
     return this.http.get(this.base_url + "/GetAllProducts")
+    .pipe(catchError(this.handleError));
+  }
+
+  UpdateProduct(product: Product): Observable<ApiResponse> {
+    return this.http.post(this.base_url + "/UpdateProduct", product)
     .pipe(catchError(this.handleError));
   }
 

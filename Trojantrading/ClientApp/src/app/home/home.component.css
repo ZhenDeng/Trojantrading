@@ -10,6 +10,7 @@ h4{
 	color: gray;
 	padding-bottom:15px;
 }
+
 .product-wrapper{
 	padding: 20px;
 	background: #eeede1;
@@ -51,4 +52,21 @@ h4{
 .btn-long{
 	width: auto !important;
 	margin-top: 0 !important;
+}
+
+input[type="number"] {
+	width: 100%;
+    border: solid 1px #2d2c26;
+    color: #2d2c26;
+    font-size: 1.1rem;
+    border-radius: 0.5em;
+    padding: 0.35em 0.65em;
+    box-shadow: inset 2px 2px 5px rgba(52, 55, 49, 0.2);
+    text-align: center;
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
 }

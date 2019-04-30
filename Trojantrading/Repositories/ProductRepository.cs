@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Trojantrading.Models;
@@ -12,6 +13,7 @@ namespace Trojantrading.Repositories
         List<Product> GetAllProducts();
         void Delete(int id);
         int GetTotalProducts();
+        ApiResponse UpdateProduct(Product product);
     }
 
     public class ProductRepository:IProductRepository
@@ -59,6 +61,27 @@ namespace Trojantrading.Repositories
         {
             var result = trojantradingDbContext.Products.Count();
             return result;
+        }
+
+        public ApiResponse UpdateProduct(Product product) {
+            try
+            {
+                trojantradingDbContext.Products.Update(product);
+                trojantradingDbContext.SaveChanges();
+                return new ApiResponse()
+                {
+                    Status = "success",
+                    Message = "Successfully update product"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse()
+                {
+                    Status = "fail",
+                    Message = ex.Message
+                };
+            }
         }
     }
 }

@@ -3,6 +3,7 @@ using Trojantrading.Repositories;
 using Trojantrading.Util;
 using Trojantrading.Models;
 using Microsoft.AspNetCore.Authorization;
+using System.Collections.Generic;
 
 namespace Trojantrading.Controllers
 {
@@ -61,6 +62,15 @@ namespace Trojantrading.Controllers
         {
             var userInfo = _userRepository.GetUserWithRole(userId);
             return Ok(userInfo);
+        }
+
+        [HttpGet("GetUsersWithRole")]
+        [NoCache]
+        [ProducesResponseType(typeof(List<User>), 200)]
+        public IActionResult GetUsersWithRole()
+        {
+            var users = _userRepository.GetUsersWithRole();
+            return Ok(users);
         }
 
         [HttpGet("ValidatePassword")]

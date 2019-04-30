@@ -65,10 +65,11 @@ export class LoginComponent implements OnInit {
           this.shareService.createCookie("userName", data.userName, 20);
           this.shareService.createCookie("userId", data.userId.toString(), 20);
           this.shareService.createCookie("role", data.role, 20);
-          console.info(data.role);
           this.router.navigate(['/home']);
-        }else{
+        }else if(data && data.userName == "inactive"){
           this.shareService.showError(".loginbtn", "Your Account Has Been Suspended", "right");
+        }else if(data && data.userName == "wrong"){
+          this.shareService.showError(".loginbtn", "User name or password is invalid", "right");
         }
       },
         (error: any) => {

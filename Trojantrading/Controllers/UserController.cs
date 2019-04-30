@@ -41,45 +41,53 @@ namespace Trojantrading.Controllers
         [ProducesResponseType(typeof(UserResponse), 200)]
         public IActionResult Authenticate([FromBody]User userModel)
         {
-            int userId = trojantradingDbContext.Users.Where(u => u.Account == userModel.Account && u.Password == userModel.Password).FirstOrDefault().Id;
-            User user = _userRepository.GetUserWithRole(userId);
-            if (user.Status.ToLower() == "active")
+            int userCount = trojantradingDbContext.Users.Where(u => u.Account == userModel.Account && u.Password == userModel.Password).Count();
+            if (userCount > 0)
             {
-                if (userModel.Account != user.Account || userModel.Password != user.Password)
+                int userId = trojantradingDbContext.Users.Where(u => u.Account == userModel.Account && u.Password == userModel.Password).FirstOrDefault().Id;
+                User user = _userRepository.GetUserWithRole(userId);
+                if (user.Status.ToLower() == "active")
                 {
-                    return Unauthorized();
-                }
-
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
-                var tokenDescriptor = new SecurityTokenDescriptor
-                {
-                    Subject = new ClaimsIdentity(new Claim[]
+                    if (userModel.Account != user.Account || userModel.Password != user.Password)
                     {
-                        new Claim(ClaimTypes.Name, userModel.Account)
-                    }),
-                    Expires = DateTime.UtcNow.AddMinutes(20),
-                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-                };
-                var token = tokenHandler.CreateToken(tokenDescriptor);
-                var tokenString = tokenHandler.WriteToken(token);
+                        return Unauthorized();
+                    }
 
-                // return basic user info and token to store client side
-                return Ok(new UserResponse
+                    var tokenHandler = new JwtSecurityTokenHandler();
+                    var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+                    var tokenDescriptor = new SecurityTokenDescriptor
+                    {
+                        Subject = new ClaimsIdentity(new Claim[]
+                        {
+                        new Claim(ClaimTypes.Name, userModel.Account)
+                        }),
+                        Expires = DateTime.UtcNow.AddMinutes(20),
+                        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                    };
+                    var token = tokenHandler.CreateToken(tokenDescriptor);
+                    var tokenString = tokenHandler.WriteToken(token);
+
+                    // return basic user info and token to store client side
+                    return Ok(new UserResponse
+                    {
+                        UserId = user.Id,
+                        UserName = user.Account,
+                        Token = tokenString,
+                        Role = user.Role.Name
+                    });
+                }
+                else
                 {
-                    UserId = user.Id,
-                    UserName = user.Account,
-                    Token = tokenString,
-                    Role = user.Role.Name
-                });
+                    return Ok(new UserResponse
+                    {
+                        UserName = "inactive",
+                    });
+                }
             }
-            else
-            {
+            else {
                 return Ok(new UserResponse
                 {
-                    UserName = "",
-                    Token = "",
-                    Role = ""
+                    UserName = "wrong",
                 });
             }
         }
