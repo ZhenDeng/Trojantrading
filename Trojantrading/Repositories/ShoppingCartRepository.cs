@@ -117,7 +117,7 @@ namespace Trojantrading.Repositories
             {
                 var shoppingCart = GetCart(userId);
 
-                var user = userRepository.GetUserWithRole(userId);
+                var user = userRepository.GetUserByAccount(userId);
 
                 int shoppingItemExists = trojantradingDbContext.ShoppingItems.Where(si => si.ShoppingCartId == shoppingCart.Id && si.ProductId == shoppingItem.Product.Id && si.Status == "0").Count();
 
@@ -188,11 +188,11 @@ namespace Trojantrading.Repositories
         private void updateShoppingCartPrice(ShoppingCart shoppingCart, User user, ShoppingItem shoppingItem)
         {
             shoppingCart.OriginalPrice += (shoppingItem.Amount * shoppingItem.Product.OriginalPrice);
-            if (user.Role.Name == RoleName.agent.ToString())
+            if (user.Role == RoleName.agent.ToString())
             {
                 shoppingCart.TotalPrice += (shoppingItem.Amount * shoppingItem.Product.AgentPrice);
             }
-            else if (user.Role.Name == RoleName.reseller.ToString())
+            else if (user.Role == RoleName.reseller.ToString())
             {
                 shoppingCart.TotalPrice += (shoppingItem.Amount * shoppingItem.Product.ResellerPrice);
             }

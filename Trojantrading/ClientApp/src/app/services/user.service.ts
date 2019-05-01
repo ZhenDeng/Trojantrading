@@ -4,7 +4,6 @@ import { HttpErrorResponse, HttpClient, HttpHeaders } from '@angular/common/http
 import { catchError } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { UserResponse, ApiResponse } from '../models/ApiResponse';
-import { UserAddress } from '../models/UserAddress';
 
 @Injectable()
 export class UserService {

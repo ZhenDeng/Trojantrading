@@ -17,6 +17,11 @@ export class AdminService {
       .pipe(catchError(this.handleError));
   }
 
+  GetUsers(): Observable<User[]> {
+    return this.http.get(this.base_url + "/GetUsers")
+      .pipe(catchError(this.handleError));
+  }
+
   UpdateUser(user: User): Observable<ApiResponse> {
     return this.http.post(this.base_url + "/UpdateUser", user)
       .pipe(catchError(this.handleError));
@@ -24,21 +29,6 @@ export class AdminService {
 
   AddUser(user: User): Observable<ApiResponse> {
     return this.http.post(this.base_url + "/AddUser", user)
-      .pipe(catchError(this.handleError));
-  }
-
-  GetUserWithAddress(userId: Number): Observable<User> {
-    return this.http.get(this.base_url + "/GetUserWithAddress?userId=" + userId)
-      .pipe(catchError(this.handleError));
-  }
-
-  GetUserWithRole(userId: Number): Observable<User> {
-    return this.http.get(this.base_url + "/GetUserWithRole?userId=" + userId)
-      .pipe(catchError(this.handleError));
-  }
-
-  GetUsersWithRole(): Observable<User[]> {
-    return this.http.get(this.base_url + "/GetUsersWithRole")
       .pipe(catchError(this.handleError));
   }
 

@@ -1,28 +1,42 @@
 import { ShoppingItem } from './shoppingItem';
 import { ShoppingCart } from "./shoppingCart";
 import { Order } from './order';
-import { UserAddress } from "./UserAddress";
-import { Role } from './Role';
 
 export interface User {
     id: number
+    createdDate: Date
     account: string
+    passswordHash: string
     password: string
     bussinessName: string
-    postCode: string
     trn: string
     email: string
-    phone: string
     mobile: string
+    phone: string
     status: string
     sendEmail: boolean
-    shoppingCart: ShoppingCart
+    billingCustomerName: string
+    billingAddressLine1: string
+    billingAddressLine2: string
+    billingAddressLine3: string
+    billingSuburb: string
+    billingState: string
+    billingPostCode: string
+    shippingCustomerName: string
+    shippingAddressLine1: string
+    shippingAddressLine2: string
+    shippingAddressLine3: string
+    shippingSuburb: string
+    shippingState: string
+    shippingPostCode: string
+    companyAddress: string
+    companyEmail: string
+    companyPhone: string
+    fax: string
+    abn: string
+    acn: string
+    role: string
+    shoppingCarts: ShoppingCart[]
     orders: Order[]
-    shippingAddress: UserAddress
-    shippingAddressId: number
-    billingAddress: UserAddress
-    billingAddressId: number
     shoppingItems: ShoppingItem[]
-    role: Role
-    roleId: number
 }

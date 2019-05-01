@@ -17,10 +17,6 @@ namespace Trojantrading.Repositories
         public DbSet<HeadInformation> HeadInformations { get; set; }
         public DbSet<ShoppingCart> ShoppingCarts { get; set; }
         public DbSet<PdfBoard> PdfBoards { get; set; }
-        public DbSet<CompanyInfo> CompanyInfos { get; set; }
-        public DbSet<Role> Roles { get; set; }
-        public DbSet<ShippingAddress> ShippingAddresses { get; set; }
-        public DbSet<BillingAddress> BillingAddresses { get; set; }
         public DbSet<ShoppingItem> ShoppingItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -48,18 +44,6 @@ namespace Trojantrading.Repositories
             modelBuilder.Entity<HeadInformation>()
                 .ToTable("headInformation")
                 .HasKey(h => h.Id);
-            modelBuilder.Entity<CompanyInfo>()
-                .ToTable("companyInfo")
-                .HasKey(c => c.Id);
-            modelBuilder.Entity<Role>()
-                .ToTable("role")
-                .HasKey(r => r.Id);
-            modelBuilder.Entity<ShippingAddress>()
-                .ToTable("ShippingAddress")
-                .HasKey(s => s.Id);
-            modelBuilder.Entity<BillingAddress>()
-                .ToTable("BillingAddress")
-                .HasKey(s => s.Id);
 
             //user shoppingcart 1:m
             modelBuilder.Entity<User>()
@@ -72,12 +56,6 @@ namespace Trojantrading.Repositories
                 .HasOne(o => o.User)
                 .WithMany(u => u.Orders)
                 .HasForeignKey(o => o.UserId);
-
-            //role user 1:m
-            modelBuilder.Entity<User>()
-                .HasOne(ur => ur.Role)
-                .WithMany(r => r.Users)
-                .HasForeignKey(ur => ur.RoleId);
 
             //order shoppingcart 1:1
             modelBuilder.Entity<ShoppingCart>()
@@ -98,18 +76,6 @@ namespace Trojantrading.Repositories
                 .HasOne(s => s.Product)
                 .WithMany(p => p.ShoppingItems)
                 .HasForeignKey(s => s.ProductId);
-
-            // user Ship address 1:1
-            modelBuilder.Entity<User>()
-                .HasOne(u => u.ShippingAddress)
-                .WithMany(s => s.Users)
-                .HasForeignKey(s => s.ShippingAddressId);
-
-            // user Bill address 1:1
-            modelBuilder.Entity<User>()
-                .HasOne(u => u.BillingAddress)
-                .WithMany(s => s.Users)
-                .HasForeignKey(s => s.BillingAddressId);
         }
     }
 }

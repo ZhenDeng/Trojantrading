@@ -1,0 +1,28 @@
+<h1 mat-dialog-title>Edit {{type}} Address</h1>
+<div mat-dialog-content [formGroup]="userFormGroup">
+  <mat-form-field>
+    <input matInput formControlName="customerName" placeholder="Customer Name">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput formControlName="addressLine1" placeholder="Address Line 1">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput formControlName="addressLine2" placeholder="Address Line 2">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput formControlName="addressLine3" placeholder="Address Line 3">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput formControlName="suburb" placeholder="Suburb">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput formControlName="state" placeholder="State">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput formControlName="postcode" placeholder="Postcode">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button class="btn btn-long" (click)="updateAddress()">Update</button>
+  <button mat-button class="btn btn-long" (click)="onNoClick()">No Thanks</button>
+</div>

@@ -12,14 +12,11 @@ namespace Trojantrading.Repositories
         ApiResponse AddUser(User user);
         ApiResponse Delete(int id);
         ApiResponse Update(User user);
-        User GetUserWithAddress(int userId);
         User GetUserByAccount(int userId);
-        User GetUserWithCompanyInfo(int userId);
-        User GetUserWithRole(int userId);
+        List<User> GetUsers();
         ApiResponse ValidateEmail(string email);
         ApiResponse UpdatePassword(int userId, string newPassword);
         ApiResponse ValidatePassword(int userId, string password);
-        List<User> GetUsersWithRole();
     }
 
     public class UserRepository:IUserRepository
@@ -36,9 +33,6 @@ namespace Trojantrading.Repositories
             try
             {
                 user.Password = CreatePassword(6);
-                user.ShippingAddressId = 1;
-                user.BillingAddressId = 1;
-                user.CompanyInfoId = 1;
                 trojantradingDbContext.Users.Add(user);
                 trojantradingDbContext.SaveChanges();
                 return new ApiResponse() {
@@ -80,118 +74,6 @@ namespace Trojantrading.Repositories
             }
         }
 
-        public User GetUserWithAddress(int userId)
-        {
-            var user = trojantradingDbContext.Users
-                        .Join(trojantradingDbContext.BillingAddresses, x => x.BillingAddressId, y => y.Id, (userModel, billingAddress) => new { User = userModel, BillingAddress = billingAddress })
-                        .Join(trojantradingDbContext.ShippingAddresses, x => x.User.ShippingAddressId, y => y.Id, (userModel, shippingAddress) => new { JoinUser = userModel, ShippingAddress = shippingAddress })
-                        .Where(x => x.JoinUser.User.Id == userId)
-                        .Select(join => new User
-                        {
-                            Id = join.JoinUser.User.Id,
-                            CreatedDate = join.JoinUser.User.CreatedDate,
-                            Account = join.JoinUser.User.Account,
-                            PassswordHash = join.JoinUser.User.PassswordHash,
-                            PasswordSalt = join.JoinUser.User.PasswordSalt,
-                            Password = join.JoinUser.User.Password,
-                            BussinessName = join.JoinUser.User.BussinessName,
-                            PostCode = join.JoinUser.User.PostCode,
-                            Trn = join.JoinUser.User.Trn,
-                            Email = join.JoinUser.User.Email,
-                            Mobile = join.JoinUser.User.Mobile,
-                            Phone = join.JoinUser.User.Phone,
-                            Status = join.JoinUser.User.Status,
-                            SendEmail = join.JoinUser.User.SendEmail,
-                            ShippingAddress = join.ShippingAddress,
-                            BillingAddress = join.JoinUser.BillingAddress,
-                            ShippingAddressId = join.ShippingAddress.Id,
-                            BillingAddressId = join.JoinUser.BillingAddress.Id
-                        }).FirstOrDefault();
-            return user;
-        }
-
-        public User GetUserWithRole(int userId)
-        {
-            var user = trojantradingDbContext.Users
-                           .Join(trojantradingDbContext.Roles, x => x.RoleId, y => y.Id, (userModel, role) => new { User = userModel, Role = role })
-                           .Where(x => x.User.Id == userId)
-                           .Select(join => new User
-                           {
-                               Id = join.User.Id,
-                               CreatedDate = join.User.CreatedDate,
-                               Account = join.User.Account,
-                               PassswordHash = join.User.PassswordHash,
-                               PasswordSalt = join.User.PasswordSalt,
-                               Password = join.User.Password,
-                               BussinessName = join.User.BussinessName,
-                               PostCode = join.User.PostCode,
-                               Trn = join.User.Trn,
-                               Email = join.User.Email,
-                               Mobile = join.User.Mobile,
-                               Phone = join.User.Phone,
-                               Status = join.User.Status,
-                               SendEmail = join.User.SendEmail,
-                               Role = join.Role,
-                               RoleId = join.Role.Id
-                           }).FirstOrDefault();
-            return user;
-
-        }
-
-        public List<User> GetUsersWithRole()
-        {
-            var users = trojantradingDbContext.Users
-                           .Join(trojantradingDbContext.Roles, x => x.RoleId, y => y.Id, (userModel, role) => new { User = userModel, Role = role })
-                           .Select(join => new User
-                           {
-                               Id = join.User.Id,
-                               CreatedDate = join.User.CreatedDate,
-                               Account = join.User.Account,
-                               PassswordHash = join.User.PassswordHash,
-                               PasswordSalt = join.User.PasswordSalt,
-                               Password = join.User.Password,
-                               BussinessName = join.User.BussinessName,
-                               PostCode = join.User.PostCode,
-                               Trn = join.User.Trn,
-                               Email = join.User.Email,
-                               Mobile = join.User.Mobile,
-                               Phone = join.User.Phone,
-                               Status = join.User.Status,
-                               SendEmail = join.User.SendEmail,
-                               Role = join.Role,
-                               RoleId = join.Role.Id
-                           }).ToList();
-            return users;
-        }
-
-        public User GetUserWithCompanyInfo(int userId)
-        {
-            var user = trojantradingDbContext.Users
-                           .Join(trojantradingDbContext.CompanyInfos, x => x.CompanyInfoId, y => y.Id, (userModel, companyInfo) => new { User = userModel, CompanyInfo = companyInfo })
-                           .Where(x => x.User.Id == userId)
-                           .Select(join => new User
-                           {
-                               Id = join.User.Id,
-                               CreatedDate = join.User.CreatedDate,
-                               Account = join.User.Account,
-                               PassswordHash = join.User.PassswordHash,
-                               PasswordSalt = join.User.PasswordSalt,
-                               Password = join.User.Password,
-                               BussinessName = join.User.BussinessName,
-                               PostCode = join.User.PostCode,
-                               Trn = join.User.Trn,
-                               Email = join.User.Email,
-                               Mobile = join.User.Mobile,
-                               Phone = join.User.Phone,
-                               Status = join.User.Status,
-                               SendEmail = join.User.SendEmail,
-                               CompanyInfo = join.CompanyInfo,
-                               CompanyInfoId = join.CompanyInfo.Id
-                           }).FirstOrDefault();
-            return user;
-
-        }
-
         public User GetUserByAccount(int userId)
         {
             var user = trojantradingDbContext.Users
@@ -200,20 +82,17 @@ namespace Trojantrading.Repositories
             return user;
         }
 
+        public List<User> GetUsers()
+        {
+            var users = trojantradingDbContext.Users.ToList();
+            return users;
+        }
+
         public ApiResponse Update(User user)
         {
             try
             {
-                User userModel = trojantradingDbContext.Users.Where(item => item.Id == user.Id).FirstOrDefault();
-                userModel.Trn = user.Trn;
-                userModel.Email = user.Email;
-                userModel.Phone = user.Phone;
-                userModel.Mobile = user.Mobile;
-                userModel.Account = user.Account;
-                userModel.RoleId = user.RoleId;
-                userModel.BussinessName = user.BussinessName;
-                userModel.Status = user.Status;
-                trojantradingDbContext.Users.Update(userModel);
+                trojantradingDbContext.Users.Update(user);
                 trojantradingDbContext.SaveChanges();
                 return new ApiResponse() {
                     Status = "success",

@@ -124,3 +124,8 @@
 .password, .newpassord, .confirmpassord{
   margin-top: 22px;
 }
+
+.editbtn{
+  color: #C20047;
+  cursor: pointer;
+}

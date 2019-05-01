@@ -15,6 +15,8 @@ namespace Trojantrading.Models
 
         public int UserId { get; set; }
 
+        public string Note { get; set; }
+
         public User User { get; set; }
 
         public Order Order { get; set; }

@@ -31,7 +31,7 @@ export class AdministrationComponent implements OnInit {
   ngOnInit() {
     this.nav.show();
     this.role = this.shareSevice.readCookie("role");
-    this.adminService.GetUsersWithRole().subscribe((res: User[]) => {
+    this.adminService.GetUsers().subscribe((res: User[]) => {
       if (res) {
         this.dataSource = res;
         this.dataSourceFilter = this.dataSource;
@@ -51,22 +51,12 @@ export class AdministrationComponent implements OnInit {
         user.email = result.email;
         user.account = result.account;
         user.status = result.status;
-        switch (result.role) {
-          case "admin":
-            user.roleId = 1;
-            break;
-          case "agent":
-            user.roleId = 2;
-            break;
-          case "reseller":
-            user.roleId = 3;
-            break;
-        };
+        user.role = result.role;
         this.adminService.AddUser(user).subscribe((res: ApiResponse) => {
           if (res.status == "success") {
             this.shareSevice.showSuccess(".addnewuser", res.message, "right");
             setTimeout(() => {
-              this.adminService.GetUsersWithRole().subscribe((res: User[]) => {
+              this.adminService.GetUsers().subscribe((res: User[]) => {
                 if (res) {
                   this.dataSource = res;
                   this.dataSourceFilter = this.dataSource;
@@ -96,22 +86,12 @@ export class AdministrationComponent implements OnInit {
         user.email = result.email;
         user.account = result.account;
         user.status = result.status;
-        switch (result.role) {
-          case "admin":
-            user.roleId = 1;
-            break;
-          case "agent":
-            user.roleId = 2;
-            break;
-          case "reseller":
-            user.roleId = 3;
-            break;
-        }
+        user.role = result.role;
         this.adminService.UpdateUser(user).subscribe((res: ApiResponse) => {
           if (res.status == "success") {
             this.shareSevice.showSuccess("#edit" + user.id, res.message, "right");
             setTimeout(() => {
-              this.adminService.GetUsersWithRole().subscribe((res: User[]) => {
+              this.adminService.GetUsers().subscribe((res: User[]) => {
                 if (res) {
                   this.dataSource = res;
                   this.dataSourceFilter = this.dataSource;

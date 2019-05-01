@@ -45,7 +45,7 @@ namespace Trojantrading.Controllers
             if (userCount > 0)
             {
                 int userId = trojantradingDbContext.Users.Where(u => u.Account == userModel.Account && u.Password == userModel.Password).FirstOrDefault().Id;
-                User user = _userRepository.GetUserWithRole(userId);
+                User user = _userRepository.GetUserByAccount(userId);
                 if (user.Status.ToLower() == "active")
                 {
                     if (userModel.Account != user.Account || userModel.Password != user.Password)
@@ -73,7 +73,7 @@ namespace Trojantrading.Controllers
                         UserId = user.Id,
                         UserName = user.Account,
                         Token = tokenString,
-                        Role = user.Role.Name
+                        Role = user.Role
                     });
                 }
                 else

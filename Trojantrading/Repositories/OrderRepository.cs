@@ -85,7 +85,7 @@ namespace Trojantrading.Repositories
         public List<Order> GetOrderWithUser(int userId)
         {
 
-            var user = userRepository.GetUserWithAddress(userId);
+            var user = userRepository.GetUserByAccount(userId);
 
             var joinOrders = trojantradingDbContext.Users.Where(u => u.Id == userId)
                         .GroupJoin(trojantradingDbContext.Orders, o => o.Id, u => u.UserId, (u, orders) => new { Orders = orders })

@@ -20,8 +20,8 @@
         <div class="card-body">
           <div class="detail">
             <span><b>Customer Number:</b> {{user?.id}}</span>
-            <span><b>Trading Name</b>: {{user?.bussinessName}}</span>
-            <span><b>Tobacco Licence Number</b>: {{user?.trn}}</span>
+            <span><b>Customer Account</b>: {{user?.account}}</span>
+            <span><b>Business Name</b>: {{user?.bussinessName}}</span>
           </div>
         </div>
       </div>
@@ -29,13 +29,13 @@
     <div class="infobody">
       <div class="card">
         <div class="card-header">
-          Shipping Address
+          Shipping Address <i class="fas fa-edit fa-fx editbtn Shipping" (click)="editAddress('Shipping')"></i>
         </div>
         <div class="card-body">
           <div class="detail">
-            <span>{{user?.shippingAddress?.customerName}}</span>
-            <span>{{user?.shippingAddress?.addressLine1}} {{user?.shippingAddress?.addressLine2}} {{user?.shippingAddress?.addressLine3}}</span>
-            <span>{{user?.shippingAddress?.suburb}} {{user?.shippingAddress?.state}} {{user?.shippingAddress?.postCode}}</span>
+            <span>{{user?.shippingCustomerName}}</span>
+            <span>{{user?.shippingAddressLine1}} {{user?.shippingAddressLine2}} {{user?.shippingAddressLine3}}</span>
+            <span>{{user?.shippingSuburb}} {{user?.shippingState}} {{user?.shippingPostCode}}</span>
           </div>
         </div>
       </div>
@@ -43,13 +43,13 @@
     <div class="infobody">
       <div class="card">
         <div class="card-header">
-          Billing Address
+          Billing Address <i class="fas fa-edit fa-fx editbtn Billing" (click)="editAddress('Billing')"></i>
         </div>
         <div class="card-body">
           <div class="detail">
-            <span>{{user?.billingAddress?.customerName}}</span>
-            <span>{{user?.billingAddress?.addressLine1}} {{user?.billingAddress?.addressLine2}} {{user?.billingAddress?.addressLine3}}</span>
-            <span>{{user?.billingAddress?.suburb}} {{user?.billingAddress?.state}} {{user?.billingAddress?.postCode}}</span>
+            <span>{{user?.billingCustomerName}}</span>
+            <span>{{user?.billingAddressLine1}} {{user?.billingAddressLine2}} {{user?.billingAddressLine3}}</span>
+            <span>{{user?.billingSuburb}} {{user?.billingState}} {{user?.billingPostCode}}</span>
           </div>
         </div>
       </div>
@@ -65,6 +65,9 @@
           <div class="detail" [formGroup]="userFormGroup">
             <mat-form-field [floatLabel]="'always'">
               <input matInput class="trn" formControlName="trn" placeholder="Tobacco Licence Number" required>
+            </mat-form-field>
+            <mat-form-field [floatLabel]="'always'">
+              <input matInput class="abn" formControlName="abn" placeholder="Australian Business Number" required>
             </mat-form-field>
             <mat-form-field [floatLabel]="'always'">
               <input matInput class="email" formControlName="email" placeholder="Email Address" required>

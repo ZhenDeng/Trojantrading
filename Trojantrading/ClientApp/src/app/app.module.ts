@@ -41,6 +41,7 @@ import { OrderService } from './services/order.service';
 import { EditProductComponent } from './popup-collection/edit-product/edit-product.component';
 import { MatSelectModule } from '@angular/material/select';
 import { EditUserComponent } from './popup-collection/edit-user/edit-user.component';
+import { EditAddressComponent } from './popup-collection/edit-address/edit-address.component';
 
 @NgModule({
   declarations: [
@@ -58,7 +59,8 @@ import { EditUserComponent } from './popup-collection/edit-user/edit-user.compon
     TermsAndConditionsComponent,
     AdministrationComponent,
     EditProductComponent,
-    EditUserComponent
+    EditUserComponent,
+    EditAddressComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -99,7 +101,8 @@ import { EditUserComponent } from './popup-collection/edit-user/edit-user.compon
   entryComponents: [
     TermsAndConditionsComponent,
     EditProductComponent,
-    EditUserComponent
+    EditUserComponent,
+    EditAddressComponent
   ],
   bootstrap: [AppComponent]
 })

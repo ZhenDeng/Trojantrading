@@ -37,13 +37,13 @@ namespace Trojantrading.Controllers
             return Ok(userInfo);
         }
 
-        [HttpGet("GetUserWithAddress")]
+        [HttpGet("GetUsers")]
         [NoCache]
-        [ProducesResponseType(typeof(User), 200)]
-        public IActionResult GetUserWithAddress(int userId)
+        [ProducesResponseType(typeof(List<User>), 200)]
+        public IActionResult GetUsers()
         {
-            var userInfo = _userRepository.GetUserWithAddress(userId);
-            return Ok(userInfo);
+            var users = _userRepository.GetUsers();
+            return Ok(users);
         }
 
         [HttpPost("UpdateUser")]
@@ -62,24 +62,6 @@ namespace Trojantrading.Controllers
         {
             var result = _userRepository.AddUser(user);
             return Ok(result);
-        }
-
-        [HttpGet("GetUserWithRole")]
-        [NoCache]
-        [ProducesResponseType(typeof(User), 200)]
-        public IActionResult GetUserWithRole(int userId)
-        {
-            var userInfo = _userRepository.GetUserWithRole(userId);
-            return Ok(userInfo);
-        }
-
-        [HttpGet("GetUsersWithRole")]
-        [NoCache]
-        [ProducesResponseType(typeof(List<User>), 200)]
-        public IActionResult GetUsersWithRole()
-        {
-            var users = _userRepository.GetUsersWithRole();
-            return Ok(users);
         }
 
         [HttpGet("ValidatePassword")]
