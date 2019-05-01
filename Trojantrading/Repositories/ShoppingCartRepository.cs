@@ -38,6 +38,7 @@ namespace Trojantrading.Repositories
                         OriginalPrice = 0,
                         TotalPrice = 0,
                         UserId = userId,
+                        Note = "",
                         Status = "0"
                     };
 

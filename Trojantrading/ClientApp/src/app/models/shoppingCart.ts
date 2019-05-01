@@ -7,4 +7,5 @@ export interface ShoppingCart {
     totalPrice: number
     originalPrice: number
     shoppingItems: ShoppingItem[]
+    note: string
 }

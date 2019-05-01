@@ -16,7 +16,7 @@ import { EditUserComponent } from '../popup-collection/edit-user/edit-user.compo
 export class AdministrationComponent implements OnInit {
 
   title: string = "Administration";
-  displayedColumns: string[] = ["UserName", "BusinessName", "Role", "Email", "Status", "EditButton", "DeleteButton"];
+  displayedColumns: string[] = ["UserName", "BusinessName", "Role", "Email", "Phone", "Status", "EditButton", "DeleteButton"];
   dataSource: User[];
   dataSourceFilter: User[];
   role: string;

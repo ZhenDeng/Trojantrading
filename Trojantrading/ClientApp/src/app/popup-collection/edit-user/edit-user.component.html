@@ -18,7 +18,16 @@
     <input matInput class="bussinessNameValidate" formControlName="bussinessName" placeholder="Business Name">
   </mat-form-field>
   <mat-form-field>
+    <input matInput class="trnValidate" formControlName="trn" placeholder="Tobacco Licence Number">
+  </mat-form-field>
+  <mat-form-field>
     <input matInput class="emailValidate" formControlName="email" placeholder="Email">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput class="phoneValidate" formControlName="phone" placeholder="Phone">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput class="mobileValidate" formControlName="mobile" placeholder="Mobile">
   </mat-form-field>
   <mat-form-field *ngIf="roleName != 'admin'">
     <mat-label>Status</mat-label>
@@ -29,6 +38,16 @@
   </mat-form-field>
   <mat-form-field *ngIf="roleName == 'admin'">
     <input matInput class="statusValidate" formControlName="status" placeholder="Status">
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput class="phoneValidate" formControlName="phone" placeholder="Phone">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput class="phoneValidate" formControlName="phone" placeholder="Phone">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput class="phoneValidate" formControlName="phone" placeholder="Phone">
   </mat-form-field>
 </div>
 <div mat-dialog-actions>

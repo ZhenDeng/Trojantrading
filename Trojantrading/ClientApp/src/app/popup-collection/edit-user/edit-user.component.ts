@@ -39,15 +39,16 @@ export class EditUserComponent implements OnInit {
       role: this.data&&this.data.user.role.name=="admin"? new FormControl({ value: "admin", disabled: true }, Validators.required):new FormControl("", Validators.compose([Validators.required])),
       bussinessName: new FormControl("", Validators.compose([Validators.required])),
       email: new FormControl("", Validators.compose([Validators.required, Validators.email])),
+      phone: new FormControl("", Validators.compose([Validators.required])),
       status: this.data&&this.data.user.role.name=="admin"? new FormControl({ value: "active", disabled: true }, Validators.required):new FormControl("", Validators.compose([Validators.required]))
     });
   }
 
   ngOnInit() {
     if(this.data && this.data.user){
-      this.roleName = this.data.user.role.name;
+      this.roleName = this.data.user.role;
       this.userFormGroup.get("account").setValue(this.data.user.account);
-      this.userFormGroup.get("role").setValue(this.data.user.role.name);
+      this.userFormGroup.get("role").setValue(this.data.user.role);
       this.userFormGroup.get("bussinessName").setValue(this.data.user.bussinessName);
       this.userFormGroup.get("email").setValue(this.data.user.email);
       this.userFormGroup.get("status").setValue(this.data.user.status);

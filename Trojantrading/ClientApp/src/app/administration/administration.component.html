@@ -31,12 +31,17 @@
       
               <ng-container matColumnDef="Role">
                 <mat-header-cell *matHeaderCellDef> Role </mat-header-cell>
-                <mat-cell *matCellDef="let element"> {{element.role.name}} </mat-cell>
+                <mat-cell *matCellDef="let element"> {{element.role}} </mat-cell>
               </ng-container>
 
               <ng-container matColumnDef="Email">
                 <mat-header-cell *matHeaderCellDef> Email </mat-header-cell>
                 <mat-cell *matCellDef="let element"> {{element.email}} </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="Phone">
+                <mat-header-cell *matHeaderCellDef> Phone </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.phone}} </mat-cell>
               </ng-container>
 
               <ng-container matColumnDef="Status">
