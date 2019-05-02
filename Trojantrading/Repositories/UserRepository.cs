@@ -10,7 +10,7 @@ namespace Trojantrading.Repositories
     public interface IUserRepository
     {
         ApiResponse AddUser(User user);
-        ApiResponse Delete(int id);
+        ApiResponse DeleteUser(int id);
         ApiResponse Update(User user);
         User GetUserByAccount(int userId);
         List<User> GetUsers();
@@ -51,7 +51,7 @@ namespace Trojantrading.Repositories
             
         }
 
-        public ApiResponse Delete(int id)
+        public ApiResponse DeleteUser(int id)
         {
             try
             {

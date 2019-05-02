@@ -2,14 +2,13 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NavMenuComponent } from './nav-menu.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatAutocompleteModule, MatTableModule, MatInputModule, MatTabsModule, MatFormFieldModule, MatIconModule, MatCardModule, MatCheckboxModule, MatListModule, MatDialogModule } from '@angular/material';
-import { productsRoutingModule } from '../products/products-routing.module.';
+import { MatTableModule, MatInputModule, MatTabsModule, MatFormFieldModule, MatIconModule, MatCardModule, MatCheckboxModule, MatListModule, MatDialogModule } from '@angular/material';
 import { HttpClientModule } from '@angular/common/http';
 import { RoutingModule } from '../app.routing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RouterModule } from '@angular/router';
-import { ProductsModule } from '../products/products.module';
+import { NgbdCarouselBasicModule } from '../ngbd-carousel-basic/ngbd-carousel-basic.module';
 
 @NgModule({
   imports: [
@@ -29,7 +28,8 @@ import { ProductsModule } from '../products/products.module';
     RouterModule,
     MatTabsModule,
     MatListModule,
-    MatDialogModule
+    MatDialogModule,
+    NgbdCarouselBasicModule
   ],
   declarations: [NavMenuComponent],
   exports:[

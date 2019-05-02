@@ -1,4 +1,4 @@
-import { Product } from './../models/Product';
+import { Product, Category } from './../models/Product';
 import { ProductService } from './../services/product.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Menu } from '../models/menu';
@@ -14,12 +14,13 @@ import { ShoppingItem } from '../models/shoppingItem';
 import { ShoppingCart } from '../models/shoppingCart';
 import * as _ from 'lodash';
 import { EditProductComponent } from '../popup-collection/edit-product/edit-product.component';
+import { NgbDropdownConfig } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
-
+  styleUrls: ['./home.component.css'],
+  providers: [NgbDropdownConfig]
 })
 export class HomeComponent implements OnInit, OnDestroy {
 
@@ -35,6 +36,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   shoppingItems: ShoppingItem[];
 
   displayedColumns: string[];
+
+  categoryList: Category[] = [];
 
   navLinks: Menu[] = [
     {
@@ -71,9 +74,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     private shoppingCartService: ShoppingCartService,
     private adminService: AdminService,
     public dialog: MatDialog
-  ) { }
+  ) {}
 
   ngOnInit() {
+
+    this.categoryList = this.productService.categoryList;
     this.activatedRoute.queryParamMap.subscribe(param => {
       this.category = param.get('category');
 
@@ -245,6 +250,10 @@ export class HomeComponent implements OnInit, OnDestroy {
           });
       }
     });
+  }
+
+  manageRedirect(category: string) {
+  
   }
 
   ngOnDestroy() {

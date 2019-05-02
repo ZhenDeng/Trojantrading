@@ -46,6 +46,15 @@ namespace Trojantrading.Controllers
             return Ok(users);
         }
 
+        [HttpGet("DeleteUser")]
+        [NoCache]
+        [ProducesResponseType(typeof(ApiResponse), 200)]
+        public IActionResult DeleteUser(int userId)
+        {
+            var result = _userRepository.DeleteUser(userId);
+            return Ok(result);
+        }
+
         [HttpPost("UpdateUser")]
         [NoCache]
         [ProducesResponseType(typeof(ApiResponse), 200)]

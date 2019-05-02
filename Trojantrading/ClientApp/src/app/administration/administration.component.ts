@@ -41,7 +41,8 @@ export class AdministrationComponent implements OnInit {
 
   addNewUser(): void {
     const dialogRef = this.dialog.open(EditUserComponent, {
-      width: '700px'
+      width: '700px',
+      data: { type: "Add" }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -73,7 +74,7 @@ export class AdministrationComponent implements OnInit {
   editUser(user: User): void {
     const dialogRef = this.dialog.open(EditUserComponent, {
       width: '700px',
-      data: { user: user }
+      data: { user: user, type: "Update" }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -106,7 +107,24 @@ export class AdministrationComponent implements OnInit {
   }
 
   deleteUser(user: User): void {
-
+    this.adminService.DeleteUser(user.id).subscribe((res: ApiResponse) => {
+      if (res.status == "success") {
+        this.shareSevice.showSuccess("#delete" + user.id, res.message, "right");
+        setTimeout(() => {
+          this.adminService.GetUsers().subscribe((res: User[]) => {
+            if (res) {
+              this.dataSource = res;
+              this.dataSourceFilter = this.dataSource;
+            }
+          });
+        }, 2000);
+      } else {
+        this.shareSevice.showError("#delete" + user.id, res.message, "right");
+      }
+    },
+      (error: any) => {
+        console.info(error);
+      });
   }
 
   applyFilter(value: string): void {

@@ -43,15 +43,19 @@ export class EditUserComponent implements OnInit {
     private shareSevice: ShareService,
     public dialogRef: MatDialogRef<EditUserComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) {
+    if(this.data&&this.data.user){
+      this.roleName = this.data.user.role;
+    }
+
     this.userFormGroup = this.formBuilder.group({
       account: new FormControl("", Validators.compose([Validators.required])),
-      role: this.data&&this.data.user.role.name=="admin"? new FormControl({ value: "admin", disabled: true }, Validators.required):new FormControl("", Validators.compose([Validators.required])),
+      role: this.roleName == "admin"? new FormControl({ value: "admin", disabled: true }, Validators.required):new FormControl("", Validators.compose([Validators.required])),
       bussinessName: new FormControl("", Validators.compose([Validators.required])),
       email: new FormControl("", Validators.compose([Validators.required, Validators.email])),
       phone: new FormControl("", Validators.compose([Validators.required])),
       abn: new FormControl("", Validators.compose([Validators.required])),
       trn: new FormControl("", Validators.compose([Validators.required])),
-      status: this.data&&this.data.user.role.name=="admin"? new FormControl({ value: "active", disabled: true }, Validators.required):new FormControl("", Validators.compose([Validators.required])),
+      status:  this.roleName == "admin"? new FormControl({ value: "active", disabled: true }, Validators.required):new FormControl("", Validators.compose([Validators.required])),
       mobile: new FormControl(""),
       billingCustomerName: new FormControl(""),
       billingAddressLine1: new FormControl(""),
@@ -77,7 +81,6 @@ export class EditUserComponent implements OnInit {
 
   ngOnInit() {
     if(this.data && this.data.user){
-      this.roleName = this.data.user.role;
       this.userFormGroup.get("account").setValue(this.data.user.account);
       this.userFormGroup.get("phone").setValue(this.data.user.phone);
       this.userFormGroup.get("abn").setValue(this.data.user.abn);
@@ -94,13 +97,13 @@ export class EditUserComponent implements OnInit {
       this.userFormGroup.get("billingSuburb").setValue(this.data.user.billingSuburb);
       this.userFormGroup.get("billingState").setValue(this.data.user.billingState);
       this.userFormGroup.get("billingPostCode").setValue(this.data.user.billingPostCode);
-      this.userFormGroup.get("ShippingCustomerName").setValue(this.data.user.ShippingCustomerName);
-      this.userFormGroup.get("ShippingAddressLine1").setValue(this.data.user.ShippingAddressLine1);
-      this.userFormGroup.get("ShippingAddressLine2").setValue(this.data.user.ShippingAddressLine2);
-      this.userFormGroup.get("ShippingAddressLine3").setValue(this.data.user.ShippingAddressLine3);
-      this.userFormGroup.get("ShippingSuburb").setValue(this.data.user.ShippingSuburb);
-      this.userFormGroup.get("ShippingState").setValue(this.data.user.ShippingState);
-      this.userFormGroup.get("ShippingPostCode").setValue(this.data.user.ShippingPostCode);
+      this.userFormGroup.get("shippingCustomerName").setValue(this.data.user.shippingCustomerName);
+      this.userFormGroup.get("shippingAddressLine1").setValue(this.data.user.shippingAddressLine1);
+      this.userFormGroup.get("shippingAddressLine2").setValue(this.data.user.shippingAddressLine2);
+      this.userFormGroup.get("shippingAddressLine3").setValue(this.data.user.shippingAddressLine3);
+      this.userFormGroup.get("shippingSuburb").setValue(this.data.user.shippingSuburb);
+      this.userFormGroup.get("shippingState").setValue(this.data.user.shippingState);
+      this.userFormGroup.get("shippingPostCode").setValue(this.data.user.shippingPostCode);
       this.userFormGroup.get("companyAddress").setValue(this.data.user.companyAddress);
       this.userFormGroup.get("companyEmail").setValue(this.data.user.companyEmail);
       this.userFormGroup.get("companyPhone").setValue(this.data.user.companyPhone);

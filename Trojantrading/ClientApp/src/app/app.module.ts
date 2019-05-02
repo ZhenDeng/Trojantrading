@@ -42,6 +42,8 @@ import { EditProductComponent } from './popup-collection/edit-product/edit-produ
 import { MatSelectModule } from '@angular/material/select';
 import { EditUserComponent } from './popup-collection/edit-user/edit-user.component';
 import { EditAddressComponent } from './popup-collection/edit-address/edit-address.component';
+import { NgbdCarouselBasicModule } from './ngbd-carousel-basic/ngbd-carousel-basic.module';
+
 
 @NgModule({
   declarations: [
@@ -82,7 +84,8 @@ import { EditAddressComponent } from './popup-collection/edit-address/edit-addre
     MatListModule,
     MatDialogModule,
     NavMenuModule,
-    MatSelectModule
+    MatSelectModule,
+    NgbdCarouselBasicModule
   ],
   providers: [
     UserService,
