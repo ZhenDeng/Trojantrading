@@ -47,11 +47,7 @@ export class AdministrationComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         let user = {} as User;
-        user.bussinessName = result.bussinessName;
-        user.email = result.email;
-        user.account = result.account;
-        user.status = result.status;
-        user.role = result.role;
+        user = result
         this.adminService.AddUser(user).subscribe((res: ApiResponse) => {
           if (res.status == "success") {
             this.shareSevice.showSuccess(".addnewuser", res.message, "right");
@@ -82,12 +78,12 @@ export class AdministrationComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        user.bussinessName = result.bussinessName;
-        user.email = result.email;
-        user.account = result.account;
-        user.status = result.status;
-        user.role = result.role;
-        this.adminService.UpdateUser(user).subscribe((res: ApiResponse) => {
+        let userModel = {} as User;
+        userModel = result;
+        userModel.id = user.id;
+        userModel.createdDate = user.createdDate;
+        userModel.sendEmail = user.sendEmail;
+        this.adminService.UpdateUser(userModel).subscribe((res: ApiResponse) => {
           if (res.status == "success") {
             this.shareSevice.showSuccess("#edit" + user.id, res.message, "right");
             setTimeout(() => {

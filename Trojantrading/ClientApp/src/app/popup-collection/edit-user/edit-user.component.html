@@ -24,10 +24,10 @@
     <input matInput class="emailValidate" formControlName="email" placeholder="Email">
   </mat-form-field>
   <mat-form-field>
-    <input matInput class="phoneValidate" formControlName="phone" placeholder="Phone">
+    <input matInput type="tel" class="phoneValidate" formControlName="phone" placeholder="Phone">
   </mat-form-field>
   <mat-form-field>
-    <input matInput class="mobileValidate" formControlName="mobile" placeholder="Mobile">
+    <input matInput formControlName="mobile" placeholder="Mobile">
   </mat-form-field>
   <mat-form-field *ngIf="roleName != 'admin'">
     <mat-label>Status</mat-label>
@@ -41,13 +41,66 @@
   </mat-form-field>
 
   <mat-form-field>
-    <input matInput class="phoneValidate" formControlName="phone" placeholder="Phone">
+    <input matInput formControlName="billingCustomerName" placeholder="Billing Customer Name">
   </mat-form-field>
   <mat-form-field>
-    <input matInput class="phoneValidate" formControlName="phone" placeholder="Phone">
+    <input matInput formControlName="billingAddressLine1" placeholder="Billing Address Line1">
   </mat-form-field>
   <mat-form-field>
-    <input matInput class="phoneValidate" formControlName="phone" placeholder="Phone">
+    <input matInput formControlName="billingAddressLine2" placeholder="Billing Address Line2">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput formControlName="billingAddressLine3" placeholder="Billing Address Line3">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput formControlName="billingSuburb" placeholder="Billing Suburb">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput formControlName="billingState" placeholder="Billing State">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput formControlName="billingPostCode" placeholder="Billing PostCode">
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput formControlName="shippingCustomerName" placeholder="Shipping Customer Name">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput formControlName="shippingAddressLine1" placeholder="Shipping Address Line 1">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput formControlName="shippingAddressLine2" placeholder="Shipping Address Line 2">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput formControlName="shippingAddressLine3" placeholder="Shipping Address Line 3">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput formControlName="shippingSuburb" placeholder="Shipping Suburb">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput formControlName="shippingState" placeholder="Shipping State">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput formControlName="shippingPostCode" placeholder="Shipping PostCode">
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput formControlName="companyAddress" placeholder="Company Address">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput formControlName="companyEmail" placeholder="Company Email">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput formControlName="companyPhone" placeholder="Company Phone">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput formControlName="fax" placeholder="Fax">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput class="abnValidate" formControlName="abn" placeholder="Australian Business Number">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput formControlName="acn" placeholder="acn">
   </mat-form-field>
 </div>
 <div mat-dialog-actions>
