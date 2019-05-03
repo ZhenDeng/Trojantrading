@@ -9,6 +9,8 @@ namespace Trojantrading.Repositories
     public interface IOrderRepository
     {
         ApiResponse AddOrder(ShoppingCart cart);
+        List<Order> GetOrdersByUserID(int userId, string dateFrom, string dateTo);
+        List<Order> GetOrdersByDate(string dateFrom, string dateTo);
         List<Order> GetOrderWithUser(int userId);
     }
 

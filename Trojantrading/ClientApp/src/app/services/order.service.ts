@@ -23,6 +23,11 @@ export class OrderService {
       .pipe(catchError(this.handleError));
   }
 
+  getOrdersByUserID(id: string, dateForm: string, dateTo: string): Observable<Order[]> {
+    return this.http.get(this.base_url + '/GetOrdersByUserID?userId=' + id + '&dateForm=' + dateForm + '&dateTo=' + dateTo)
+    .pipe(catchError(this.handleError));
+  }
+
   private handleError(error: HttpErrorResponse) {
     console.error('server error:', error);
     if (error.error instanceof ErrorEvent) {

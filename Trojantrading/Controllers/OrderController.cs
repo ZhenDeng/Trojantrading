@@ -31,6 +31,34 @@ namespace Trojantrading.Controllers
             return Ok(_orderRepository.AddOrder(cart));
         }
 
+
+        [HttpGet("GetOrdersByUserID")]
+        [ProducesResponseType(typeof(Order[]), 200)]
+        [ProducesResponseType(typeof(ApiResponse), 400)]
+        public IActionResult GetOrdersByUserID(string userId, string dateFrom, string dateTo)
+        {
+            try
+            {
+                List<Order> results = new List<Order>();
+                if (!string.IsNullOrWhiteSpace(userId))
+                {
+                    int id = int.Parse(userId);
+                    results = _orderRepository.GetOrdersByUserID(id, dateFrom, dateTo);
+                }
+                else
+                {
+                    results = _orderRepository.GetOrdersByDate(dateFrom, dateTo);
+                }
+
+
+                return Ok(results.ToArray());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ApiResponse { Status = "false", Message = ex.Message });
+            }
+        }
+
         [HttpGet("GetOrderWithUser")]
         [NoCache]
         [ProducesResponseType(typeof(List<Order>), 200)]
