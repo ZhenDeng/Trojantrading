@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NavbarService } from '../services/navbar.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ShareService } from '../services/share.service';
-import { NgbDropdownConfig, NgbCarouselConfig } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdownConfig } from '@ng-bootstrap/ng-bootstrap';
 import { ShoppingCartService } from '../services/shopping-cart.service';
 import { AdminService } from '../services/admin.service';
 import { User } from '../models/user';
