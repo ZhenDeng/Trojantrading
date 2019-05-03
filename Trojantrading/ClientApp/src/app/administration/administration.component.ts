@@ -7,6 +7,7 @@ import * as _ from 'lodash';
 import { ApiResponse } from '../models/ApiResponse';
 import { ShareService } from '../services/share.service';
 import { EditUserComponent } from '../popup-collection/edit-user/edit-user.component';
+import { HeadInformation } from '../models/header-info';
 
 @Component({
   selector: 'app-administration',
@@ -17,8 +18,11 @@ export class AdministrationComponent implements OnInit {
 
   title: string = "Administration";
   displayedColumns: string[] = ["UserName", "BusinessName", "Role", "Email", "Phone", "Status", "EditButton", "DeleteButton"];
+  displayedHeaderColumns: string[] = ["Id", "Content", "ImagePath", "EditButton", "DeleteButton"];
   dataSource: User[];
   dataSourceFilter: User[];
+  dataSourceHeader: HeadInformation[];
+  dataSourceHeaderFilter: HeadInformation[];
   role: string;
 
   constructor(
@@ -129,5 +133,21 @@ export class AdministrationComponent implements OnInit {
 
   applyFilter(value: string): void {
     this.dataSourceFilter = this.dataSource.filter(user => user.account.toLowerCase().trim().includes(value.toLowerCase().trim()) || user.bussinessName.toLowerCase().trim().includes(value.toLowerCase().trim()));
+  }
+
+  addNewHeader(): void{
+
+  }
+
+  applyHeaderFilter(value: string): void{
+
+  }
+
+  editHeader(element: HeadInformation): void{
+
+  }
+
+  deleteHeader(element: HeadInformation): void{
+
   }
 }

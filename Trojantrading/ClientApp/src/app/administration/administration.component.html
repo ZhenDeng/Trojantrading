@@ -76,6 +76,55 @@
               Content 2 
             </mat-tab>
 
+            <mat-tab label="HEADER INFORMATIONS"> 
+              <button class="btn btn-green addnewuser" (click)="addNewHeader()" *ngIf="role =='admin'">Add New Header Information</button>
+                <span class="filter-wrapper">
+                  <span class="searchInputGroup">
+                    <span class="searchIcon">
+                      <i class="fas fa-search fa-2x"></i>
+                    </span>
+                    <input class="searchInput" (keyup)="applyHeaderFilter($event.target.value)" type="text" placeholder="Search">
+                  </span>
+                </span>
+            
+                <div class="example-container mat-elevation-z8">
+                  <mat-table #table [dataSource]="dataSourceHeaderFilter">
+            
+                    <ng-container matColumnDef="Id">
+                      <mat-header-cell *matHeaderCellDef> Id </mat-header-cell>
+                      <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
+                    </ng-container>
+            
+                    <ng-container matColumnDef="Content">
+                      <mat-header-cell *matHeaderCellDef> Content </mat-header-cell>
+                      <mat-cell *matCellDef="let element"> {{element.content}} </mat-cell>
+                    </ng-container>
+            
+                    <ng-container matColumnDef="ImagePath">
+                      <mat-header-cell *matHeaderCellDef> ImagePath </mat-header-cell>
+                      <mat-cell *matCellDef="let element"> {{element.imagePath}} </mat-cell>
+                    </ng-container>
+            
+                    <ng-container matColumnDef="EditButton">
+                      <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                      <mat-cell *matCellDef="let element">
+                        <button id="editheader{{element.id}}" class="btn btn-long" (click)="editHeader(element)">Edit</button>
+                      </mat-cell>
+                    </ng-container>
+      
+                    <ng-container matColumnDef="DeleteButton">
+                        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                          <button id="deleteheader{{element.id}}" class="btn btn-long" (click)="deleteHeader(element)">Delete</button>
+                        </mat-cell>
+                      </ng-container>
+            
+                    <mat-header-row *matHeaderRowDef="displayedHeaderColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedHeaderColumns;"></mat-row>
+                  </mat-table>
+                </div>
+            </mat-tab>
+
           </mat-tab-group>
 
         </section>
