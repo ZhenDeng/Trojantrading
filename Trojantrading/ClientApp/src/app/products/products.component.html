@@ -10,7 +10,7 @@
         </a>
       </nav>
       
-      <ng-container *ngIf="!isHomeComponentDestroyed">
+      <ng-container>
         <section class="product-wrapper">
           <h4>{{title}}</h4>
           <span class="filter-wrapper">
@@ -36,13 +36,25 @@
               <!-- wlpPrice Column -->
               <ng-container matColumnDef="category">
                 <mat-header-cell *matHeaderCellDef> Category </mat-header-cell>
-                <mat-cell *matCellDef="let element"> {{element.category}} </mat-cell>
+                <mat-cell *matCellDef="let element" style="text-transform:capitalize;"> {{element.category}} </mat-cell>
               </ng-container>
       
               <!-- buyPrice Column -->
               <ng-container matColumnDef="originalPrice">
                 <mat-header-cell *matHeaderCellDef> Original Price ex. GST </mat-header-cell>
                 <mat-cell *matCellDef="let element"> {{element.originalPrice | currency:'AUD':'symbol-narrow':'.2-2'}} </mat-cell>
+              </ng-container>
+
+                <!-- buyPrice Column -->
+              <ng-container matColumnDef="agentPrice" *ngIf="role=='admin' || role=='agent'">
+               <mat-header-cell *matHeaderCellDef> Agent Price ex. GST </mat-header-cell>
+               <mat-cell *matCellDef="let element"> {{element.agentPrice | currency:'AUD':'symbol-narrow':'.2-2'}} </mat-cell>
+              </ng-container>
+
+              <!-- buyPrice Column -->
+              <ng-container matColumnDef="resellerPrice" *ngIf="role=='admin' || role=='reseller'">
+                <mat-header-cell *matHeaderCellDef> Reseller Price ex. GST </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.resellerPrice | currency:'AUD':'symbol-narrow':'.2-2'}} </mat-cell>
               </ng-container>
       
               <ng-container matColumnDef="qty">

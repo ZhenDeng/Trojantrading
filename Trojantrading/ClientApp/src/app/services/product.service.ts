@@ -8,20 +8,14 @@ import { Order } from '../models/order';
 @Injectable()
 export class ProductService {
 
-  product_url: string = "api/Product";
-  order_url: string = "api/Order";
+  base_url: string = "api/Product";
 
   constructor(
     private http: HttpClient
   ) { }
 
   getAllProducts(): Observable<Product[]> {
-    return this.http.get(this.product_url + "/GetAllProducts")
-    .pipe(catchError(this.handleError));
-  }
-
-  getOrdersByUserID(id: string): Observable<Order[]> {
-    return this.http.get(this.order_url + '/GetOrdersByUserID?userId=' + id)
+    return this.http.get(this.base_url + "/GetAllProducts")
     .pipe(catchError(this.handleError));
   }
 

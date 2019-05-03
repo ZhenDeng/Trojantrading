@@ -25,12 +25,21 @@ namespace Trojantrading.Controllers
         [HttpGet("GetOrdersByUserID")]
         [ProducesResponseType(typeof(Order[]), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
-        public IActionResult GetOrdersByUserID(string userId)
+        public IActionResult GetOrdersByUserID(string userId, string dateFrom, string dateTo)
         {
             try
             {
-                int id = int.Parse(userId);
-                var results = _orderRepository.GetOrdersByUserID(id);
+                List<Order> results = new List<Order>();
+                if (!string.IsNullOrWhiteSpace(userId))
+                {
+                    int id = int.Parse(userId);
+                    results = _orderRepository.GetOrdersByUserID(id, dateFrom, dateTo);
+                }
+                else
+                {
+                    results = _orderRepository.GetOrdersByDate(dateFrom, dateTo);
+                }
+
 
                 return Ok(results.ToArray());
             }

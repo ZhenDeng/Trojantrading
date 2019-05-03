@@ -73,7 +73,7 @@ export class NavMenuComponent implements OnInit {
 
   manageRedirect(category: string) {
     this.router.navigate(['home'], {
-      relativeTo: this.activatedRouter,
+      //relativeTo: this.activatedRouter,
       queryParams: {
         category: category
       }

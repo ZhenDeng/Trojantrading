@@ -77,13 +77,13 @@ export class HomeComponent implements OnInit, OnDestroy {
 
       this.title = 'Products in All Categories';
       if (this.shareService.readCookie("role") && this.shareService.readCookie("role") == "admin") {
-        this.displayedColumns = ['name', 'category', 'originalPrice', 'agentPrice', 'resellerPrice', 'qty', 'button']
+        this.displayedColumns = ['name', 'category', 'originalPrice', 'agentPrice', 'resellerPrice', 'qty', 'button'];
       }
       else if (this.shareService.readCookie("role") && this.shareService.readCookie("role") == "agent") {
-        this.displayedColumns = ['name', 'category', 'originalPrice', 'agentPrice', 'qty', 'button']
+        this.displayedColumns = ['name', 'category', 'originalPrice', 'agentPrice', 'qty', 'button'];
       }
       else if (this.shareService.readCookie("role") && this.shareService.readCookie("role") == "reseller") {
-        this.displayedColumns = ['name', 'category', 'originalPrice', 'resellerPrice', 'qty', 'button']
+        this.displayedColumns = ['name', 'category', 'originalPrice', 'resellerPrice', 'qty', 'button'];
       } else {
         this.displayedColumns = ['name', 'category', 'originalPrice', 'qty', 'button']
       }

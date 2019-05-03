@@ -69,6 +69,14 @@ export class ProductsComponent implements OnInit {
         } else {
           this.title = 'Sold Out';
         }
+
+        if(this.role === "admin") {
+          this.displayedColumns = ['name', 'category', 'originalPrice', 'agentPrice', 'resellerPrice', 'qty', 'button'];
+        } else if (this.role === "agent") {
+          this.displayedColumns = ['name', 'category', 'originalPrice', 'agentPrice', 'qty', 'button'];
+        } else if (this.role === "reseller") {
+          this.displayedColumns = ['name', 'category', 'originalPrice', 'resellerPrice', 'qty', 'button'];
+        }
         
         if (!this.products.length) {
           this.getProducts(type);
@@ -106,12 +114,6 @@ export class ProductsComponent implements OnInit {
       // invalid character, prevent input
       event.preventDefault();
     }
-  }
-
-
-
-  ngOnDestroy(){
-    
   }
 
 }

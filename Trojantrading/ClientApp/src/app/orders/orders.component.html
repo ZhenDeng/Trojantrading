@@ -1,5 +1,62 @@
 <app-nav-menu></app-nav-menu>
 
-<p>
-  orders works!
-</p>
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12 body-content">
+      
+      <ng-container>
+        <section class="product-wrapper">
+          <h4>{{title}}</h4>
+          <span class="filter-wrapper">
+            <span class="searchInputGroup">
+              <span class="searchIcon">
+                <i class="fas fa-search fa-2x"></i>
+              </span>
+              <input class="searchInput" (keyup)="applyFilter($event.target.value)" type="text" placeholder="Search">
+            </span>
+          </span>
+      
+          <div class="example-container mat-elevation-z8">
+            <mat-table #table [dataSource]="dataSource">
+          
+              <ng-container matColumnDef="Id">
+                <mat-header-cell *matHeaderCellDef class="mat-table_3fex"> Id </mat-header-cell>
+                <mat-cell *matCellDef="let element" class="mat-table_3fex">{{element.Id}}</mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="bussinessName">
+                <mat-header-cell *matHeaderCellDef> Customer </mat-header-cell>
+                <mat-cell *matCellDef="let element" style="text-transform:capitalize;"> {{element.user.bussinessName}} </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="createdDate">
+                <mat-header-cell *matHeaderCellDef> Created Date </mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.createdDate | date }}</mat-cell>
+              </ng-container>
+      
+              <ng-container matColumnDef="totalPrice">
+                <mat-header-cell *matHeaderCellDef> Amount </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.totalPrice | currency:'AUD':'symbol-narrow':'.2-2'}} </mat-cell>
+              </ng-container>
+      
+              <ng-container matColumnDef="orderStatus">
+                <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{ element.orderStatus }}</mat-cell>
+              </ng-container>
+      
+              <ng-container matColumnDef="button">
+                <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                  <button id="{{element.id}}" class="btn btn-long" (click)="editProduct(element)" *ngIf="role =='admin'">Edit</button>
+                </mat-cell>
+              </ng-container>
+      
+              <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            </mat-table>
+          </div>
+        </section>
+      </ng-container>
+    </div>
+  </div>
+</div>

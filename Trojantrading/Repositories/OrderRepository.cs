@@ -9,7 +9,8 @@ namespace Trojantrading.Repositories
     public interface IOrderRepository
     {
 
-        List<Order> GetOrdersByUserID(int userId);
+        List<Order> GetOrdersByUserID(int userId, string dateFrom, string dateTo);
+        List<Order> GetOrdersByDate(string dateFrom, string dateTo);
         ApiResponse AddOrder(ShoppingCart cart);
         List<Order> GetOrderWithUser(int userId);
     }
@@ -83,12 +84,46 @@ namespace Trojantrading.Repositories
             }
         }
 
-        public List<Order> GetOrdersByUserID(int userId)
+        public List<Order> GetOrdersByUserID(int userId, string dateFrom, string dateTo)
         {
             List<Order> orders = new List<Order>();
 
-            orders = trojantradingDbContext.Orders
-                .Where(x => x.UserId == userId).ToList();
+            DateTime fromDate = string.IsNullOrWhiteSpace(dateFrom) ? DateTime.Now.AddMonths(-1).Date : DateTime.Parse(dateFrom).Date;
+            DateTime toDate = string.IsNullOrWhiteSpace(dateTo) ? DateTime.Now.AddDays(1).Date : DateTime.Parse(dateTo).AddDays(1).Date; // usage end date always next day midnight
+
+            //orders = trojantradingDbContext.Orders
+            //    .Where(x => x.UserId == userId && x.CreatedDate >= fromDate && x.CreatedDate <= toDate).ToList();
+
+            orders = trojantradingDbContext.Orders.Where(x => x.UserId == userId && x.CreatedDate >= fromDate && x.CreatedDate <= toDate)
+                    .Join(trojantradingDbContext.Users,
+                    order => order.UserId,
+                    user => user.Id,
+                    (order, user) => order).ToList();
+
+
+
+            return orders;
+        }
+
+        public List<Order> GetOrdersByDate(string dateFrom, string dateTo)
+        {
+            List<Order> orders = new List<Order>();
+
+            DateTime fromDate = string.IsNullOrWhiteSpace(dateFrom) ? DateTime.Now.AddMonths(-1).Date : DateTime.Parse(dateFrom).Date;
+            DateTime toDate = string.IsNullOrWhiteSpace(dateTo) ? DateTime.Now.AddDays(1).Date : DateTime.Parse(dateTo).AddDays(1).Date; // usage end date always next day midnight
+
+            //orders = trojantradingDbContext.Orders
+            //    .Where(x => x.CreatedDate >= fromDate && x.CreatedDate <= toDate).ToList();
+
+            //orders =
+            //    from order in trojantradingDbContext.Orders.Where(x => x.CreatedDate >= fromDate && x.CreatedDate <= toDate)
+            //    join user in trojantradingDbContext.Users on order.UserId equals user.Id into orderGroup
+            //    select orderGroup;
+            orders = trojantradingDbContext.Orders.Where(x => x.CreatedDate >= fromDate && x.CreatedDate <= toDate)
+                    .Join(trojantradingDbContext.Users,
+                    order => order.UserId,
+                    user => user.Id,
+                    (order, user) => order).ToList();
 
             return orders;
         }
