@@ -21,7 +21,7 @@ export class OrdersComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.nav.hideTab();
+    
     this.nav.show();
   }
 

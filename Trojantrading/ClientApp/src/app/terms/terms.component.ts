@@ -13,7 +13,7 @@ export class TermsComponent implements OnInit {
   constructor(private nav: NavbarService) { }
 
   ngOnInit() {
-    this.nav.hideTab();
+    
     this.nav.show();
   }
 

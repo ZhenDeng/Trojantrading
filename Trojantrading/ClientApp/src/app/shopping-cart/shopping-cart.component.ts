@@ -46,7 +46,7 @@ export class ShoppingCartComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.nav.hideTab();
+    
     this.nav.show();
 
     this.shoppingCartService.currentShoppingItemLength.subscribe((length: number) => {

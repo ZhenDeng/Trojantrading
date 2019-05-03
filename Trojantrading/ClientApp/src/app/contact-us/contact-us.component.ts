@@ -15,7 +15,7 @@ export class ContactUsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.nav.hideTab();
+    
     this.nav.show();
   }
 

@@ -107,7 +107,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
     this.role = this.shareService.readCookie("role");
     this.nav.show();
-    this.nav.showTab();
     this.getAllProducts();
     this.adminService.GetUserByAccount(_.toNumber(this.shareService.readCookie("userId"))).subscribe((res: User) => {
       if (res) {
@@ -253,7 +252,13 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   manageRedirect(category: string) {
-  
+    this.dataSource.filter = category;
+  }
+
+  switchLabel(id: string): void{
+    if(id == "allProducts"){
+      this.dataSource.filter ="";
+    }
   }
 
   ngOnDestroy() {

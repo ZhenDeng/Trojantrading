@@ -3,8 +3,17 @@
 <div class="container">
   <div class="row">
     <div class="col-sm-12 body-content">
+
+      <section class="container-fluid">
+        <div class="row navbar-button">
+          <div class="col-sm-12 navbar-button_flexWrapper">
+            <button *ngFor="let cig of categoryList" (click)="manageRedirect(cig?.category);">{{cig?.type}}</button>
+          </div>
+        </div>
+      </section>
+
       <nav mat-tab-nav-bar>
-        <a mat-tab-link *ngFor="let link of navLinks" [routerLink]="link.path" routerLinkActive #rla="routerLinkActive"
+        <a mat-tab-link (click)="switchLabel(link.id)" *ngFor="let link of navLinks" [routerLink]="link.path" routerLinkActive #rla="routerLinkActive"
           [active]="rla.isActive">
           {{link.label}}
         </a>

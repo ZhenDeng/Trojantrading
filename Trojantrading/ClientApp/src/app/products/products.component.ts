@@ -1,5 +1,5 @@
 import { ProductService } from './../services/product.service';
-import { Product } from './../models/Product';
+import { Product, Category } from './../models/Product';
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatTableDataSource, MatDialog } from '@angular/material';
@@ -29,6 +29,8 @@ export class ProductsComponent implements OnInit {
   displayedColumns: string[];
 
   role: string;
+
+  categoryList: Category[] = [];
 
   navLinks: Menu[] = [
     {
@@ -64,7 +66,7 @@ export class ProductsComponent implements OnInit {
 
   ngOnInit() {
     this.nav.show();
-    this.nav.showTab();
+    this.categoryList = this.productService.categoryList;
     this.role = this.shareService.readCookie("role");
     if (this.shareService.readCookie("role") && this.shareService.readCookie("role") == "admin") {
       this.displayedColumns = ['name', 'category', 'originalPrice', 'agentPrice', 'resellerPrice', 'status', 'button']
@@ -211,8 +213,19 @@ export class ProductsComponent implements OnInit {
     });
   }
 
-  ngOnDestroy() {
-
+  manageRedirect(category: string) {
+    this.dataSource.filter = category;
   }
 
+  switchLabel(id: string): void{
+    if(id == "allProducts"){
+      this.dataSource.filter ="";
+    }else{
+      this.activatedRouter.paramMap.subscribe(param => {
+        this.viewType = param.get('type');
+        const type = this.viewType.toLowerCase();
+        this.filterProducts(type, this.products);
+      });
+    }
+  }
 }
