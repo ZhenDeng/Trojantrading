@@ -10,6 +10,7 @@ import { ShoppingItem } from '../models/shoppingItem';
 import { ApiResponse } from '../models/ApiResponse';
 import { OrderService } from '../services/order.service';
 import * as _ from 'lodash';
+import { Product } from '../models/Product';
 
 @Component({
   selector: 'app-shopping-cart',
@@ -46,7 +47,7 @@ export class ShoppingCartComponent implements OnInit {
   }
 
   ngOnInit() {
-    
+
     this.nav.show();
 
     this.shoppingCartService.currentShoppingItemLength.subscribe((length: number) => {
@@ -132,7 +133,7 @@ export class ShoppingCartComponent implements OnInit {
 
   checkoutShoppingItems(): void {
     this.orderService.AddOrder(this.shoppingCart).subscribe((res: ApiResponse) => {
-      if(res && res.status == "success"){
+      if (res && res.status == "success") {
         this.adminService.GetUserByAccount(_.toNumber(this.shareService.readCookie("userId"))).subscribe((user: User) => {
           this.shoppingCartService.GetShoppingCart(user.id).subscribe((res: ShoppingCart) => {
             this.priceExclGst = 0;
@@ -150,9 +151,9 @@ export class ShoppingCartComponent implements OnInit {
           (error: any) => {
             console.info(error);
           });
-        
+
         this.shareService.showSuccess(".checkoutbtn", res.message, "right");
-      }else{
+      } else {
         this.shareService.showError(".checkoutbtn", res.message, "right");
       }
     },
@@ -204,6 +205,36 @@ export class ShoppingCartComponent implements OnInit {
       (error: any) => {
         console.info(error);
       });
+  }
+
+  changeQuantity(item: ShoppingItem): void {
+    if(item.amount<1){
+      item.amount = 1;
+      this.shareService.showError("#qty"+item.id, "Minimum qty is 1", "right");
+    }else{
+      this.priceExclGst = 0;
+      this.gst = 0;
+      this.priceIncGst = 0;
+      this.oringinalPriceExclGst = 0;
+      this.oringinalPriceIncGst = 0;
+      this.discount = 0;
+      if (this.shoppingCart.shoppingItems.length) {
+        this.dataSource.forEach(si => {
+          this.oringinalPriceExclGst += si.amount * si.product.originalPrice;
+          if (this.role == "agent") {
+            si.subTotal = si.amount * si.product.agentPrice;
+            this.priceExclGst += si.amount * si.product.agentPrice;
+          } else if (this.role == "reseller") {
+            si.subTotal = si.amount * si.product.agentPrice;
+            this.priceExclGst += si.amount * si.product.resellerPrice;
+          }
+        });
+      }
+      this.gst = this.priceExclGst * 0.1;
+      this.oringinalPriceIncGst = this.oringinalPriceExclGst + this.oringinalPriceExclGst * 0.1;
+      this.priceIncGst = this.gst + this.priceExclGst;
+      this.discount = this.oringinalPriceIncGst - this.priceIncGst;
+    }
   }
 
   _keyPress(event: any) {

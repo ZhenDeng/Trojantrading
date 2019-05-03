@@ -48,27 +48,43 @@
               <i class="fas fa-user fa-fw"></i> My Account
             </a>
           </li>
-          <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }' ngbDropdown #myDrop="ngbDropdown" *ngIf="role !='admin'">
-            <a ngbDropdownToggle [routerLink]='["/cart"]' class="btn btn-outline-primary" id="dropdownConfig" (mouseenter)="myDrop.open()">
+          <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }' ngbDropdown
+            #myDrop="ngbDropdown" *ngIf="role !='admin'">
+            <a ngbDropdownToggle [routerLink]='["/cart"]' class="btn btn-outline-primary" id="dropdownConfig"
+              (mouseenter)="myDrop.open()">
               <i class="fas fa-shopping-cart fa-fw"></i> My Cart
             </a>
             <div ngbDropdownMenu aria-labelledby="dropdownConfig" (mouseleave)="myDrop.close()" *ngIf="role !='admin'">
               <mat-list role="list" *ngIf="role =='agent'">
                 <h3 mat-subheader>Your Order</h3>
                 <mat-list-item role="listitem" *ngFor="let shoppingItem of shoppingItems">
-                  <span class="carttext">{{shoppingItem?.product?.name}}&nbsp;&nbsp;&nbsp; {{shoppingItem?.product?.agentPrice | currency:'AUD':'symbol-narrow':'.2-2'}} * {{shoppingItem?.amount}}</span><span class="cartprice">{{shoppingItem?.amount * shoppingItem?.product?.agentPrice | currency:'AUD':'symbol-narrow':'.2-2'}}</span><span class="carticon" (click)="deleteShoppingItem(shoppingItem)"><i id="shoppingitem{{shoppingItem.id}}" class="far fa-trash-alt fa-1x"></i></span>
+                  <span class="carttext">{{shoppingItem?.product?.name}}&nbsp;&nbsp;&nbsp;
+                    {{shoppingItem?.product?.agentPrice | currency:'AUD':'symbol-narrow':'.2-2'}} *
+                    {{shoppingItem?.amount}}</span><span
+                    class="cartprice">{{shoppingItem?.amount * shoppingItem?.product?.agentPrice | currency:'AUD':'symbol-narrow':'.2-2'}}</span><span
+                    class="carticon" (click)="deleteShoppingItem(shoppingItem)"><i id="shoppingitem{{shoppingItem.id}}"
+                      class="far fa-trash-alt fa-1x"></i></span>
                 </mat-list-item>
-                <button class="btn btn-long" (click)="proceedToCheckout()" *ngIf="shoppingItems?.length">Procees To Checkout</button>
-                <button class="btn btn-long" (click)="continueShopping()" *ngIf="!shoppingItems?.length">Start Shopping</button>
+                <button class="btn btn-long" (click)="proceedToCheckout()" *ngIf="shoppingItems?.length">Procees To
+                  Checkout</button>
+                <button class="btn btn-long" (click)="continueShopping()" *ngIf="!shoppingItems?.length">Start
+                  Shopping</button>
               </mat-list>
               <mat-list role="list" *ngIf="role =='reseller'">
                 <h3 mat-subheader>Your Order</h3>
                 <mat-list-item role="listitem" *ngFor="let shoppingItem of shoppingItems">
-                  <span class="carttext">{{shoppingItem?.product?.name}}&nbsp;&nbsp;&nbsp; {{shoppingItem?.product?.resellerPrice | currency:'AUD':'symbol-narrow':'.2-2'}} * {{shoppingItem?.amount}}</span><span class="cartprice">{{shoppingItem?.amount * shoppingItem?.product?.resellerPrice | currency:'AUD':'symbol-narrow':'.2-2'}}</span><span class="carticon" (click)="deleteShoppingItem(shoppingItem)"><i id="shoppingitem{{shoppingItem.id}}" class="far fa-trash-alt fa-1x"></i></span>
+                  <span class="carttext">{{shoppingItem?.product?.name}}&nbsp;&nbsp;&nbsp;
+                    {{shoppingItem?.product?.resellerPrice | currency:'AUD':'symbol-narrow':'.2-2'}} *
+                    {{shoppingItem?.amount}}</span><span
+                    class="cartprice">{{shoppingItem?.amount * shoppingItem?.product?.resellerPrice | currency:'AUD':'symbol-narrow':'.2-2'}}</span><span
+                    class="carticon" (click)="deleteShoppingItem(shoppingItem)"><i id="shoppingitem{{shoppingItem.id}}"
+                      class="far fa-trash-alt fa-1x"></i></span>
                 </mat-list-item>
-                <button class="btn btn-long" (click)="proceedToCheckout()" *ngIf="shoppingItems?.length">Procees To Checkout</button>
-                <button class="btn btn-long" (click)="continueShopping()" *ngIf="!shoppingItems?.length">Start Shopping</button>
-              </mat-list>              
+                <button class="btn btn-long" (click)="proceedToCheckout()" *ngIf="shoppingItems?.length">Procees To
+                  Checkout</button>
+                <button class="btn btn-long" (click)="continueShopping()" *ngIf="!shoppingItems?.length">Start
+                  Shopping</button>
+              </mat-list>
             </div>
           </li>
           <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }' *ngIf="role =='admin'">
@@ -91,13 +107,10 @@
     </div>
   </nav>
 
-  <!-- <app-ngbd-carousel-basic></app-ngbd-carousel-basic> -->
-  
-  <!-- <section class="container-fluid" *ngIf="nav.tabVisible">
-    <div class="row navbar-button">
-      <div class="col-sm-12 navbar-button_flexWrapper">
-        <button *ngFor="let cig of categoryList" (click)="manageRedirect(cig?.category);">{{cig?.type}}</button>
-      </div>
-    </div>
-  </section> -->
+  <!-- <mat-card class="container card-carousel">
+    <mat-card-content>
+      <app-ngbd-carousel-basic></app-ngbd-carousel-basic>
+    </mat-card-content>
+  </mat-card> -->
+
 </ng-container>

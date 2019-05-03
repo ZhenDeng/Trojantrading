@@ -48,8 +48,7 @@
       
               <ng-container matColumnDef="qty">
                 <mat-header-cell *matHeaderCellDef class="mat-table_3fex"> Quantity </mat-header-cell>
-                <mat-cell *matCellDef="let element" class="mat-table_3fex"> <input type="number" (keypress)="_keyPress($event)"
-                    [(ngModel)]="element.amount"> </mat-cell>
+                <mat-cell *matCellDef="let element" class="mat-table_3fex"> <input id="qty{{element.id}}" type="number" (keypress)="_keyPress($event)" (keyup)="changeQuantity(element)" [(ngModel)]="element.amount"> </mat-cell>
               </ng-container>
       
               <ng-container matColumnDef="subTotal">

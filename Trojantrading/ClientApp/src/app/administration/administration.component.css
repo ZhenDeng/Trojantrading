@@ -31,6 +31,26 @@ h4{
     font-weight: bold !important;
 }
 
+::ng-deep .mat-tab-body{
+	margin-top: 20px;
+}
+
+::ng-deep .mat-tab-label-active{
+	background: #eeede1 !important;
+	opacity: 1 !important;
+	color: #C20047;
+	border-bottom: 1px solid #C20047;
+	font-weight: bolder;
+}
+
+::ng-deep .mat-tab-label{
+	opacity: 0.3;
+}
+
+::ng-deep .mat-ink-bar{
+	background-color: #C20047 !important;
+}
+
 .filter-wrapper{
 	width: 300px;
 	display: block;

@@ -88,6 +88,10 @@ a{
   cursor: auto !important;
 }
 
+::ng-deep .mat-card{
+  width: 1250px !important;
+}
+
 .btn-long{
 	width: auto !important;
 	margin: 15px 54px 0 !important;
@@ -118,4 +122,8 @@ a{
   .navbar-brand {
     padding: 9px 10px;
   }
+}
+
+.card-carousel{
+  margin-top: 30px;
 }

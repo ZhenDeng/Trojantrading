@@ -19,11 +19,15 @@ h4{
 /* Overwrite default google material styles */
 
 ::ng-deep .mat-tab-link.mat-tab-label-active{
-	background: #eeede1!important;
-	opacity: 1!important;
+	background: #eeede1 !important;
+	opacity: 1 !important;
 	color: #C20047;
 	border-bottom: 1px solid #C20047;
 	font-weight: bolder;
+}
+
+::ng-deep .mat-ink-bar{
+	background-color: #C20047 !important;
 }
 
 ::ng-deep .mat-cell, .mat-header-cell{
