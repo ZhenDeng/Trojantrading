@@ -23,7 +23,6 @@
         "../node_modules/jquery-ui/themes/base/all.css"
       ],
       "scripts": [
-        "../node_modules/jquery/dist/jquery.min.js",
         "../node_modules/jquery-ui-dist/jquery-ui.js",
         "../../wwwroot/js/jquery-extension.js",
         "../node_modules/bootstrap/dist/js/bootstrap.min.js"

@@ -15,7 +15,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTabsModule, MatTableModule, MatDialogModule } from '@angular/material';
 import { AccountDetailsComponent } from './account-details/account-details.component';
 import { AdminService } from './services/admin.service';
-import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { AboutUsComponent } from './about-us/about-us.component';
 import { ContactUsComponent } from './contact-us/contact-us.component';
 import { PromoSummaryComponent } from './promo-summary/promo-summary.component';
@@ -42,8 +41,8 @@ import { EditProductComponent } from './popup-collection/edit-product/edit-produ
 import { MatSelectModule } from '@angular/material/select';
 import { EditUserComponent } from './popup-collection/edit-user/edit-user.component';
 import { EditAddressComponent } from './popup-collection/edit-address/edit-address.component';
+import { SlickCarouselModule } from 'ngx-slick-carousel';
 import { NgbdCarouselBasicModule } from './ngbd-carousel-basic/ngbd-carousel-basic.module';
-
 
 @NgModule({
   declarations: [
@@ -85,6 +84,7 @@ import { NgbdCarouselBasicModule } from './ngbd-carousel-basic/ngbd-carousel-bas
     MatDialogModule,
     NavMenuModule,
     MatSelectModule,
+    SlickCarouselModule,
     NgbdCarouselBasicModule
   ],
   providers: [

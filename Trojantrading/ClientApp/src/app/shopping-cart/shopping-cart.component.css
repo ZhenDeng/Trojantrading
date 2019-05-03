@@ -1,5 +1,6 @@
 .container{
 	margin-top: 30px;
+	min-height: 558px;
 }
 nav a{
 	width: 25%;

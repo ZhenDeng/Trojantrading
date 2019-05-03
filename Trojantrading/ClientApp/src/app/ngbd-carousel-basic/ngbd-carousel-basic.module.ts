@@ -1,12 +1,11 @@
 import { NgModule } from '@angular/core';
 import { NgbdCarouselBasicComponent } from './ngbd-carousel-basic.component';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { SlickCarouselModule } from 'ngx-slick-carousel';
 
 @NgModule({
-  imports: [BrowserModule, NgbModule],
+  imports: [BrowserModule, SlickCarouselModule],
   declarations: [NgbdCarouselBasicComponent],
-  exports: [NgbdCarouselBasicComponent],
-  bootstrap: [NgbdCarouselBasicComponent]
+  exports: [NgbdCarouselBasicComponent]
 })
 export class NgbdCarouselBasicModule { }

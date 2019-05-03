@@ -8,6 +8,7 @@ import { RoutingModule } from '../app.routing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RouterModule } from '@angular/router';
+import { SlickCarouselModule } from 'ngx-slick-carousel';
 import { NgbdCarouselBasicModule } from '../ngbd-carousel-basic/ngbd-carousel-basic.module';
 
 @NgModule({
@@ -29,6 +30,7 @@ import { NgbdCarouselBasicModule } from '../ngbd-carousel-basic/ngbd-carousel-ba
     MatTabsModule,
     MatListModule,
     MatDialogModule,
+    SlickCarouselModule,
     NgbdCarouselBasicModule
   ],
   declarations: [NavMenuComponent],
