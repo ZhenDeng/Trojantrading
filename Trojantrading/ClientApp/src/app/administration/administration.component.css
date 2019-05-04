@@ -1,3 +1,4 @@
+@import "../home/home.component.css";
 .container{
 	margin-top: 30px;
 	min-height: 558px;
@@ -77,4 +78,16 @@ h4{
 
 .addnewuser{
 	float: right;
+}
+
+.form-group {
+    display: flex;
+}
+
+.input-group {
+    position: relative;
+    display: block;
+    border-collapse: separate;
+    margin-left: 10px;
+    margin-top: -18px;
 }

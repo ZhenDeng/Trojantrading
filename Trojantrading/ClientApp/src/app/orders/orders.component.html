@@ -7,7 +7,7 @@
       <ng-container>
         <section class="product-wrapper">
           <h4>{{title}}</h4>
-          <div class="filter-wrapper" style="width:500px;">
+          <div class="filter-wrapper" style="width:600px;">
             <span class="searchInputGroup">
               <span class="searchIcon">
                 <i class="fas fa-search fa-2x"></i>
@@ -24,7 +24,9 @@
                     <input class="form-control" placeholder="yyyy-mm-dd" (click)="dt.toggle()"
                            name="dp" [(ngModel)]="dateTo" ngbDatepicker #dt="ngbDatepicker">
                   </div>
+                  
               </div>
+              <button class="btn btn-green" (click)="getOrders()">Search</button>
             </span>
           </div>
       
@@ -32,13 +34,13 @@
             <mat-table #table [dataSource]="dataSource">
           
               <ng-container matColumnDef="id">
-                <mat-header-cell *matHeaderCellDef class="mat-table_3fex"> Id </mat-header-cell>
-                <mat-cell *matCellDef="let element" class="mat-table_3fex">{{element.id}}</mat-cell>
+                <mat-header-cell *matHeaderCellDef> Id </mat-header-cell>
+                <mat-cell *matCellDef="let element">{{element.id}}</mat-cell>
               </ng-container>
 
-              <ng-container matColumnDef="bussinessName">
-                <mat-header-cell *matHeaderCellDef> Customer </mat-header-cell>
-                <mat-cell *matCellDef="let element" style="text-transform:capitalize;"> {{element.user.bussinessName}} </mat-cell>
+              <ng-container matColumnDef="customer">
+                <mat-header-cell *matHeaderCellDef class="mat-table_3fex"> Customer </mat-header-cell>
+                <mat-cell *matCellDef="let element" class="mat-table_3fex" style="text-transform:capitalize;"> {{element.customer}} </mat-cell>
               </ng-container>
 
               <ng-container matColumnDef="createdDate">

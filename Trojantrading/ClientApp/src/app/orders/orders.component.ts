@@ -26,7 +26,7 @@ export class OrdersComponent implements OnInit {
   orders: Order[] = [];
   filteredOrder: Order[] = [];
   dataSource = new MatTableDataSource();
-  displayedColumns: string[] = ['id', 'bussinessName', 'createdDate', 'totalPrice', 'orderStatus', 'button'];
+  displayedColumns: string[] = ['id', 'customer', 'createdDate', 'totalPrice', 'orderStatus', 'button'];
 
   constructor(
     private nav: NavbarService,
@@ -62,6 +62,7 @@ export class OrdersComponent implements OnInit {
 
     this.orderService.getOrdersByUserID(this.userId, this.strDateFrom, this.strDateTo).subscribe((value: Order[]) => {
        this.orders = value;
+       this.orders.forEach(x => x.customer = x.user.bussinessName);
        this.dataSource = new MatTableDataSource(this.orders);
     },
     (error: any) => {

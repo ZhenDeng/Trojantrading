@@ -14,4 +14,5 @@ export interface Order {
     userId: number
     shoppingCartId: number
     shoppingCart: ShoppingCart  
+    customer: string
 }

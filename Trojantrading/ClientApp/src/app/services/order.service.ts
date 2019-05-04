@@ -23,8 +23,8 @@ export class OrderService {
       .pipe(catchError(this.handleError));
   }
 
-  getOrdersByUserID(id: string, dateForm: string, dateTo: string): Observable<any> {
-    return this.http.get(this.base_url + '/GetOrdersByUserID?userId=' + id + '&dateForm=' + dateForm + '&dateTo=' + dateTo)
+  getOrdersByUserID(id: string, dateFrom: string, dateTo: string): Observable<any> {
+    return this.http.get(this.base_url + '/GetOrdersByUserID?userId=' + id + '&dateFrom=' + dateFrom + '&dateTo=' + dateTo)
     .pipe(catchError(this.handleError));
   }
 

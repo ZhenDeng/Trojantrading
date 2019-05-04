@@ -1,13 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { NavbarService } from '../services/navbar.service';
 import { AdminService } from '../services/admin.service';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatTableDataSource } from '@angular/material';
 import { User } from '../models/user';
 import * as _ from 'lodash';
 import { ApiResponse } from '../models/ApiResponse';
 import { ShareService } from '../services/share.service';
 import { EditUserComponent } from '../popup-collection/edit-user/edit-user.component';
 import { HeadInformation } from '../models/header-info';
+import { OrderService } from '../services/order.service';
+import { NgbDate } from '@ng-bootstrap/ng-bootstrap/datepicker/ngb-date';
+import { Order } from '../models/order';
+import { NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-administration',
@@ -19,21 +23,33 @@ export class AdministrationComponent implements OnInit {
   title: string = "Administration";
   displayedColumns: string[] = ["UserName", "BusinessName", "Role", "Email", "Phone", "Status", "EditButton", "DeleteButton"];
   displayedHeaderColumns: string[] = ["Id", "Content", "ImagePath", "EditButton", "DeleteButton"];
+  displayedOrderColumns: string[] = ['id', 'customer', 'createdDate', 'totalPrice', 'orderStatus', 'button'];
   dataSource: User[];
   dataSourceFilter: User[];
   dataSourceHeader: HeadInformation[];
   dataSourceHeaderFilter: HeadInformation[];
   role: string;
+  dateFrom: NgbDate;
+  dateTo: NgbDate;
+  strDateFrom: string = '';
+  strDateTo: string = '';
+  orders: Order[] = [];
+  filteredOrder: Order[] = [];
+  ordersDataSource = new MatTableDataSource();
 
   constructor(
     public nav: NavbarService,
     private adminService: AdminService,
     private shareSevice: ShareService,
+    private orderService: OrderService,
+    private calendar: NgbCalendar,
     public dialog: MatDialog
   ) { }
 
   ngOnInit() {
     this.nav.show();
+    this.dateFrom = this.calendar.getNext(this.calendar.getToday(), 'd', -30);
+    this.dateTo = this.calendar.getToday();
     this.role = this.shareSevice.readCookie("role");
     this.adminService.GetUsers().subscribe((res: User[]) => {
       if (res) {
@@ -41,7 +57,29 @@ export class AdministrationComponent implements OnInit {
         this.dataSourceFilter = this.dataSource;
       }
     });
+
+    this.getOrders();
   }
+
+  getOrders() {
+    this.convertDateFormat();
+
+    const userId = ''; //admin
+    this.orderService.getOrdersByUserID(userId, this.strDateFrom, this.strDateTo).subscribe((value: Order[]) => {
+       this.orders = value;
+       this.orders.forEach(x => x.customer = x.user.bussinessName);
+       this.ordersDataSource = new MatTableDataSource(this.orders);
+    },
+    (error: any) => {
+      console.info(error);
+    });
+  }
+
+  convertDateFormat(): void {
+    this.strDateFrom = this.dateFrom.day + '/' + this.dateFrom.month + '/' + this.dateFrom.year;
+    this.strDateTo = this.dateTo.day + '/' + this.dateTo.month + '/' + this.dateTo.year;
+  }
+
 
   addNewUser(): void {
     const dialogRef = this.dialog.open(EditUserComponent, {
@@ -141,6 +179,11 @@ export class AdministrationComponent implements OnInit {
 
   applyHeaderFilter(value: string): void{
 
+  }
+
+  applyOrderFilter(value: string) {
+    value = value.trim().toLowerCase();
+    this.ordersDataSource.filter = value;
   }
 
   editHeader(element: HeadInformation): void{
