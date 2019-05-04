@@ -39,7 +39,7 @@ namespace Trojantrading.Models
         public string Acn { get; set; }
         public string Role { get; set; }
         public List<ShoppingCart> ShoppingCarts { get; set; }
-        public List<Order> Orders { get; set; }
+        //public List<Order> Orders { get; set; }
         public List<ShoppingItem> ShoppingItems { get; set; }
     }
 

@@ -10,7 +10,7 @@ export interface Product {
     button: string
     quantity: number
     status: string
-    shoppingItem: ShoppingItem
+    shoppingItem: ShoppingItem[]
 }
 
 export interface Category{

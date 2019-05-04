@@ -104,7 +104,7 @@ namespace Trojantrading.Repositories
                 var userInfo = userRepository.GetUserByAccount(order.UserId);
                 order.User = userInfo;
             }
-            return orders;
+            return orders.ToList();
 
         }
 

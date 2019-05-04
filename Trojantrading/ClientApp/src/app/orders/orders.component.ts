@@ -2,11 +2,12 @@ import { MatTableDataSource } from '@angular/material';
 import { Component, OnInit } from '@angular/core';
 import { NavbarService } from '../services/navbar.service';
 import { ShareService } from '../services/share.service';
-import { ShoppingCartService } from '../services/shopping-cart.service';
-import { AdminService } from '../services/admin.service';
 import { Router } from '@angular/router';
 import { OrderService } from '../services/order.service';
 import { Order } from '../models/order';
+import { NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDate } from '@ng-bootstrap/ng-bootstrap/datepicker/ngb-date';
+
 
 @Component({
   selector: 'app-orders',
@@ -18,23 +19,27 @@ export class OrdersComponent implements OnInit {
   title = 'Order History';
   userId: string = '';
   role: string = '';
-  dateFrom: string = '';
-  dateTo: string = '';
+  dateFrom: NgbDate;
+  dateTo: NgbDate;
+  strDateFrom: string = '';
+  strDateTo: string = '';
   orders: Order[] = [];
   filteredOrder: Order[] = [];
   dataSource = new MatTableDataSource();
-  displayedColumns: string[] = ['Id', 'bussinessName', 'createdDate', 'totalPrice', 'orderStatus', 'button'];
+  displayedColumns: string[] = ['id', 'bussinessName', 'createdDate', 'totalPrice', 'orderStatus', 'button'];
 
   constructor(
     private nav: NavbarService,
     private shareService: ShareService,
     private orderService: OrderService,
-    private shoppingCartService: ShoppingCartService,
-    private adminService: AdminService,
+    private calendar: NgbCalendar,
     private router: Router
   ) { }
 
   ngOnInit() {
+    this.dateFrom = this.calendar.getNext(this.calendar.getToday(), 'd', -30);
+    this.dateTo = this.calendar.getToday();
+
     this.nav.show();
 
     this.role = this.shareService.readCookie("role");
@@ -43,11 +48,19 @@ export class OrdersComponent implements OnInit {
     this.userId = this.role === "admin" ? '' : this.shareService.readCookie("userId");
 
     this.getOrders();
+
   }
 
-  getOrders() {
+  convertDateFormat(): void {
+    this.strDateFrom = this.dateFrom.day + '/' + this.dateFrom.month + '/' + this.dateFrom.year;
+    this.strDateTo = this.dateTo.day + '/' + this.dateTo.month + '/' + this.dateTo.year;
+  }
 
-    this.orderService.getOrdersByUserID(this.userId, this.dateFrom, this.dateTo).subscribe((value: Order[]) => {
+
+  getOrders() {
+    this.convertDateFormat();
+
+    this.orderService.getOrdersByUserID(this.userId, this.strDateFrom, this.strDateTo).subscribe((value: Order[]) => {
        this.orders = value;
        this.dataSource = new MatTableDataSource(this.orders);
     },

@@ -51,12 +51,6 @@ namespace Trojantrading.Repositories
                 .WithOne(s => s.User)
                 .HasForeignKey(s => s.UserId);
 
-            //user order 1:m
-            modelBuilder.Entity<Order>()
-                .HasOne(o => o.User)
-                .WithMany(u => u.Orders)
-                .HasForeignKey(o => o.UserId);
-
             //order shoppingcart 1:1
             modelBuilder.Entity<ShoppingCart>()
                 .HasOne(s => s.Order)

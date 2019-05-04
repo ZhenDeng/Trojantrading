@@ -1,1 +1,13 @@
 @import "../home/home.component.css";
+
+.form-group {
+    display: flex;
+}
+
+.input-group {
+    position: relative;
+    display: block;
+    border-collapse: separate;
+    margin-left: 10px;
+    margin-top: -18px;
+}

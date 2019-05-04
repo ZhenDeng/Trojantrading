@@ -69,7 +69,7 @@ import { NgbdCarouselBasicModule } from './ngbd-carousel-basic/ngbd-carousel-bas
     FormsModule,
     RoutingModule,
     BrowserAnimationsModule,
-    NgbModule,
+    NgbModule.forRoot(),
     MatFormFieldModule,
     ReactiveFormsModule,
     MatInputModule,

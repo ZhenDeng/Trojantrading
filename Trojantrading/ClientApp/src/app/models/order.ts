@@ -1,5 +1,5 @@
+import { ShoppingCart } from './shoppingCart';
 import { User } from './user';
-import { ShoppingItem } from './shoppingItem';
 
 export interface Order {
     id: number
@@ -11,5 +11,7 @@ export interface Order {
     clientMessage: string
     adminMessage: string
     user: User
-    shoppingItems: ShoppingItem[]  
+    userId: number
+    shoppingCartId: number
+    shoppingCart: ShoppingCart  
 }

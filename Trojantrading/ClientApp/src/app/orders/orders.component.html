@@ -7,21 +7,33 @@
       <ng-container>
         <section class="product-wrapper">
           <h4>{{title}}</h4>
-          <span class="filter-wrapper">
+          <div class="filter-wrapper" style="width:500px;">
             <span class="searchInputGroup">
               <span class="searchIcon">
                 <i class="fas fa-search fa-2x"></i>
               </span>
               <input class="searchInput" (keyup)="applyFilter($event.target.value)" type="text" placeholder="Search">
+              <div class="form-group">
+                <div class="input-group">
+                  Date From: 
+                  <input class="form-control" placeholder="yyyy-mm-dd" (click)="df.toggle()"
+                         name="dp" [(ngModel)]="dateFrom" ngbDatepicker #df="ngbDatepicker">
+                </div>
+                <div class="input-group">
+                    Date To: 
+                    <input class="form-control" placeholder="yyyy-mm-dd" (click)="dt.toggle()"
+                           name="dp" [(ngModel)]="dateTo" ngbDatepicker #dt="ngbDatepicker">
+                  </div>
+              </div>
             </span>
-          </span>
+          </div>
       
           <div class="example-container mat-elevation-z8">
             <mat-table #table [dataSource]="dataSource">
           
-              <ng-container matColumnDef="Id">
+              <ng-container matColumnDef="id">
                 <mat-header-cell *matHeaderCellDef class="mat-table_3fex"> Id </mat-header-cell>
-                <mat-cell *matCellDef="let element" class="mat-table_3fex">{{element.Id}}</mat-cell>
+                <mat-cell *matCellDef="let element" class="mat-table_3fex">{{element.id}}</mat-cell>
               </ng-container>
 
               <ng-container matColumnDef="bussinessName">

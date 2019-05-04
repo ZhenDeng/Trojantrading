@@ -33,13 +33,15 @@ namespace Trojantrading.Controllers
 
 
         [HttpGet("GetOrdersByUserID")]
-        [ProducesResponseType(typeof(Order[]), 200)]
+        [NoCache]
+        [ProducesResponseType(typeof(List<Order>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
         public IActionResult GetOrdersByUserID(string userId, string dateFrom, string dateTo)
         {
             try
             {
                 List<Order> results = new List<Order>();
+                
                 if (!string.IsNullOrWhiteSpace(userId))
                 {
                     int id = int.Parse(userId);
@@ -51,7 +53,7 @@ namespace Trojantrading.Controllers
                 }
 
 
-                return Ok(results.ToArray());
+                return Ok(results);
             }
             catch (Exception ex)
             {
