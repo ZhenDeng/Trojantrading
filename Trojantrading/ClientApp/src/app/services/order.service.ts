@@ -33,6 +33,11 @@ export class OrderService {
     .pipe(catchError(this.handleError));
   }
 
+  DeleteOrder(orderId: Number): Observable<ApiResponse> {
+    return this.http.get(this.base_url + "/DeleteOrder?orderId=" + orderId)
+      .pipe(catchError(this.handleError));
+  }
+
   private handleError(error: HttpErrorResponse) {
     console.error('server error:', error);
     if (error.error instanceof ErrorEvent) {

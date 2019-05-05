@@ -9,6 +9,8 @@ namespace Trojantrading.Repositories
     public interface IOrderRepository
     {
         ApiResponse AddOrder(ShoppingCart cart);
+        Order Get(int id);
+        ApiResponse DeleteOrder(int id);
         List<Order> GetOrdersByUserID(int userId, string dateFrom, string dateTo);
         List<Order> GetOrdersByDate(string dateFrom, string dateTo);
         List<Order> GetOrderWithUser(int userId);
@@ -82,6 +84,37 @@ namespace Trojantrading.Repositories
                 };
             }
 
+        }
+
+        public Order Get(int id)
+        {
+            var order = trojantradingDbContext.Orders
+                .Where(o => o.Id == id)
+                .FirstOrDefault();
+            return order;
+        }
+
+        public ApiResponse DeleteOrder(int id)
+        {
+            try
+            {
+                var order = trojantradingDbContext.Orders.Where(u => u.Id == id).FirstOrDefault();
+                trojantradingDbContext.Orders.Remove(order);
+                trojantradingDbContext.SaveChanges();
+                return new ApiResponse()
+                {
+                    Status = "success",
+                    Message = "Successfully delete user"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse()
+                {
+                    Status = "fail",
+                    Message = ex.Message
+                };
+            }
         }
 
         public List<Order> GetOrdersByUserID(int userId, string dateFrom, string dateTo)

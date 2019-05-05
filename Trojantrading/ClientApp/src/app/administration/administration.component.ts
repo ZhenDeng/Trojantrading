@@ -135,6 +135,26 @@ export class AdministrationComponent implements OnInit {
     });
   }
 
+  editOrder(order: Order): void {
+    //const dialogf = this.dialog.open
+  }
+
+  deleteOrder(order: Order):void {
+    this.orderService.DeleteOrder(order.id).subscribe((res: ApiResponse) => {
+      if (res.status == "success") {
+        this.shareSevice.showSuccess("#deleteorder" + order.id, res.message, "right");
+        setTimeout(() => {
+          this.getOrders();
+        }, 2000);
+      } else {
+        this.shareSevice.showError("#deleteorder" + order.id, res.message, "right");
+      }
+    },
+      (error: any) => {
+        console.info(error);
+      });
+  }
+
   editUser(user: User): void {
     const dialogRef = this.dialog.open(EditUserComponent, {
       width: '700px',

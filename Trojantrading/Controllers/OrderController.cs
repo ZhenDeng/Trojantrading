@@ -77,6 +77,15 @@ namespace Trojantrading.Controllers
             return Ok(_orderRepository.GetOrderWithUser(userId));
         }
 
+        [HttpGet("DeleteOrder")]
+        [NoCache]
+        [ProducesResponseType(typeof(ApiResponse), 200)]
+        public IActionResult DeleteOrder(int orderId)
+        {
+            var result = _orderRepository.DeleteOrder(orderId);
+            return Ok(result);
+        }
+
         //[HttpGet("ExportOrdersToExcel")]
         //[NoCache]
         //[ProducesResponseType(typeof(string), 200)]
@@ -103,11 +112,11 @@ namespace Trojantrading.Controllers
         //        }
 
         //        _excelManager.OrdesSummarySheet(pck, orders);
-                
+
         //        pck.SaveAs(file);
         //        return Ok(fileName);
         //    }
         //}
- 
+
     }
 }
