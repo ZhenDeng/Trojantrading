@@ -1,3 +1,4 @@
+import { FileService } from './../services/file.service';
 import { MatTableDataSource } from '@angular/material';
 import { Component, OnInit } from '@angular/core';
 import { NavbarService } from '../services/navbar.service';
@@ -7,6 +8,7 @@ import { OrderService } from '../services/order.service';
 import { Order } from '../models/order';
 import { NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 import { NgbDate } from '@ng-bootstrap/ng-bootstrap/datepicker/ngb-date';
+import { DatePipe } from '@angular/common';
 
 
 @Component({
@@ -17,6 +19,7 @@ import { NgbDate } from '@ng-bootstrap/ng-bootstrap/datepicker/ngb-date';
 export class OrdersComponent implements OnInit {
 
   title = 'Order History';
+  url = '';
   userId: string = '';
   role: string = '';
   dateFrom: NgbDate;
@@ -32,7 +35,9 @@ export class OrdersComponent implements OnInit {
     private nav: NavbarService,
     private shareService: ShareService,
     private orderService: OrderService,
+    private fileService: FileService,
     private calendar: NgbCalendar,
+    private datePipe: DatePipe,
     private router: Router
   ) { }
 
@@ -68,6 +73,22 @@ export class OrdersComponent implements OnInit {
     (error: any) => {
       console.info(error);
     });
+  }
+
+  downloadExcel() {
+    this.convertDateFormat();
+
+    let exportOrdersArray = this.orders.map(x => ({
+      Id: x.id,
+      Customer: x.customer,
+      CreatedDate: this.datePipe.transform(x.createdDate, 'yyyy-MM-dd'),
+      Amount: x.totalPrice,
+      Status: x.orderStatus
+    }));
+
+
+    this.fileService.exportAsExcelFile(exportOrdersArray, 'TrojanTrading_Orders_' + this.strDateFrom + '_' + this.strDateTo);
+
   }
 
   applyFilter(value: string) {

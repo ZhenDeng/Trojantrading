@@ -1,3 +1,4 @@
+import { FileService } from './services/file.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -96,6 +97,7 @@ import { NgbdCarouselBasicModule } from './ngbd-carousel-basic/ngbd-carousel-bas
     ShareService,
     ShoppingCartService,
     OrderService,
+    FileService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,

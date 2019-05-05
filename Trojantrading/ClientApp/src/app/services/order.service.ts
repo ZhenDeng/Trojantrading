@@ -28,6 +28,11 @@ export class OrderService {
     .pipe(catchError(this.handleError));
   }
 
+  exportOrdersToExcel(id: string, dateFrom: string, dateTo: string): Observable<any> {
+    return this.http.get(this.base_url + '/ExportOrdersToExcel?userId=' + id + '&dateFrom=' + dateFrom + '&dateTo=' + dateTo)
+    .pipe(catchError(this.handleError));
+  }
+
   private handleError(error: HttpErrorResponse) {
     console.error('server error:', error);
     if (error.error instanceof ErrorEvent) {

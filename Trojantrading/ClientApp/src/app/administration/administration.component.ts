@@ -1,3 +1,4 @@
+import { FileService } from './../services/file.service';
 import { Component, OnInit } from '@angular/core';
 import { NavbarService } from '../services/navbar.service';
 import { AdminService } from '../services/admin.service';
@@ -12,11 +13,13 @@ import { OrderService } from '../services/order.service';
 import { NgbDate } from '@ng-bootstrap/ng-bootstrap/datepicker/ngb-date';
 import { Order } from '../models/order';
 import { NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-administration',
   templateUrl: './administration.component.html',
-  styleUrls: ['./administration.component.css']
+  styleUrls: ['./administration.component.css'],
+  providers: [DatePipe]
 })
 export class AdministrationComponent implements OnInit {
 
@@ -42,8 +45,10 @@ export class AdministrationComponent implements OnInit {
     private adminService: AdminService,
     private shareSevice: ShareService,
     private orderService: OrderService,
+    private fileService: FileService,
     private calendar: NgbCalendar,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private datePipe: DatePipe
   ) { }
 
   ngOnInit() {
@@ -79,6 +84,23 @@ export class AdministrationComponent implements OnInit {
     this.strDateFrom = this.dateFrom.day + '/' + this.dateFrom.month + '/' + this.dateFrom.year;
     this.strDateTo = this.dateTo.day + '/' + this.dateTo.month + '/' + this.dateTo.year;
   }
+
+  downloadExcel() {
+    this.convertDateFormat();
+
+    let exportOrdersArray = this.orders.map(x => ({
+      Id: x.id,
+      Customer: x.customer,
+      CreatedDate: this.datePipe.transform(x.createdDate, 'yyyy-MM-dd'),
+      Amount: x.totalPrice,
+      Status: x.orderStatus
+    }));
+
+
+    this.fileService.exportAsExcelFile(exportOrdersArray, 'TrojanTrading_Orders_' + this.strDateFrom + '_' + this.strDateTo);
+
+  }
+
 
 
   addNewUser(): void {

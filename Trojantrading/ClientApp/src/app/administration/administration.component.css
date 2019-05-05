@@ -91,3 +91,7 @@ h4{
     margin-left: 10px;
     margin-top: -18px;
 }
+
+.form-control {
+    width: 100px;
+}
