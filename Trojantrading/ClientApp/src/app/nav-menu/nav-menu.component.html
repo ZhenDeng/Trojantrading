@@ -107,7 +107,7 @@
     </div>
   </nav>
 
-  <mat-card class="container card-carousel">
+  <mat-card class="container card-carousel" *ngIf="headerDataSource?.length">
     <mat-card-content>
       <app-ngbd-carousel-basic></app-ngbd-carousel-basic>
     </mat-card-content>

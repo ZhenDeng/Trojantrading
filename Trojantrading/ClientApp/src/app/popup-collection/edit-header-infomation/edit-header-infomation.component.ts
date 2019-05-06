@@ -24,8 +24,22 @@ export class EditHeaderInfomationComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.userFormGroup.get("imagePath").setValue(this.data.product.name);
-    this.userFormGroup.get("content").setValue(this.data.product.name);
+    if(this.data.type == "Update"){
+      this.userFormGroup.get("imagePath").setValue(this.data.headInfo.imagePath);
+      this.userFormGroup.get("content").setValue(this.data.headInfo.content);
+    }
+  }
+
+  updateHeadInfomation(): void{
+    if(this.userFormGroup.valid){
+      this.dialogRef.close(this.userFormGroup.value);
+    }else{
+      this.shareSevice.showError(".imagePathValidate", "Please enter image path", "right");
+    }
+  }
+
+  onNoClick(): void {
+    this.dialogRef.close();
   }
 
 }

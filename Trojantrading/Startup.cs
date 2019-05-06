@@ -63,6 +63,7 @@ namespace Trojantrading
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IPdfBoardRepository, PdfBoardRepository>();
             services.AddTransient<IShoppingCartRepository, ShoppingCartRepository>();
+            services.AddTransient<IHeaderInfomationRepository, HeaderInfomationRepository>();
             services.AddTransient<IShare, Share>();
 
             // In production, the Angular files will be served from this directory

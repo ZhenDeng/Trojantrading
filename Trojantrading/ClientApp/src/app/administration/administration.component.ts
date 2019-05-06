@@ -14,6 +14,8 @@ import { NgbDate } from '@ng-bootstrap/ng-bootstrap/datepicker/ngb-date';
 import { Order } from '../models/order';
 import { NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 import { DatePipe } from '@angular/common';
+import { EditHeaderInfomationComponent } from '../popup-collection/edit-header-infomation/edit-header-infomation.component';
+import { HeadInformationService } from '../services/head-information.service';
 
 @Component({
   selector: 'app-administration',
@@ -49,7 +51,8 @@ export class AdministrationComponent implements OnInit {
     private fileService: FileService,
     private calendar: NgbCalendar,
     public dialog: MatDialog,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private headInformationService: HeadInformationService
   ) { }
 
   ngOnInit() {
@@ -62,7 +65,19 @@ export class AdministrationComponent implements OnInit {
         this.dataSource = res;
         this.dataSourceFilter = this.dataSource;
       }
-    });
+    },
+      (error: any) => {
+        console.info(error);
+      });
+
+    this.headInformationService.GetHeadInformation().subscribe((res: HeadInformation[]) => {
+      if (res) {
+        this.headerDataSource = new MatTableDataSource(res);
+      }
+    },
+      (error: any) => {
+        console.info(error);
+      });
 
     this.getOrders();
   }
@@ -72,13 +87,13 @@ export class AdministrationComponent implements OnInit {
 
     const userId = ''; //admin
     this.orderService.getOrdersByUserID(userId, this.strDateFrom, this.strDateTo).subscribe((value: Order[]) => {
-       this.orders = value;
-       this.orders.forEach(x => x.customer = x.user.bussinessName);
-       this.ordersDataSource = new MatTableDataSource(this.orders);
+      this.orders = value;
+      this.orders.forEach(x => x.customer = x.user.bussinessName);
+      this.ordersDataSource = new MatTableDataSource(this.orders);
     },
-    (error: any) => {
-      console.info(error);
-    });
+      (error: any) => {
+        console.info(error);
+      });
   }
 
   convertDateFormat(): void {
@@ -101,8 +116,6 @@ export class AdministrationComponent implements OnInit {
     this.fileService.exportAsExcelFile(exportOrdersArray, 'TrojanTrading_Orders_' + this.strDateFrom + '_' + this.strDateTo);
 
   }
-
-
 
   addNewUser(): void {
     const dialogRef = this.dialog.open(EditUserComponent, {
@@ -140,7 +153,7 @@ export class AdministrationComponent implements OnInit {
     //const dialogf = this.dialog.open
   }
 
-  deleteOrder(order: Order):void {
+  deleteOrder(order: Order): void {
     this.orderService.DeleteOrder(order.id).subscribe((res: ApiResponse) => {
       if (res.status == "success") {
         this.shareSevice.showSuccess("#deleteorder" + order.id, res.message, "right");
@@ -201,7 +214,10 @@ export class AdministrationComponent implements OnInit {
               this.dataSource = res;
               this.dataSourceFilter = this.dataSource;
             }
-          });
+          },
+            (error: any) => {
+              console.info(error);
+            });
         }, 2000);
       } else {
         this.shareSevice.showError("#delete" + user.id, res.message, "right");
@@ -216,11 +232,28 @@ export class AdministrationComponent implements OnInit {
     this.dataSourceFilter = this.dataSource.filter(user => user.account.toLowerCase().trim().includes(value.toLowerCase().trim()) || user.bussinessName.toLowerCase().trim().includes(value.toLowerCase().trim()));
   }
 
-  addNewHeader(): void{
+  addNewHeader(): void {
+    const dialogRef = this.dialog.open(EditHeaderInfomationComponent, {
+      width: '700px',
+      data: { type: "Add" }
+    });
 
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.headInformationService.GetHeadInformation().subscribe((res: HeadInformation[]) => {
+          if (res) {
+            this.headerDataSource = new MatTableDataSource(res);
+          }
+          this.headInformationService.changeMessage(this.headerDataSource.data.length)
+        },
+          (error: any) => {
+            console.info(error);
+          });
+      }
+    });
   }
 
-  applyHeaderFilter(value: string): void{
+  applyHeaderFilter(value: string): void {
     value = value.trim().toLowerCase();
     this.headerDataSource.filter = value;
   }
@@ -230,11 +263,60 @@ export class AdministrationComponent implements OnInit {
     this.ordersDataSource.filter = value;
   }
 
-  editHeader(element: HeadInformation): void{
+  editHeader(element: HeadInformation): void {
+    const dialogRef = this.dialog.open(EditHeaderInfomationComponent, {
+      width: '700px',
+      data: { type: "Update", headInfo: element }
+    });
 
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.headInformationService.UpdateHeadInfomation(result).subscribe((res: ApiResponse) => {
+          if (res && res.status == "success") {
+            this.shareSevice.showSuccess("#editheader" + element.id, res.message, "right");
+            setTimeout(() => {
+              this.headInformationService.GetHeadInformation().subscribe((res: HeadInformation[]) => {
+                if (res) {
+                  this.headerDataSource = new MatTableDataSource(res);
+                }
+                this.headInformationService.changeMessage(this.headerDataSource.data.length)
+              },
+                (error: any) => {
+                  console.info(error);
+                });
+            }, 2000);
+          } else {
+            this.shareSevice.showError("#editheader" + element.id, res.message, "right");
+          }
+        },
+          (error: any) => {
+            console.info(error);
+          });
+      }
+    });
   }
 
-  deleteHeader(element: HeadInformation): void{
-
+  deleteHeader(element: HeadInformation): void {
+    this.headInformationService.DeleteHeadInfomation(element).subscribe((res: ApiResponse) => {
+      if (res.status == "success") {
+        this.shareSevice.showSuccess("#deleteheader" + element.id, res.message, "right");
+        setTimeout(() => {
+          this.headInformationService.GetHeadInformation().subscribe((res: HeadInformation[]) => {
+            if (res) {
+              this.headerDataSource = new MatTableDataSource(res);
+            }
+            this.headInformationService.changeMessage(this.headerDataSource.data.length)
+          },
+            (error: any) => {
+              console.info(error);
+            });
+        }, 2000);
+      } else {
+        this.shareSevice.showError("#deleteheader" + element.id, res.message, "right");
+      }
+    },
+      (error: any) => {
+        console.info(error);
+      });
   }
 }

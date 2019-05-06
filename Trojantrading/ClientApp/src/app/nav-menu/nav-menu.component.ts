@@ -12,6 +12,9 @@ import { ApiResponse } from '../models/ApiResponse';
 import * as _ from 'lodash';
 import { Category } from '../models/Product';
 import { ProductService } from '../services/product.service';
+import { HeadInformationService } from '../services/head-information.service';
+import { HeadInformation } from '../models/header-info';
+import { MatTableDataSource } from '@angular/material';
 
 @Component({
   selector: 'app-nav-menu',
@@ -24,6 +27,7 @@ export class NavMenuComponent implements OnInit {
   shoppingItems: ShoppingItem[];
   role: string;
   categoryList: Category[];
+  headerDataSource: HeadInformation[] = [];
 
   constructor(
     public nav: NavbarService,
@@ -32,13 +36,23 @@ export class NavMenuComponent implements OnInit {
     private shareService: ShareService,
     private shoppingCartService: ShoppingCartService,
     private adminService: AdminService,
-    private productService: ProductService
+    private productService: ProductService,
+    private headInformationService: HeadInformationService
   ) { 
   }
 
   ngOnInit() {
     this.role = this.shareService.readCookie("role");
     this.categoryList = this.productService.categoryList;
+
+    this.headInformationService.GetHeadInformation().subscribe((res: HeadInformation[]) => {
+      if (res) {
+        this.headerDataSource = res;
+      }
+    },
+      (error: any) => {
+        console.info(error);
+      });
 
     this.shoppingCartService.currentShoppingItemLength.subscribe((length: number) => {
       this.shoppingCartService.AddShoppingCart(_.toNumber(this.shareService.readCookie("userId"))).subscribe((sc: ApiResponse) => {

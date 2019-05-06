@@ -45,6 +45,7 @@ import { EditAddressComponent } from './popup-collection/edit-address/edit-addre
 import { SlickCarouselModule } from 'ngx-slick-carousel';
 import { NgbdCarouselBasicModule } from './ngbd-carousel-basic/ngbd-carousel-basic.module';
 import { EditHeaderInfomationComponent } from './popup-collection/edit-header-infomation/edit-header-infomation.component';
+import { HeadInformationService } from './services/head-information.service';
 
 @NgModule({
   declarations: [
@@ -100,6 +101,7 @@ import { EditHeaderInfomationComponent } from './popup-collection/edit-header-in
     ShoppingCartService,
     OrderService,
     FileService,
+    HeadInformationService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,

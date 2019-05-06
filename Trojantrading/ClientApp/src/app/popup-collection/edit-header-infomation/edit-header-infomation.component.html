@@ -1,13 +1,13 @@
 <h1 mat-dialog-title>Edit Header Infomation</h1>
 <div mat-dialog-content [formGroup]="userFormGroup">
   <mat-form-field>
-    <input matInput class="imagePathValidate" formControlName="imagePath" placeholder="Image Path">
+    <input matInput class="imagePathValidate" formControlName="imagePath" placeholder="Image Path" required>
   </mat-form-field>
   <mat-form-field>
     <input matInput class="contentValidate" formControlName="content" placeholder="Content">
   </mat-form-field>
 </div>
 <div mat-dialog-actions>
-  <button mat-button class="btn btn-long" (click)="updateProductDetails()">Update</button>
+  <button mat-button class="btn btn-long" (click)="updateHeadInfomation()">{{data.type}}</button>
   <button mat-button class="btn btn-long" (click)="onNoClick()">No Thanks</button>
 </div>

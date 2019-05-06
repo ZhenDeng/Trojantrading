@@ -1,5 +1,10 @@
 @import "../home/home.component.css";
 
+.container{
+	margin-top: 30px;
+	min-height: 700px;
+}
+
 .form-group {
     display: flex;
 }
