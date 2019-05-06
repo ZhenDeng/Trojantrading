@@ -44,6 +44,7 @@ import { EditUserComponent } from './popup-collection/edit-user/edit-user.compon
 import { EditAddressComponent } from './popup-collection/edit-address/edit-address.component';
 import { SlickCarouselModule } from 'ngx-slick-carousel';
 import { NgbdCarouselBasicModule } from './ngbd-carousel-basic/ngbd-carousel-basic.module';
+import { EditHeaderInfomationComponent } from './popup-collection/edit-header-infomation/edit-header-infomation.component';
 
 @NgModule({
   declarations: [
@@ -62,7 +63,8 @@ import { NgbdCarouselBasicModule } from './ngbd-carousel-basic/ngbd-carousel-bas
     AdministrationComponent,
     EditProductComponent,
     EditUserComponent,
-    EditAddressComponent
+    EditAddressComponent,
+    EditHeaderInfomationComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -107,7 +109,8 @@ import { NgbdCarouselBasicModule } from './ngbd-carousel-basic/ngbd-carousel-bas
     TermsAndConditionsComponent,
     EditProductComponent,
     EditUserComponent,
-    EditAddressComponent
+    EditAddressComponent,
+    EditHeaderInfomationComponent
   ],
   bootstrap: [AppComponent]
 })

@@ -39,6 +39,7 @@ export class AdministrationComponent implements OnInit {
   orders: Order[] = [];
   filteredOrder: Order[] = [];
   ordersDataSource = new MatTableDataSource();
+  headerDataSource = new MatTableDataSource();
 
   constructor(
     public nav: NavbarService,
@@ -220,7 +221,8 @@ export class AdministrationComponent implements OnInit {
   }
 
   applyHeaderFilter(value: string): void{
-
+    value = value.trim().toLowerCase();
+    this.headerDataSource.filter = value;
   }
 
   applyOrderFilter(value: string) {
