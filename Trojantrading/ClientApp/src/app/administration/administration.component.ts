@@ -70,14 +70,7 @@ export class AdministrationComponent implements OnInit {
         console.info(error);
       });
 
-    this.headInformationService.GetHeadInformation().subscribe((res: HeadInformation[]) => {
-      if (res) {
-        this.headerDataSource = new MatTableDataSource(res);
-      }
-    },
-      (error: any) => {
-        console.info(error);
-      });
+    this.getHeadInformation();
 
     this.getOrders();
   }
@@ -90,6 +83,18 @@ export class AdministrationComponent implements OnInit {
       this.orders = value;
       this.orders.forEach(x => x.customer = x.user.bussinessName);
       this.ordersDataSource = new MatTableDataSource(this.orders);
+    },
+      (error: any) => {
+        console.info(error);
+      });
+  }
+
+  getHeadInformation(): void{
+    this.headInformationService.GetHeadInformation().subscribe((res: HeadInformation[]) => {
+      if (res) {
+        this.headerDataSource = new MatTableDataSource(res);
+      }
+      this.headInformationService.changeMessage(this.headerDataSource.data.length)
     },
       (error: any) => {
         console.info(error);
@@ -240,11 +245,15 @@ export class AdministrationComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.headInformationService.GetHeadInformation().subscribe((res: HeadInformation[]) => {
-          if (res) {
-            this.headerDataSource = new MatTableDataSource(res);
+        this.headInformationService.AddHeader(result).subscribe((res: ApiResponse) => {
+          if(res.status = "success"){
+            this.shareSevice.showSuccess(".addnewhead", res.message, "right");
+            setTimeout(() => {
+              this.getHeadInformation();
+            }, 2000);
+          }else{
+            this.shareSevice.showError(".addnewhead", res.message, "right");
           }
-          this.headInformationService.changeMessage(this.headerDataSource.data.length)
         },
           (error: any) => {
             console.info(error);
@@ -275,15 +284,7 @@ export class AdministrationComponent implements OnInit {
           if (res && res.status == "success") {
             this.shareSevice.showSuccess("#editheader" + element.id, res.message, "right");
             setTimeout(() => {
-              this.headInformationService.GetHeadInformation().subscribe((res: HeadInformation[]) => {
-                if (res) {
-                  this.headerDataSource = new MatTableDataSource(res);
-                }
-                this.headInformationService.changeMessage(this.headerDataSource.data.length)
-              },
-                (error: any) => {
-                  console.info(error);
-                });
+              this.getHeadInformation();
             }, 2000);
           } else {
             this.shareSevice.showError("#editheader" + element.id, res.message, "right");
@@ -301,15 +302,7 @@ export class AdministrationComponent implements OnInit {
       if (res.status == "success") {
         this.shareSevice.showSuccess("#deleteheader" + element.id, res.message, "right");
         setTimeout(() => {
-          this.headInformationService.GetHeadInformation().subscribe((res: HeadInformation[]) => {
-            if (res) {
-              this.headerDataSource = new MatTableDataSource(res);
-            }
-            this.headInformationService.changeMessage(this.headerDataSource.data.length)
-          },
-            (error: any) => {
-              console.info(error);
-            });
+          this.getHeadInformation();
         }, 2000);
       } else {
         this.shareSevice.showError("#deleteheader" + element.id, res.message, "right");

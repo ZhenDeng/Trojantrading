@@ -4,7 +4,7 @@
   <main class="row">
     <div class='col-sm-12 body-content'>
       <ng-container>
-        <section class="product-wrapper">
+        <section class="product-wrapper" *ngIf="!successCheckout">
           <h4>Checkout</h4>
 
           <div class="emptycart" *ngIf="!dataSource?.length">
@@ -84,6 +84,14 @@
               <div class="pushright"></div>
               <button class="btn btn-long checkoutbtn" (click)="checkoutShoppingItems()">Checkout</button>
             </div>
+          </div>
+        </section>
+
+        <section class="product-wrapper" *ngIf="successCheckout">
+          <div class="successcheckout">
+            <i class="fas fa-clipboard-check fa-7x successicon"></i>
+            <p>CONGRATULATIONS! THE SHOPPING CART IS SUCCESSFULLY CHECKED OUT</p>
+            <button class="btn btn-long" (click)="continueShopping()">Continue Shopping</button>
           </div>
         </section>
       </ng-container>

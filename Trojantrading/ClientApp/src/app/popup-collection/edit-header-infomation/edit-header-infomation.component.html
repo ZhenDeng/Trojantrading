@@ -2,6 +2,7 @@
 <div mat-dialog-content [formGroup]="userFormGroup">
   <mat-form-field>
     <input matInput class="imagePathValidate" formControlName="imagePath" placeholder="Image Path" required>
+    <span matPrefix>/img/</span>
   </mat-form-field>
   <mat-form-field>
     <input matInput class="contentValidate" formControlName="content" placeholder="Content">

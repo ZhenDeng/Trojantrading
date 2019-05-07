@@ -2,6 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ShareService } from '../../services/share.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { HeadInformation } from '../../models/header-info';
 
 @Component({
   selector: 'app-edit-header-infomation',
@@ -12,6 +13,7 @@ export class EditHeaderInfomationComponent implements OnInit {
 
   userFormGroup: FormGroup;
   type: string;
+  updatedHeadInfomation: HeadInformation;
 
   constructor(private formBuilder: FormBuilder,
     private shareSevice: ShareService,
@@ -25,6 +27,7 @@ export class EditHeaderInfomationComponent implements OnInit {
 
   ngOnInit() {
     if(this.data.type == "Update"){
+      this.updatedHeadInfomation = this.data.headInfo;
       this.userFormGroup.get("imagePath").setValue(this.data.headInfo.imagePath);
       this.userFormGroup.get("content").setValue(this.data.headInfo.content);
     }
@@ -32,7 +35,9 @@ export class EditHeaderInfomationComponent implements OnInit {
 
   updateHeadInfomation(): void{
     if(this.userFormGroup.valid){
-      this.dialogRef.close(this.userFormGroup.value);
+      this.updatedHeadInfomation.imagePath = this.userFormGroup.get("imagePath").value;
+      this.updatedHeadInfomation.content = this.userFormGroup.get("content").value;
+      this.dialogRef.close(this.updatedHeadInfomation);
     }else{
       this.shareSevice.showError(".imagePathValidate", "Please enter image path", "right");
     }
