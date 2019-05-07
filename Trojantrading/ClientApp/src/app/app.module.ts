@@ -45,6 +45,8 @@ import { EditAddressComponent } from './popup-collection/edit-address/edit-addre
 import { SlickCarouselModule } from 'ngx-slick-carousel';
 import { NgbdCarouselBasicModule } from './ngbd-carousel-basic/ngbd-carousel-basic.module';
 import { EditOrderComponent } from './popup-collection/edit-order/edit-order.component';
+import { EditHeaderInfomationComponent } from './popup-collection/edit-header-infomation/edit-header-infomation.component';
+import { HeadInformationService } from './services/head-information.service';
 
 @NgModule({
   declarations: [
@@ -64,7 +66,8 @@ import { EditOrderComponent } from './popup-collection/edit-order/edit-order.com
     EditProductComponent,
     EditUserComponent,
     EditAddressComponent,
-    EditOrderComponent
+    EditOrderComponent,
+    EditHeaderInfomationComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -100,6 +103,7 @@ import { EditOrderComponent } from './popup-collection/edit-order/edit-order.com
     ShoppingCartService,
     OrderService,
     FileService,
+    HeadInformationService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
@@ -109,7 +113,8 @@ import { EditOrderComponent } from './popup-collection/edit-order/edit-order.com
     TermsAndConditionsComponent,
     EditProductComponent,
     EditUserComponent,
-    EditAddressComponent
+    EditAddressComponent,
+    EditHeaderInfomationComponent
   ],
   bootstrap: [AppComponent]
 })

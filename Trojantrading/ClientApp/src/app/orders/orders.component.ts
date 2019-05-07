@@ -14,7 +14,8 @@ import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-orders',
   templateUrl: './orders.component.html',
-  styleUrls: ['./orders.component.css']
+  styleUrls: ['./orders.component.css'],
+  providers: [DatePipe]
 })
 export class OrdersComponent implements OnInit {
 

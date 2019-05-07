@@ -1,7 +1,7 @@
 @import "../home/home.component.css";
 .container{
 	margin-top: 30px;
-	min-height: 558px;
+	min-height: 700px;
 }
 
 nav a{
