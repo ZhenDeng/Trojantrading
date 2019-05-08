@@ -43,7 +43,7 @@ namespace Trojantrading.Repositories
                     CreatedDate = DateTime.Now,
                     TotalItems = cart.TotalItems,
                     TotalPrice = cart.TotalPrice,
-                    OrderStatus = "Order Submitted",
+                    OrderStatus = "Unprocessed",
                     UserId = cart.UserId,
                     ShoppingCartId = cart.Id,
                     InvoiceNo = DateTime.Now.ToString("yyyyMMddHHmmss"),

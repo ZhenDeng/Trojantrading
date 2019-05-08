@@ -9,11 +9,11 @@
   <mat-form-field>
     <mat-label>Status</mat-label>
     <mat-select formControlName="orderStatus">
-      <mat-option value="{{status?.type}}" *ngFor="let status of data.statusList">{{status?.type}}</mat-option>
+      <mat-option value="{{status?.orderStatus}}" *ngFor="let status of data.statusList">{{status?.orderStatus}}</mat-option>
     </mat-select>
   </mat-form-field>
   <mat-form-field>
-      <label class="createdDateValidate" formControlName="createdDate" placeholder="Created Date"> </label>
+      <input matInput class="createdDateValidate" formControlName="createdDate" placeholder="Created Date"/>
   </mat-form-field>
 
 </div>

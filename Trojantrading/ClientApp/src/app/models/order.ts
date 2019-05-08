@@ -19,5 +19,5 @@ export interface Order {
 }
 
 export interface Status{
-    type: string
+    orderStatus: string
 }

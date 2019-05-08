@@ -13,10 +13,10 @@ export class OrderService {
   base_url: string = "api/Order";
 
   statusList: Status[] = [
-    { type: 'Unprocessed'},
-    { type: 'Accepted'},
-    { type: 'Rejected'},
-    { type: 'Shipped '}
+    { orderStatus: 'Unprocessed'},
+    { orderStatus: 'Accepted'},
+    { orderStatus: 'Rejected'},
+    { orderStatus: 'Shipped '}
   ];
 
   constructor(private http: HttpClient) { }
