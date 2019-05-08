@@ -251,6 +251,13 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
 
+  changeQuantity(element: Product): void{
+    if(element.quantity<1){
+      element.quantity = 1;
+      this.shareService.showError("#product"+element.id, "Minimum qty is 1", "right");
+    }
+  }
+
   manageRedirect(category: string) {
     this.dataSource.filter = category;
   }

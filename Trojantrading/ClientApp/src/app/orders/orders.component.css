@@ -20,3 +20,8 @@
 .form-control {
     width: 100px;
 }
+
+.btn-green{
+    padding-top: 4px !important;
+    font-style: normal !important;
+}

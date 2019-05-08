@@ -1,5 +1,5 @@
 <ngx-slick-carousel class="carousel" #slickModal="slick-carousel" [config]="slideConfig">
   <div ngxSlickItem *ngFor="let slide of headerDataSource" class="slide">
-    <img src="{{slide.imagePath}}" width="100%" height="150">
+    <img src="/img/{{slide.imagePath}}" width="100%" height="150">
   </div>
 </ngx-slick-carousel>

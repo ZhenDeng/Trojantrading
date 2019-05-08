@@ -108,7 +108,7 @@ h4{
 	cursor: pointer;
 }
 
-.emptycart{
+.emptycart, .successcheckout{
 	text-align: center;
 }
 
@@ -132,4 +132,14 @@ input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button { 
   -webkit-appearance: none; 
   margin: 0; 
+}
+
+.successicon{
+	margin-bottom: 25px;
+    color: green;
+}
+
+.successcheckout p{
+	color: green;
+	font-size: 28px;
 }

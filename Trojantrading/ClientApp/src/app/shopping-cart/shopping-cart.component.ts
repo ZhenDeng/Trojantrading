@@ -10,7 +10,6 @@ import { ShoppingItem } from '../models/shoppingItem';
 import { ApiResponse } from '../models/ApiResponse';
 import { OrderService } from '../services/order.service';
 import * as _ from 'lodash';
-import { Product } from '../models/Product';
 
 @Component({
   selector: 'app-shopping-cart',
@@ -29,6 +28,7 @@ export class ShoppingCartComponent implements OnInit {
   priceIncGst: number;
   discount: number;
   role: string = this.shareService.readCookie("role");
+  successCheckout: boolean = false;
 
   constructor(
     private nav: NavbarService,
@@ -49,7 +49,7 @@ export class ShoppingCartComponent implements OnInit {
   ngOnInit() {
 
     this.nav.show();
-
+    this.successCheckout = false;
     this.shoppingCartService.currentShoppingItemLength.subscribe((length: number) => {
       this.adminService.GetUserByAccount(_.toNumber(this.shareService.readCookie("userId"))).subscribe((user: User) => {
         this.shoppingCartService.GetShoppingCart(user.id).subscribe((res: ShoppingCart) => {
@@ -128,6 +128,7 @@ export class ShoppingCartComponent implements OnInit {
   }
 
   continueShopping(): void {
+    this.successCheckout = false;
     this.router.navigate(['/home']);
   }
 
@@ -142,6 +143,7 @@ export class ShoppingCartComponent implements OnInit {
             this.discount = 0;
             this.shoppingCart = res;
             this.dataSource = this.shoppingCart.shoppingItems;
+            this.successCheckout = true;
             this.shoppingCartService.MonitorShoppingItemLength(this.dataSource.length);
           },
             (error: any) => {
