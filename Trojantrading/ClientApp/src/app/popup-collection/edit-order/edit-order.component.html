@@ -1,3 +1,23 @@
-<p>
-  edit-order works!
-</p>
+<h1 mat-dialog-title>Edit Order Details</h1>
+<div mat-dialog-content [formGroup]="orderFormGroup">
+  <mat-form-field>
+    <input matInput class="customerValidate" formControlName="customer" placeholder="Customer">
+  </mat-form-field>
+  <mat-form-field>
+      <input matInput class="invoicenoValidate" formControlName="invoiceNo" placeholder="Invoice Number">
+    </mat-form-field>
+  <mat-form-field>
+    <mat-label>Status</mat-label>
+    <mat-select formControlName="orderStatus">
+      <mat-option value="{{status?.type}}" *ngFor="let status of data.statusList">{{status?.type}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+      <label class="createdDateValidate" formControlName="createdDate" placeholder="Created Date"> </label>
+  </mat-form-field>
+
+</div>
+<div mat-dialog-actions>
+  <button mat-button class="btn btn-long" (click)="updateOrderDetails()">Update</button>
+  <button mat-button class="btn btn-long" (click)="onNoClick()">Cancel</button>
+</div>

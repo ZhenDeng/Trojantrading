@@ -9,6 +9,7 @@ namespace Trojantrading.Repositories
         ShoppingCart GetCart(int userId);
         ApiResponse UpdateShoppingCart(int userId, ShoppingItem shoppingItem);
         ApiResponse AddShoppingCart(int userId);
+        ShoppingCart GetShoppingCartByID(int shoppingCartId, int userId);
         ShoppingCart GetCartWithShoppingItems(int userId);
         ApiResponse deleteShoppingItem(int shoppingItemId);
     }
@@ -75,6 +76,38 @@ namespace Trojantrading.Repositories
             var shoppingCart = trojantradingDbContext.ShoppingCarts
                 .Where(s => s.UserId == userId && s.Status == "0")
                 .FirstOrDefault();
+            return shoppingCart;
+        }
+
+        public ShoppingCart GetShoppingCartByID(int shoppingCartId, int userId)
+        {
+             var shoppingCart = trojantradingDbContext.ShoppingCarts.Where(s => s.Id == shoppingCartId)
+                                .GroupJoin(trojantradingDbContext.ShoppingItems, sc => sc.Id, si => si.ShoppingCartId, (shoppingCartModel, shoppingItems) => new { ShoppingCart = shoppingCartModel, ShoppingItems = shoppingItems })
+                                .Select(join => new ShoppingCart()
+                                {
+                                    Id = join.ShoppingCart.Id,
+                                    TotalItems = join.ShoppingCart.TotalItems,
+                                    TotalPrice = join.ShoppingCart.TotalPrice,
+                                    ShoppingItems = join.ShoppingItems.ToList(),
+                                    OriginalPrice = join.ShoppingCart.OriginalPrice,
+                                    UserId = userId,
+                                    Status = "0"
+                                }).FirstOrDefault();
+
+            if (shoppingCart.TotalItems > 0)
+            {
+                shoppingCart.ShoppingItems = shoppingCart.ShoppingItems
+                            .Join(trojantradingDbContext.Products, si => si.ProductId, p => p.Id, (shoppingItem, product) => new { ShoppingItem = shoppingItem, Product = product })
+                            .Select(join => new ShoppingItem
+                            {
+                                Id = join.ShoppingItem.Id,
+                                Amount = join.ShoppingItem.Amount,
+                                Product = join.Product,
+                                ProductId = join.Product.Id,
+                                Status = "0"
+                            }).ToList();
+            }
+
             return shoppingCart;
         }
 

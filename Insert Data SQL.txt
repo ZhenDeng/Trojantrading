@@ -1,6 +1,9 @@
 USE [trojantrading]
 GO
 
+alter table trojantrading.[order]
+add InvoiceNo nvarchar(MAX)
+
 INSERT INTO [trojantrading].[user]
            ([CreatedDate]
            ,[Account]

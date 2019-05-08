@@ -11,6 +11,8 @@ namespace Trojantrading.Repositories
         ApiResponse AddOrder(ShoppingCart cart);
         Order Get(int id);
         ApiResponse DeleteOrder(int id);
+        ApiResponse UpdateOder(Order order);
+        Order GetOrdersWithShoppingItems(int orderId);
         List<Order> GetOrdersByUserID(int userId, string dateFrom, string dateTo);
         List<Order> GetOrdersByDate(string dateFrom, string dateTo);
         List<Order> GetOrderWithUser(int userId);
@@ -44,6 +46,7 @@ namespace Trojantrading.Repositories
                     OrderStatus = "Order Submitted",
                     UserId = cart.UserId,
                     ShoppingCartId = cart.Id,
+                    InvoiceNo = DateTime.Now.ToString("yyyyMMddHHmmss"),
                     ClientMessage = "",
                     AdminMessage = "",
                     Balance = 0
@@ -117,6 +120,28 @@ namespace Trojantrading.Repositories
             }
         }
 
+        public ApiResponse UpdateOder(Order order)
+        {
+            try
+            {
+                trojantradingDbContext.Orders.Update(order);
+                trojantradingDbContext.SaveChanges();
+                return new ApiResponse()
+                {
+                    Status = "success",
+                    Message = "Successfully update product"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse()
+                {
+                    Status = "fail",
+                    Message = ex.Message
+                };
+            }
+        }
+
         public List<Order> GetOrdersByUserID(int userId, string dateFrom, string dateTo)
         {
             List<Order> orders = new List<Order>();
@@ -174,6 +199,18 @@ namespace Trojantrading.Repositories
                 order.User = user;
             }
             return joinOrders;
+        }
+
+        public Order GetOrdersWithShoppingItems(int orderId)
+        {
+            var order = trojantradingDbContext.Orders.Where(x => x.Id == orderId).FirstOrDefault();
+
+            var shoppingCart = shoppingCartRepository.GetShoppingCartByID(order.ShoppingCartId, order.UserId);
+
+            order.ShoppingCart = shoppingCart;
+
+            return order;
+            
         }
     }
 }

@@ -38,6 +38,23 @@ namespace Trojantrading.Controllers
             return Ok(_orderRepository.AddOrder(cart));
         }
 
+        [HttpPost("UpdateOrder")]
+        [NoCache]
+        [ProducesResponseType(typeof(ApiResponse), 200)]
+        [ProducesResponseType(typeof(ApiResponse), 400)]
+        public IActionResult UpdateProduct([FromBody]Order order)
+        {
+            return Ok(_orderRepository.UpdateOder(order));
+        }
+
+        [HttpPost("GetOrdersWithShoppingItems")]
+        [NoCache]
+        [ProducesResponseType(typeof(Order), 200)]
+        [ProducesResponseType(typeof(ApiResponse), 400)]
+        public IActionResult GetOrdersWithShoppingItems(int orderId)
+        {
+            return Ok(_orderRepository.GetOrdersWithShoppingItems(orderId));
+        }
 
         [HttpGet("GetOrdersByUserID")]
         [NoCache]

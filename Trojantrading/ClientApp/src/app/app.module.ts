@@ -114,7 +114,8 @@ import { HeadInformationService } from './services/head-information.service';
     EditProductComponent,
     EditUserComponent,
     EditAddressComponent,
-    EditHeaderInfomationComponent
+    EditHeaderInfomationComponent,
+    EditOrderComponent
   ],
   bootstrap: [AppComponent]
 })

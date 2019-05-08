@@ -100,9 +100,9 @@
                   <div class="example-container mat-elevation-z8">
                     <mat-table #table [dataSource]="ordersDataSource">
                   
-                      <ng-container matColumnDef="id">
-                        <mat-header-cell *matHeaderCellDef> Id </mat-header-cell>
-                        <mat-cell *matCellDef="let element">{{element.id}}</mat-cell>
+                      <ng-container matColumnDef="invoiceNo">
+                        <mat-header-cell *matHeaderCellDef> Invoice Number </mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{element.invoiceNo}}</mat-cell>
                       </ng-container>
         
                       <ng-container matColumnDef="customer">
@@ -125,13 +125,19 @@
                         <mat-cell *matCellDef="let element"> {{ element.orderStatus }}</mat-cell>
                       </ng-container>
               
-                      <ng-container matColumnDef="button">
+                      <ng-container matColumnDef="editButton">
                         <mat-header-cell *matHeaderCellDef></mat-header-cell>
                         <mat-cell *matCellDef="let element">
-                          <button id="{{element.id}}" class="btn btn-long" (click)="editOrder(element)" *ngIf="role =='admin'">Edit</button>
-                          <button id="deleteorder{{element.id}}" class="btn btn-long" (click)="deleteOrder(element)">Delete</button>
+                          <button id="editorder{{element.id}}" class="btn btn-long" (click)="editOrder(element)" *ngIf="role =='admin'">Edit</button>
                         </mat-cell>
                       </ng-container>
+
+                      <ng-container matColumnDef="deleteButton">
+                          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                          <mat-cell *matCellDef="let element">
+                              <button id="deleteorder{{element.id}}" class="btn btn-long" (click)="deleteOrder(element)">Delete</button>
+                          </mat-cell>
+                        </ng-container>
               
                       <mat-header-row *matHeaderRowDef="displayedOrderColumns"></mat-header-row>
                       <mat-row *matRowDef="let row; columns: displayedOrderColumns;"></mat-row>

@@ -16,6 +16,7 @@ import { NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 import { DatePipe } from '@angular/common';
 import { EditHeaderInfomationComponent } from '../popup-collection/edit-header-infomation/edit-header-infomation.component';
 import { HeadInformationService } from '../services/head-information.service';
+import { EditOrderComponent } from '../popup-collection/edit-order/edit-order.component';
 
 @Component({
   selector: 'app-administration',
@@ -28,7 +29,7 @@ export class AdministrationComponent implements OnInit {
   title: string = "Administration";
   displayedColumns: string[] = ["UserName", "BusinessName", "Role", "Email", "Phone", "Status", "EditButton", "DeleteButton"];
   displayedHeaderColumns: string[] = ["Id", "Content", "ImagePath", "EditButton", "DeleteButton"];
-  displayedOrderColumns: string[] = ['id', 'customer', 'createdDate', 'totalPrice', 'orderStatus', 'button'];
+  displayedOrderColumns: string[] = ['invoiceNo', 'customer', 'createdDate', 'totalPrice', 'orderStatus', 'editButton', 'deleteButton'];
   dataSource: User[];
   dataSourceFilter: User[];
   dataSourceHeader: HeadInformation[];
@@ -150,7 +151,33 @@ export class AdministrationComponent implements OnInit {
   }
 
   editOrder(order: Order): void {
-    //const dialogf = this.dialog.open
+      const dialogRef = this.dialog.open(EditOrderComponent, {
+      width: '700px',
+      data: { order: order, statusList: this.orderService.statusList }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        let orderModel = {} as Order;
+        orderModel = result;
+        orderModel.id = order.id;
+        orderModel.createdDate = order.createdDate;
+
+        this.orderService.updateOrder(orderModel).subscribe((res: ApiResponse) => {
+          if (res.status == "success") {
+            this.shareSevice.showSuccess("#editorder" + order.id, res.message, "right");
+            setTimeout(() => {
+              this.getOrders();
+
+            }, 2000);
+          } else {
+            this.shareSevice.showError("#editorder" + order.id, res.message, "right");
+          }
+        },
+          (error: any) => {
+            console.info(error);
+          });
+      }
+    });
   }
 
   deleteOrder(order: Order): void {

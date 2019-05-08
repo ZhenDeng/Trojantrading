@@ -15,4 +15,9 @@ export interface Order {
     shoppingCartId: number
     shoppingCart: ShoppingCart  
     customer: string
+    invoiceNo: string
+}
+
+export interface Status{
+    type: string
 }

@@ -1,3 +1,4 @@
+import { Status } from './../models/order';
 import { Injectable } from '@angular/core';
 import { ShoppingCart } from '../models/shoppingCart';
 import { Observable } from 'rxjs';
@@ -10,6 +11,13 @@ import { Order } from '../models/order';
 export class OrderService {
 
   base_url: string = "api/Order";
+
+  statusList: Status[] = [
+    { type: 'Unprocessed'},
+    { type: 'Accepted'},
+    { type: 'Rejected'},
+    { type: 'Shipped '}
+  ];
 
   constructor(private http: HttpClient) { }
 
@@ -37,6 +45,17 @@ export class OrderService {
     return this.http.get(this.base_url + "/DeleteOrder?orderId=" + orderId)
       .pipe(catchError(this.handleError));
   }
+
+  updateOrder(Order: Order): Observable<ApiResponse> {
+    return this.http.post(this.base_url + "/UpdateOrder", Order)
+    .pipe(catchError(this.handleError));
+  }
+
+  getOrdersWithShoppingItems(userId: number): Observable<Order> {
+    return this.http.get(this.base_url + '/GetOrdersWithShoppingItems?userId=' + userId)
+    .pipe(catchError(this.handleError));
+  }
+
 
   private handleError(error: HttpErrorResponse) {
     console.error('server error:', error);

@@ -30,7 +30,7 @@ export class OrdersComponent implements OnInit {
   orders: Order[] = [];
   filteredOrder: Order[] = [];
   dataSource = new MatTableDataSource();
-  displayedColumns: string[] = ['id', 'customer', 'createdDate', 'totalPrice', 'orderStatus', 'button'];
+  displayedColumns: string[] = ['invoiceNo', 'customer', 'createdDate', 'totalPrice', 'orderStatus', 'button'];
 
   constructor(
     private nav: NavbarService,
@@ -80,7 +80,7 @@ export class OrdersComponent implements OnInit {
     this.convertDateFormat();
 
     let exportOrdersArray = this.orders.map(x => ({
-      Id: x.id,
+      InvoiceNumber: x.invoiceNo,
       Customer: x.customer,
       CreatedDate: this.datePipe.transform(x.createdDate, 'yyyy-MM-dd'),
       Amount: x.totalPrice,
