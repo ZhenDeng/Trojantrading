@@ -320,7 +320,9 @@ export class AdministrationComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.headInformationService.UpdateHeadInfomation(result).subscribe((res: ApiResponse) => {
+        element.imagePath = result.imagePath;
+        element.content = result.content;
+        this.headInformationService.UpdateHeadInfomation(element).subscribe((res: ApiResponse) => {
           if (res && res.status == "success") {
             this.shareSevice.showSuccess("#editheader" + element.id, res.message, "right");
             setTimeout(() => {

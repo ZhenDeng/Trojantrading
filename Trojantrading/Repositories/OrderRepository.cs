@@ -40,7 +40,7 @@ namespace Trojantrading.Repositories
             {
                 Order order = new Order()
                 {
-                    CreatedDate = DateTime.Now,
+                    CreatedDate = DateTime.Now.ToLocalTime(),
                     TotalItems = cart.TotalItems,
                     TotalPrice = cart.TotalPrice,
                     OrderStatus = "Unprocessed",
@@ -144,13 +144,18 @@ namespace Trojantrading.Repositories
 
         public List<Order> GetOrdersByUserID(int userId, string dateFrom, string dateTo)
         {
-            List<Order> orders = new List<Order>();
 
             DateTime fromDate = string.IsNullOrWhiteSpace(dateFrom) ? DateTime.Now.AddMonths(-1).Date : DateTime.Parse(dateFrom).Date;
             DateTime toDate = string.IsNullOrWhiteSpace(dateTo) ? DateTime.Now.AddDays(1).Date : DateTime.Parse(dateTo).AddDays(1).Date; // usage end date always next day midnight
 
-            orders = trojantradingDbContext.Orders
-                .Where(x => x.UserId == userId && x.CreatedDate >= fromDate && x.CreatedDate <= toDate).ToList();
+            var orderssadsa = trojantradingDbContext.Orders
+                .Where(x => x.UserId == userId).ToList();
+
+            int a = DateTime.Compare(orderssadsa[0].CreatedDate.ToUniversalTime(), fromDate.ToLocalTime());
+            int b = DateTime.Compare(orderssadsa[0].CreatedDate.ToUniversalTime(), toDate.ToLocalTime());
+
+            var orders = trojantradingDbContext.Orders
+                .Where(x => x.UserId == userId && DateTime.Compare(x.CreatedDate, fromDate)>=0 && DateTime.Compare(x.CreatedDate, toDate) <= 0).ToList();
 
             //orders = trojantradingDbContext.Orders.Where(x => x.UserId == userId && x.CreatedDate >= fromDate && x.CreatedDate <= toDate)
             //        .Join(trojantradingDbContext.Users,
@@ -162,7 +167,8 @@ namespace Trojantrading.Repositories
                 var userInfo = userRepository.GetUserByAccount(order.UserId);
                 order.User = userInfo;
             }
-            return orders.ToList();
+
+            return orders;
 
         }
 

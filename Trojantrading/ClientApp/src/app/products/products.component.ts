@@ -131,7 +131,7 @@ export class ProductsComponent implements OnInit {
   addNewProduct(): void {
     const dialogRef = this.dialog.open(EditProductComponent, {
       width: '700px',
-      data: { categorys: this.productService.categoryList }
+      data: { categorys: this.productService.categoryList, type: "Add" }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -171,7 +171,7 @@ export class ProductsComponent implements OnInit {
   editProduct(product: Product): void {
     const dialogRef = this.dialog.open(EditProductComponent, {
       width: '700px',
-      data: { product: product, categorys: this.productService.categoryList }
+      data: { product: product, categorys: this.productService.categoryList, type: "Update" }
     });
 
     dialogRef.afterClosed().subscribe(result => {
