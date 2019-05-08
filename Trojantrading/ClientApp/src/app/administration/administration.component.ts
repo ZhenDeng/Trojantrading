@@ -1,3 +1,4 @@
+import { Status } from './../models/order';
 import { FileService } from './../services/file.service';
 import { Component, OnInit } from '@angular/core';
 import { NavbarService } from '../services/navbar.service';
@@ -41,6 +42,7 @@ export class AdministrationComponent implements OnInit {
   strDateTo: string = '';
   orders: Order[] = [];
   filteredOrder: Order[] = [];
+  statusList: Status[] =[];
   ordersDataSource = new MatTableDataSource();
   headerDataSource = new MatTableDataSource();
 
@@ -78,6 +80,7 @@ export class AdministrationComponent implements OnInit {
 
   getOrders() {
     this.convertDateFormat();
+    this.statusList = this.orderService.statusList;
 
     const userId = ''; //admin
     this.orderService.getOrdersByUserID(userId, this.strDateFrom, this.strDateTo).subscribe((value: Order[]) => {
@@ -88,6 +91,16 @@ export class AdministrationComponent implements OnInit {
       (error: any) => {
         console.info(error);
       });
+  }
+
+  changeStatus(order: Order) {
+    
+    this.orderService.updateOrder(order).subscribe((res: any) => {
+      this.shareSevice.showSuccess(`#status${order.id}`, res.message, "right");
+    },
+    (error: any) => {
+      console.info(error);
+    }); 
   }
 
   getHeadInformation(): void{

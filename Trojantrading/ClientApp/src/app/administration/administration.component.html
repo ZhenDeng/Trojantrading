@@ -122,7 +122,11 @@
               
                       <ng-container matColumnDef="orderStatus">
                         <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
-                        <mat-cell *matCellDef="let element"> {{ element.orderStatus }}</mat-cell>
+                        <mat-cell *matCellDef="let element"> 
+                            <mat-select [(ngModel)]="element.orderStatus" id="status{{element.id}}" (change)="changeStatus(element);">
+                                <mat-option value="{{status?.orderStatus}}" *ngFor="let status of statusList">{{status?.orderStatus}}</mat-option>
+                              </mat-select>
+                        </mat-cell>
                       </ng-container>
               
                       <ng-container matColumnDef="editButton">

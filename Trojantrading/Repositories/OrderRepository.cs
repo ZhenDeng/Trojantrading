@@ -107,7 +107,7 @@ namespace Trojantrading.Repositories
                 return new ApiResponse()
                 {
                     Status = "success",
-                    Message = "Successfully delete user"
+                    Message = "Successfully delete order"
                 };
             }
             catch (Exception ex)
@@ -129,7 +129,7 @@ namespace Trojantrading.Repositories
                 return new ApiResponse()
                 {
                     Status = "success",
-                    Message = "Successfully update product"
+                    Message = "Successfully update order"
                 };
             }
             catch (Exception ex)
