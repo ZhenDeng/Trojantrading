@@ -28,7 +28,7 @@ export class AdministrationComponent implements OnInit {
   title: string = "Administration";
   displayedColumns: string[] = ["UserName", "BusinessName", "Role", "Email", "Phone", "Status", "EditButton", "DeleteButton"];
   displayedHeaderColumns: string[] = ["Id", "Content", "ImagePath", "EditButton", "DeleteButton"];
-  displayedOrderColumns: string[] = ['id', 'customer', 'createdDate', 'totalPrice', 'orderStatus', 'button'];
+  displayedOrderColumns: string[] = ['id', 'customer', 'createdDate', 'totalPrice', 'orderStatus', 'editbutton', 'deletebutton'];
   dataSource: User[];
   dataSourceFilter: User[];
   dataSourceHeader: HeadInformation[];
