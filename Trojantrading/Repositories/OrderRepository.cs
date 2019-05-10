@@ -11,11 +11,10 @@ namespace Trojantrading.Repositories
         ApiResponse AddOrder(ShoppingCart cart);
         Order Get(int id);
         ApiResponse DeleteOrder(int id);
-        ApiResponse UpdateOder(Order order);
+        ApiResponse UpdateOrder(Order order);
         Order GetOrdersWithShoppingItems(int orderId);
         List<Order> GetOrdersByUserID(int userId, string dateFrom, string dateTo);
         List<Order> GetOrdersByDate(string dateFrom, string dateTo);
-        List<Order> GetOrderWithUser(int userId);
     }
 
     public class OrderRepository : IOrderRepository
@@ -120,7 +119,7 @@ namespace Trojantrading.Repositories
             }
         }
 
-        public ApiResponse UpdateOder(Order order)
+        public ApiResponse UpdateOrder(Order order)
         {
             try
             {
@@ -154,7 +153,9 @@ namespace Trojantrading.Repositories
             foreach (var order in orders)
             {
                 var userInfo = userRepository.GetUserByAccount(order.UserId);
+                var shoppingCart = trojantradingDbContext.ShoppingCarts.Where(sc => sc.Id == order.ShoppingCartId).SingleOrDefault();
                 order.User = userInfo;
+                order.ShoppingCart = shoppingCart;
             }
 
             return orders;
@@ -180,21 +181,6 @@ namespace Trojantrading.Repositories
 
         }
 
-        public List<Order> GetOrderWithUser(int userId)
-        {
-
-            var user = userRepository.GetUserByAccount(userId);
-
-            var joinOrders = trojantradingDbContext.Users.Where(u => u.Id == userId)
-                        .GroupJoin(trojantradingDbContext.Orders, o => o.Id, u => u.UserId, (u, orders) => new { Orders = orders })
-                        .SelectMany(selectOrders => selectOrders.Orders).ToList();
-
-            foreach (var order in joinOrders)
-            {
-                order.User = user;
-            }
-            return joinOrders;
-        }
 
         public Order GetOrdersWithShoppingItems(int orderId)
         {

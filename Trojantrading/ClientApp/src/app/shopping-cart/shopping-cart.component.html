@@ -64,6 +64,20 @@
               <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
             </mat-table>
             <div class="totalrow" style="padding-top: 20px;">
+              <p style="flex: 7">&nbsp;</p>
+              <mat-form-field style="flex: 3">
+                <mat-label>Payment Method</mat-label>
+                <mat-select [(ngModel)]="selectedPayment" (ngModelChange)="changePaymentMethod()">
+                  <mat-option value="onaccount">
+                    ON ACCOUNT
+                  </mat-option>
+                  <mat-option value="prepay">
+                    PREPAYMENT
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="totalrow">
               <p class="totaltext">You will pay Excl. GST</p>
               <p class="totalprice">{{priceExclGst | currency:'AUD':'symbol-narrow':'.2-2'}}</p>
             </div>

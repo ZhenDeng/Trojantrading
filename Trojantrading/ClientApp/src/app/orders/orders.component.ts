@@ -30,7 +30,7 @@ export class OrdersComponent implements OnInit {
   orders: Order[] = [];
   filteredOrder: Order[] = [];
   dataSource = new MatTableDataSource();
-  displayedColumns: string[] = ['invoiceNo', 'customer', 'createdDate', 'totalPrice', 'orderStatus', 'button'];
+  displayedColumns: string[] = ['invoiceNo', 'customer', 'createdDate', 'totalPrice', 'payment', 'orderStatus'];
 
   constructor(
     private nav: NavbarService,

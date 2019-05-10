@@ -40,7 +40,8 @@ namespace Trojantrading.Repositories
                         TotalPrice = 0,
                         UserId = userId,
                         Note = "",
-                        Status = "0"
+                        Status = "0",
+                        PaymentMethod = "ON ACCOUNT"
                     };
 
                     trojantradingDbContext.ShoppingCarts.Add(sc);
@@ -91,7 +92,8 @@ namespace Trojantrading.Repositories
                                     ShoppingItems = join.ShoppingItems.ToList(),
                                     OriginalPrice = join.ShoppingCart.OriginalPrice,
                                     UserId = userId,
-                                    Status = "0"
+                                    Status = "0",
+                                    PaymentMethod = join.ShoppingCart.PaymentMethod
                                 }).FirstOrDefault();
 
             if (shoppingCart.TotalItems > 0)
@@ -123,7 +125,8 @@ namespace Trojantrading.Repositories
                                     ShoppingItems = join.ShoppingItems.ToList(),
                                     OriginalPrice = join.ShoppingCart.OriginalPrice,
                                     UserId = userId,
-                                    Status = "0"
+                                    Status = "0",
+                                    PaymentMethod = join.ShoppingCart.PaymentMethod
                                 }).FirstOrDefault();
 
 

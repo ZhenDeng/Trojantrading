@@ -29,6 +29,7 @@ export class ShoppingCartComponent implements OnInit {
   discount: number;
   role: string = this.shareService.readCookie("role");
   successCheckout: boolean = false;
+  selectedPayment: string;
 
   constructor(
     private nav: NavbarService,
@@ -49,6 +50,7 @@ export class ShoppingCartComponent implements OnInit {
   ngOnInit() {
 
     this.nav.show();
+    this.selectedPayment = "onaccount";
     this.successCheckout = false;
     this.shoppingCartService.currentShoppingItemLength.subscribe((length: number) => {
       this.adminService.GetUserByAccount(_.toNumber(this.shareService.readCookie("userId"))).subscribe((user: User) => {
@@ -66,10 +68,10 @@ export class ShoppingCartComponent implements OnInit {
               this.oringinalPriceExclGst += si.amount * si.product.originalPrice;
               if (this.role == "agent") {
                 si.subTotal = si.amount * si.product.agentPrice;
-                this.priceExclGst += si.amount * si.product.agentPrice;
+                this.priceExclGst += si.subTotal;
               } else if (this.role == "wholesaler") {
-                si.subTotal = si.amount * si.product.agentPrice;
-                this.priceExclGst += si.amount * si.product.wholesalerPrice;
+                si.subTotal = si.amount * si.product.wholesalerPrice;
+                this.priceExclGst += si.subTotal;
               }
             });
             this.gst = this.priceExclGst * 0.1;
@@ -89,42 +91,6 @@ export class ShoppingCartComponent implements OnInit {
       (error: any) => {
         console.info(error);
       });
-
-    this.adminService.GetUserByAccount(_.toNumber(this.shareService.readCookie("userId"))).subscribe((user: User) => {
-      this.shoppingCartService.GetShoppingCart(user.id).subscribe((res: ShoppingCart) => {
-        this.priceExclGst = 0;
-        this.gst = 0;
-        this.priceIncGst = 0;
-        this.oringinalPriceExclGst = 0;
-        this.oringinalPriceIncGst = 0;
-        this.discount = 0;
-        this.shoppingCart = res;
-        this.dataSource = this.shoppingCart.shoppingItems;
-        if (res.shoppingItems.length) {
-          this.dataSource.forEach(si => {
-            this.oringinalPriceExclGst += si.amount * si.product.originalPrice;
-            if (this.role == "agent") {
-              si.subTotal = si.amount * si.product.agentPrice;
-              this.priceExclGst += si.amount * si.product.agentPrice;
-            } else if (this.role == "wholesaler") {
-              si.subTotal = si.amount * si.product.agentPrice;
-              this.priceExclGst += si.amount * si.product.wholesalerPrice;
-            }
-          });
-          this.gst = this.priceExclGst * 0.1;
-          this.oringinalPriceIncGst = this.oringinalPriceExclGst + this.oringinalPriceExclGst * 0.1;
-          this.priceIncGst = this.gst + this.priceExclGst;
-          this.discount = this.oringinalPriceIncGst - this.priceIncGst;
-        }
-      },
-        (error: any) => {
-          console.info(error);
-        });
-    },
-      (error: any) => {
-        console.info(error);
-      });
-
   }
 
   continueShopping(): void {
@@ -141,6 +107,8 @@ export class ShoppingCartComponent implements OnInit {
             this.gst = 0;
             this.priceIncGst = 0;
             this.discount = 0;
+            this.oringinalPriceExclGst = 0;
+            this.oringinalPriceIncGst = 0;
             this.shoppingCart = res;
             this.dataSource = this.shoppingCart.shoppingItems;
             this.successCheckout = true;
@@ -169,28 +137,11 @@ export class ShoppingCartComponent implements OnInit {
       if (res && res.status == "success") {
         this.adminService.GetUserByAccount(_.toNumber(this.shareService.readCookie("userId"))).subscribe((user: User) => {
           this.shoppingCartService.GetShoppingCart(user.id).subscribe((res: ShoppingCart) => {
-            this.priceExclGst = 0;
-            this.gst = 0;
-            this.priceIncGst = 0;
-            this.discount = 0;
             this.shoppingCart = res;
             this.dataSource = this.shoppingCart.shoppingItems;
             this.shoppingCartService.MonitorShoppingItemLength(this.dataSource.length);
             if (res && res.shoppingItems.length) {
-              this.dataSource.forEach(si => {
-                this.oringinalPriceExclGst = si.amount * si.product.originalPrice;
-                if (this.role == "agent") {
-                  si.subTotal = si.amount * si.product.agentPrice;
-                  this.priceExclGst += si.amount * si.product.agentPrice;
-                } else if (this.role == "wholesaler") {
-                  si.subTotal = si.amount * si.product.agentPrice;
-                  this.priceExclGst += si.amount * si.product.wholesalerPrice;
-                }
-              });
-              this.gst = this.priceExclGst * 0.1;
-              this.oringinalPriceIncGst = this.oringinalPriceExclGst + this.oringinalPriceExclGst * 0.1;
-              this.priceIncGst = this.gst + this.priceExclGst;
-              this.discount = this.oringinalPriceIncGst - this.priceIncGst;
+              this.changePaymentMethod();
             }
           },
             (error: any) => {
@@ -214,27 +165,52 @@ export class ShoppingCartComponent implements OnInit {
       item.amount = 1;
       this.shareService.showError("#qty"+item.id, "Minimum qty is 1", "right");
     }else{
-      this.priceExclGst = 0;
-      this.gst = 0;
-      this.priceIncGst = 0;
-      this.oringinalPriceExclGst = 0;
-      this.oringinalPriceIncGst = 0;
-      this.discount = 0;
-      if (this.shoppingCart.shoppingItems.length) {
-        this.dataSource.forEach(si => {
-          this.oringinalPriceExclGst += si.amount * si.product.originalPrice;
-          if (this.role == "agent") {
-            si.subTotal = si.amount * si.product.agentPrice;
-            this.priceExclGst += si.amount * si.product.agentPrice;
-          } else if (this.role == "wholesaler") {
-            si.subTotal = si.amount * si.product.agentPrice;
-            this.priceExclGst += si.amount * si.product.wholesalerPrice;
-          }
-        });
-      }
+      this.changePaymentMethod();
+    }
+    this.shoppingCart.totalItems = 0;
+    this.dataSource.forEach(si => {
+      this.shoppingCart.totalItems += si.amount;
+    });
+  }
+
+  changePaymentMethod(): void{
+    this.priceExclGst = 0;
+    this.gst = 0;
+    this.priceIncGst = 0;
+    this.discount = 0;
+    this.oringinalPriceExclGst = 0;
+    this.oringinalPriceIncGst = 0;
+    if(this.selectedPayment == "onaccount"){
+      this.dataSource.forEach(si => {
+        this.oringinalPriceExclGst = si.amount * si.product.originalPrice;
+        if (this.role == "agent") {
+          si.subTotal = si.amount * si.product.agentPrice;
+          this.priceExclGst += si.subTotal;
+        } else if (this.role == "wholesaler") {
+          si.subTotal = si.amount * si.product.agentPrice;
+          this.priceExclGst += si.subTotal;
+        }
+      });
       this.gst = this.priceExclGst * 0.1;
       this.oringinalPriceIncGst = this.oringinalPriceExclGst + this.oringinalPriceExclGst * 0.1;
       this.priceIncGst = this.gst + this.priceExclGst;
+      this.shoppingCart.totalPrice = this.priceIncGst;
+      this.discount = this.oringinalPriceIncGst - this.priceIncGst;
+    }else{
+      this.dataSource.forEach(si => {
+        this.oringinalPriceExclGst = si.amount * si.product.originalPrice;
+        if (this.role == "agent") {
+          si.subTotal = si.amount * si.product.agentPrice - (si.amount * si.product.agentPrice * si.product.prepaymentDiscount/100);
+          this.priceExclGst += si.subTotal;
+        } else if (this.role == "wholesaler") {
+          si.subTotal = si.amount * si.product.wholesalerPrice - (si.amount * si.product.wholesalerPrice * si.product.prepaymentDiscount/100);
+          this.priceExclGst += si.subTotal;
+        }
+      });
+      this.gst = this.priceExclGst * 0.1;
+      this.oringinalPriceIncGst = this.oringinalPriceExclGst + this.oringinalPriceExclGst * 0.1;
+      this.priceIncGst = this.gst + this.priceExclGst;
+      this.shoppingCart.totalPrice = this.priceIncGst;
       this.discount = this.oringinalPriceIncGst - this.priceIncGst;
     }
   }
