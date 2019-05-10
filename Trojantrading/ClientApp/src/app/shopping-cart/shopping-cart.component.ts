@@ -41,8 +41,8 @@ export class ShoppingCartComponent implements OnInit {
     if (this.shareService.readCookie("role") && this.shareService.readCookie("role") == "agent") {
       this.displayedColumns = ['name', 'category', 'originalPrice', 'agentPrice', 'qty', 'subTotal', 'remove'];
     }
-    else if (this.shareService.readCookie("role") && this.shareService.readCookie("role") == "reseller") {
-      this.displayedColumns = ['name', 'category', 'originalPrice', 'resellerPrice', 'qty', 'subTotal', 'remove'];
+    else if (this.shareService.readCookie("role") && this.shareService.readCookie("role") == "wholesaler") {
+      this.displayedColumns = ['name', 'category', 'originalPrice', 'wholesalerPrice', 'qty', 'subTotal', 'remove'];
     }
   }
 
@@ -67,9 +67,9 @@ export class ShoppingCartComponent implements OnInit {
               if (this.role == "agent") {
                 si.subTotal = si.amount * si.product.agentPrice;
                 this.priceExclGst += si.amount * si.product.agentPrice;
-              } else if (this.role == "reseller") {
+              } else if (this.role == "wholesaler") {
                 si.subTotal = si.amount * si.product.agentPrice;
-                this.priceExclGst += si.amount * si.product.resellerPrice;
+                this.priceExclGst += si.amount * si.product.wholesalerPrice;
               }
             });
             this.gst = this.priceExclGst * 0.1;
@@ -106,9 +106,9 @@ export class ShoppingCartComponent implements OnInit {
             if (this.role == "agent") {
               si.subTotal = si.amount * si.product.agentPrice;
               this.priceExclGst += si.amount * si.product.agentPrice;
-            } else if (this.role == "reseller") {
+            } else if (this.role == "wholesaler") {
               si.subTotal = si.amount * si.product.agentPrice;
-              this.priceExclGst += si.amount * si.product.resellerPrice;
+              this.priceExclGst += si.amount * si.product.wholesalerPrice;
             }
           });
           this.gst = this.priceExclGst * 0.1;
@@ -182,9 +182,9 @@ export class ShoppingCartComponent implements OnInit {
                 if (this.role == "agent") {
                   si.subTotal = si.amount * si.product.agentPrice;
                   this.priceExclGst += si.amount * si.product.agentPrice;
-                } else if (this.role == "reseller") {
+                } else if (this.role == "wholesaler") {
                   si.subTotal = si.amount * si.product.agentPrice;
-                  this.priceExclGst += si.amount * si.product.resellerPrice;
+                  this.priceExclGst += si.amount * si.product.wholesalerPrice;
                 }
               });
               this.gst = this.priceExclGst * 0.1;
@@ -226,9 +226,9 @@ export class ShoppingCartComponent implements OnInit {
           if (this.role == "agent") {
             si.subTotal = si.amount * si.product.agentPrice;
             this.priceExclGst += si.amount * si.product.agentPrice;
-          } else if (this.role == "reseller") {
+          } else if (this.role == "wholesaler") {
             si.subTotal = si.amount * si.product.agentPrice;
-            this.priceExclGst += si.amount * si.product.resellerPrice;
+            this.priceExclGst += si.amount * si.product.wholesalerPrice;
           }
         });
       }

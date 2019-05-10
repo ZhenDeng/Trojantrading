@@ -1,25 +1,29 @@
 <h1 mat-dialog-title>Edit Product Details</h1>
 <div mat-dialog-content [formGroup]="userFormGroup">
   <mat-form-field>
-    <input matInput class="descriptionValidate" formControlName="name" placeholder="Description">
+    <input matInput class="descriptionValidate" formControlName="name" placeholder="Description" required>
   </mat-form-field>
   <mat-form-field>
     <mat-label>Category</mat-label>
-    <mat-select formControlName="category">
+    <mat-select formControlName="category" required>
       <mat-option value="{{cg?.category}}" *ngFor="let cg of data.categorys">{{cg?.type}}</mat-option>
     </mat-select>
   </mat-form-field>
   <mat-form-field>
-    <input matInput class="originalPriceValidate" type="number" formControlName="originalPrice" placeholder="Original Price">
+    <input matInput class="originalPriceValidate" type="number" formControlName="originalPrice" placeholder="Original Price" required>
     <span matPrefix>$&nbsp;</span>
   </mat-form-field>
   <mat-form-field>
-    <input matInput class="agentPriceValidate" type="number" formControlName="agentPrice" placeholder="Agent Price">
+    <input matInput class="agentPriceValidate" type="number" formControlName="agentPrice" placeholder="Agent Price" required>
     <span matPrefix>$&nbsp;</span>
   </mat-form-field>
   <mat-form-field>
-    <input matInput class="resellerPriceValidate" type="number" formControlName="resellerPrice" placeholder="Reseller Price">
+    <input matInput class="wholesalerPriceValidate" type="number" formControlName="wholesalerPrice" placeholder="Wholesaler Price" required>
     <span matPrefix>$&nbsp;</span>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput class="prepaymentDiscountValidate" type="number" formControlName="prepaymentDiscount" placeholder="Prepayment Discount">
+    <span matPrefix>%&nbsp;</span>
   </mat-form-field>
   <mat-form-field>
     <mat-label>Status</mat-label>

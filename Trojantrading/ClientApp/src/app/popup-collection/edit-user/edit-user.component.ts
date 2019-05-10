@@ -58,16 +58,14 @@ export class EditUserComponent implements OnInit {
       status:  this.roleName == "admin"? new FormControl({ value: "active", disabled: true }, Validators.required):new FormControl("", Validators.compose([Validators.required])),
       mobile: new FormControl(""),
       billingCustomerName: new FormControl(""),
-      billingAddressLine1: new FormControl(""),
-      billingAddressLine2: new FormControl(""),
-      billingAddressLine3: new FormControl(""),
+      billingStreetNumber: new FormControl(""),
+      billingAddressLine: new FormControl(""),
       billingSuburb: new FormControl(""),
       billingState: new FormControl(""),
       billingPostCode: new FormControl(""),
       shippingCustomerName: new FormControl(""),
-      shippingAddressLine1: new FormControl(""),
-      shippingAddressLine2: new FormControl(""),
-      shippingAddressLine3: new FormControl(""),
+      shippingStreetNumber: new FormControl(""),
+      shippingAddressLine: new FormControl(""),
       shippingSuburb: new FormControl(""),
       shippingState: new FormControl(""),
       shippingPostCode: new FormControl(""),
@@ -91,16 +89,14 @@ export class EditUserComponent implements OnInit {
       this.userFormGroup.get("status").setValue(this.data.user.status);
       this.userFormGroup.get("mobile").setValue(this.data.user.mobile);
       this.userFormGroup.get("billingCustomerName").setValue(this.data.user.billingCustomerName);
-      this.userFormGroup.get("billingAddressLine1").setValue(this.data.user.billingAddressLine1);
-      this.userFormGroup.get("billingAddressLine2").setValue(this.data.user.billingAddressLine2);
-      this.userFormGroup.get("billingAddressLine3").setValue(this.data.user.billingAddressLine3);
+      this.userFormGroup.get("billingStreetNumber").setValue(this.data.user.billingStreetNumber);
+      this.userFormGroup.get("billingAddressLine").setValue(this.data.user.billingAddressLine);
       this.userFormGroup.get("billingSuburb").setValue(this.data.user.billingSuburb);
       this.userFormGroup.get("billingState").setValue(this.data.user.billingState);
       this.userFormGroup.get("billingPostCode").setValue(this.data.user.billingPostCode);
       this.userFormGroup.get("shippingCustomerName").setValue(this.data.user.shippingCustomerName);
-      this.userFormGroup.get("shippingAddressLine1").setValue(this.data.user.shippingAddressLine1);
-      this.userFormGroup.get("shippingAddressLine2").setValue(this.data.user.shippingAddressLine2);
-      this.userFormGroup.get("shippingAddressLine3").setValue(this.data.user.shippingAddressLine3);
+      this.userFormGroup.get("shippingStreetNumber").setValue(this.data.user.shippingStreetNumber);
+      this.userFormGroup.get("shippingAddressLine").setValue(this.data.user.shippingAddressLine);
       this.userFormGroup.get("shippingSuburb").setValue(this.data.user.shippingSuburb);
       this.userFormGroup.get("shippingState").setValue(this.data.user.shippingState);
       this.userFormGroup.get("shippingPostCode").setValue(this.data.user.shippingPostCode);

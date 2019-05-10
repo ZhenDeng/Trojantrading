@@ -1,6 +1,5 @@
 import { ShoppingItem } from './shoppingItem';
 import { ShoppingCart } from "./shoppingCart";
-import { Order } from './order';
 
 export interface User {
     id: number
@@ -16,16 +15,14 @@ export interface User {
     status: string
     sendEmail: boolean
     billingCustomerName: string
-    billingAddressLine1: string
-    billingAddressLine2: string
-    billingAddressLine3: string
+    billingStreetNumber: string
+    billingAddressLine: string
     billingSuburb: string
     billingState: string
     billingPostCode: string
     shippingCustomerName: string
-    shippingAddressLine1: string
-    shippingAddressLine2: string
-    shippingAddressLine3: string
+    shippingStreetNumber: string
+    shippingAddressLine: string
     shippingSuburb: string
     shippingState: string
     shippingPostCode: string
@@ -37,6 +34,5 @@ export interface User {
     acn: string
     role: string
     shoppingCarts: ShoppingCart[]
-    orders: Order[]
     shoppingItems: ShoppingItem[]
 }

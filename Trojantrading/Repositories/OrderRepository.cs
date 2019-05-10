@@ -40,7 +40,7 @@ namespace Trojantrading.Repositories
             {
                 Order order = new Order()
                 {
-                    CreatedDate = DateTime.Now.ToLocalTime(),
+                    CreatedDate = DateTime.Now,
                     TotalItems = cart.TotalItems,
                     TotalPrice = cart.TotalPrice,
                     OrderStatus = "Unprocessed",
@@ -145,8 +145,8 @@ namespace Trojantrading.Repositories
         public List<Order> GetOrdersByUserID(int userId, string dateFrom, string dateTo)
         {
 
-            DateTime fromDate = string.IsNullOrWhiteSpace(dateFrom) ? DateTime.Now.AddMonths(-1).Date : DateTime.Parse(dateFrom).Date;
-            DateTime toDate = string.IsNullOrWhiteSpace(dateTo) ? DateTime.Now.AddDays(1).Date : DateTime.Parse(dateTo).AddDays(1).Date; // usage end date always next day midnight
+            DateTime fromDate = string.IsNullOrWhiteSpace(dateFrom) ? DateTime.Now.AddMonths(-1) : DateTime.Parse(dateFrom);
+            DateTime toDate = string.IsNullOrWhiteSpace(dateTo) ? DateTime.Now.AddDays(1) : DateTime.Parse(dateTo).AddDays(1); // usage end date always next day midnight
 
             var orders = trojantradingDbContext.Orders
                 .Where(x => x.UserId == userId && DateTime.Compare(x.CreatedDate, fromDate)>=0 && DateTime.Compare(x.CreatedDate, toDate) <= 0).ToList();

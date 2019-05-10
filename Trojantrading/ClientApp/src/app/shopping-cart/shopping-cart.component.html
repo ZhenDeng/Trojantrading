@@ -41,9 +41,9 @@
               </ng-container>
 
               <!-- buyPrice Column -->
-              <ng-container matColumnDef="resellerPrice" *ngIf="role=='reseller'">
-                <mat-header-cell *matHeaderCellDef> Reseller Price ex. GST </mat-header-cell>
-                <mat-cell *matCellDef="let element"> {{element.product.resellerPrice | currency:'AUD':'symbol-narrow':'.2-2'}} </mat-cell>
+              <ng-container matColumnDef="wholesalerPrice" *ngIf="role=='wholesaler'">
+                <mat-header-cell *matHeaderCellDef> Wholesaler Price ex. GST </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.product.wholesalerPrice | currency:'AUD':'symbol-narrow':'.2-2'}} </mat-cell>
               </ng-container>
       
               <ng-container matColumnDef="qty">
@@ -99,4 +99,4 @@
   </main>
 </div>
 
-<div class="globalfooter">© Copyright 2019 TrojanTrading Tobacco Group Australia Pty Ltd.</div>
+<div class="globalfooter">© Copyright 2019 Trojan Trading Company PTY LTD.</div>

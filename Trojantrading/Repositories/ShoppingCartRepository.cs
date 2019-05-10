@@ -228,7 +228,7 @@ namespace Trojantrading.Repositories
             }
             else if (user.Role == RoleName.reseller.ToString())
             {
-                shoppingCart.TotalPrice += (shoppingItem.Amount * shoppingItem.Product.ResellerPrice);
+                shoppingCart.TotalPrice += (shoppingItem.Amount * shoppingItem.Product.WholesalerPrice);
             }
         }
     }
