@@ -99,6 +99,7 @@ export class ShoppingCartComponent implements OnInit {
   }
 
   checkoutShoppingItems(): void {
+    this.shoppingCart.paymentMethod = this.selectedPayment;
     this.orderService.AddOrder(this.shoppingCart).subscribe((res: ApiResponse) => {
       if (res && res.status == "success") {
         this.adminService.GetUserByAccount(_.toNumber(this.shareService.readCookie("userId"))).subscribe((user: User) => {
@@ -182,7 +183,7 @@ export class ShoppingCartComponent implements OnInit {
     this.oringinalPriceIncGst = 0;
     if(this.selectedPayment == "onaccount"){
       this.dataSource.forEach(si => {
-        this.oringinalPriceExclGst = si.amount * si.product.originalPrice;
+        this.oringinalPriceExclGst += si.amount * si.product.originalPrice;
         if (this.role == "agent") {
           si.subTotal = si.amount * si.product.agentPrice;
           this.priceExclGst += si.subTotal;
@@ -198,7 +199,7 @@ export class ShoppingCartComponent implements OnInit {
       this.discount = this.oringinalPriceIncGst - this.priceIncGst;
     }else{
       this.dataSource.forEach(si => {
-        this.oringinalPriceExclGst = si.amount * si.product.originalPrice;
+        this.oringinalPriceExclGst += si.amount * si.product.originalPrice;
         if (this.role == "agent") {
           si.subTotal = si.amount * si.product.agentPrice - (si.amount * si.product.agentPrice * si.product.prepaymentDiscount/100);
           this.priceExclGst += si.subTotal;

@@ -26,7 +26,7 @@ export class OrderService {
       .pipe(catchError(this.handleError));
   }
 
-  getOrdersByUserID(id: string, dateFrom: string, dateTo: string): Observable<any> {
+  getOrdersByUserID(id: string, dateFrom: string, dateTo: string): Observable<Order[]> {
     return this.http.get(this.base_url + '/GetOrdersByUserID?userId=' + id + '&dateFrom=' + dateFrom + '&dateTo=' + dateTo)
     .pipe(catchError(this.handleError));
   }

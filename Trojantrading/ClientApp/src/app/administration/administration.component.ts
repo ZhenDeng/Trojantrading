@@ -85,7 +85,6 @@ export class AdministrationComponent implements OnInit {
     const userId = ''; //admin
     this.orderService.getOrdersByUserID(userId, this.strDateFrom, this.strDateTo).subscribe((value: Order[]) => {
       this.orders = value;
-      this.orders.forEach(x => x.customer = x.user.bussinessName);
       this.ordersDataSource = new MatTableDataSource(this.orders);
     },
       (error: any) => {
@@ -116,8 +115,8 @@ export class AdministrationComponent implements OnInit {
   }
 
   convertDateFormat(): void {
-    this.strDateFrom = this.dateFrom.day + '/' + this.dateFrom.month + '/' + this.dateFrom.year;
-    this.strDateTo = this.dateTo.day + '/' + this.dateTo.month + '/' + this.dateTo.year;
+    this.strDateFrom = this.dateFrom.month + '/' + this.dateFrom.day + '/' + this.dateFrom.year;
+    this.strDateTo = this.dateTo.month + '/' + this.dateTo.day + '/' + this.dateTo.year;
   }
 
   downloadExcel() {
@@ -125,7 +124,7 @@ export class AdministrationComponent implements OnInit {
 
     let exportOrdersArray = this.orders.map(x => ({
       Id: x.id,
-      Customer: x.customer,
+      Customer: x.user.bussinessName,
       CreatedDate: this.datePipe.transform(x.createdDate, 'yyyy-MM-dd'),
       Amount: x.totalPrice,
       Status: x.orderStatus

@@ -46,7 +46,7 @@ namespace Trojantrading.Repositories
                     UserId = cart.UserId,
                     ShoppingCartId = cart.Id,
                     InvoiceNo = DateTime.Now.ToString("yyyyMMddHHmmss"),
-                    ClientMessage = "",
+                    ClientMessage = cart.PaymentMethod == "onaccount"? "ON ACCOUNT": "PREPAYMENT",
                     AdminMessage = "",
                     Balance = 0
                 };
@@ -153,9 +153,7 @@ namespace Trojantrading.Repositories
             foreach (var order in orders)
             {
                 var userInfo = userRepository.GetUserByAccount(order.UserId);
-                var shoppingCart = trojantradingDbContext.ShoppingCarts.Where(sc => sc.Id == order.ShoppingCartId).SingleOrDefault();
                 order.User = userInfo;
-                order.ShoppingCart = shoppingCart;
             }
 
             return orders;

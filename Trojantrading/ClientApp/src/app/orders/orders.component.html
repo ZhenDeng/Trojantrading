@@ -40,8 +40,8 @@
               </ng-container>
 
               <ng-container matColumnDef="customer">
-                <mat-header-cell *matHeaderCellDef class="mat-table_3fex"> Customer </mat-header-cell>
-                <mat-cell *matCellDef="let element" class="mat-table_3fex" style="text-transform:capitalize;"> {{element.customer}} </mat-cell>
+                <mat-header-cell *matHeaderCellDef> Customer </mat-header-cell>
+                <mat-cell *matCellDef="let element" style="text-transform:capitalize;"> {{element.user.bussinessName}} </mat-cell>
               </ng-container>
 
               <ng-container matColumnDef="createdDate">
@@ -56,7 +56,7 @@
 
               <ng-container matColumnDef="payment">
                 <mat-header-cell *matHeaderCellDef> Payment Method </mat-header-cell>
-                <mat-cell *matCellDef="let element"> {{ element.shoppingCart.paymentMethod }}</mat-cell>
+                <mat-cell *matCellDef="let element"> {{ element.clientMessage }}</mat-cell>
               </ng-container>
       
               <ng-container matColumnDef="orderStatus">
