@@ -14,7 +14,9 @@ namespace Trojantrading.Models
 
         public double AgentPrice { get; set; }
 
-        public double ResellerPrice { get; set; }
+        public double WholesalerPrice { get; set; }
+
+        public double PrepaymentDiscount { get; set; }
 
         public string Category { get; set; }
 

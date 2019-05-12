@@ -26,12 +26,7 @@ export class OrderService {
       .pipe(catchError(this.handleError));
   }
 
-  GetOrderWithUser(userId: number): Observable<Order[]>{
-    return this.http.get(this.base_url + "/GetOrderWithUser?userId=" + userId)
-      .pipe(catchError(this.handleError));
-  }
-
-  getOrdersByUserID(id: string, dateFrom: string, dateTo: string): Observable<any> {
+  getOrdersByUserID(id: string, dateFrom: string, dateTo: string): Observable<Order[]> {
     return this.http.get(this.base_url + '/GetOrdersByUserID?userId=' + id + '&dateFrom=' + dateFrom + '&dateTo=' + dateTo)
     .pipe(catchError(this.handleError));
   }
@@ -55,7 +50,6 @@ export class OrderService {
     return this.http.get(this.base_url + '/GetOrdersWithShoppingItems?userId=' + userId)
     .pipe(catchError(this.handleError));
   }
-
 
   private handleError(error: HttpErrorResponse) {
     console.error('server error:', error);

@@ -18,16 +18,14 @@ namespace Trojantrading.Models
         public string Status { get; set; }
         public bool SendEmail { get; set; }
         public string BillingCustomerName { get; set; }
-        public string BillingAddressLine1 { get; set; }
-        public string BillingAddressLine2 { get; set; }
-        public string BillingAddressLine3 { get; set; }
+        public string BillingStreetNumber { get; set; }
+        public string BillingAddressLine { get; set; }
         public string BillingSuburb { get; set; }
         public string BillingState { get; set; }
         public string BillingPostCode { get; set; }
         public string ShippingCustomerName { get; set; }
-        public string ShippingAddressLine1 { get; set; }
-        public string ShippingAddressLine2 { get; set; }
-        public string ShippingAddressLine3 { get; set; }
+        public string ShippingStreetNumber { get; set; }
+        public string ShippingAddressLine { get; set; }
         public string ShippingSuburb { get; set; }
         public string ShippingState { get; set; }
         public string ShippingPostCode { get; set; }

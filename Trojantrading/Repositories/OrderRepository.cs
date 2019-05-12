@@ -11,11 +11,10 @@ namespace Trojantrading.Repositories
         ApiResponse AddOrder(ShoppingCart cart);
         Order Get(int id);
         ApiResponse DeleteOrder(int id);
-        ApiResponse UpdateOder(Order order);
+        ApiResponse UpdateOrder(Order order);
         Order GetOrdersWithShoppingItems(int orderId);
         List<Order> GetOrdersByUserID(int userId, string dateFrom, string dateTo);
         List<Order> GetOrdersByDate(string dateFrom, string dateTo);
-        List<Order> GetOrderWithUser(int userId);
     }
 
     public class OrderRepository : IOrderRepository
@@ -47,7 +46,7 @@ namespace Trojantrading.Repositories
                     UserId = cart.UserId,
                     ShoppingCartId = cart.Id,
                     InvoiceNo = DateTime.Now.ToString("yyyyMMddHHmmss"),
-                    ClientMessage = "",
+                    ClientMessage = cart.PaymentMethod == "onaccount"? "ON ACCOUNT": "PREPAYMENT",
                     AdminMessage = "",
                     Balance = 0
                 };
@@ -120,7 +119,7 @@ namespace Trojantrading.Repositories
             }
         }
 
-        public ApiResponse UpdateOder(Order order)
+        public ApiResponse UpdateOrder(Order order)
         {
             try
             {
@@ -144,25 +143,20 @@ namespace Trojantrading.Repositories
 
         public List<Order> GetOrdersByUserID(int userId, string dateFrom, string dateTo)
         {
-            List<Order> orders = new List<Order>();
 
-            DateTime fromDate = string.IsNullOrWhiteSpace(dateFrom) ? DateTime.Now.AddMonths(-1).Date : DateTime.Parse(dateFrom).Date;
-            DateTime toDate = string.IsNullOrWhiteSpace(dateTo) ? DateTime.Now.AddDays(1).Date : DateTime.Parse(dateTo).AddDays(1).Date; // usage end date always next day midnight
+            DateTime fromDate = string.IsNullOrWhiteSpace(dateFrom) ? DateTime.Now.AddMonths(-1) : DateTime.Parse(dateFrom);
+            DateTime toDate = string.IsNullOrWhiteSpace(dateTo) ? DateTime.Now.AddDays(1) : DateTime.Parse(dateTo).AddDays(1); // usage end date always next day midnight
 
-            orders = trojantradingDbContext.Orders
-                .Where(x => x.UserId == userId && x.CreatedDate >= fromDate && x.CreatedDate <= toDate).ToList();
+            var orders = trojantradingDbContext.Orders
+                .Where(x => x.UserId == userId && DateTime.Compare(x.CreatedDate, fromDate)>=0 && DateTime.Compare(x.CreatedDate, toDate) <= 0).ToList();
 
-            //orders = trojantradingDbContext.Orders.Where(x => x.UserId == userId && x.CreatedDate >= fromDate && x.CreatedDate <= toDate)
-            //        .Join(trojantradingDbContext.Users,
-            //        order => order.UserId,
-            //        user => user.Id,
-            //        (order, user) => order).ToList();
             foreach (var order in orders)
             {
                 var userInfo = userRepository.GetUserByAccount(order.UserId);
                 order.User = userInfo;
             }
-            return orders.ToList();
+
+            return orders;
 
         }
 
@@ -174,7 +168,7 @@ namespace Trojantrading.Repositories
             DateTime toDate = string.IsNullOrWhiteSpace(dateTo) ? DateTime.Now.AddDays(1).Date : DateTime.Parse(dateTo).AddDays(1).Date; // usage end date always next day midnight
 
             orders = trojantradingDbContext.Orders
-                .Where(x => x.CreatedDate >= fromDate && x.CreatedDate <= toDate).ToList();
+                .Where(x => DateTime.Compare(x.CreatedDate, fromDate) >= 0 && DateTime.Compare(x.CreatedDate, toDate) <= 0).ToList();
 
             foreach (var order in orders)
             {
@@ -185,21 +179,6 @@ namespace Trojantrading.Repositories
 
         }
 
-        public List<Order> GetOrderWithUser(int userId)
-        {
-
-            var user = userRepository.GetUserByAccount(userId);
-
-            var joinOrders = trojantradingDbContext.Users.Where(u => u.Id == userId)
-                        .GroupJoin(trojantradingDbContext.Orders, o => o.Id, u => u.UserId, (u, orders) => new { Orders = orders })
-                        .SelectMany(selectOrders => selectOrders.Orders).ToList();
-
-            foreach (var order in joinOrders)
-            {
-                order.User = user;
-            }
-            return joinOrders;
-        }
 
         public Order GetOrdersWithShoppingItems(int orderId)
         {

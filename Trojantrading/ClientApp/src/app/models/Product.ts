@@ -5,7 +5,8 @@ export interface Product {
     name: string
     originalPrice: number
     agentPrice: number
-    resellerPrice: number
+    wholesalerPrice: number
+    prepaymentDiscount: number
     category: string
     button: string
     quantity: number

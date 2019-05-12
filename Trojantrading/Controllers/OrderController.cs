@@ -19,14 +19,12 @@ namespace Trojantrading.Controllers
     public class OrderController:Controller
     {
         private readonly IOrderRepository _orderRepository;
-        //private readonly IExcelManager _excelManager;
 
         public OrderController(
             IOrderRepository orderRepository
           )
         {
             _orderRepository = orderRepository;
-            //_excelManager = excelManager;
         }
 
         [HttpPost("AddOrder")]
@@ -42,9 +40,9 @@ namespace Trojantrading.Controllers
         [NoCache]
         [ProducesResponseType(typeof(ApiResponse), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
-        public IActionResult UpdateProduct([FromBody]Order order)
+        public IActionResult UpdateOrder([FromBody]Order order)
         {
-            return Ok(_orderRepository.UpdateOder(order));
+            return Ok(_orderRepository.UpdateOrder(order));
         }
 
         [HttpPost("GetOrdersWithShoppingItems")]
@@ -85,15 +83,6 @@ namespace Trojantrading.Controllers
             }
         }
 
-        [HttpGet("GetOrderWithUser")]
-        [NoCache]
-        [ProducesResponseType(typeof(List<Order>), 200)]
-        [ProducesResponseType(typeof(ApiResponse), 400)]
-        public IActionResult GetOrderWithUser(int userId)
-        {
-            return Ok(_orderRepository.GetOrderWithUser(userId));
-        }
-
         [HttpGet("DeleteOrder")]
         [NoCache]
         [ProducesResponseType(typeof(ApiResponse), 200)]
@@ -102,38 +91,5 @@ namespace Trojantrading.Controllers
             var result = _orderRepository.DeleteOrder(orderId);
             return Ok(result);
         }
-
-        //[HttpGet("ExportOrdersToExcel")]
-        //[NoCache]
-        //[ProducesResponseType(typeof(string), 200)]
-        //public IActionResult ExportOrdersToExcel(string userId, string dateFrom, string dateTo)
-        //{
-
-        //    string fileName = string.Format("TrojanTrading_Orders_{0}-{1}.xlsx", dateFrom.Replace("/", "_"), dateTo.Replace("/", "_"));
-
-        //    FileInfo file = _excelManager.CreateExcelFile(fileName);
-
-        //    // Create An Excel Workbook
-        //    using (ExcelPackage pck = new ExcelPackage())
-        //    {
-        //        List<Order> orders = new List<Order>();
-
-        //        if (!string.IsNullOrWhiteSpace(userId))
-        //        {
-        //            int id = int.Parse(userId);
-        //            orders = _orderRepository.GetOrdersByUserID(id, dateFrom, dateTo);
-        //        }
-        //        else
-        //        {
-        //            orders = _orderRepository.GetOrdersByDate(dateFrom, dateTo);
-        //        }
-
-        //        _excelManager.OrdesSummarySheet(pck, orders);
-
-        //        pck.SaveAs(file);
-        //        return Ok(fileName);
-        //    }
-        //}
-
     }
 }

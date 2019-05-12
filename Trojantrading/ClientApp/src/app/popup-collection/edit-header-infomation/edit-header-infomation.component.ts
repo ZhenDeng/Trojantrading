@@ -13,7 +13,6 @@ export class EditHeaderInfomationComponent implements OnInit {
 
   userFormGroup: FormGroup;
   type: string;
-  updatedHeadInfomation: HeadInformation;
 
   constructor(private formBuilder: FormBuilder,
     private shareSevice: ShareService,
@@ -27,7 +26,6 @@ export class EditHeaderInfomationComponent implements OnInit {
 
   ngOnInit() {
     if(this.data.type == "Update"){
-      this.updatedHeadInfomation = this.data.headInfo;
       this.userFormGroup.get("imagePath").setValue(this.data.headInfo.imagePath);
       this.userFormGroup.get("content").setValue(this.data.headInfo.content);
     }
@@ -35,9 +33,7 @@ export class EditHeaderInfomationComponent implements OnInit {
 
   updateHeadInfomation(): void{
     if(this.userFormGroup.valid){
-      this.updatedHeadInfomation.imagePath = this.userFormGroup.get("imagePath").value;
-      this.updatedHeadInfomation.content = this.userFormGroup.get("content").value;
-      this.dialogRef.close(this.updatedHeadInfomation);
+      this.dialogRef.close(this.userFormGroup.value);
     }else{
       this.shareSevice.showError(".imagePathValidate", "Please enter image path", "right");
     }

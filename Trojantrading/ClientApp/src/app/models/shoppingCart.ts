@@ -13,4 +13,5 @@ export interface ShoppingCart {
     status: string
     shoppingItems: ShoppingItem[]
     note: string
+    paymentMethod: string
 }

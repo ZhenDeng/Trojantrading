@@ -1,10 +1,10 @@
 <h1 mat-dialog-title>Edit Order Details</h1>
 <div mat-dialog-content [formGroup]="orderFormGroup">
   <mat-form-field>
-    <input matInput class="customerValidate" formControlName="customer" placeholder="Customer">
+    <input matInput class="customerValidate" formControlName="customer" placeholder="Customer" required>
   </mat-form-field>
   <mat-form-field>
-      <input matInput class="invoicenoValidate" formControlName="invoiceNo" placeholder="Invoice Number">
+      <input matInput class="invoicenoValidate" formControlName="invoiceNo" placeholder="Invoice Number" required>
     </mat-form-field>
   <mat-form-field>
     <mat-label>Status</mat-label>

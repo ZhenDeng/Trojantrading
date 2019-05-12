@@ -11,10 +11,7 @@ export interface Order {
     clientMessage: string
     adminMessage: string
     user: User
-    userId: number
-    shoppingCartId: number
     shoppingCart: ShoppingCart  
-    customer: string
     invoiceNo: string
 }
 

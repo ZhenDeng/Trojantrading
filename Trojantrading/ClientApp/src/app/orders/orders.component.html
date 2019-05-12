@@ -40,8 +40,8 @@
               </ng-container>
 
               <ng-container matColumnDef="customer">
-                <mat-header-cell *matHeaderCellDef class="mat-table_3fex"> Customer </mat-header-cell>
-                <mat-cell *matCellDef="let element" class="mat-table_3fex" style="text-transform:capitalize;"> {{element.customer}} </mat-cell>
+                <mat-header-cell *matHeaderCellDef> Customer </mat-header-cell>
+                <mat-cell *matCellDef="let element" style="text-transform:capitalize;"> {{element.user.bussinessName}} </mat-cell>
               </ng-container>
 
               <ng-container matColumnDef="createdDate">
@@ -53,17 +53,15 @@
                 <mat-header-cell *matHeaderCellDef> Amount </mat-header-cell>
                 <mat-cell *matCellDef="let element"> {{element.totalPrice | currency:'AUD':'symbol-narrow':'.2-2'}} </mat-cell>
               </ng-container>
+
+              <ng-container matColumnDef="payment">
+                <mat-header-cell *matHeaderCellDef> Payment Method </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{ element.clientMessage }}</mat-cell>
+              </ng-container>
       
               <ng-container matColumnDef="orderStatus">
                 <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
                 <mat-cell *matCellDef="let element"> {{ element.orderStatus }}</mat-cell>
-              </ng-container>
-      
-              <ng-container matColumnDef="button">
-                <mat-header-cell *matHeaderCellDef></mat-header-cell>
-                <mat-cell *matCellDef="let element">
-                  <!-- <button id="{{element.id}}" class="btn btn-long" (click)="editProduct(element)" *ngIf="role =='admin'">Edit</button> -->
-                </mat-cell>
               </ng-container>
       
               <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
@@ -76,4 +74,4 @@
   </div>
 </div>
 
-<div class="globalfooter">© Copyright 2019 TrojanTrading Tobacco Group Australia Pty Ltd.</div>
+<div class="globalfooter">© Copyright 2019 Trojan Trading Company PTY LTD.</div>

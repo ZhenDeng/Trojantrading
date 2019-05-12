@@ -21,6 +21,8 @@ namespace Trojantrading.Models
 
         public Order Order { get; set; }
 
+        public string PaymentMethod { get; set; }
+
         public string Status { get; set; }// checkout -- 1, not check out -- 0
 
         public List<ShoppingItem> ShoppingItems { get; set; }

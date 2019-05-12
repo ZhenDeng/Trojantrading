@@ -69,13 +69,13 @@ export class ProductsComponent implements OnInit {
     this.categoryList = this.productService.categoryList;
     this.role = this.shareService.readCookie("role");
     if (this.shareService.readCookie("role") && this.shareService.readCookie("role") == "admin") {
-      this.displayedColumns = ['name', 'category', 'originalPrice', 'agentPrice', 'resellerPrice', 'status', 'button']
+      this.displayedColumns = ['name', 'category', 'originalPrice', 'agentPrice', 'wholesalerPrice', 'status', 'button']
     }
     else if (this.shareService.readCookie("role") && this.shareService.readCookie("role") == "agent") {
       this.displayedColumns = ['name', 'category', 'originalPrice', 'agentPrice', 'qty', 'status', 'button']
     }
-    else if (this.shareService.readCookie("role") && this.shareService.readCookie("role") == "reseller") {
-      this.displayedColumns = ['name', 'category', 'originalPrice', 'resellerPrice', 'qty', 'status', 'button']
+    else if (this.shareService.readCookie("role") && this.shareService.readCookie("role") == "wholesaler") {
+      this.displayedColumns = ['name', 'category', 'originalPrice', 'wholesalerPrice', 'qty', 'status', 'button']
     } else {
       this.displayedColumns = ['name', 'category', 'originalPrice', 'qty', 'status', 'button']
     }
@@ -131,7 +131,7 @@ export class ProductsComponent implements OnInit {
   addNewProduct(): void {
     const dialogRef = this.dialog.open(EditProductComponent, {
       width: '700px',
-      data: { categorys: this.productService.categoryList }
+      data: { categorys: this.productService.categoryList, type: "Add" }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -171,7 +171,7 @@ export class ProductsComponent implements OnInit {
   editProduct(product: Product): void {
     const dialogRef = this.dialog.open(EditProductComponent, {
       width: '700px',
-      data: { product: product, categorys: this.productService.categoryList }
+      data: { product: product, categorys: this.productService.categoryList, type: "Update" }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -180,7 +180,7 @@ export class ProductsComponent implements OnInit {
         product.category = result.category;
         product.agentPrice = result.agentPrice;
         product.originalPrice = result.originalPrice;
-        product.resellerPrice = result.resellerPrice;
+        product.wholesalerPrice = result.wholesalerPrice;
         this.productService.UpdateProduct(product).subscribe((res: ApiResponse) => {
           if (res.status == "success") {
             this.shareService.showSuccess("#" + product.id, res.message, "right");

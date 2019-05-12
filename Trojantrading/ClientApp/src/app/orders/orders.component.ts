@@ -30,7 +30,7 @@ export class OrdersComponent implements OnInit {
   orders: Order[] = [];
   filteredOrder: Order[] = [];
   dataSource = new MatTableDataSource();
-  displayedColumns: string[] = ['invoiceNo', 'customer', 'createdDate', 'totalPrice', 'orderStatus', 'button'];
+  displayedColumns: string[] = ['invoiceNo', 'customer', 'createdDate', 'totalPrice', 'payment', 'orderStatus'];
 
   constructor(
     private nav: NavbarService,
@@ -38,8 +38,7 @@ export class OrdersComponent implements OnInit {
     private orderService: OrderService,
     private fileService: FileService,
     private calendar: NgbCalendar,
-    private datePipe: DatePipe,
-    private router: Router
+    private datePipe: DatePipe
   ) { }
 
   ngOnInit() {
@@ -53,27 +52,27 @@ export class OrdersComponent implements OnInit {
     //admin user parse empty userid to get all other users' order records
     this.userId = this.role === "admin" ? '' : this.shareService.readCookie("userId");
 
-    this.getOrders();
-
-  }
-
-  convertDateFormat(): void {
-    this.strDateFrom = this.dateFrom.day + '/' + this.dateFrom.month + '/' + this.dateFrom.year;
-    this.strDateTo = this.dateTo.day + '/' + this.dateTo.month + '/' + this.dateTo.year;
-  }
-
-
-  getOrders() {
     this.convertDateFormat();
 
     this.orderService.getOrdersByUserID(this.userId, this.strDateFrom, this.strDateTo).subscribe((value: Order[]) => {
-       this.orders = value;
-       this.orders.forEach(x => x.customer = x.user.bussinessName);
-       this.dataSource = new MatTableDataSource(this.orders);
+      console.info(value);
+      this.orders = value;
+      this.dataSource = new MatTableDataSource(this.orders);
     },
     (error: any) => {
       console.info(error);
     });
+
+  }
+
+  convertDateFormat(): void {
+    this.strDateFrom = this.dateFrom.month + '/' + this.dateFrom.day + '/' + this.dateFrom.year;
+    this.strDateTo = this.dateTo.month + '/' + this.dateTo.day + '/' + this.dateTo.year;
+  }
+
+
+  getOrders() {
+    
   }
 
   downloadExcel() {
@@ -81,7 +80,7 @@ export class OrdersComponent implements OnInit {
 
     let exportOrdersArray = this.orders.map(x => ({
       InvoiceNumber: x.invoiceNo,
-      Customer: x.customer,
+      Customer: x.user.bussinessName,
       CreatedDate: this.datePipe.transform(x.createdDate, 'yyyy-MM-dd'),
       Amount: x.totalPrice,
       Status: x.orderStatus

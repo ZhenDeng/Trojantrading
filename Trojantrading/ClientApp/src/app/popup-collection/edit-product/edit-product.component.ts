@@ -24,8 +24,8 @@ export class EditProductComponent implements OnInit {
     'agentPrice': [
       { class: 'agentPriceValidate', message: 'Please enter valid agent price' }
     ],
-    'resellerPrice': [
-      { class: 'resellerPriceValidate', message: 'Please enter valid reseller price' }
+    'wholesalerPrice': [
+      { class: 'wholesalerPriceValidate', message: 'Please enter valid wholesaler price' }
     ]
   }
 
@@ -38,7 +38,8 @@ export class EditProductComponent implements OnInit {
       category: new FormControl("", Validators.compose([Validators.required])),
       originalPrice: new FormControl("", Validators.compose([Validators.required])),
       agentPrice: new FormControl("", Validators.compose([Validators.required])),
-      resellerPrice: new FormControl("", Validators.compose([Validators.required])),
+      wholesalerPrice: new FormControl("", Validators.compose([Validators.required])),
+      prepaymentDiscount: new FormControl(""),
       status: new FormControl("")
     });
   }
@@ -49,8 +50,9 @@ export class EditProductComponent implements OnInit {
       this.userFormGroup.get("category").setValue(this.data.product.category);
       this.userFormGroup.get("originalPrice").setValue(this.data.product.originalPrice);
       this.userFormGroup.get("agentPrice").setValue(this.data.product.agentPrice);
-      this.userFormGroup.get("resellerPrice").setValue(this.data.product.resellerPrice);
+      this.userFormGroup.get("wholesalerPrice").setValue(this.data.product.wholesalerPrice);
       this.userFormGroup.get("status").setValue(this.data.product.status);
+      this.userFormGroup.get("prepaymentDiscount").setValue(this.data.product.prepaymentDiscount);
     }
   }
 
@@ -62,7 +64,7 @@ export class EditProductComponent implements OnInit {
       this.isNotValidField('category', this.account_validation_messages.category);
       this.isNotValidField('originalPrice', this.account_validation_messages.originalPrice);
       this.isNotValidField('agentPrice', this.account_validation_messages.agentPrice);
-      this.isNotValidField('resellerPrice', this.account_validation_messages.resellerPrice);
+      this.isNotValidField('wholesalerPrice', this.account_validation_messages.wholesalerPrice);
     }
   }
 

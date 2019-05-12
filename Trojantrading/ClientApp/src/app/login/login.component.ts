@@ -62,13 +62,13 @@ export class LoginComponent implements OnInit {
       this.userService.userAuthentication(this.userFormGroup.value).subscribe((data: UserResponse) => {
         if(data && data.token){
           this.shareService.createCookie("userToken", data.token, 20);
-          this.shareService.createCookie("userName", data.userName, 20);
+          this.shareService.createCookie("userName", data.userName.toLowerCase(), 20);
           this.shareService.createCookie("userId", data.userId.toString(), 20);
-          this.shareService.createCookie("role", data.role, 20);
+          this.shareService.createCookie("role", data.role.toLowerCase(), 20);
           this.router.navigate(['/home']);
-        }else if(data && data.userName == "inactive"){
+        }else if(data && data.userName.toLowerCase() == "inactive"){
           this.shareService.showError(".loginbtn", "Your Account Has Been Suspended", "right");
-        }else if(data && data.userName == "wrong"){
+        }else if(data && data.userName.toLowerCase() == "wrong"){
           this.shareService.showError(".loginbtn", "User name or password is invalid", "right");
         }
       },
@@ -97,7 +97,7 @@ export class LoginComponent implements OnInit {
           this.userService.PasswordRecover(this.userEmailGroup.get("email").value, _.toNumber(this.shareService.readCookie("userId"))).subscribe((res: UserResponse) => {
             if(res && res.token){
               this.shareService.createCookie("recoverToken", res.token, 5);
-              this.shareService.createCookie("recoverUser", res.userName, 5);
+              this.shareService.createCookie("recoverUser", res.userName.toLowerCase(), 5);
               this.shareService.createCookie("recoverUserId", res.userId.toString(), 5);
               this.showResetText = true;
             }

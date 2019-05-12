@@ -1,9 +1,6 @@
 USE [trojantrading]
 GO
 
-alter table trojantrading.[order]
-add InvoiceNo nvarchar(MAX)
-
 INSERT INTO [trojantrading].[user]
            ([CreatedDate]
            ,[Account]
@@ -17,16 +14,14 @@ INSERT INTO [trojantrading].[user]
            ,[Status]
            ,[SendEmail]
            ,[BillingCustomerName]
-           ,[BillingAddressLine1]
-           ,[BillingAddressLine2]
-           ,[BillingAddressLine3]
+		   , BillingStreetNumber
+           ,[BillingAddressLine]
            ,[BillingSuburb]
            ,[BillingState]
            ,[BillingPostCode]
            ,[ShippingCustomerName]
-           ,[ShippingAddressLine1]
-           ,[ShippingAddressLine2]
-           ,[ShippingAddressLine3]
+		   , ShippingStreetNumber
+           ,[ShippingAddressLine]
            ,[ShippingSuburb]
            ,[ShippingState]
            ,[ShippingPostCode]
@@ -50,16 +45,14 @@ INSERT INTO [trojantrading].[user]
            ,'active'
            ,1
            ,'Yu'
+		   ,'12'
            ,'Garden St'
-           ,''
-           ,''
            ,'Maroubra'
            ,'NSW'
            ,'2305'
            ,'Yu'
+		   ,'12'
            ,'Garden St'
-           ,''
-           ,''
            ,'Maroubra'
            ,'NSW'
            ,'2305'
@@ -81,7 +74,8 @@ INSERT INTO [trojantrading].[product]
            ,[Name]
            ,[OriginalPrice]
            ,[AgentPrice]
-           ,[ResellerPrice]
+		   ,WholesalerPrice
+		   ,PrepaymentDiscount
            ,[Category]
            ,[Status])
      VALUES
@@ -90,6 +84,7 @@ INSERT INTO [trojantrading].[product]
            ,23.95
            ,21.95
            ,22.95
+		   ,5
            ,'hand-made'
            ,'')
 GO
@@ -99,7 +94,8 @@ INSERT INTO [trojantrading].[product]
            ,[Name]
            ,[OriginalPrice]
            ,[AgentPrice]
-           ,[ResellerPrice]
+           ,WholesalerPrice
+		   ,PrepaymentDiscount
            ,[Category]
            ,[Status])
      VALUES
@@ -108,6 +104,7 @@ INSERT INTO [trojantrading].[product]
            ,33.95
            ,31.95
            ,32.95
+		   ,10
            ,'machine-made'
            ,'New')
 GO
@@ -117,7 +114,8 @@ INSERT INTO [trojantrading].[product]
            ,[Name]
            ,[OriginalPrice]
            ,[AgentPrice]
-           ,[ResellerPrice]
+           ,WholesalerPrice
+		   ,PrepaymentDiscount
            ,[Category]
            ,[Status])
      VALUES
@@ -126,6 +124,7 @@ INSERT INTO [trojantrading].[product]
            ,43.95
            ,41.95
            ,42.95
+		   ,20
            ,'little-cigars'
            ,'Promotion')
 GO
@@ -135,7 +134,8 @@ INSERT INTO [trojantrading].[product]
            ,[Name]
            ,[OriginalPrice]
            ,[AgentPrice]
-           ,[ResellerPrice]
+           ,WholesalerPrice
+		   ,PrepaymentDiscount
            ,[Category]
            ,[Status])
      VALUES
@@ -144,6 +144,7 @@ INSERT INTO [trojantrading].[product]
            ,53.95
            ,51.95
            ,52.95
+		   ,0
            ,'cigarettes'
            ,'SoldOut')
 GO

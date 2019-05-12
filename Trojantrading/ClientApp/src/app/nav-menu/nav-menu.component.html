@@ -70,13 +70,13 @@
                 <button class="btn btn-long" (click)="continueShopping()" *ngIf="!shoppingItems?.length">Start
                   Shopping</button>
               </mat-list>
-              <mat-list role="list" *ngIf="role =='reseller'">
+              <mat-list role="list" *ngIf="role =='wholesaler'">
                 <h3 mat-subheader>Your Order</h3>
                 <mat-list-item role="listitem" *ngFor="let shoppingItem of shoppingItems">
                   <span class="carttext">{{shoppingItem?.product?.name}}&nbsp;&nbsp;&nbsp;
-                    {{shoppingItem?.product?.resellerPrice | currency:'AUD':'symbol-narrow':'.2-2'}} *
+                    {{shoppingItem?.product?.wholesalerPrice | currency:'AUD':'symbol-narrow':'.2-2'}} *
                     {{shoppingItem?.amount}}</span><span
-                    class="cartprice">{{shoppingItem?.amount * shoppingItem?.product?.resellerPrice | currency:'AUD':'symbol-narrow':'.2-2'}}</span><span
+                    class="cartprice">{{shoppingItem?.amount * shoppingItem?.product?.wholesalerPrice | currency:'AUD':'symbol-narrow':'.2-2'}}</span><span
                     class="carticon" (click)="deleteShoppingItem(shoppingItem)"><i id="shoppingitem{{shoppingItem.id}}"
                       class="far fa-trash-alt fa-1x"></i></span>
                 </mat-list-item>

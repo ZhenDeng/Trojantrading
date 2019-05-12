@@ -84,13 +84,13 @@ export class HomeComponent implements OnInit, OnDestroy {
 
       this.title = 'Products in All Categories';
       if (this.shareService.readCookie("role") && this.shareService.readCookie("role") == "admin") {
-        this.displayedColumns = ['name', 'category', 'originalPrice', 'agentPrice', 'resellerPrice', 'status', 'button']
+        this.displayedColumns = ['name', 'category', 'originalPrice', 'agentPrice', 'wholesalerPrice', 'status', 'button']
       }
       else if (this.shareService.readCookie("role") && this.shareService.readCookie("role") == "agent") {
         this.displayedColumns = ['name', 'category', 'originalPrice', 'agentPrice', 'qty', 'status', 'button']
       }
-      else if (this.shareService.readCookie("role") && this.shareService.readCookie("role") == "reseller") {
-        this.displayedColumns = ['name', 'category', 'originalPrice', 'resellerPrice', 'qty', 'status', 'button']
+      else if (this.shareService.readCookie("role") && this.shareService.readCookie("role") == "wholesaler") {
+        this.displayedColumns = ['name', 'category', 'originalPrice', 'wholesalerPrice', 'qty', 'status', 'button']
       } else {
         this.displayedColumns = ['name', 'category', 'originalPrice', 'qty', 'status', 'button']
       }
@@ -233,7 +233,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         product.category = result.category;
         product.agentPrice = result.agentPrice;
         product.originalPrice = result.originalPrice;
-        product.resellerPrice = result.resellerPrice;
+        product.wholesalerPrice = result.wholesalerPrice;
         this.productService.UpdateProduct(product).subscribe((res: ApiResponse) => {
           if (res.status == "success") {
             this.shareService.showSuccess("#" + product.id, res.message, "right");
