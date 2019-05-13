@@ -47,6 +47,8 @@ import { NgbdCarouselBasicModule } from './ngbd-carousel-basic/ngbd-carousel-bas
 import { EditOrderComponent } from './popup-collection/edit-order/edit-order.component';
 import { EditHeaderInfomationComponent } from './popup-collection/edit-header-infomation/edit-header-infomation.component';
 import { HeadInformationService } from './services/head-information.service';
+import { LoadScreenComponent } from './load-screen/load-screen.component';
+import { LoadScreenService } from './services/load-screen.service';
 
 @NgModule({
   declarations: [
@@ -67,7 +69,8 @@ import { HeadInformationService } from './services/head-information.service';
     EditUserComponent,
     EditAddressComponent,
     EditOrderComponent,
-    EditHeaderInfomationComponent
+    EditHeaderInfomationComponent,
+    LoadScreenComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -103,6 +106,7 @@ import { HeadInformationService } from './services/head-information.service';
     ShoppingCartService,
     OrderService,
     FileService,
+    LoadScreenService,
     HeadInformationService,
     {
       provide: HTTP_INTERCEPTORS,
