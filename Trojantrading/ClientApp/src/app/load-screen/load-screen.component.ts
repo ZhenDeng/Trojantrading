@@ -6,10 +6,10 @@ import { LoadScreenService } from '../services/load-screen.service';
  
 @Component({
   selector: 'loading-screen',
-  templateUrl: './loading-screen.component.html',
-  styleUrls: ['./loading-screen.component.css']
+  templateUrl: './load-screen.component.html',
+  styleUrls: ['./load-screen.component.css']
 })
-export class LoadingScreenComponent implements OnInit, OnDestroy {
+export class LoadScreenComponent implements OnInit, OnDestroy {
   @Input('backDropWidth') backDropWidth: string;
   @Input('showBlurTable') showBlurTable: boolean;
   @Input('isScrolled') isScrolled: boolean;
@@ -28,7 +28,7 @@ export class LoadingScreenComponent implements OnInit, OnDestroy {
   
   ngOnInit() {
  
-    this.currentWidth = this.backDropWidth ? this.backDropWidth : '984';
+    this.currentWidth = this.backDropWidth ? this.backDropWidth : '1920';
     this.showTable = this.showBlurTable ? this.showBlurTable : false;
  
     this.loadingSubscription = this.loadingScreenService.loadingStatus.pipe(

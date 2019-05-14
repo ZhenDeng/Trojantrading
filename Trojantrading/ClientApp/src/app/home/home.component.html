@@ -18,7 +18,9 @@
           {{link.label}}
         </a>
       </nav>
-        
+
+      <loading-screen *ngIf="!loadContent" [showBlurTable]="false" (currentLoadingStatus)="onLoading($event)"></loading-screen>
+
       <!-- Showing all products at the home page -->
       <ng-container *ngIf="!isHomeComponentDestroyed">
         <section class="product-wrapper">

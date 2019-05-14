@@ -25,6 +25,7 @@ export class LoginComponent implements OnInit {
   showResetText: boolean = false;
   checked:boolean = false;
   hidePassword: boolean = true;
+  loadContent: boolean = false;
 
   constructor(
     private userService: UserService,
@@ -42,12 +43,15 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.nav.hide();
+    this.loadContent = false;
     if(_.toNumber(this.shareService.readCookie("userName"))){
       this.userFormGroup.get("account").setValue(_.toNumber(this.shareService.readCookie("userName")));
     }
+    this.loadContent = true;
   }
 
   onSubmit() {
+    this.loadContent = false;
     if(!this.userFormGroup.get('account').valid){
       this.shareService.showError('#account', 'Please enter your account', "right");
     }
@@ -61,19 +65,23 @@ export class LoginComponent implements OnInit {
     if(this.userFormGroup.valid && this.checked){
       this.userService.userAuthentication(this.userFormGroup.value).subscribe((data: UserResponse) => {
         if(data && data.token){
-          this.shareService.createCookie("userToken", data.token, 20);
-          this.shareService.createCookie("userName", data.userName.toLowerCase(), 20);
-          this.shareService.createCookie("userId", data.userId.toString(), 20);
-          this.shareService.createCookie("role", data.role.toLowerCase(), 20);
+          this.loadContent = true;
+          this.shareService.createCookie("userToken", data.token, 60);
+          this.shareService.createCookie("userName", data.userName.toLowerCase(), 60);
+          this.shareService.createCookie("userId", data.userId.toString(), 60);
+          this.shareService.createCookie("role", data.role.toLowerCase(), 60);
           this.router.navigate(['/home']);
         }else if(data && data.userName.toLowerCase() == "inactive"){
+          this.loadContent = true;
           this.shareService.showError(".loginbtn", "Your Account Has Been Suspended", "right");
         }else if(data && data.userName.toLowerCase() == "wrong"){
+          this.loadContent = true;
           this.shareService.showError(".loginbtn", "User name or password is invalid", "right");
         }
       },
         (error: any) => {
           console.info(error);
+          this.loadContent = true;
         });
     }
   }
@@ -88,6 +96,10 @@ export class LoginComponent implements OnInit {
   backToLogin(): void {
     this.sentEmailField = false;
     this.showResetText = false;
+  }
+
+  onLoading(currentLoadingStatus: boolean) {
+    this.loadContent = !currentLoadingStatus;
   }
 
   sendPasswordRecoveryEmail(): void {

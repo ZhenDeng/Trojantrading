@@ -10,6 +10,9 @@
       Amanda,
       Café Crème, Colts, Borkum Riff, Cricket and Ventti.</p>
   </section>
+
+  <loading-screen *ngIf="!loadContent" [showBlurTable]="false" (currentLoadingStatus)="onLoading($event)"></loading-screen>
+
   <div class="bottom">
     <div class="login-box" *ngIf="!sentEmailField">
       <form [formGroup]="userFormGroup">

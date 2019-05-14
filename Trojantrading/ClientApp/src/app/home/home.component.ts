@@ -38,7 +38,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   displayedColumns: string[];
 
   categoryList: Category[] = [];
-
+  loadContent: boolean = false;
   navLinks: Menu[] = [
     {
       path: '/home',
@@ -77,7 +77,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-
     this.categoryList = this.productService.categoryList;
     this.activatedRoute.queryParamMap.subscribe(param => {
       this.category = param.get('category');
@@ -135,15 +134,17 @@ export class HomeComponent implements OnInit, OnDestroy {
       } else {
         this.dataSource = new MatTableDataSource(this.allProducts);
       }
-
     },
       (error: any) => {
         console.info(error);
       });
   }
 
-  filterProductsByCategory() {
+  onLoading(currentLoadingStatus: boolean) {
+    this.loadContent = !currentLoadingStatus;
+  }
 
+  filterProductsByCategory() {
     this.title = `Products ${this.category}`;
     this.filteredProducts = this.allProducts.filter(x => x.category.toLowerCase().includes(this.category.toLowerCase()));
     this.dataSource = new MatTableDataSource(this.filteredProducts);

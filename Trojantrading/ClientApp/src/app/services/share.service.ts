@@ -3,7 +3,6 @@
 /// <reference path="./jquery.extension.d.ts" />
 
 import { Injectable } from '@angular/core';
-import { Product } from '../models/Product';
 
 declare var jquery: any;
 declare var $: any;

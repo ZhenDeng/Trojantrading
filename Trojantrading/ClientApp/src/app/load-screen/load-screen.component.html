@@ -1,3 +1,31 @@
-<p>
-  load-screen works!
-</p>
+<div class="loading-screen-wrapper" [style.width.px]="currentWidth" [class.scrolled]="isScrolled" [class.scrollAfterLoading]="scrollAfterLoading">
+  <div class="loader" ></div>
+</div>
+<div class="inner-subBlock-wrapper" *ngIf="showTable">
+  <div class="shared-outer-wrapper">
+     <table style="width:100%">
+       <thead>
+          <tr class="row order-title-wrapper">
+             <th class="col blur_header"><span class="blur_text animated bounce"></span></th>
+             <th class="col blur_header"><span class="blur_text animated bounce"></span></th>
+             <th class="col blur_header"><span class="blur_text animated bounce"></span></th>
+             <th class="col blur_header"><span class="blur_text animated bounce"></span></th>
+          </tr>
+       </thead>
+       <tbody>
+         <tr class="row order-content-wrapper">
+           <td class="col-md blur_body"><span class="blur_text animated bounce"></span></td>
+           <td class="col-md blur_body"><span class="blur_text animated bounce"></span></td>
+           <td class="col-md blur_body"><span class="blur_text animated bounce"></span></td>
+           <td class="col-md blur_body"><span class="blur_text animated bounce"></span></td>
+         </tr>
+         <tr class="row order-content-wrapper">
+            <td class="col-md blur_body"><span class="blur_text animated bounce"></span></td>
+            <td class="col-md blur_body"><span class="blur_text animated bounce"></span></td>
+            <td class="col-md blur_body"><span class="blur_text animated bounce"></span></td>
+            <td class="col-md blur_body"><span class="blur_text animated bounce"></span></td>
+          </tr>
+       </tbody>
+     </table>
+  </div>
+</div>
