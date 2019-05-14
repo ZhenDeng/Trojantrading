@@ -7,6 +7,7 @@
       <ng-container>
         <section class="product-wrapper">
           <h4>{{title}}</h4>
+          <loading-screen *ngIf="!loadContent" [showBlurTable]="false" (currentLoadingStatus)="onLoading($event)"></loading-screen>
           <div class="filter-wrapper" style="width:700px;">
             <span class="searchInputGroup">
               <span class="searchIcon">

@@ -45,6 +45,7 @@ export class AdministrationComponent implements OnInit {
   statusList: Status[] =[];
   ordersDataSource = new MatTableDataSource();
   headerDataSource = new MatTableDataSource();
+  loadContent: boolean = false;
 
   constructor(
     public nav: NavbarService,
@@ -352,5 +353,9 @@ export class AdministrationComponent implements OnInit {
       (error: any) => {
         console.info(error);
       });
+  }
+
+  onLoading(currentLoadingStatus: boolean) {
+    this.loadContent = !currentLoadingStatus;
   }
 }

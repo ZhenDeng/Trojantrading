@@ -6,7 +6,7 @@
       <ng-container>
         <section class="product-wrapper">
           <h4 style="text-transform:capitalize;">{{title}}</h4>
-
+          <loading-screen *ngIf="!loadContent" [showBlurTable]="false" (currentLoadingStatus)="onLoading($event)"></loading-screen>
           <mat-tab-group mat-stretch-tabs>
             <mat-tab label="USERS">
               <button class="btn btn-green addnewuser" (click)="addNewUser()" *ngIf="role =='admin'">Add New

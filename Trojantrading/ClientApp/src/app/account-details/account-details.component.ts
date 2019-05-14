@@ -30,6 +30,7 @@ export class AccountDetailsComponent implements OnInit {
   hidePassword: boolean = true;
   hideNewPassword: boolean = true;
   hideConfirmPassword: boolean = true;
+  loadContent: boolean = false;
 
   constructor(
     private adminService: AdminService,
@@ -192,6 +193,10 @@ export class AccountDetailsComponent implements OnInit {
           });
       }
     });
+  }
+
+  onLoading(currentLoadingStatus: boolean) {
+    this.loadContent = !currentLoadingStatus;
   }
 
   backToProduct(): void {
