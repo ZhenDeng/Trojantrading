@@ -49,6 +49,7 @@ import { EditHeaderInfomationComponent } from './popup-collection/edit-header-in
 import { HeadInformationService } from './services/head-information.service';
 import { LoadScreenComponent } from './load-screen/load-screen.component';
 import { LoadScreenService } from './services/load-screen.service';
+import { UploadPdfComponent } from './popup-collection/upload-pdf/upload-pdf.component';
 
 @NgModule({
   declarations: [
@@ -70,7 +71,8 @@ import { LoadScreenService } from './services/load-screen.service';
     EditAddressComponent,
     EditOrderComponent,
     EditHeaderInfomationComponent,
-    LoadScreenComponent
+    LoadScreenComponent,
+    UploadPdfComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -119,7 +121,8 @@ import { LoadScreenService } from './services/load-screen.service';
     EditUserComponent,
     EditAddressComponent,
     EditHeaderInfomationComponent,
-    EditOrderComponent
+    EditOrderComponent,
+    UploadPdfComponent
   ],
   bootstrap: [AppComponent]
 })

@@ -74,53 +74,59 @@ export class HomeComponent implements OnInit, OnDestroy {
     private shoppingCartService: ShoppingCartService,
     private adminService: AdminService,
     public dialog: MatDialog
-  ) {}
+  ) { }
 
   ngOnInit() {
-    this.categoryList = this.productService.categoryList;
-    this.activatedRoute.queryParamMap.subscribe(param => {
-      this.category = param.get('category');
 
-      this.title = 'Products in All Categories';
-      if (this.shareService.readCookie("role") && this.shareService.readCookie("role") == "admin") {
-        this.displayedColumns = ['name', 'category', 'originalPrice', 'agentPrice', 'wholesalerPrice', 'status', 'button']
-      }
-      else if (this.shareService.readCookie("role") && this.shareService.readCookie("role") == "agent") {
-        this.displayedColumns = ['name', 'category', 'originalPrice', 'agentPrice', 'qty', 'status', 'button']
-      }
-      else if (this.shareService.readCookie("role") && this.shareService.readCookie("role") == "wholesaler") {
-        this.displayedColumns = ['name', 'category', 'originalPrice', 'wholesalerPrice', 'qty', 'status', 'button']
-      } else {
-        this.displayedColumns = ['name', 'category', 'originalPrice', 'qty', 'status', 'button']
-      }
+    if (!this.shareService.readCookie("userName")) {
+      this.router.navigateByUrl('/login');
+    } else {
+      this.categoryList = this.productService.categoryList;
+      this.activatedRoute.queryParamMap.subscribe(param => {
+        this.category = param.get('category');
 
-      this.dataSource = new MatTableDataSource();
+        this.title = 'Products in All Categories';
+        if (this.shareService.readCookie("role") && this.shareService.readCookie("role") == "admin") {
+          this.displayedColumns = ['name', 'category', 'originalPrice', 'agentPrice', 'wholesalerPrice', 'status', 'button']
+        }
+        else if (this.shareService.readCookie("role") && this.shareService.readCookie("role") == "agent") {
+          this.displayedColumns = ['name', 'category', 'originalPrice', 'agentPrice', 'qty', 'status', 'button']
+        }
+        else if (this.shareService.readCookie("role") && this.shareService.readCookie("role") == "wholesaler") {
+          this.displayedColumns = ['name', 'category', 'originalPrice', 'wholesalerPrice', 'qty', 'status', 'button']
+        } else {
+          this.displayedColumns = ['name', 'category', 'originalPrice', 'qty', 'status', 'button']
+        }
 
-      this.getAllProducts();
+        this.dataSource = new MatTableDataSource();
 
-    });
+        this.getAllProducts();
 
-    let currentURL = this.router.url;
-    if (!currentURL.includes('/home')) {
-      this.isHomeComponentDestroyed = true;
-    }
-    this.role = this.shareService.readCookie("role");
-    this.nav.show();
-    this.getAllProducts();
-    this.adminService.GetUserByAccount(_.toNumber(this.shareService.readCookie("userId"))).subscribe((res: User) => {
-      if (res) {
-        this.user = res;
-        this.shoppingCartService.AddShoppingCart(res.id).subscribe((res: ApiResponse) => {
-          console.info(res);
-        },
-          (error: any) => {
-            console.info(error);
-          });
-      }
-    },
-      (error: any) => {
-        console.info(error);
       });
+
+      let currentURL = this.router.url;
+      if (!currentURL.includes('/home')) {
+        this.isHomeComponentDestroyed = true;
+      }
+      this.role = this.shareService.readCookie("role");
+      this.nav.show();
+      this.getAllProducts();
+      this.adminService.GetUserByAccount(_.toNumber(this.shareService.readCookie("userId"))).subscribe((res: User) => {
+        if (res) {
+          this.user = res;
+          this.shoppingCartService.AddShoppingCart(res.id).subscribe((res: ApiResponse) => {
+            console.info(res);
+          },
+            (error: any) => {
+              console.info(error);
+            });
+        }
+      },
+        (error: any) => {
+          console.info(error);
+        });
+    }
+
   }
 
 
@@ -252,10 +258,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
 
-  changeQuantity(element: Product): void{
-    if(element.quantity<1){
+  changeQuantity(element: Product): void {
+    if (element.quantity < 1) {
       element.quantity = 1;
-      this.shareService.showError("#product"+element.id, "Minimum qty is 1", "right");
+      this.shareService.showError("#product" + element.id, "Minimum qty is 1", "right");
     }
   }
 
@@ -263,9 +269,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.dataSource.filter = category;
   }
 
-  switchLabel(id: string): void{
-    if(id == "allProducts"){
-      this.dataSource.filter ="";
+  switchLabel(id: string): void {
+    if (id == "allProducts") {
+      this.dataSource.filter = "";
     }
   }
 

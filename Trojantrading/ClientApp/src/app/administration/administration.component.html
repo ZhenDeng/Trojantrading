@@ -6,7 +6,8 @@
       <ng-container>
         <section class="product-wrapper">
           <h4 style="text-transform:capitalize;">{{title}}</h4>
-          <loading-screen *ngIf="!loadContent" [showBlurTable]="false" (currentLoadingStatus)="onLoading($event)"></loading-screen>
+          <loading-screen *ngIf="!loadContent" [showBlurTable]="false" (currentLoadingStatus)="onLoading($event)">
+          </loading-screen>
           <mat-tab-group mat-stretch-tabs>
             <mat-tab label="USERS">
               <button class="btn btn-green addnewuser" (click)="addNewUser()" *ngIf="role =='admin'">Add New
@@ -215,7 +216,34 @@
             </mat-tab>
 
             <mat-tab label="UPLOAD PDF">
-              
+
+              <button class="btn btn-green addnewuser" (click)="uploadPdf()">Upload Pdf</button>
+              <span class="filter-wrapper">
+                &nbsp;
+              </span>
+
+              <div class="example-container mat-elevation-z8">
+                <mat-table #table [dataSource]="pdfDataSource">
+
+                  <ng-container matColumnDef="id">
+                    <mat-header-cell *matHeaderCellDef> Id </mat-header-cell>
+                    <mat-cell *matCellDef="let element">#{{element.id}}</mat-cell>
+                  </ng-container>
+
+                  <ng-container matColumnDef="title">
+                    <mat-header-cell *matHeaderCellDef> Title </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.title}} </mat-cell>
+                  </ng-container>
+
+                  <ng-container matColumnDef="imagePath">
+                    <mat-header-cell *matHeaderCellDef> Path </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.path}} </mat-cell>
+                  </ng-container>
+
+                  <mat-header-row *matHeaderRowDef="displayedPdfColumns"></mat-header-row>
+                  <mat-row *matRowDef="let row; columns: displayedPdfColumns;"></mat-row>
+                </mat-table>
+              </div>
             </mat-tab>
 
           </mat-tab-group>

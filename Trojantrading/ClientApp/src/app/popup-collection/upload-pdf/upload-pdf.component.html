@@ -1,0 +1,8 @@
+<h1 mat-dialog-title>UPLOAD PDF</h1>
+<div mat-dialog-content>
+  <input class="file-upload" type='file' (change)="onSelectFile($event)">
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">CANCEL</button>
+  <button mat-button (click)="uploadPdf()">UPLOAD</button>
+</div>

@@ -9,7 +9,7 @@ import * as _ from 'lodash';
 import { ApiResponse } from '../models/ApiResponse';
 import { ShareService } from '../services/share.service';
 import { EditUserComponent } from '../popup-collection/edit-user/edit-user.component';
-import { HeadInformation } from '../models/header-info';
+import { HeadInformation, PdfBoard } from '../models/header-info';
 import { OrderService } from '../services/order.service';
 import { NgbDate } from '@ng-bootstrap/ng-bootstrap/datepicker/ngb-date';
 import { Order } from '../models/order';
@@ -18,6 +18,7 @@ import { DatePipe } from '@angular/common';
 import { EditHeaderInfomationComponent } from '../popup-collection/edit-header-infomation/edit-header-infomation.component';
 import { HeadInformationService } from '../services/head-information.service';
 import { EditOrderComponent } from '../popup-collection/edit-order/edit-order.component';
+import { UploadPdfComponent } from '../popup-collection/upload-pdf/upload-pdf.component';
 
 @Component({
   selector: 'app-administration',
@@ -31,6 +32,7 @@ export class AdministrationComponent implements OnInit {
   displayedColumns: string[] = ["UserName", "BusinessName", "Role", "Email", "Phone", "Status", "EditButton", "DeleteButton"];
   displayedHeaderColumns: string[] = ["Id", "Content", "ImagePath", "EditButton", "DeleteButton"];
   displayedOrderColumns: string[] = ['invoiceNo', 'customer', 'createdDate', 'totalPrice', 'orderStatus', 'editButton', 'deleteButton'];
+  displayedPdfColumns: string[] = ["id", "title", "imagePath"];
   dataSource: User[];
   dataSourceFilter: User[];
   dataSourceHeader: HeadInformation[];
@@ -45,6 +47,7 @@ export class AdministrationComponent implements OnInit {
   statusList: Status[] =[];
   ordersDataSource = new MatTableDataSource();
   headerDataSource = new MatTableDataSource();
+  pdfDataSource = new MatTableDataSource();
   loadContent: boolean = false;
 
   constructor(
@@ -75,6 +78,8 @@ export class AdministrationComponent implements OnInit {
       });
 
     this.getHeadInformation();
+
+    this.getPdfBoards();
 
     this.getOrders();
   }
@@ -109,6 +114,17 @@ export class AdministrationComponent implements OnInit {
         this.headerDataSource = new MatTableDataSource(res);
       }
       this.headInformationService.changeMessage(this.headerDataSource.data.length)
+    },
+      (error: any) => {
+        console.info(error);
+      });
+  }
+
+  getPdfBoards(): void{
+    this.fileService.GetPdfBoards().subscribe((res: PdfBoard[]) => {
+      if (res) {
+        this.pdfDataSource = new MatTableDataSource(res);
+      }
     },
       (error: any) => {
         console.info(error);
@@ -357,5 +373,15 @@ export class AdministrationComponent implements OnInit {
 
   onLoading(currentLoadingStatus: boolean) {
     this.loadContent = !currentLoadingStatus;
+  }
+
+  uploadPdf(): void{
+    const dialogRef = this.dialog.open(UploadPdfComponent, {
+      width: '400px',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      
+    });
   }
 }

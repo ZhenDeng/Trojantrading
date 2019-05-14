@@ -4,6 +4,8 @@ import * as XLSX from 'xlsx';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { catchError } from 'rxjs/operators';
+import { PdfBoard } from '../models/header-info';
+import { ApiResponse } from '../models/ApiResponse';
 
 
 const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
@@ -16,107 +18,99 @@ const EXCEL_EXTENSION = '.xlsx';
 @Injectable()
 export class FileService {
 
-    constructor(private http: HttpClient,
-    ) { }
+  base_url: string = "api/PdfBoard";
 
+  constructor(private http: HttpClient,
+  ) { }
 
-    saveFile(url: string): Observable<any> {
-        return this.http.get<Blob>(url, { responseType: 'blob' as 'json' })
-            .pipe(catchError(this.handleError));
-    }
+  GetPdfBoards(): Observable<PdfBoard[]>{
+    return this.http.get(this.base_url + "/GetPdfBoards")
+    .pipe(catchError(this.handleError));
+  }
 
+  SavePdf(file: any): Observable<ApiResponse>{
+    return this.http.post(this.base_url + "/SavePdf", file)
+    .pipe(catchError(this.handleError));
+  }
 
-    // public exportAsExcelFile(json: any[], excelFileName: string): void {
+  saveFile(url: string): Observable<any> {
+    return this.http.get<Blob>(url, { responseType: 'blob' as 'json' })
+      .pipe(catchError(this.handleError));
+  }
 
-    //     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(json);
+  public exportAsExcelFile(json: any[], excelFileName: string): void {
 
-    //     const workbook: XLSX.WorkBook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(json);
 
-    //     const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const workbook: XLSX.WorkBook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
+    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    //const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'buffer' });
+    this.saveAsExcelFile(excelBuffer, excelFileName);
+  }
 
-    //     this.saveAsExcelFile(excelBuffer, excelFileName);
-    // }
-    public exportAsExcelFile(json: any[], excelFileName: string): void {
-    
-      const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(json);
+  public exportAsCSVFile(json: any[], csvFileName: string): void {
 
-      const workbook: XLSX.WorkBook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
-      const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-      //const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'buffer' });
-      this.saveAsExcelFile(excelBuffer, excelFileName);
-    }
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(json);
 
-    public exportAsCSVFile(json: any[], csvFileName: string): void {
+    const workbook: XLSX.WorkBook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
 
-        const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(json);
+    const excelBuffer: any = XLSX.write(workbook, { bookType: 'csv', type: 'array' });
 
-        const workbook: XLSX.WorkBook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
+    this.saveAsCSVFile(excelBuffer, csvFileName);
+  }
 
-        const excelBuffer: any = XLSX.write(workbook, { bookType: 'csv', type: 'array' });
+  saveAsExcelFile(buffer: any, fileName: string): void {
+    const data: Blob = new Blob([buffer], {
+      type: EXCEL_TYPE
+    });
+    _filesaver.saveAs(data, fileName + EXCEL_EXTENSION);
+  }
 
-        this.saveAsCSVFile(excelBuffer, csvFileName);
-    }
+  saveAsImageFile(buffer: any, fileName: string): void {
+    const data: Blob = new Blob([buffer], {
+      type: IMAGE_TYPE
+    });
 
-    // saveAsExcelFile(buffer: any, fileName: string): void {
+    _filesaver.saveAs(data, fileName);
+  }
 
-    //     const data: Blob = new Blob([buffer], {
-    //         type: EXCEL_TYPE
-    //     });
+  saveAsPdf(buffer: any, fileName: string): void {
+    const data: Blob = new Blob([buffer], {
+      type: PDF_TYPE
+    });
 
-    //     _filesaver.saveAs(data, fileName);
-    // }
-     saveAsExcelFile(buffer: any, fileName: string): void {
-      const data: Blob = new Blob([buffer], {
-        type: EXCEL_TYPE
-      });
-      _filesaver.saveAs(data, fileName + EXCEL_EXTENSION);
-    }
+    _filesaver.saveAs(data, fileName);
+  }
 
-    saveAsImageFile(buffer: any, fileName: string): void {
-        const data: Blob = new Blob([buffer], {
-            type: IMAGE_TYPE
-        });
+  saveAsCSVFile(buffer: any, fileName: string): void {
 
-        _filesaver.saveAs(data, fileName);
-    }
+    const data: Blob = new Blob([buffer], {
+      type: CSV_TYPE
+    });
 
-    saveAsPdf(buffer: any, fileName: string): void {
-        const data: Blob = new Blob([buffer], {
-            type: PDF_TYPE
-        });
+    _filesaver.saveAs(data, fileName);
+  }
 
-        _filesaver.saveAs(data, fileName);
-    }
+  saveAsJSONFile(buffer: any, fileName: string): void {
 
-    saveAsCSVFile(buffer: any, fileName: string): void {
+    const data: Blob = new Blob([buffer], {
+      type: JSON_TYPE
+    });
 
-        const data: Blob = new Blob([buffer], {
-            type: CSV_TYPE
-        });
+    _filesaver.saveAs(data, fileName);
+  }
 
-        _filesaver.saveAs(data, fileName);
-    }
-
-    saveAsJSONFile(buffer: any, fileName: string): void {
-
-        const data: Blob = new Blob([buffer], {
-            type: JSON_TYPE
-        });
-
-        _filesaver.saveAs(data, fileName);
-    }
-
-    private handleError(error: HttpErrorResponse) {
-      console.error('server error:', error);
-      if (error.error instanceof ErrorEvent) {
-        let errMessage = '';
-        try {
-          errMessage = error.error.message;
-        } catch (err) {
-          errMessage = error.statusText;
-        }
-        return Observable.throw(errMessage);
+  private handleError(error: HttpErrorResponse) {
+    console.error('server error:', error);
+    if (error.error instanceof ErrorEvent) {
+      let errMessage = '';
+      try {
+        errMessage = error.error.message;
+      } catch (err) {
+        errMessage = error.statusText;
       }
-      return Observable.throw(error.error || 'ASP.NET Core server error');
+      return Observable.throw(errMessage);
     }
+    return Observable.throw(error.error || 'ASP.NET Core server error');
+  }
 }
