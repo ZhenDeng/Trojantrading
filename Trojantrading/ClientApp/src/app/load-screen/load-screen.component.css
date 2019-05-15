@@ -31,8 +31,8 @@
 } */
 
 .loader {
-  width: 150px;
-  height: 160px;
+  width: 120px;
+  height: 110px;
   margin: auto;
   background-image: url('/img/progress.gif');
   position: relative;

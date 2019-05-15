@@ -7,9 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using System;
 using System.IO;
 using System.Linq;
-using System.Web;
 using Microsoft.AspNetCore.Http;
-using System.Net;
 
 namespace Trojantrading.Controllers
 {
@@ -20,16 +18,13 @@ namespace Trojantrading.Controllers
     {
         private readonly IPdfBoardRepository pdfBoardRepository;
         private readonly TrojantradingDbContext trojantradingDbContext;
-        private readonly IHttpContextAccessor httpAccessor;
 
         public PdfBoardController(
             IPdfBoardRepository pdfBoardRepository, 
-            TrojantradingDbContext trojantradingDbContext,
-            IHttpContextAccessor httpAccessor)
+            TrojantradingDbContext trojantradingDbContext)
         {
             this.pdfBoardRepository = pdfBoardRepository;
             this.trojantradingDbContext = trojantradingDbContext;
-            this.httpAccessor = httpAccessor;
         }
 
         [HttpGet("GetPdfBoards")]
@@ -97,75 +92,5 @@ namespace Trojantrading.Controllers
             }
         }
         #endregion
-
-        [HttpGet("DownloadPdf")]
-        [NoCache]
-        public FileResult DownloadPdf(string file, string fileName = "", bool displaySaveAs = false)
-        {
-            if (string.IsNullOrEmpty(file)) return null;
-
-            file = HttpUtility.UrlDecode(file).Trim();
-            fileName = HttpUtility.UrlDecode(fileName).Trim();
-
-            Uri uriResult;
-            byte[] fileBytes = null;
-            bool isLocalFile = false;
-
-            bool isUrl = Uri.TryCreate(file, UriKind.Absolute, out uriResult) && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
-
-            if (isUrl)
-            {
-                Uri fileUri = new Uri(file);
-
-                if (string.IsNullOrEmpty(fileName))
-                {
-                    fileName = Path.GetFileName(fileUri.LocalPath);
-                }
-                else
-                {
-                    string fileExtension = Path.GetExtension(fileName);
-                    if (string.IsNullOrEmpty(fileExtension))
-                    {
-                        fileName += Path.GetExtension(Path.GetFileName(fileUri.LocalPath));
-                    }
-                }
-            }
-            else            // file is on server
-            {
-                isLocalFile = true;
-                // get full path
-                file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, file);
-
-                // check file name and extension
-                if (string.IsNullOrEmpty(fileName))
-                {
-                    fileName = Path.GetFileName(file);
-                }
-                else
-                {
-                    string fileExtension = Path.GetExtension(fileName);
-                    if (string.IsNullOrEmpty(fileExtension))
-                    {
-                        fileName += Path.GetExtension(Path.GetFileName(file));
-                    }
-                }
-            }
-            fileBytes = pdfBoardRepository.CopyFileToMemory(file, isLocalFile);
-            if (fileBytes == null) return null;     // file does not exist
-            if (displaySaveAs || file.EndsWith(".eml"))
-            {
-                // force to display SaveAs dialog box
-                httpAccessor.HttpContext.Response.Headers.Add("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
-            }
-            else
-            {
-                // file will open in browser 
-                httpAccessor.HttpContext.Response.Headers.Add("Content-Disposition", "inline; filename=\"" + fileName + "\"");
-            }
-
-            pdfBoardRepository.UpdateFileDownloadCookie();
-            return File(fileBytes, "application/" + Path.GetExtension(Path.GetFileName(file)).Replace(".", ""));
-        }
-
     }
 }

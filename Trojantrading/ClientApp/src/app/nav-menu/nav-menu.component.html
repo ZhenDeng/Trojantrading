@@ -97,8 +97,8 @@
               <i class="fas fa-list fa-fw"></i> Order History
             </a>
           </li>
-          <li (click)="downloadPdf()">
-            <a>
+          <li *ngIf="role !='admin'">
+            <a href="{{filePath}}" target="_blank">
               <i class="fas fa-download fa-fw"></i> Download Price List
             </a>
           </li>

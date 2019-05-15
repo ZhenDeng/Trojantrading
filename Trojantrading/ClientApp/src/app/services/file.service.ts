@@ -33,8 +33,8 @@ export class FileService {
     .pipe(catchError(this.handleError));
   }
 
-  DownloadPdf(type: string, file: any, fileName: string): Observable<any>{
-    return this.http.get(this.base_url + "/SavePdf?type="+type+"&file="+file+"&fileName="+fileName)
+  DownloadPdf(file: any, fileName: string): Observable<any>{
+    return this.http.get(this.base_url + "/DownloadPdf?file="+file+"&fileName="+fileName)
     .pipe(catchError(this.handleError));
   }
 

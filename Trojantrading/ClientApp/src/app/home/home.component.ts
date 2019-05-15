@@ -77,8 +77,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    console.info(this.shareService.readCookie("userToken"));
-    if (!this.shareService.readCookie("userName")) {
+    if (!this.shareService.readCookie("userToken")) {
       this.router.navigateByUrl('/login');
     } else {
       this.categoryList = this.productService.categoryList;

@@ -14,7 +14,6 @@ import { Category } from '../models/Product';
 import { ProductService } from '../services/product.service';
 import { HeadInformationService } from '../services/head-information.service';
 import { HeadInformation } from '../models/header-info';
-import { MatTableDataSource } from '@angular/material';
 
 @Component({
   selector: 'app-nav-menu',
@@ -28,6 +27,7 @@ export class NavMenuComponent implements OnInit {
   role: string;
   categoryList: Category[];
   headerDataSource: HeadInformation[] = [];
+  filePath: string;
 
   constructor(
     public nav: NavbarService,
@@ -43,6 +43,7 @@ export class NavMenuComponent implements OnInit {
 
   ngOnInit() {
     this.role = this.shareService.readCookie("role");
+    this.filePath = this.role.toUpperCase()+" PRICE LIST.pdf";
     this.categoryList = this.productService.categoryList;
 
     this.headInformationService.GetHeadInformation().subscribe((res: HeadInformation[]) => {
@@ -106,12 +107,11 @@ export class NavMenuComponent implements OnInit {
     this.router.navigate(['/home']);
   }
 
-  downloadPdf(): void{
-    
-  }
-
   logOut(): void {
     this.shareService.savecookies("userToken", "", 1);
+    this.shareService.savecookies("userName", "", 1);
+    this.shareService.savecookies("userId", "", 1);
+    this.shareService.savecookies("role", "", 1);
     this.router.navigate(['login'], { relativeTo: this.activatedRouter.parent })
   }
 
