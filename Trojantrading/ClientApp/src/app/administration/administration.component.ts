@@ -132,8 +132,8 @@ export class AdministrationComponent implements OnInit {
   }
 
   convertDateFormat(): void {
-    this.strDateFrom = this.dateFrom.month + '/' + this.dateFrom.day + '/' + this.dateFrom.year;
-    this.strDateTo = this.dateTo.month + '/' + this.dateTo.day + '/' + this.dateTo.year;
+    this.strDateFrom = this.dateFrom.day + '/' + this.dateFrom.month + '/' + this.dateFrom.year;
+    this.strDateTo = this.dateTo.day + '/' + this.dateTo.month + '/' + this.dateTo.year;
   }
 
   downloadExcel() {
@@ -377,11 +377,11 @@ export class AdministrationComponent implements OnInit {
 
   uploadPdf(): void{
     const dialogRef = this.dialog.open(UploadPdfComponent, {
-      width: '400px',
+      width: '650px',
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      
+      this.getPdfBoards();
     });
   }
 }

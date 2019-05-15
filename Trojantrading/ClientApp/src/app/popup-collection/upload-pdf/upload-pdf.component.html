@@ -1,8 +1,19 @@
 <h1 mat-dialog-title>UPLOAD PDF</h1>
 <div mat-dialog-content>
+  <mat-form-field style="flex: 3">
+    <mat-label>CHOOSE FILE ROLE</mat-label>
+    <mat-select [(ngModel)]="selectedRole">
+      <mat-option value="agent">
+        AGENT
+      </mat-option>
+      <mat-option value="wholesaler">
+        WHOLESALER
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
   <input class="file-upload" type='file' (change)="onSelectFile($event)">
 </div>
 <div mat-dialog-actions>
-  <button mat-button (click)="onNoClick()">CANCEL</button>
-  <button mat-button (click)="uploadPdf()">UPLOAD</button>
+  <button mat-button class="btn btn-long" (click)="onNoClick()">CANCEL</button>
+  <button mat-button class="btn btn-long uploadpdf" (click)="uploadPdf()">UPLOAD</button>
 </div>

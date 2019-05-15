@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
@@ -62,6 +63,7 @@ namespace Trojantrading
             services.AddSingleton<IFileProvider>(
             new PhysicalFileProvider(
                 Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")));
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IOrderRepository, OrderRepository>();
             services.AddTransient<IProductRepository, ProductRepository>();
             services.AddTransient<IUserRepository, UserRepository>();

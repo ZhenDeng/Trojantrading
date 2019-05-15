@@ -106,6 +106,9 @@ export class NavMenuComponent implements OnInit {
     this.router.navigate(['/home']);
   }
 
+  downloadPdf(): void{
+    
+  }
 
   logOut(): void {
     this.shareService.savecookies("userToken", "", 1);

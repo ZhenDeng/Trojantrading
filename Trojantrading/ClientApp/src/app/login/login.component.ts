@@ -66,10 +66,10 @@ export class LoginComponent implements OnInit {
       this.userService.userAuthentication(this.userFormGroup.value).subscribe((data: UserResponse) => {
         if(data && data.token){
           this.loadContent = true;
-          this.shareService.createCookie("userToken", data.token, 60);
-          this.shareService.createCookie("userName", data.userName.toLowerCase(), 60);
-          this.shareService.createCookie("userId", data.userId.toString(), 60);
-          this.shareService.createCookie("role", data.role.toLowerCase(), 60);
+          this.shareService.createCookie("userToken", data.token, 20);
+          this.shareService.createCookie("userName", data.userName.toLowerCase(), 20);
+          this.shareService.createCookie("userId", data.userId.toString(), 20);
+          this.shareService.createCookie("role", data.role.toLowerCase(), 20);
           this.router.navigate(['/home']);
         }else if(data && data.userName.toLowerCase() == "inactive"){
           this.loadContent = true;

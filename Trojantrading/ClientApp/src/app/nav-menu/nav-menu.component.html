@@ -97,6 +97,11 @@
               <i class="fas fa-list fa-fw"></i> Order History
             </a>
           </li>
+          <li (click)="downloadPdf()">
+            <a>
+              <i class="fas fa-download fa-fw"></i> Download Price List
+            </a>
+          </li>
           <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
             <a (click)="logOut()">
               <i class="fas fa-sign-out-alt fa-fw"></i> Log Out
