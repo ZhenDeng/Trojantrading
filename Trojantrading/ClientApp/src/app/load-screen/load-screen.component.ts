@@ -28,7 +28,7 @@ export class LoadScreenComponent implements OnInit, OnDestroy {
   
   ngOnInit() {
  
-    this.currentWidth = this.backDropWidth ? this.backDropWidth : '1920';
+    //this.currentWidth = this.backDropWidth ? this.backDropWidth : '1920';
     this.showTable = this.showBlurTable ? this.showBlurTable : false;
  
     this.loadingSubscription = this.loadingScreenService.loadingStatus.pipe(
