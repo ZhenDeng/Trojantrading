@@ -76,13 +76,13 @@ export class EditOrderComponent implements OnInit {
     if (this.orderFormGroup.valid) {
       this.currentOrder.invoiceNo = this.orderFormGroup.value.invoiceNo;
       this.currentOrder.orderStatus = this.orderFormGroup.value.orderStatus;
-      this.currentOrder.totalPrice = this.orderFormGroup.value.totalPrice;
+      //this.currentOrder.totalPrice = this.orderFormGroup.value.totalPrice;
       this.currentOrder.balance = this.orderFormGroup.value.balance;
       this.currentOrder.clientMessage = this.orderFormGroup.value.clientMessage;
       this.currentOrder.adminMessage = this.orderFormGroup.value.adminMessage;
       this.currentOrder.shoppingCart.paymentMethod = this.orderFormGroup.value.paymentMethod;
       this.currentOrder.shoppingCart.note = this.orderFormGroup.value.note;
-
+      //console.log(this.currentOrder);
       this.dialogRef.close(this.currentOrder);
     } else {
       this.isNotValidField('name', this.account_validation_messages.name);
