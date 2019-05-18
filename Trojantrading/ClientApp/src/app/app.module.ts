@@ -96,7 +96,7 @@ import { UploadPdfComponent } from './popup-collection/upload-pdf/upload-pdf.com
     NavMenuModule,
     MatSelectModule,
     SlickCarouselModule,
-    NgbdCarouselBasicModule
+    NgbdCarouselBasicModule,
   ],
   providers: [
     UserService,

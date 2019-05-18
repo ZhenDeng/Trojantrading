@@ -1,11 +1,11 @@
 <h1 mat-dialog-title>Edit Order Details</h1>
 <div mat-dialog-content [formGroup]="orderFormGroup">
   <mat-form-field>
-    <input matInput class="customerValidate" formControlName="customer" placeholder="Customer" required>
+    <input matInput class="customerValidate" formControlName="customer" placeholder="Customer">
   </mat-form-field>
   <mat-form-field>
       <input matInput class="invoicenoValidate" formControlName="invoiceNo" placeholder="Invoice Number" required>
-    </mat-form-field>
+  </mat-form-field>
   <mat-form-field>
     <mat-label>Status</mat-label>
     <mat-select formControlName="orderStatus">
@@ -13,8 +13,79 @@
     </mat-select>
   </mat-form-field>
   <mat-form-field>
-      <input matInput class="createdDateValidate" formControlName="createdDate" placeholder="Created Date" disabled/>
+    <input matInput class="createdDateValidate" formControlName="createdDate" placeholder="Created Date" />
   </mat-form-field>
+  <mat-form-field>
+    <input matInput class="balanceValidate" formControlName="balance" placeholder="Balance"/>
+    <span matPrefix>$&nbsp;</span>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Payment Method</mat-label>
+    <mat-select formControlName="paymentMethod">
+      <mat-option value="onaccount">
+        ON ACCOUNT
+      </mat-option>
+      <mat-option value="prepay">
+        PREPAYMENT
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <div class="shared-outer-wrapper" style="width:100%;" *ngIf="currentItems.length">
+    <table class="white" id="orders">
+        <thead>
+          <tr class="row">
+            <th class="col" style="max-width:30%">Product Name</th>
+            <th class="col">Category</th>
+            <th class="col">Original Price</th>
+            <th class="col">Agent Price</th>
+            <th class="col">WholeSeller Price</th>
+            <th class="col" style="max-width:12%">QTY</th>
+            <th class="col" style="max-width:12%">Total Price</th>
+          </tr>
+        </thead>
+        <tbody>
+            <ng-container *ngFor="let item of currentItems">
+              <tr class="row">
+                <td class="col-md align-left" style="max-width:30%">
+                  {{ item.product.name }}
+                </td>
+                <td class="col-md align-left">
+                  {{ item.product.category }}
+                </td>
+                <td class="col-md align-left">
+                  {{ item.product.originalPrice }}
+                </td>
+                <td class="col-md align-left">
+                  {{ item.product.agentPrice }}
+                </td>
+                <td class="col-md align-left">
+                  {{ item.product.wholesalerPrice }}
+                </td>
+                <td class="col-md align-left" style="max-width:12%">
+                  <input integerOnly type="text" class="input-box-small" [value]="item.amount" (input)="item.amount = qtyInput.value" #qtyInput />
+                </td>
+                <td class="col-md align-left">
+
+                </td>
+              </tr>
+            </ng-container>
+        </tbody>
+    </table>
+   </div> 
+   <mat-form-field>
+    <input matInput class="totalPriceValidate" formControlName="totalPrice" placeholder="Total Price"/>
+    <span matPrefix>$&nbsp;</span>
+  </mat-form-field>
+  <mat-form-field>
+    <textarea matInput class="noteValidate" formControlName="note" placeholder="Note"></textarea>
+  </mat-form-field>
+  <mat-form-field>
+    <textarea matInput class="clientMessageValidate" formControlName="clientMessage" placeholder="Client Message"></textarea>
+  </mat-form-field>
+  <mat-form-field>
+    <textarea matInput class="adminMessageValidate" formControlName="adminMessage" placeholder="Admin Message"></textarea>
+  </mat-form-field>
+
 
 </div>
 <div mat-dialog-actions>

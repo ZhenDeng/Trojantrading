@@ -45,13 +45,13 @@ namespace Trojantrading.Controllers
             return Ok(_orderRepository.UpdateOrder(order));
         }
 
-        [HttpPost("GetOrdersWithShoppingItems")]
+        [HttpGet("GetOrdersWithShoppingItems")]
         [NoCache]
         [ProducesResponseType(typeof(Order), 200)]
-        [ProducesResponseType(typeof(ApiResponse), 400)]
         public IActionResult GetOrdersWithShoppingItems(int orderId)
         {
-            return Ok(_orderRepository.GetOrdersWithShoppingItems(orderId));
+            var result = _orderRepository.GetOrdersWithShoppingItems(orderId);
+            return Ok(result);
         }
 
         [HttpGet("GetOrdersByUserID")]

@@ -46,8 +46,8 @@ export class OrderService {
     .pipe(catchError(this.handleError));
   }
 
-  getOrdersWithShoppingItems(userId: number): Observable<Order> {
-    return this.http.get(this.base_url + '/GetOrdersWithShoppingItems?userId=' + userId)
+  getOrdersWithShoppingItems(orderId: number): Observable<Order> {
+    return this.http.get(this.base_url + '/GetOrdersWithShoppingItems?orderId=' + orderId)
     .pipe(catchError(this.handleError));
   }
 

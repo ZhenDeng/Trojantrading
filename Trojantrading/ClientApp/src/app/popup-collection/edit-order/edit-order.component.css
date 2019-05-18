@@ -5,3 +5,40 @@
 ::ng-deep .mat-dialog-actions{
     padding: 12px 27px !important;
 }
+
+.shared-outer-wrapper {
+    background: #fff;
+    border: 1px solid #e6e6e6;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, .1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .1);
+  }
+  
+
+.input-box-small {
+    width: 45px;
+}
+
+#orders {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  #orders td, #orders th {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  #orders tr:nth-child(even){background-color: #f2f2f2;}
+  
+  #orders tr:hover {background-color: #ddd;}
+  
+  #orders th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #4CAF50;
+    color: white;
+  }

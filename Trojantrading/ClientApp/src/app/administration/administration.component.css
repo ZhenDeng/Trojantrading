@@ -76,6 +76,17 @@ h4{
 	margin-top: 0 !important;
 }
 
+.btn-order {
+	padding: 5px 15px 5px 15px;
+	font: icon;
+}
+
+.mat-table_2fex {
+    -webkit-box-flex: 2;
+    -ms-flex: 2;
+    flex: 2;
+}
+
 .addnewuser, .addnewhead{
 	float: right;
 }

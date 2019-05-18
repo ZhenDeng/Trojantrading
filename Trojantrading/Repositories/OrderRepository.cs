@@ -145,7 +145,7 @@ namespace Trojantrading.Repositories
         {
 
             DateTime fromDate = string.IsNullOrWhiteSpace(dateFrom) ? DateTime.Now.AddMonths(-1) : DateTime.Parse(dateFrom);
-            DateTime toDate = string.IsNullOrWhiteSpace(dateTo) ? DateTime.Now.AddDays(1) : DateTime.Parse(dateTo).AddDays(1); // usage end date always next day midnight
+            DateTime toDate = string.IsNullOrWhiteSpace(dateTo) ? DateTime.Now.AddDays(1) : DateTime.Parse(dateTo).AddDays(1); // end date always next day midnight
 
             var orders = trojantradingDbContext.Orders
                 .Where(x => x.UserId == userId && DateTime.Compare(x.CreatedDate, fromDate)>=0 && DateTime.Compare(x.CreatedDate, toDate) <= 0).ToList();
@@ -165,7 +165,7 @@ namespace Trojantrading.Repositories
             List<Order> orders = new List<Order>();
 
             DateTime fromDate = string.IsNullOrWhiteSpace(dateFrom) ? DateTime.Now.AddMonths(-1).Date : DateTime.Parse(dateFrom).Date;
-            DateTime toDate = string.IsNullOrWhiteSpace(dateTo) ? DateTime.Now.AddDays(1).Date : DateTime.Parse(dateTo).AddDays(1).Date; // usage end date always next day midnight
+            DateTime toDate = string.IsNullOrWhiteSpace(dateTo) ? DateTime.Now.AddDays(1).Date : DateTime.Parse(dateTo).AddDays(1).Date; // end date always next day midnight
 
             orders = trojantradingDbContext.Orders
                 .Where(x => DateTime.Compare(x.CreatedDate, fromDate) >= 0 && DateTime.Compare(x.CreatedDate, toDate) <= 0).ToList();
@@ -186,7 +186,10 @@ namespace Trojantrading.Repositories
 
             var shoppingCart = shoppingCartRepository.GetShoppingCartByID(order.ShoppingCartId, order.UserId);
 
+            var userDetail = userRepository.GetUserByAccount(order.UserId);
+
             order.ShoppingCart = shoppingCart;
+            order.User = userDetail;
 
             return order;
             

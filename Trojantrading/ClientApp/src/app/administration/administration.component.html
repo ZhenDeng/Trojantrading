@@ -98,8 +98,8 @@
                     </div>
 
                   </div>
-                  <button class="btn btn-green" (click)="getOrders()">Search</button>
-                  <button class="btn btn-green" (click)="downloadExcel()">Download Excel</button>
+                  <button class="btn btn-green btn-order" (click)="getOrders()">Search</button>
+                  <button class="btn btn-green btn-order" (click)="downloadExcel()">Download Excel</button>
                 </span>
               </div>
 
@@ -107,13 +107,13 @@
                 <mat-table #table [dataSource]="ordersDataSource">
 
                   <ng-container matColumnDef="invoiceNo">
-                    <mat-header-cell *matHeaderCellDef> Invoice Number </mat-header-cell>
-                    <mat-cell *matCellDef="let element">{{element.invoiceNo}}</mat-cell>
+                    <mat-header-cell *matHeaderCellDef class="mat-table_2fex"> Invoice Number </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="mat-table_2fex">{{element.invoiceNo}}</mat-cell>
                   </ng-container>
 
                   <ng-container matColumnDef="customer">
-                    <mat-header-cell *matHeaderCellDef class="mat-table_3fex"> Customer </mat-header-cell>
-                    <mat-cell *matCellDef="let element" class="mat-table_3fex" style="text-transform:capitalize;">
+                    <mat-header-cell *matHeaderCellDef class="mat-table_2fex"> Customer </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="mat-table_2fex" style="text-transform:capitalize;">
                       {{element.user.bussinessName}} </mat-cell>
                   </ng-container>
 

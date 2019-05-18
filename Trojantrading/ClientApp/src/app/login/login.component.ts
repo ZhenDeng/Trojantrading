@@ -51,7 +51,7 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
-    this.loadContent = false;
+    
     if(!this.userFormGroup.get('account').valid){
       this.shareService.showError('#account', 'Please enter your account', "right");
     }
@@ -63,6 +63,7 @@ export class LoginComponent implements OnInit {
     }
 
     if(this.userFormGroup.valid && this.checked){
+      this.loadContent = false;
       this.userService.userAuthentication(this.userFormGroup.value).subscribe((data: UserResponse) => {
         if(data && data.token){
           this.loadContent = true;
