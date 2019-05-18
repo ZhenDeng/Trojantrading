@@ -37,10 +37,10 @@
             <th class="col" style="max-width:30%">Product Name</th>
             <th class="col">Category</th>
             <th class="col">Original Price</th>
-            <th class="col">Agent Price</th>
-            <th class="col">WholeSeller Price</th>
+            <th class="col" *ngIf="currentRole =='agent'">Agent Price</th>
+            <th class="col" *ngIf="currentRole =='wholesaler'">WholeSeller Price</th>
             <th class="col" style="max-width:12%">QTY</th>
-            <th class="col" style="max-width:12%">Total Price</th>
+            <th class="col" style="max-width:12%">Sub Total</th>
           </tr>
         </thead>
         <tbody>
@@ -53,26 +53,27 @@
                   {{ item.product.category }}
                 </td>
                 <td class="col-md align-left">
-                  {{ item.product.originalPrice }}
+                  {{ item.product.originalPrice | currency }}
                 </td>
-                <td class="col-md align-left">
-                  {{ item.product.agentPrice }}
+                <td class="col-md align-left" *ngIf="currentRole =='agent'">
+                  {{ item.product.agentPrice | currency }}
                 </td>
-                <td class="col-md align-left">
-                  {{ item.product.wholesalerPrice }}
+                <td class="col-md align-left" *ngIf="currentRole =='wholesaler'">
+                  {{ item.product.wholesalerPrice | currency }}
                 </td>
                 <td class="col-md align-left" style="max-width:12%">
-                  <input integerOnly type="text" class="input-box-small" [value]="item.amount" (input)="item.amount = qtyInput.value" #qtyInput />
+                  <input type="text" [attr.id]="'qty' + item.id" class="input-box-small" [value]="item.amount" (input)="item.amount = qtyInput.value"
+                   (focusout)="onQtyChange(item, $event.target.value)" #qtyInput />
                 </td>
                 <td class="col-md align-left">
-
+                     {{ item.subTotal | currency }}
                 </td>
               </tr>
             </ng-container>
         </tbody>
     </table>
    </div> 
-   <mat-form-field>
+   <mat-form-field style="margin-top:20px;">
     <input matInput class="totalPriceValidate" formControlName="totalPrice" placeholder="Total Price"/>
     <span matPrefix>$&nbsp;</span>
   </mat-form-field>

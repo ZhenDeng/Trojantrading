@@ -1,3 +1,4 @@
+import { User } from './../../models/user';
 import { ShoppingItem } from './../../models/shoppingItem';
 import { ShoppingCart } from './../../models/shoppingCart';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
@@ -7,6 +8,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { OrderService } from '../../services/order.service';
 import { Order } from '../../models/order';
+import { isNullOrUndefined } from 'util';
 
 @Component({
   selector: 'app-edit-order',
@@ -20,6 +22,8 @@ export class EditOrderComponent implements OnInit {
   currentOrder: Order;
   currentCart: ShoppingCart;
   currentItems: ShoppingItem[] = [];
+  currentUser: User;
+  currentRole: string;
   account_validation_messages: any = {
     'name': [
       { class: 'customerValidate', message: 'Please enter customer name' }
@@ -57,11 +61,11 @@ export class EditOrderComponent implements OnInit {
       this.getOrdersWithShoppingItems(this.data.order.id);
       this.orderFormGroup.controls["customer"].disable();
       this.orderFormGroup.controls["createdDate"].disable();
+      this.orderFormGroup.controls["totalPrice"].disable();
       this.orderFormGroup.get("customer").setValue(this.data.order.user.bussinessName);
       this.orderFormGroup.get("invoiceNo").setValue(this.data.order.invoiceNo);
       this.orderFormGroup.get("createdDate").setValue(this.datePipe.transform(this.data.order.createdDate, 'yyyy-MM-dd'));
       this.orderFormGroup.get("orderStatus").setValue(this.data.order.orderStatus);
-      this.orderFormGroup.get("totalPrice").setValue(this.data.order.totalPrice.toFixed(2));
       this.orderFormGroup.get("balance").setValue(this.data.order.balance.toFixed(2));
       this.orderFormGroup.get("clientMessage").setValue(this.data.order.clientMessage);
       this.orderFormGroup.get("adminMessage").setValue(this.data.order.adminMessage);
@@ -76,8 +80,10 @@ export class EditOrderComponent implements OnInit {
       this.currentOrder.balance = this.orderFormGroup.value.balance;
       this.currentOrder.clientMessage = this.orderFormGroup.value.clientMessage;
       this.currentOrder.adminMessage = this.orderFormGroup.value.adminMessage;
-      console.log(this.currentOrder);
-      //this.dialogRef.close(this.orderFormGroup.value);
+      this.currentOrder.shoppingCart.paymentMethod = this.orderFormGroup.value.paymentMethod;
+      this.currentOrder.shoppingCart.note = this.orderFormGroup.value.note;
+
+      this.dialogRef.close(this.currentOrder);
     } else {
       this.isNotValidField('name', this.account_validation_messages.name);
       this.isNotValidField('invoiceNo', this.account_validation_messages.invoiceNumber);
@@ -98,16 +104,60 @@ export class EditOrderComponent implements OnInit {
         this.currentOrder = value;
         this.currentCart = value.shoppingCart;
         this.currentItems = this.currentCart.shoppingItems;
+        this.currentUser = value.user;
+        this.currentRole = this.currentUser.role;
+
+        if (this.currentItems.length) {
+          this.currentItems.forEach(item => {
+            if (this.currentRole == 'agent') {
+              item.subTotal = item.product.agentPrice * item.amount;
+            } else if (this.currentRole == 'wholesaler') {
+              item.subTotal = item.product.wholesalerPrice * item.amount;
+            } else {
+              item.subTotal = item.product.originalPrice * item.amount;
+            } 
+          });
+        }
 
         this.orderFormGroup.get("note").setValue(this.currentCart.note);
         this.orderFormGroup.get("paymentMethod").setValue(this.currentCart.paymentMethod);
-
+        this.orderFormGroup.get("totalPrice").setValue(this.currentCart.totalPrice.toFixed(2));
         
     },
     (error: any) => {
       console.info(error);
     });
   }
+
+  onQtyChange(item: ShoppingItem, qty: number) {
+    if (isNullOrUndefined(qty)) {
+      this.shareService.showValidator("#qty" + item.id, "Please enter quantity number", "right", "error");
+      return;
+    }
+    if (this.currentRole == 'agent') {
+      item.subTotal = item.product.agentPrice * qty;
+    } else if (this.currentRole == 'wholesaler') {
+      item.subTotal = item.product.wholesalerPrice * qty;
+    } else {
+      item.subTotal = item.product.originalPrice * qty;
+    }
+
+    this.calculateTotalPrice();
+     
+  }
+
+  calculateTotalPrice():void {
+    let total = 0;
+    this.currentItems.forEach(i => {
+       total += i.subTotal;
+    });
+
+    this.currentOrder.totalPrice = total;
+
+    this.orderFormGroup.get("totalPrice").setValue(total);
+
+  }
+
 
   onNoClick(): void {
     this.dialogRef.close();

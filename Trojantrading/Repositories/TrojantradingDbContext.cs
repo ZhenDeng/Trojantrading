@@ -66,10 +66,10 @@ namespace Trojantrading.Repositories
                 .OnDelete(DeleteBehavior.Restrict);
 
             //shopping item product 1:1
-            modelBuilder.Entity<ShoppingItem>()
-                .HasOne(s => s.Product)
-                .WithMany(p => p.ShoppingItems)
-                .HasForeignKey(s => s.ProductId);
+            //modelBuilder.Entity<ShoppingItem>()
+            //    .HasOne(s => s.Product)
+            //    .WithMany(p => p.ShoppingItems)
+            //    .HasForeignKey(s => s.ProductId);
         }
     }
 }
