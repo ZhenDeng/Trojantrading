@@ -33,6 +33,11 @@ export class FileService {
     .pipe(catchError(this.handleError));
   }
 
+  UploadUsers(file: any): Observable<ApiResponse>{
+    return this.http.post(this.base_url + "/UploadUsers", file)
+    .pipe(catchError(this.handleError));
+  }
+
   DownloadPdf(file: any, fileName: string): Observable<any>{
     return this.http.get(this.base_url + "/DownloadPdf?file="+file+"&fileName="+fileName)
     .pipe(catchError(this.handleError));

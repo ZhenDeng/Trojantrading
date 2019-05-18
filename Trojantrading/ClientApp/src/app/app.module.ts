@@ -50,6 +50,7 @@ import { HeadInformationService } from './services/head-information.service';
 import { LoadScreenComponent } from './load-screen/load-screen.component';
 import { LoadScreenService } from './services/load-screen.service';
 import { UploadPdfComponent } from './popup-collection/upload-pdf/upload-pdf.component';
+import { UploadUsersComponent } from './popup-collection/upload-users/upload-users.component';
 
 @NgModule({
   declarations: [
@@ -72,7 +73,8 @@ import { UploadPdfComponent } from './popup-collection/upload-pdf/upload-pdf.com
     EditOrderComponent,
     EditHeaderInfomationComponent,
     LoadScreenComponent,
-    UploadPdfComponent
+    UploadPdfComponent,
+    UploadUsersComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -122,7 +124,8 @@ import { UploadPdfComponent } from './popup-collection/upload-pdf/upload-pdf.com
     EditAddressComponent,
     EditHeaderInfomationComponent,
     EditOrderComponent,
-    UploadPdfComponent
+    UploadPdfComponent,
+    UploadUsersComponent
   ],
   bootstrap: [AppComponent]
 })

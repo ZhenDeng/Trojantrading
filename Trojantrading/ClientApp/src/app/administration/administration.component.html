@@ -12,6 +12,7 @@
             <mat-tab label="USERS">
               <button class="btn btn-green addnewuser" (click)="addNewUser()" *ngIf="role =='admin'">Add New
                 User</button>
+              <button class="btn btn-green addnewuser" (click)="uploadUsers()" *ngIf="role =='admin'">Upload Users</button>
               <span class="filter-wrapper">
                 <span class="searchInputGroup">
                   <span class="searchIcon">
@@ -245,7 +246,6 @@
                 </mat-table>
               </div>
             </mat-tab>
-
           </mat-tab-group>
 
         </section>

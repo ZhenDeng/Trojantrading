@@ -19,6 +19,7 @@ import { EditHeaderInfomationComponent } from '../popup-collection/edit-header-i
 import { HeadInformationService } from '../services/head-information.service';
 import { EditOrderComponent } from '../popup-collection/edit-order/edit-order.component';
 import { UploadPdfComponent } from '../popup-collection/upload-pdf/upload-pdf.component';
+import { UploadUsersComponent } from '../popup-collection/upload-users/upload-users.component';
 
 @Component({
   selector: 'app-administration',
@@ -67,6 +68,17 @@ export class AdministrationComponent implements OnInit {
     this.dateFrom = this.calendar.getNext(this.calendar.getToday(), 'd', -30);
     this.dateTo = this.calendar.getToday();
     this.role = this.shareSevice.readCookie("role");
+
+    this.getUsers();
+
+    this.getHeadInformation();
+
+    this.getPdfBoards();
+
+    this.getOrders();
+  }
+
+  getUsers(): void{
     this.adminService.GetUsers().subscribe((res: User[]) => {
       if (res) {
         this.dataSource = res;
@@ -76,12 +88,6 @@ export class AdministrationComponent implements OnInit {
       (error: any) => {
         console.info(error);
       });
-
-    this.getHeadInformation();
-
-    this.getPdfBoards();
-
-    this.getOrders();
   }
 
   getOrders() {
@@ -132,8 +138,8 @@ export class AdministrationComponent implements OnInit {
   }
 
   convertDateFormat(): void {
-    this.strDateFrom = this.dateFrom.day + '/' + this.dateFrom.month + '/' + this.dateFrom.year;
-    this.strDateTo = this.dateTo.day + '/' + this.dateTo.month + '/' + this.dateTo.year;
+    this.strDateFrom = this.dateFrom.month + '/' + this.dateFrom.day + '/' + this.dateFrom.year;
+    this.strDateTo = this.dateTo.month + '/' + this.dateTo.day + '/' + this.dateTo.year;
   }
 
   downloadExcel() {
@@ -376,12 +382,14 @@ export class AdministrationComponent implements OnInit {
   }
 
   uploadPdf(): void{
-    const dialogRef = this.dialog.open(UploadPdfComponent, {
+    this.dialog.open(UploadPdfComponent, {
       width: '650px',
     });
+  }
 
-    dialogRef.afterClosed().subscribe(result => {
-      this.getPdfBoards();
+  uploadUsers(): void{
+    this.dialog.open(UploadUsersComponent, {
+      width: '650px',
     });
   }
 }
