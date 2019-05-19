@@ -31,9 +31,9 @@ namespace Trojantrading.Controllers
         [NoCache]
         [ProducesResponseType(typeof(ApiResponse), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
-        public IActionResult AddOrder([FromBody]ShoppingCart cart)
+        public IActionResult AddOrder(int gst, int priceExclGst, int discount, [FromBody]ShoppingCart cart)
         {
-            return Ok(_orderRepository.AddOrder(cart));
+            return Ok(_orderRepository.AddOrder(cart, gst, priceExclGst, discount));
         }
 
         [HttpPost("UpdateOrder")]
@@ -79,7 +79,7 @@ namespace Trojantrading.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(new ApiResponse { Status = "false", Message = ex.Message });
+                return Ok(new ApiResponse { Status = "false", Message = ex.Message });
             }
         }
 

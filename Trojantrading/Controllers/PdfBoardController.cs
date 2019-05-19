@@ -89,7 +89,7 @@ namespace Trojantrading.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(new ApiResponse
+                return Ok(new ApiResponse
                 {
                     Status = "fail",
                     Message = ex.Message
@@ -121,7 +121,7 @@ namespace Trojantrading.Controllers
                         FileInfo file = new FileInfo(path);
                         using (ExcelPackage package = new ExcelPackage(file))
                         {
-                            ExcelWorksheet workSheet = package.Workbook.Worksheets["Customer"];
+                            ExcelWorksheet workSheet = package.Workbook.Worksheets["Sheet1"];
                             int totalRows = workSheet.Dimension.Rows;
 
                             List<User> userList = new List<User>();
@@ -132,25 +132,29 @@ namespace Trojantrading.Controllers
                                 builder.Append(RandomString(4, true));
                                 builder.Append(RandomNumber(1000, 9999));
                                 builder.Append(RandomString(2, false));
-                                userList.Add(new User
-                                {
-                                    Account = workSheet.Cells[i, 1].Value.ToString(),
-                                    Password = builder.ToString(),
-                                    BussinessName = workSheet.Cells[i, 2].Value.ToString(),
-                                    BillingStreetNumber = workSheet.Cells[i, 3].Value.ToString(),
-                                    BillingAddressLine = workSheet.Cells[i, 4].Value.ToString(),
-                                    BillingSuburb = workSheet.Cells[i, 5].Value.ToString(),
-                                    BillingState = workSheet.Cells[i, 6].Value.ToString(),
-                                    BillingPostCode = workSheet.Cells[i, 7].Value.ToString(),
-                                    ShippingStreetNumber = workSheet.Cells[i, 8].Value.ToString(),
-                                    ShippingAddressLine = workSheet.Cells[i, 9].Value.ToString(),
-                                    ShippingSuburb = workSheet.Cells[i, 10].Value.ToString(),
-                                    ShippingState = workSheet.Cells[i, 11].Value.ToString(),
-                                    Phone = workSheet.Cells[i, 12].Value.ToString(),
-                                    CompanyPhone = workSheet.Cells[i, 13].Value.ToString(),
-                                    Mobile = workSheet.Cells[i, 14].Value.ToString(),
-                                    Email = workSheet.Cells[i, 15].Value.ToString()
-                                });
+                                if (workSheet.Cells[i, 1].Value != null) {
+                                    userList.Add(new User()
+                                    {
+                                        Account = workSheet.Cells[i, 1].Value == null ? "" : workSheet.Cells[i, 1].Value.ToString(),
+                                        Password = builder.ToString(),
+                                        BussinessName = workSheet.Cells[i, 2].Value == null ? "" : workSheet.Cells[i, 2].Value.ToString(),
+                                        BillingStreetNumber = workSheet.Cells[i, 3].Value == null ? "" : workSheet.Cells[i, 3].Value.ToString(),
+                                        BillingAddressLine = workSheet.Cells[i, 4].Value == null ? "" : workSheet.Cells[i, 4].Value.ToString(),
+                                        BillingSuburb = workSheet.Cells[i, 5].Value == null ? "" : workSheet.Cells[i, 5].Value.ToString(),
+                                        BillingState = workSheet.Cells[i, 6].Value == null ? "" : workSheet.Cells[i, 6].Value.ToString(),
+                                        BillingPostCode = workSheet.Cells[i, 7].Value == null ? "" : workSheet.Cells[i, 7].Value.ToString(),
+                                        ShippingStreetNumber = workSheet.Cells[i, 8].Value == null ? "" : workSheet.Cells[i, 8].Value.ToString(),
+                                        ShippingAddressLine = workSheet.Cells[i, 9].Value == null ? "" : workSheet.Cells[i, 9].Value.ToString(),
+                                        ShippingSuburb = workSheet.Cells[i, 10].Value == null ? "" : workSheet.Cells[i, 10].Value.ToString(),
+                                        ShippingState = workSheet.Cells[i, 11].Value == null ? "" : workSheet.Cells[i, 11].Value.ToString(),
+                                        ShippingPostCode = workSheet.Cells[i, 12].Value == null ? "" : workSheet.Cells[i, 12].Value.ToString(),
+                                        Phone = workSheet.Cells[i, 13].Value == null ? "" : workSheet.Cells[i, 13].Value.ToString(),
+                                        CompanyPhone = workSheet.Cells[i, 14].Value == null ? "" : workSheet.Cells[i, 14].Value.ToString(),
+                                        Mobile = workSheet.Cells[i, 15].Value == null ? "" : workSheet.Cells[i, 15].Value.ToString(),
+                                        Email = workSheet.Cells[i, 16].Value == null ? "" : workSheet.Cells[i, 16].Value.ToString()
+                                    });
+                                }
+                                
                             }
 
                             trojantradingDbContext.Users.AddRange(userList);
@@ -171,7 +175,7 @@ namespace Trojantrading.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(new ApiResponse
+                return Ok(new ApiResponse
                 {
                     Status = "fail",
                     Message = ex.Message

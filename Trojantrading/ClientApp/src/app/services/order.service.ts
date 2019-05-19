@@ -21,8 +21,8 @@ export class OrderService {
 
   constructor(private http: HttpClient) { }
 
-  AddOrder(cart: ShoppingCart): Observable<ApiResponse>{
-    return this.http.post(this.base_url + "/AddOrder", cart)
+  AddOrder(cart: ShoppingCart, gst: number, priceExclGst: number, discount: number): Observable<ApiResponse>{
+    return this.http.post(this.base_url + "/AddOrder?gst="+gst+"&priceExclGst="+priceExclGst+"&discount="+discount, cart)
       .pipe(catchError(this.handleError));
   }
 

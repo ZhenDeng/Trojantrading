@@ -45,7 +45,7 @@ namespace Trojantrading.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(new ApiResponse { Status = "false", Message = ex.Message });
+                return Ok(new ApiResponse { Status = "false", Message = ex.Message });
 
             }
         }

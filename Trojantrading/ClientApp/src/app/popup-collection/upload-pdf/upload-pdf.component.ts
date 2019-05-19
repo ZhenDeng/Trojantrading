@@ -30,21 +30,24 @@ export class UploadPdfComponent implements OnInit {
   }
 
   uploadPdf(): void {
-
-    this.formData.append(this.file.name, this.file);
-    this.fileService.SavePdf(this.selectedRole, this.formData).subscribe((res: ApiResponse) => {
-      if (res.status == "success") {
-        this.shareService.showSuccess(".uploadpdf", res.message, "right");
-        setTimeout(() => {
-          this.dialogRef.close();
-        }, 1500);
-      } else {
-        this.shareService.showError(".uploadpdf", res.message, "right");
-      }
-    },
-      (error: any) => {
-        console.info(error);
-      });
+    if(this.file){
+      this.formData.append(this.file.name, this.file);
+      this.fileService.SavePdf(this.selectedRole, this.formData).subscribe((res: ApiResponse) => {
+        if (res.status == "success") {
+          this.shareService.showSuccess(".uploadpdf", res.message, "right");
+          setTimeout(() => {
+            this.dialogRef.close();
+          }, 1500);
+        } else {
+          this.shareService.showError(".uploadpdf", res.message, "right");
+        }
+      },
+        (error: any) => {
+          console.info(error);
+        });
+    }else{
+      this.shareService.showError(".uploadpdf", "Upload file is empty", "right");
+    }
   }
 
   onNoClick(): void {
