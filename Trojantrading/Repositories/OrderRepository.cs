@@ -70,19 +70,19 @@ namespace Trojantrading.Repositories
                 stringBuilder.Append("<div style='padding: 0; margin: 0; height: 100%; background:#fbfaf7;'>");
                 stringBuilder.Append("<table width='100%' height='100%' align='center' cellspacing='0' cellpadding='0' bgcolor='#fbfaf7'>");
                 stringBuilder.Append("<tbody>");
-                stringBuilder.Append("<tr><td style='font:12px;font-family=Arial,Helvetica,sans-serif;color:#454545'>&nbsp;</td></tr>");
+                stringBuilder.Append("<tr><td style='font:12px/1.5 Arial,Helvetica,sans-serif;color:#454545'>&nbsp;</td></tr>");
                 stringBuilder.Append("<tr>");
                 stringBuilder.Append("<td style='color:#343731;'><table width='600px' bgcolor='#ffffff' cellspacing='0' cellpadding='0' align='center' border='0' style='border:1px solid #232323;text-align:center'><tbody><tr><td style='padding:10px;color:#343731'>");
                 stringBuilder.Append("<img src ='https://ci6.googleusercontent.com/proxy/Gunm1Ui60tevgKhW_lccMS_unKUUgy-lJMieq_PRab1QyTLnRoP9G1x6zOVZC4jdRT5fDUVlNj_RpRc=s0-d-e1-ft#https://st-group.net.au/img/stg-logo.png' width='80px' style='margin:0 auto;display:block'>");
                 stringBuilder.Append("<h1 style='font-weight:400;text-transform:uppercase'>Trojan Trading Company PTY LTD</h1><h4 style='font-weight:400;text-transform:uppercase'>Australia</h4>");
                 stringBuilder.Append("</td></tr></tbody></table></td></tr>");
-                stringBuilder.Append("<tr><td width='600' style='font:12px;font-family=Arial,Helvetica,sans-serif;color:#454545'>");
+                stringBuilder.Append("<tr><td width='600' style='font:12px/1.5 Arial,Helvetica,sans-serif;color:#454545'>");
                 stringBuilder.Append("<table cellspacing='0' cellpadding='0' width='600' align='center' bgcolor='#ffffff' border='0' style='border-right:1px solid #d3d3d3;border-left:1px solid #d3d3d3'>");
-                stringBuilder.Append("<tbody><tr><td align='center' style='font:12px;font-family=Arial,Helvetica,sans-serif;color:#454545'>&nbsp;</td></tr>");
-                stringBuilder.Append("<tr><td style='font:12px;font-family=Arial,Helvetica,sans-serif;color:#454545'>");
+                stringBuilder.Append("<tbody><tr><td align='center' style='font:12px/1.5 Arial,Helvetica,sans-serif;color:#454545'>&nbsp;</td></tr>");
+                stringBuilder.Append("<tr><td style='font:12px/1.5 Arial,Helvetica,sans-serif;color:#454545'>");
                 stringBuilder.Append("<h3 style='margin:15px 20px 10px 20px;font-size:1.1em;color:#454545;text-align:center'>Your Order #" + orderId + " for Customer " + currentUser.Account + "</h3>");
                 stringBuilder.Append("</td></tr>");
-                stringBuilder.Append("<tr><td style='font:12px;font-family=Arial,Helvetica,sans-serif;color:#454545'><table width='90%' cellspacing='0' cellpadding='0' align='center' bgcolor='#ffffff' border='0'>");
+                stringBuilder.Append("<tr><td style='font:12px/1.5 Arial,Helvetica,sans-serif;color:#454545'><table width='90%' cellspacing='0' cellpadding='0' align='center' bgcolor='#ffffff' border='0'>");
                 stringBuilder.Append("<tbody><tr>");
                 stringBuilder.Append("<td style='padding:1em 0.25em;border-bottom:1px solid #c4c4c4'></td>");
                 stringBuilder.Append("<td style='padding:1em 0.25em;border-bottom:1px solid #c4c4c4;text-align:right'><strong style ='font-size:10px'>WLP ex.GST</strong></td>");
@@ -92,7 +92,7 @@ namespace Trojantrading.Repositories
                 foreach (var item in cart.ShoppingItems)
                 {
                     stringBuilder.Append("<tr><td style='padding:0 0.25em;border-bottom:1px solid #c4c4c4'><h4 style='margin:0'>#" + item.Product.Id + " " + item.Product.Name + "</h4></td>");
-                    stringBuilder.Append("<td style='padding:0 0.25em;border-bottom:1px solid #c4c4c4;text-align:right'><p style='font:12px;font-family=Arial,Helvetica,sans-serif;margin:0 0 0 0'>$" + item.Product.OriginalPrice + "</p></td>");
+                    stringBuilder.Append("<td style='padding:0 0.25em;border-bottom:1px solid #c4c4c4;text-align:right'><p style='font:12px/1.5 Arial,Helvetica,sans-serif;margin:0 0 0 0'>$" + item.Product.OriginalPrice + "</p></td>");
                     if (currentUser.Role.ToLower() == "agent")
                     {
                         stringBuilder.Append("<td style='padding:0 0.25em;border-bottom:1px solid #c4c4c4;text-align:right'><strong>$" + item.Product.AgentPrice + "</strong></td>");
@@ -124,20 +124,20 @@ namespace Trojantrading.Repositories
                 stringBuilder.Append("<tr><td colspan='1'>&nbsp;</td><td colspan='3' width='100' style='padding:0.5em 0.25em;border-bottom:1px solid #c4c4c4'>Total Discount Earned</td>");
                 stringBuilder.Append("<td width='100' style='padding:0.5em 0.25em;border-bottom:1px solid #c4c4c4;text-align:right'><strong><span>" + discount + "</span></strong></td></tr>");
                 stringBuilder.Append("</tfoot></table></td></tr>");
-                stringBuilder.Append("<tr><td style='font:12px;font-family=Arial,Helvetica,sans-serif;color:#454545'><table width='90%'><tbody>");
-                stringBuilder.Append("<tr><td valign='top' width='50%' style='font:12px;font-family=Arial,Helvetica,sans-serif;color:#454545'><h3 style='margin:15px 20px 10px 20px;font-size:1.1em;color:#454545;text-align:left'>Shipping Address</h3>");
-                stringBuilder.Append("<p style='font:12px;font-family=Arial,Helvetica,sans-serif;color:#454545;margin:12px 20px 10px 20px;margin-bottom:0'>" + currentUser.Account + "<br>" + currentUser.ShippingCustomerName + "<br>");
+                stringBuilder.Append("<tr><td style='font:12px/1.5 Arial,Helvetica,sans-serif;color:#454545'><table width='90%'><tbody>");
+                stringBuilder.Append("<tr><td valign='top' width='50%' style='font:12px/1.5 Arial,Helvetica,sans-serif;color:#454545'><h3 style='margin:15px 20px 10px 20px;font-size:1.1em;color:#454545;text-align:left'>Shipping Address</h3>");
+                stringBuilder.Append("<p style='font:12px/1.5 Arial,Helvetica,sans-serif;color:#454545;margin:12px 20px 10px 20px;margin-bottom:0'>" + currentUser.Account + "<br>" + currentUser.ShippingCustomerName + "<br>");
                 stringBuilder.Append(currentUser.ShippingStreetNumber + " " + currentUser.ShippingAddressLine + "<br> " + currentUser.ShippingSuburb + ", " + currentUser.ShippingState + ", " + currentUser.ShippingPostCode + "<br>");
                 stringBuilder.Append("<strong>Email:</strong><a href='" + currentUser.Email + "' target='_blank'>" + currentUser.Email + "</a><br><strong>Phone:</strong>" + currentUser.Phone + "</p></td>");
-                stringBuilder.Append("<td valign='top' width='50%' style='font:12px;font-family=Arial,Helvetica,sans-serif;color:#454545'><h3 style='margin:15px 20px 10px 20px;font-size:1.1em;color:#454545;text-align:left'>Billing Address</h3>");
-                stringBuilder.Append("<p style='font:12px;font-family=Arial,Helvetica,sans-serif;color:#454545;margin:12px 20px 10px 20px;margin-bottom:0'>" + currentUser.Account + "<br>" + currentUser.BillingCustomerName + "<br>");
+                stringBuilder.Append("<td valign='top' width='50%' style='font:12px/1.5 Arial,Helvetica,sans-serif;color:#454545'><h3 style='margin:15px 20px 10px 20px;font-size:1.1em;color:#454545;text-align:left'>Billing Address</h3>");
+                stringBuilder.Append("<p style='font:12px/1.5 Arial,Helvetica,sans-serif;color:#454545;margin:12px 20px 10px 20px;margin-bottom:0'>" + currentUser.Account + "<br>" + currentUser.BillingCustomerName + "<br>");
                 stringBuilder.Append(currentUser.BillingStreetNumber + " " + currentUser.BillingAddressLine + "<br> " + currentUser.BillingSuburb + ", " + currentUser.BillingState + ", " + currentUser.BillingPostCode + "<br>");
                 stringBuilder.Append("<strong>Email:</strong><a href='" + currentUser.Email + "' target='_blank'>" + currentUser.Email + "</a><br><strong>Phone:</strong>" + currentUser.Phone + "</p></td>");
                 stringBuilder.Append("</tr></tbody></table></td></tr>");
-                stringBuilder.Append("<tr><td style='font:12px;font-family=Arial,Helvetica,sans-serif;color:#454545'>&nbsp;</td></tr>");
-                stringBuilder.Append("<tr><td style='font:12px;font-family=Arial,Helvetica,sans-serif;color:#454545;background:#f6f4ef;text-align:center;border-bottom:1px solid #d3d3d3'><p style='font:12px;font-family=Arial,Helvetica,sans-serif;color:#45659d;margin:12px 20px 10px 20px;text-decoration:none'><a href='https://st-group.net.au' style='color:#454545;text-decoration:none' target='_blank'><strong>https://st-group.net.au</strong></a></p></td></tr>");
+                stringBuilder.Append("<tr><td style='font:12px/1.5 Arial,Helvetica,sans-serif;color:#454545'>&nbsp;</td></tr>");
+                stringBuilder.Append("<tr><td style='font:12px/1.5 Arial,Helvetica,sans-serif;color:#454545;background:#f6f4ef;text-align:center;border-bottom:1px solid #d3d3d3'><p style='font:12px/1.5 Arial,Helvetica,sans-serif;color:#45659d;margin:12px 20px 10px 20px;text-decoration:none'><a href='https://st-group.net.au' style='color:#454545;text-decoration:none' target='_blank'><strong>https://st-group.net.au</strong></a></p></td></tr>");
                 stringBuilder.Append("</tbody></table></td></tr>");
-                stringBuilder.Append("<tr><td style='font:12px;font-family=Arial,Helvetica,sans-serif;color:#454545'>&nbsp;</td></tr>");
+                stringBuilder.Append("<tr><td style='font:12px/1.5 Arial,Helvetica,sans-serif;color:#454545'>&nbsp;</td></tr>");
                 stringBuilder.Append("</tbody></table></div>");
                 string emailBody = stringBuilder.ToString();
                 share.SendEmail("testprojectemail2019@gmail.com", "testprojectemail2019@gmail.com", "test", emailBody, "", "", true);
