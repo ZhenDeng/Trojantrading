@@ -81,8 +81,11 @@ export class EditOrderComponent implements OnInit {
       this.currentOrder.clientMessage = this.orderFormGroup.value.clientMessage;
       this.currentOrder.adminMessage = this.orderFormGroup.value.adminMessage;
       this.currentOrder.shoppingCart.paymentMethod = this.orderFormGroup.value.paymentMethod;
-      this.currentOrder.shoppingCart.note = this.orderFormGroup.value.note;
-      //console.log(this.currentOrder);
+      //this.currentOrder.shoppingCart.note = this.orderFormGroup.value.note;
+      this.currentCart.totalPrice = this.currentOrder.totalPrice;
+      this.currentCart.note = this.orderFormGroup.value.note;
+      this.currentOrder.shoppingCart = this.currentCart;
+      //console.log(this.orderFormGroup.value.note);
       this.dialogRef.close(this.currentOrder);
     } else {
       this.isNotValidField('name', this.account_validation_messages.name);
@@ -122,7 +125,7 @@ export class EditOrderComponent implements OnInit {
 
         this.orderFormGroup.get("note").setValue(this.currentCart.note);
         this.orderFormGroup.get("paymentMethod").setValue(this.currentCart.paymentMethod);
-        this.orderFormGroup.get("totalPrice").setValue(this.currentCart.totalPrice.toFixed(2));
+        this.orderFormGroup.get("totalPrice").setValue(this.currentOrder.totalPrice.toFixed(2));
         
     },
     (error: any) => {
@@ -154,7 +157,7 @@ export class EditOrderComponent implements OnInit {
 
     this.currentOrder.totalPrice = total;
 
-    this.orderFormGroup.get("totalPrice").setValue(total.toString());
+    this.orderFormGroup.get("totalPrice").setValue(total.toFixed(2));
 
   }
   
