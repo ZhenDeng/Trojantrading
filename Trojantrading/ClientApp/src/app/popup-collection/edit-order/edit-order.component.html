@@ -21,7 +21,7 @@
   </mat-form-field>
   <mat-form-field>
     <mat-label>Payment Method</mat-label>
-    <mat-select formControlName="paymentMethod">
+    <mat-select formControlName="paymentMethod" (change)="onChangePaymentMethod(currentItems);">
       <mat-option value="onaccount">
         ON ACCOUNT
       </mat-option>
@@ -63,7 +63,7 @@
                 </td>
                 <td class="col-md align-left" style="max-width:12%">
                   <input type="text" [attr.id]="'qty' + item.id" class="input-box-small" [value]="item.amount" (input)="item.amount = qtyInput.value"
-                   (keyup)="onQtyChange(item, $event.target.value)" #qtyInput />
+                   (keyup)="onQtyChange(item, $event.target.value)" (keypress)="_keyPress($event)" #qtyInput />
                 </td>
                 <td class="col-md align-left">
                      {{ item.subTotal | currency:'AUD':'symbol-narrow':'.2-2' }}
@@ -76,9 +76,6 @@
    <mat-form-field style="margin-top:20px;">
     <input matInput class="totalPriceValidate" formControlName="totalPrice" placeholder="Total Price"/>
     <span matPrefix>$&nbsp;</span>
-  </mat-form-field>
-  <mat-form-field>
-    <textarea matInput class="noteValidate" formControlName="note" placeholder="Note"></textarea>
   </mat-form-field>
   <mat-form-field>
     <textarea matInput class="clientMessageValidate" formControlName="clientMessage" placeholder="Client Message"></textarea>

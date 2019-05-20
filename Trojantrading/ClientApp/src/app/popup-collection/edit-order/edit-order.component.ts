@@ -24,6 +24,7 @@ export class EditOrderComponent implements OnInit {
   currentItems: ShoppingItem[] = [];
   currentUser: User;
   currentRole: string;
+  selectedPaymentMethod: string;
   account_validation_messages: any = {
     'name': [
       { class: 'customerValidate', message: 'Please enter customer name' }
@@ -49,7 +50,6 @@ export class EditOrderComponent implements OnInit {
       orderStatus: new FormControl(""),
       totalPrice: new FormControl(""),
       balance: new FormControl(""),
-      note: new FormControl(""),
       clientMessage: new FormControl(""),
       adminMessage: new FormControl(""),
       paymentMethod: new FormControl(""),
@@ -81,11 +81,9 @@ export class EditOrderComponent implements OnInit {
       this.currentOrder.clientMessage = this.orderFormGroup.value.clientMessage;
       this.currentOrder.adminMessage = this.orderFormGroup.value.adminMessage;
       this.currentOrder.shoppingCart.paymentMethod = this.orderFormGroup.value.paymentMethod;
-      //this.currentOrder.shoppingCart.note = this.orderFormGroup.value.note;
       this.currentCart.totalPrice = this.currentOrder.totalPrice;
-      this.currentCart.note = this.orderFormGroup.value.note;
       this.currentOrder.shoppingCart = this.currentCart;
-      //console.log(this.orderFormGroup.value.note);
+
       this.dialogRef.close(this.currentOrder);
     } else {
       this.isNotValidField('name', this.account_validation_messages.name);
@@ -104,12 +102,13 @@ export class EditOrderComponent implements OnInit {
   getOrdersWithShoppingItems(id: number) {
       
     this.orderService.getOrdersWithShoppingItems(id).subscribe((value: Order) => {
-        console.info(value);
+        //console.info(value);
         this.currentOrder = value;
         this.currentCart = value.shoppingCart;
         this.currentItems = this.currentCart.shoppingItems;
         this.currentUser = value.user;
         this.currentRole = this.currentUser.role;
+        this.selectedPaymentMethod = this.currentCart.paymentMethod;
 
         if (this.currentItems.length) {
           this.currentItems.forEach(item => {
@@ -123,7 +122,6 @@ export class EditOrderComponent implements OnInit {
           });
         }
 
-        this.orderFormGroup.get("note").setValue(this.currentCart.note);
         this.orderFormGroup.get("paymentMethod").setValue(this.currentCart.paymentMethod);
         this.orderFormGroup.get("totalPrice").setValue(this.currentOrder.totalPrice.toFixed(2));
         
@@ -146,6 +144,36 @@ export class EditOrderComponent implements OnInit {
         item.subTotal = item.product.originalPrice * qty;
       }
     }
+    this.onChangePaymentMethod(this.currentItems);
+    
+  }
+
+  onChangePaymentMethod(items: ShoppingItem[]) {
+    this.selectedPaymentMethod = this.orderFormGroup.get("paymentMethod").value;
+    console.log(this.selectedPaymentMethod);
+
+    if(this.selectedPaymentMethod == 'onaccount') {
+      items.forEach(item => {
+        if (this.currentRole == 'agent') {
+          item.subTotal = item.product.agentPrice * item.amount;
+        } else if (this.currentRole == 'wholesaler') {
+          item.subTotal = item.product.wholesalerPrice * item.amount;
+        } else {
+          item.subTotal = item.product.originalPrice * item.amount;
+        }
+      })
+    } else {
+      items.forEach(item => {
+        if (this.currentRole == 'agent') {
+          item.subTotal = (item.product.agentPrice * ((100 - item.product.prepaymentDiscount)/100)) * item.amount;
+        } else if (this.currentRole == 'wholesaler') {
+          item.subTotal = (item.product.wholesalerPrice * ((100 - item.product.prepaymentDiscount)/100)) * item.amount;
+        } else {
+          item.subTotal = (item.product.originalPrice * ((100 - item.product.prepaymentDiscount)/100)) * item.amount;
+        }
+      })
+    }
+
     this.calculateTotalPrice();
   }
 
