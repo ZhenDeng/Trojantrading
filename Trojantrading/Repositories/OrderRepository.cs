@@ -140,7 +140,7 @@ namespace Trojantrading.Repositories
                 stringBuilder.Append("<tr><td style='font:12px/1.5 Arial,Helvetica,sans-serif;color:#454545'>&nbsp;</td></tr>");
                 stringBuilder.Append("</tbody></table></div>");
                 string emailBody = stringBuilder.ToString();
-                share.SendEmail("testprojectemail2019@gmail.com", "testprojectemail2019@gmail.com", "test", emailBody, "", "", true);
+                share.SendEmail("testprojectemail2019@gmail.com", currentUser.Email, "test", emailBody, "", "", true);
 
                 foreach (var si in cart.ShoppingItems)
                 {
