@@ -83,7 +83,8 @@ export class EditOrderComponent implements OnInit {
       this.currentOrder.shoppingCart.paymentMethod = this.orderFormGroup.value.paymentMethod;
       this.currentCart.totalPrice = this.currentOrder.totalPrice;
       this.currentOrder.shoppingCart = this.currentCart;
-
+      this.currentOrder.shoppingCart.shoppingItems = this.currentItems;
+      console.info(this.currentOrder);
       this.dialogRef.close(this.currentOrder);
     } else {
       this.isNotValidField('name', this.account_validation_messages.name);
@@ -111,15 +112,28 @@ export class EditOrderComponent implements OnInit {
         this.selectedPaymentMethod = this.currentCart.paymentMethod;
 
         if (this.currentItems.length) {
-          this.currentItems.forEach(item => {
-            if (this.currentRole == 'agent') {
-              item.subTotal = item.product.agentPrice * item.amount;
-            } else if (this.currentRole == 'wholesaler') {
-              item.subTotal = item.product.wholesalerPrice * item.amount;
-            } else {
-              item.subTotal = item.product.originalPrice * item.amount;
-            } 
-          });
+          if(this.selectedPaymentMethod == 'onaccount') {
+            this.currentItems.forEach(item => {
+              if (this.currentRole == 'agent') {
+                item.subTotal = item.product.agentPrice * item.amount;
+              } else if (this.currentRole == 'wholesaler') {
+                item.subTotal = item.product.wholesalerPrice * item.amount;
+              } else {
+                item.subTotal = item.product.originalPrice * item.amount;
+              }
+            })
+          } else {
+            this.currentItems.forEach(item => {
+              if (this.currentRole == 'agent') {
+                item.subTotal = (item.product.agentPrice * ((100 - item.product.prepaymentDiscount)/100)) * item.amount;
+              } else if (this.currentRole == 'wholesaler') {
+                item.subTotal = (item.product.wholesalerPrice * ((100 - item.product.prepaymentDiscount)/100)) * item.amount;
+              } else {
+                item.subTotal = (item.product.originalPrice * ((100 - item.product.prepaymentDiscount)/100)) * item.amount;
+              }
+            })
+          }
+          this.calculateTotalPrice();
         }
 
         this.orderFormGroup.get("paymentMethod").setValue(this.currentCart.paymentMethod);
@@ -150,8 +164,6 @@ export class EditOrderComponent implements OnInit {
 
   onChangePaymentMethod(items: ShoppingItem[]) {
     this.selectedPaymentMethod = this.orderFormGroup.get("paymentMethod").value;
-    console.log(this.selectedPaymentMethod);
-
     if(this.selectedPaymentMethod == 'onaccount') {
       items.forEach(item => {
         if (this.currentRole == 'agent') {
@@ -173,7 +185,7 @@ export class EditOrderComponent implements OnInit {
         }
       })
     }
-
+    this.currentItems = items;
     this.calculateTotalPrice();
   }
 
