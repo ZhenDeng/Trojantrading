@@ -10,7 +10,7 @@ namespace Trojantrading.Repositories
 
     public interface IOrderRepository
     {
-        ApiResponse AddOrder(ShoppingCart cart, int gst, int priceExclGst, int discount);
+        ApiResponse AddOrder(ShoppingCart cart, double gst, double priceExclGst, double discount);
         Order Get(int id);
         ApiResponse DeleteOrder(int id);
         ApiResponse UpdateOrder(Order order);
@@ -38,7 +38,7 @@ namespace Trojantrading.Repositories
             this.share = share;
         }
 
-        public ApiResponse AddOrder(ShoppingCart cart, int gst, int priceExclGst, int discount)
+        public ApiResponse AddOrder(ShoppingCart cart, double gst, double priceExclGst, double discount)
         {
             try
             {
@@ -65,7 +65,7 @@ namespace Trojantrading.Repositories
                     orderId = trojantradingDbContext.Orders.Last().Id + 1;
                 }
                 var currentUser = userRepository.GetUserByAccount(cart.UserId);
-                int priceIncGst = priceExclGst + gst;
+                double priceIncGst = priceExclGst + gst;
                 StringBuilder stringBuilder = new StringBuilder();
                 stringBuilder.Append("<div style='padding: 0; margin: 0; height: 100%; background:#fbfaf7;'>");
                 stringBuilder.Append("<table width='100%' height='100%' align='center' cellspacing='0' cellpadding='0' bgcolor='#fbfaf7'>");
@@ -73,7 +73,7 @@ namespace Trojantrading.Repositories
                 stringBuilder.Append("<tr><td style='font:12px/1.5 Arial,Helvetica,sans-serif;color:#454545'>&nbsp;</td></tr>");
                 stringBuilder.Append("<tr>");
                 stringBuilder.Append("<td style='color:#343731;'><table width='600px' bgcolor='#ffffff' cellspacing='0' cellpadding='0' align='center' border='0' style='border:1px solid #232323;text-align:center'><tbody><tr><td style='padding:10px;color:#343731'>");
-                stringBuilder.Append("<img src ='https://ci6.googleusercontent.com/proxy/Gunm1Ui60tevgKhW_lccMS_unKUUgy-lJMieq_PRab1QyTLnRoP9G1x6zOVZC4jdRT5fDUVlNj_RpRc=s0-d-e1-ft#https://st-group.net.au/img/stg-logo.png' width='80px' style='margin:0 auto;display:block'>");
+                stringBuilder.Append("<img src='https://via.placeholder.com/150' width='80px' style='margin:0 auto;display:block'>");
                 stringBuilder.Append("<h1 style='font-weight:400;text-transform:uppercase'>Trojan Trading Company PTY LTD</h1><h4 style='font-weight:400;text-transform:uppercase'>Australia</h4>");
                 stringBuilder.Append("</td></tr></tbody></table></td></tr>");
                 stringBuilder.Append("<tr><td width='600' style='font:12px/1.5 Arial,Helvetica,sans-serif;color:#454545'>");
@@ -95,20 +95,20 @@ namespace Trojantrading.Repositories
                     stringBuilder.Append("<td style='padding:0 0.25em;border-bottom:1px solid #c4c4c4;text-align:right'><p style='font:12px/1.5 Arial,Helvetica,sans-serif;margin:0 0 0 0'>$" + item.Product.OriginalPrice + "</p></td>");
                     if (currentUser.Role.ToLower() == "agent")
                     {
-                        stringBuilder.Append("<td style='padding:0 0.25em;border-bottom:1px solid #c4c4c4;text-align:right'><strong>$" + item.Product.AgentPrice + "</strong></td>");
+                        stringBuilder.Append("<td style='padding:0 0.25em;border-bottom:1px solid #c4c4c4;text-align:right'><strong>$" + String.Format("{0:0.00}", item.Product.AgentPrice) + "</strong></td>");
                     }
                     else if (currentUser.Role.ToLower() == "wholesaler")
                     {
-                        stringBuilder.Append("<td style='padding:0 0.25em;border-bottom:1px solid #c4c4c4;text-align:right'><strong>$" + item.Product.WholesalerPrice + "</strong></td>");
+                        stringBuilder.Append("<td style='padding:0 0.25em;border-bottom:1px solid #c4c4c4;text-align:right'><strong>$" + String.Format("{0:0.00}", item.Product.WholesalerPrice) + "</strong></td>");
                     }
                     stringBuilder.Append("<td style='padding:0 0.25em;border-bottom:1px solid #c4c4c4;text-align:center'>" + item.Amount + "</td>");
                     if (currentUser.Role.ToLower() == "agent")
                     {
-                        stringBuilder.Append("<td style='padding:0 0.25em;border-bottom:1px solid #c4c4c4;text-align:right'><span><strong>$" + item.Product.AgentPrice * item.Amount + "</strong></span></td></tr>");
+                        stringBuilder.Append("<td style='padding:0 0.25em;border-bottom:1px solid #c4c4c4;text-align:right'><span><strong>$" + String.Format("{0:0.00}", item.Product.AgentPrice * item.Amount) + "</strong></span></td></tr>");
                     }
                     else if (currentUser.Role.ToLower() == "wholesaler")
                     {
-                        stringBuilder.Append("<td style='padding:0 0.25em;border-bottom:1px solid #c4c4c4;text-align:right'><span><strong>$" + item.Product.WholesalerPrice * item.Amount + "</strong></span></td></tr>");
+                        stringBuilder.Append("<td style='padding:0 0.25em;border-bottom:1px solid #c4c4c4;text-align:right'><span><strong>$" + String.Format("{0:0.00}", item.Product.WholesalerPrice * item.Amount) + "</strong></span></td></tr>");
                     }
                 }
                 stringBuilder.Append("</tbody>");
@@ -116,13 +116,13 @@ namespace Trojantrading.Repositories
                 stringBuilder.Append("<tr><td colspan='1'>&nbsp;</td><td colspan='3' width='100' style='padding:0.5em 0.25em;border-bottom:1px solid #c4c4c4'>Payment Method</td>");
                 stringBuilder.Append("<td width='100' style='padding:0.5em 0.25em;border-bottom:1px solid #c4c4c4;text-align:right'><strong><span>" + order.ClientMessage + "</span></strong></td></tr>");
                 stringBuilder.Append("<tr><td colspan='1'>&nbsp;</td><td colspan='3' width='100' style='padding:0.5em 0.25em;border-bottom:1px solid #c4c4c4'>You Will Pay Excl.GST</td>");
-                stringBuilder.Append("<td width='100' style='padding:0.5em 0.25em;border-bottom:1px solid #c4c4c4;text-align:right'><strong>$<span>" + priceExclGst + "</span></strong></td></tr>");
+                stringBuilder.Append("<td width='100' style='padding:0.5em 0.25em;border-bottom:1px solid #c4c4c4;text-align:right'><strong>$<span>" + String.Format("{0:0.00}", priceExclGst) + "</span></strong></td></tr>");
                 stringBuilder.Append("<tr><td colspan='1'>&nbsp;</td><td colspan='3' width='100' style='padding:0.5em 0.25em;border-bottom:1px solid #c4c4c4'>GST</td>");
-                stringBuilder.Append("<td width='100' style='padding:0.5em 0.25em;border-bottom:1px solid #c4c4c4;text-align:right'><strong>$<span>" + gst + "</span></strong></td></tr>");
+                stringBuilder.Append("<td width='100' style='padding:0.5em 0.25em;border-bottom:1px solid #c4c4c4;text-align:right'><strong>$<span>" + String.Format("{0:0.00}", gst) + "</span></strong></td></tr>");
                 stringBuilder.Append("<tr><td colspan='1'>&nbsp;</td><td colspan='3' width='100' style='padding:0.5em 0.25em;border-bottom:1px solid #c4c4c4'>You will pay Inc.GST</td>");
-                stringBuilder.Append("<td width='100' style='padding:0.5em 0.25em;border-bottom:1px solid #c4c4c4;text-align:right'><strong>$<span>" + priceIncGst + "</span></strong></td></tr>");
+                stringBuilder.Append("<td width='100' style='padding:0.5em 0.25em;border-bottom:1px solid #c4c4c4;text-align:right'><strong>$<span>" + String.Format("{0:0.00}", priceIncGst) + "</span></strong></td></tr>");
                 stringBuilder.Append("<tr><td colspan='1'>&nbsp;</td><td colspan='3' width='100' style='padding:0.5em 0.25em;border-bottom:1px solid #c4c4c4'>Total Discount Earned</td>");
-                stringBuilder.Append("<td width='100' style='padding:0.5em 0.25em;border-bottom:1px solid #c4c4c4;text-align:right'><strong><span>" + discount + "</span></strong></td></tr>");
+                stringBuilder.Append("<td width='100' style='padding:0.5em 0.25em;border-bottom:1px solid #c4c4c4;text-align:right'><strong>$<span>" + String.Format("{0:0.00}", discount) + "</span></strong></td></tr>");
                 stringBuilder.Append("</tfoot></table></td></tr>");
                 stringBuilder.Append("<tr><td style='font:12px/1.5 Arial,Helvetica,sans-serif;color:#454545'><table width='90%'><tbody>");
                 stringBuilder.Append("<tr><td valign='top' width='50%' style='font:12px/1.5 Arial,Helvetica,sans-serif;color:#454545'><h3 style='margin:15px 20px 10px 20px;font-size:1.1em;color:#454545;text-align:left'>Shipping Address</h3>");
@@ -135,7 +135,7 @@ namespace Trojantrading.Repositories
                 stringBuilder.Append("<strong>Email:</strong><a href='" + currentUser.Email + "' target='_blank'>" + currentUser.Email + "</a><br><strong>Phone:</strong>" + currentUser.Phone + "</p></td>");
                 stringBuilder.Append("</tr></tbody></table></td></tr>");
                 stringBuilder.Append("<tr><td style='font:12px/1.5 Arial,Helvetica,sans-serif;color:#454545'>&nbsp;</td></tr>");
-                stringBuilder.Append("<tr><td style='font:12px/1.5 Arial,Helvetica,sans-serif;color:#454545;background:#f6f4ef;text-align:center;border-bottom:1px solid #d3d3d3'><p style='font:12px/1.5 Arial,Helvetica,sans-serif;color:#45659d;margin:12px 20px 10px 20px;text-decoration:none'><a href='https://st-group.net.au' style='color:#454545;text-decoration:none' target='_blank'><strong>https://st-group.net.au</strong></a></p></td></tr>");
+                stringBuilder.Append("<tr><td style='font:12px/1.5 Arial,Helvetica,sans-serif;color:#454545;background:#f6f4ef;text-align:center;border-bottom:1px solid #d3d3d3'><p style='font:12px/1.5 Arial,Helvetica,sans-serif;color:#45659d;margin:12px 20px 10px 20px;text-decoration:none'><a style='color:#454545;text-decoration:none' target='_blank'><strong>https://XXXXXXXX</strong></a></p></td></tr>");
                 stringBuilder.Append("</tbody></table></td></tr>");
                 stringBuilder.Append("<tr><td style='font:12px/1.5 Arial,Helvetica,sans-serif;color:#454545'>&nbsp;</td></tr>");
                 stringBuilder.Append("</tbody></table></div>");

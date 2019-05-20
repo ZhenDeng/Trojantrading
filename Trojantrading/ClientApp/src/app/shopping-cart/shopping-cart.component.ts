@@ -102,6 +102,9 @@ export class ShoppingCartComponent implements OnInit {
   checkoutShoppingItems(): void {
     this.shoppingCart.paymentMethod = this.selectedPayment;
     this.loadContent = false;
+    console.info(this.gst);
+    console.info(this.priceExclGst);
+    console.info(this.discount);
     this.orderService.AddOrder(this.shoppingCart, this.gst, this.priceExclGst, this.discount).subscribe((res: ApiResponse) => {
       if (res && res.status == "success") {
         this.adminService.GetUserByAccount(_.toNumber(this.shareService.readCookie("userId"))).subscribe((user: User) => {

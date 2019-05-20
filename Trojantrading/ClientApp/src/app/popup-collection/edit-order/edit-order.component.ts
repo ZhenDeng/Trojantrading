@@ -120,8 +120,6 @@ export class EditOrderComponent implements OnInit {
             } 
           });
         }
-
-        this.orderFormGroup.get("note").setValue(this.currentCart.note);
         this.orderFormGroup.get("paymentMethod").setValue(this.currentCart.paymentMethod);
         this.orderFormGroup.get("totalPrice").setValue(this.currentOrder.totalPrice.toFixed(2));
         
