@@ -53,20 +53,20 @@
                   {{ item.product.category }}
                 </td>
                 <td class="col-md align-left">
-                  {{ item.product.originalPrice | currency }}
+                  {{ item.product.originalPrice | currency:'AUD':'symbol-narrow':'.2-2' }}
                 </td>
                 <td class="col-md align-left" *ngIf="currentRole =='agent'">
-                  {{ item.product.agentPrice | currency }}
+                  {{ item.product.agentPrice | currency:'AUD':'symbol-narrow':'.2-2' }}
                 </td>
                 <td class="col-md align-left" *ngIf="currentRole =='wholesaler'">
-                  {{ item.product.wholesalerPrice | currency }}
+                  {{ item.product.wholesalerPrice | currency:'AUD':'symbol-narrow':'.2-2' }}
                 </td>
                 <td class="col-md align-left" style="max-width:12%">
                   <input type="text" [attr.id]="'qty' + item.id" class="input-box-small" [value]="item.amount" (input)="item.amount = qtyInput.value"
-                   (focusout)="onQtyChange(item, $event.target.value)" #qtyInput />
+                   (keyup)="onQtyChange(item, $event.target.value)" #qtyInput />
                 </td>
                 <td class="col-md align-left">
-                     {{ item.subTotal | currency }}
+                     {{ item.subTotal | currency:'AUD':'symbol-narrow':'.2-2' }}
                 </td>
               </tr>
             </ng-container>

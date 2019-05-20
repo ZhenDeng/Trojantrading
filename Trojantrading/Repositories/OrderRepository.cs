@@ -56,9 +56,14 @@ namespace Trojantrading.Repositories
                     Balance = 0
                 };
                 trojantradingDbContext.Orders.Add(order);
-
-                int orderId = trojantradingDbContext.Orders.Last().Id + 1;
-
+                int orderId;
+                if (trojantradingDbContext.Orders.ToList().Count < 1)
+                {
+                    orderId = 1;
+                }
+                else {
+                    orderId = trojantradingDbContext.Orders.Last().Id + 1;
+                }
                 var currentUser = userRepository.GetUserByAccount(cart.UserId);
                 int priceIncGst = priceExclGst + gst;
                 StringBuilder stringBuilder = new StringBuilder();

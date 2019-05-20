@@ -11,7 +11,7 @@
             <p>Your Cart Is Empty</p>
             <button class="btn btn-long" (click)="continueShopping()">Start Shopping</button>
           </div>
-
+          <loading-screen *ngIf="!loadContent" [showBlurTable]="false" (currentLoadingStatus)="onLoading($event)"></loading-screen>
           <div class="example-container mat-elevation-z8" *ngIf="dataSource?.length">
             <mat-table #table [dataSource]="dataSource">
       

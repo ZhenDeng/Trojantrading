@@ -101,6 +101,7 @@ export class EditOrderComponent implements OnInit {
   getOrdersWithShoppingItems(id: number) {
       
     this.orderService.getOrdersWithShoppingItems(id).subscribe((value: Order) => {
+        console.info(value);
         this.currentOrder = value;
         this.currentCart = value.shoppingCart;
         this.currentItems = this.currentCart.shoppingItems;
@@ -130,20 +131,19 @@ export class EditOrderComponent implements OnInit {
   }
 
   onQtyChange(item: ShoppingItem, qty: number) {
-    if (isNullOrUndefined(qty)) {
+    if (!qty) {
       this.shareService.showValidator("#qty" + item.id, "Please enter quantity number", "right", "error");
-      return;
+      item.amount = 1;
+    }else{
+      if (this.currentRole == 'agent') {
+        item.subTotal = item.product.agentPrice * qty;
+      } else if (this.currentRole == 'wholesaler') {
+        item.subTotal = item.product.wholesalerPrice * qty;
+      } else {
+        item.subTotal = item.product.originalPrice * qty;
+      }
     }
-    if (this.currentRole == 'agent') {
-      item.subTotal = item.product.agentPrice * qty;
-    } else if (this.currentRole == 'wholesaler') {
-      item.subTotal = item.product.wholesalerPrice * qty;
-    } else {
-      item.subTotal = item.product.originalPrice * qty;
-    }
-
     this.calculateTotalPrice();
-     
   }
 
   calculateTotalPrice():void {
@@ -154,10 +154,19 @@ export class EditOrderComponent implements OnInit {
 
     this.currentOrder.totalPrice = total;
 
-    this.orderFormGroup.get("totalPrice").setValue(total);
+    this.orderFormGroup.get("totalPrice").setValue(total.toString());
 
   }
+  
+  _keyPress(event: any) {
+    const pattern = /[0-9\+\-\ ]/;
+    let inputChar = String.fromCharCode(event.charCode);
 
+    if (!pattern.test(inputChar)) {
+      // invalid character, prevent input
+      event.preventDefault();
+    }
+  }
 
   onNoClick(): void {
     this.dialogRef.close();

@@ -30,6 +30,7 @@ export class ShoppingCartComponent implements OnInit {
   role: string = this.shareService.readCookie("role");
   successCheckout: boolean = false;
   selectedPayment: string;
+  loadContent = false;
 
   constructor(
     private nav: NavbarService,
@@ -214,6 +215,10 @@ export class ShoppingCartComponent implements OnInit {
       this.shoppingCart.totalPrice = this.priceIncGst;
       this.discount = this.oringinalPriceIncGst - this.priceIncGst;
     }
+  }
+
+  onLoading(currentLoadingStatus: boolean) {
+    this.loadContent = !currentLoadingStatus;
   }
 
   _keyPress(event: any) {
