@@ -92,7 +92,7 @@ namespace Trojantrading.Repositories
                                     ShoppingItems = join.ShoppingItems.ToList(),
                                     OriginalPrice = join.ShoppingCart.OriginalPrice,
                                     UserId = userId,
-                                    Status = "0",
+                                    Status = join.ShoppingCart.Status,
                                     PaymentMethod = join.ShoppingCart.PaymentMethod
                                 }).FirstOrDefault();
 
@@ -106,7 +106,7 @@ namespace Trojantrading.Repositories
                                 Amount = join.ShoppingItem.Amount,
                                 Product = join.Product,
                                 ProductId = join.Product.Id,
-                                Status = "0"
+                                Status = join.ShoppingItem.Status
                             }).ToList();
             }
 
@@ -125,7 +125,7 @@ namespace Trojantrading.Repositories
                                     ShoppingItems = join.ShoppingItems.ToList(),
                                     OriginalPrice = join.ShoppingCart.OriginalPrice,
                                     UserId = userId,
-                                    Status = "0",
+                                    Status = join.ShoppingCart.Status,
                                     PaymentMethod = join.ShoppingCart.PaymentMethod
                                 }).FirstOrDefault();
 
@@ -140,7 +140,7 @@ namespace Trojantrading.Repositories
                                 Amount = join.ShoppingItem.Amount,
                                 Product = join.Product,
                                 ProductId = join.Product.Id,
-                                Status = "0"
+                                Status = join.ShoppingItem.Status
                             }).ToList();
             }
 

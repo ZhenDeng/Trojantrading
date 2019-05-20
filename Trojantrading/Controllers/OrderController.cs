@@ -31,7 +31,7 @@ namespace Trojantrading.Controllers
         [NoCache]
         [ProducesResponseType(typeof(ApiResponse), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
-        public IActionResult AddOrder(int gst, int priceExclGst, int discount, [FromBody]ShoppingCart cart)
+        public IActionResult AddOrder(double gst, double priceExclGst, double discount, [FromBody]ShoppingCart cart)
         {
             return Ok(_orderRepository.AddOrder(cart, gst, priceExclGst, discount));
         }

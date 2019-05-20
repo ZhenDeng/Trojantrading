@@ -101,6 +101,10 @@ export class ShoppingCartComponent implements OnInit {
 
   checkoutShoppingItems(): void {
     this.shoppingCart.paymentMethod = this.selectedPayment;
+    this.loadContent = false;
+    console.info(this.gst);
+    console.info(this.priceExclGst);
+    console.info(this.discount);
     this.orderService.AddOrder(this.shoppingCart, this.gst, this.priceExclGst, this.discount).subscribe((res: ApiResponse) => {
       if (res && res.status == "success") {
         this.adminService.GetUserByAccount(_.toNumber(this.shareService.readCookie("userId"))).subscribe((user: User) => {
@@ -115,16 +119,17 @@ export class ShoppingCartComponent implements OnInit {
             this.dataSource = this.shoppingCart.shoppingItems;
             this.successCheckout = true;
             this.shoppingCartService.MonitorShoppingItemLength(this.dataSource.length);
+            this.loadContent = true;
           },
             (error: any) => {
               console.info(error);
+              this.loadContent = true;
             });
         },
           (error: any) => {
             console.info(error);
+            this.loadContent = true;
           });
-
-        this.shareService.showSuccess(".checkoutbtn", res.message, "right");
       } else {
         this.shareService.showError(".checkoutbtn", res.message, "right");
       }
