@@ -49,7 +49,6 @@ export class EditOrderComponent implements OnInit {
       orderStatus: new FormControl(""),
       totalPrice: new FormControl(""),
       balance: new FormControl(""),
-      note: new FormControl(""),
       clientMessage: new FormControl(""),
       adminMessage: new FormControl(""),
       paymentMethod: new FormControl(""),
@@ -83,7 +82,6 @@ export class EditOrderComponent implements OnInit {
       this.currentOrder.shoppingCart.paymentMethod = this.orderFormGroup.value.paymentMethod;
       //this.currentOrder.shoppingCart.note = this.orderFormGroup.value.note;
       this.currentCart.totalPrice = this.currentOrder.totalPrice;
-      this.currentCart.note = this.orderFormGroup.value.note;
       this.currentOrder.shoppingCart = this.currentCart;
       //console.log(this.orderFormGroup.value.note);
       this.dialogRef.close(this.currentOrder);
