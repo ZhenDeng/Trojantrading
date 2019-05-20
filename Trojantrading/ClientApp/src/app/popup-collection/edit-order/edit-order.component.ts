@@ -150,7 +150,7 @@ export class EditOrderComponent implements OnInit {
 
   onChangePaymentMethod(items: ShoppingItem[]) {
     this.selectedPaymentMethod = this.orderFormGroup.get("paymentMethod").value;
-    console.log(this.selectedPaymentMethod);
+    //console.log(this.selectedPaymentMethod);
 
     if(this.selectedPaymentMethod == 'onaccount') {
       items.forEach(item => {
