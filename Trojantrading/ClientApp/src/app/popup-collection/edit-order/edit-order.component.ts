@@ -8,7 +8,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { OrderService } from '../../services/order.service';
 import { Order } from '../../models/order';
-import { isNullOrUndefined } from 'util';
+
 
 @Component({
   selector: 'app-edit-order',
@@ -52,7 +52,6 @@ export class EditOrderComponent implements OnInit {
       balance: new FormControl(""),
       clientMessage: new FormControl(""),
       adminMessage: new FormControl(""),
-      paymentMethod: new FormControl(""),
     });
    }
 
@@ -80,11 +79,11 @@ export class EditOrderComponent implements OnInit {
       this.currentOrder.balance = this.orderFormGroup.value.balance;
       this.currentOrder.clientMessage = this.orderFormGroup.value.clientMessage;
       this.currentOrder.adminMessage = this.orderFormGroup.value.adminMessage;
-      this.currentOrder.shoppingCart.paymentMethod = this.orderFormGroup.value.paymentMethod;
+      this.currentOrder.shoppingCart.paymentMethod = this.selectedPaymentMethod;
       this.currentCart.totalPrice = this.currentOrder.totalPrice;
       this.currentOrder.shoppingCart = this.currentCart;
       this.currentOrder.shoppingCart.shoppingItems = this.currentItems;
-      console.info(this.currentOrder);
+
       this.dialogRef.close(this.currentOrder);
     } else {
       this.isNotValidField('name', this.account_validation_messages.name);
@@ -111,33 +110,9 @@ export class EditOrderComponent implements OnInit {
         this.currentRole = this.currentUser.role;
         this.selectedPaymentMethod = this.currentCart.paymentMethod;
 
-        if (this.currentItems.length) {
-          if(this.selectedPaymentMethod == 'onaccount') {
-            this.currentItems.forEach(item => {
-              if (this.currentRole == 'agent') {
-                item.subTotal = item.product.agentPrice * item.amount;
-              } else if (this.currentRole == 'wholesaler') {
-                item.subTotal = item.product.wholesalerPrice * item.amount;
-              } else {
-                item.subTotal = item.product.originalPrice * item.amount;
-              }
-            })
-          } else {
-            this.currentItems.forEach(item => {
-              if (this.currentRole == 'agent') {
-                item.subTotal = (item.product.agentPrice * ((100 - item.product.prepaymentDiscount)/100)) * item.amount;
-              } else if (this.currentRole == 'wholesaler') {
-                item.subTotal = (item.product.wholesalerPrice * ((100 - item.product.prepaymentDiscount)/100)) * item.amount;
-              } else {
-                item.subTotal = (item.product.originalPrice * ((100 - item.product.prepaymentDiscount)/100)) * item.amount;
-              }
-            })
-          }
-          this.calculateTotalPrice();
-        }
+        this.onChangePaymentMethod(this.currentItems, this.selectedPaymentMethod);
 
-        this.orderFormGroup.get("paymentMethod").setValue(this.currentCart.paymentMethod);
-        this.orderFormGroup.get("totalPrice").setValue(this.currentOrder.totalPrice.toFixed(2));
+        //this.orderFormGroup.get("totalPrice").setValue(this.currentOrder.totalPrice.toFixed(2));
         
     },
     (error: any) => {
@@ -149,24 +124,18 @@ export class EditOrderComponent implements OnInit {
     if (!qty) {
       this.shareService.showValidator("#qty" + item.id, "Please enter quantity number", "right", "error");
       item.amount = 1;
-    }else{
-      if (this.currentRole == 'agent') {
-        item.subTotal = item.product.agentPrice * qty;
-      } else if (this.currentRole == 'wholesaler') {
-        item.subTotal = item.product.wholesalerPrice * qty;
-      } else {
-        item.subTotal = item.product.originalPrice * qty;
-      }
     }
-    this.onChangePaymentMethod(this.currentItems);
+
+    this.onChangePaymentMethod(this.currentItems, this.selectedPaymentMethod);
     
   }
 
-  onChangePaymentMethod(items: ShoppingItem[]) {
-    this.selectedPaymentMethod = this.orderFormGroup.get("paymentMethod").value;
-    //console.log(this.selectedPaymentMethod);
+  onChangePaymentMethod(items: ShoppingItem[], paymentMethod: string) {
+    //this.selectedPaymentMethod = this.orderFormGroup.get("paymentMethod").value;
+    console.log(paymentMethod);
+    this.selectedPaymentMethod = paymentMethod;
 
-    if(this.selectedPaymentMethod == 'onaccount') {
+    if(paymentMethod == 'onaccount') {
       items.forEach(item => {
         if (this.currentRole == 'agent') {
           item.subTotal = item.product.agentPrice * item.amount;
