@@ -21,7 +21,7 @@
   </mat-form-field>
   <mat-form-field>
     <mat-label>Payment Method</mat-label>
-    <mat-select formControlName="paymentMethod" (change)="onChangePaymentMethod(currentItems);">
+    <mat-select [value]="selectedPaymentMethod" (change)="onChangePaymentMethod(currentItems, paymentmethod.value);" #paymentmethod>
       <mat-option value="onaccount">
         ON ACCOUNT
       </mat-option>
