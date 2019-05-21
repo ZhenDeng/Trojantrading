@@ -69,7 +69,7 @@
       
               <ng-container matColumnDef="qty" *ngIf="role!='admin'">
                 <mat-header-cell *matHeaderCellDef> Quantity </mat-header-cell>
-                <mat-cell *matCellDef="let element"> <input type="number" (keypress)="_keyPress($event)" value="{{element.quantity}}"> </mat-cell>
+                <mat-cell *matCellDef="let element"> <input type="number" id="product{{element.id}}" (keypress)="_keyPress($event)" (keyup)="changeQuantity(element)" [(ngModel)]="element.quantity"> </mat-cell>
               </ng-container>
 
               <ng-container matColumnDef="status">
@@ -80,7 +80,7 @@
               <ng-container matColumnDef="button">
                 <mat-header-cell *matHeaderCellDef></mat-header-cell>
                 <mat-cell *matCellDef="let element">
-                  <button id="{{element.id}}" class="btn btn-long" (click)="addToCart(element)" [disabled]="element.status.toLowerCase() == 'soldout'" *ngIf="role !='admin'">Add To Cart</button>
+                  <button id="{{element.id}}" class="btn btn-long" (click)="addToCart(element)" [disabled]="element.status.toLowerCase() == 'soldout' || element.quantity==0" *ngIf="role !='admin'">Add To Cart</button>
                   <button id="{{element.id}}" class="btn btn-long" (click)="editProduct(element)" *ngIf="role =='admin'">Edit</button>
                 </mat-cell>
               </ng-container>

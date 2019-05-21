@@ -108,7 +108,7 @@ export class ProductsComponent implements OnInit {
 
   filterProducts(type: string, value: Product[]) {
     this.filteredProducts = value.filter(x => x.status && x.status.toLowerCase().trim().includes(type.toLowerCase().trim()));
-    this.filteredProducts.forEach(product => product.quantity = 1);
+    this.filteredProducts.forEach(product => product.quantity = 0);
     this.dataSource = new MatTableDataSource(this.filteredProducts);
   }
 
@@ -215,6 +215,13 @@ export class ProductsComponent implements OnInit {
 
   manageRedirect(category: string) {
     this.dataSource.filter = category;
+  }
+
+  changeQuantity(element: Product): void {
+    if (element.quantity < 0) {
+      element.quantity = 0;
+      this.shareService.showError("#product" + element.id, "Minimum qty is 0", "right");
+    }
   }
 
   switchLabel(id: string): void{

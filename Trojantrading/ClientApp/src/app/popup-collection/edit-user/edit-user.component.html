@@ -1,7 +1,10 @@
-<h1 mat-dialog-title>Edit User Details</h1>
+<h1 mat-dialog-title>{{data.type}} User Details</h1>
 <div mat-dialog-content [formGroup]="userFormGroup">
   <mat-form-field>
     <input matInput class="accountValidate" formControlName="account" placeholder="User Name" required>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput class="passwordValidate" formControlName="password" placeholder="Password" required>
   </mat-form-field>
   <mat-form-field *ngIf="roleName != 'admin'">
     <mat-label>Role</mat-label>

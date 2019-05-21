@@ -32,6 +32,12 @@
                     </mat-cell>
                   </ng-container>
 
+                  <ng-container matColumnDef="Password">
+                    <mat-header-cell *matHeaderCellDef> Password </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.password}}
+                    </mat-cell>
+                  </ng-container>
+
                   <ng-container matColumnDef="BusinessName">
                     <mat-header-cell *matHeaderCellDef> Business Name </mat-header-cell>
                     <mat-cell *matCellDef="let element"> {{element.bussinessName}} </mat-cell>

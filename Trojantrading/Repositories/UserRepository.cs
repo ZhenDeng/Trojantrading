@@ -4,6 +4,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System;
 using System.Text;
+using Trojantrading.Service;
 
 namespace Trojantrading.Repositories
 {
@@ -22,17 +23,23 @@ namespace Trojantrading.Repositories
     public class UserRepository:IUserRepository
     {
         private readonly TrojantradingDbContext trojantradingDbContext;
+        private readonly IShare share;
 
-        public UserRepository(TrojantradingDbContext trojantradingDbContext)
+        public UserRepository(TrojantradingDbContext trojantradingDbContext, IShare share)
         {
             this.trojantradingDbContext = trojantradingDbContext;
+            this.share = share;
         }
 
         public ApiResponse AddUser(User user)
         {
             try
             {
-                user.Password = CreatePassword(6);
+                StringBuilder builder = new StringBuilder();
+                builder.Append(share.RandomString(4, true));
+                builder.Append(share.RandomNumber(1000, 9999));
+                builder.Append(share.RandomString(2, false));
+                user.Password = builder.ToString();
                 trojantradingDbContext.Users.Add(user);
                 trojantradingDbContext.SaveChanges();
                 return new ApiResponse() {

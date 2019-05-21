@@ -77,7 +77,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    this.loadContent = false;
     if (!this.shareService.readCookie("userToken")) {
+      this.loadContent = true;
       this.router.navigateByUrl('/login');
     } else {
       this.categoryList = this.productService.categoryList;
@@ -111,6 +113,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.nav.show();
       this.getAllProducts();
       this.adminService.GetUserByAccount(_.toNumber(this.shareService.readCookie("userId"))).subscribe((res: User) => {
+        this.loadContent = true;
         if (res) {
           this.user = res;
           this.shoppingCartService.AddShoppingCart(res.id).subscribe((res: ApiResponse) => {
@@ -132,7 +135,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   getAllProducts() {
     this.productService.getAllProducts().subscribe((value: Product[]) => {
       this.allProducts = value;
-      this.allProducts.forEach(product => product.quantity = 1);
+      this.allProducts.forEach(product => product.quantity = 0);
 
       if (value.length && this.category != null && this.category != '') {
         this.filterProductsByCategory();
@@ -258,9 +261,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   changeQuantity(element: Product): void {
-    if (element.quantity < 1) {
-      element.quantity = 1;
-      this.shareService.showError("#product" + element.id, "Minimum qty is 1", "right");
+    if (element.quantity < 0) {
+      element.quantity = 0;
+      this.shareService.showError("#product" + element.id, "Minimum qty is 0", "right");
     }
   }
 
@@ -277,5 +280,4 @@ export class HomeComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     console.log("destroy home page");
   }
-
 }

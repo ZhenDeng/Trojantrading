@@ -19,6 +19,9 @@ export class EditUserComponent implements OnInit {
     'role': [
       { class: 'roleValidate', message: 'Please choose one role' }
     ],
+    'password': [
+      { class: 'passwordValidate', message: 'Please input valid password, minimum length is 6' }
+    ],
     'bussinessName': [
       { class: 'bussinessNameValidate', message: 'Please enter business name' }
     ],
@@ -49,6 +52,7 @@ export class EditUserComponent implements OnInit {
 
     this.userFormGroup = this.formBuilder.group({
       account: new FormControl("", Validators.compose([Validators.required])),
+      password: new FormControl("", Validators.compose([Validators.required, Validators.minLength(6)])),
       role: this.roleName == "admin"? new FormControl({ value: "admin", disabled: true }, Validators.required):new FormControl("", Validators.compose([Validators.required])),
       bussinessName: new FormControl("", Validators.compose([Validators.required])),
       email: new FormControl("", Validators.compose([Validators.required, Validators.email])),
@@ -80,6 +84,7 @@ export class EditUserComponent implements OnInit {
   ngOnInit() {
     if(this.data && this.data.user){
       this.userFormGroup.get("account").setValue(this.data.user.account);
+      this.userFormGroup.get("password").setValue(this.data.user.password);
       this.userFormGroup.get("phone").setValue(this.data.user.phone);
       this.userFormGroup.get("abn").setValue(this.data.user.abn);
       this.userFormGroup.get("trn").setValue(this.data.user.trn);
@@ -113,6 +118,7 @@ export class EditUserComponent implements OnInit {
       this.dialogRef.close(this.userFormGroup.getRawValue());
     } else {
       this.isNotValidField('account', this.account_validation_messages.account);
+      this.isNotValidField('password', this.account_validation_messages.password);
       this.isNotValidField('role', this.account_validation_messages.role);
       this.isNotValidField('phone', this.account_validation_messages.phone);
       this.isNotValidField('abn', this.account_validation_messages.abn);
