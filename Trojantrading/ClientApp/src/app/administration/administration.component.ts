@@ -30,7 +30,7 @@ import { UploadUsersComponent } from '../popup-collection/upload-users/upload-us
 export class AdministrationComponent implements OnInit {
 
   title: string = "Administration";
-  displayedColumns: string[] = ["UserName", "BusinessName", "Role", "Email", "Phone", "Status", "EditButton", "DeleteButton"];
+  displayedColumns: string[] = ["UserName", "Password", "BusinessName", "Role", "Email", "Phone", "Status", "EditButton", "DeleteButton"];
   displayedHeaderColumns: string[] = ["Id", "Content", "ImagePath", "EditButton", "DeleteButton"];
   displayedOrderColumns: string[] = ['invoiceNo', 'customer', 'createdDate', 'totalPrice', 'orderStatus', 'editButton', 'deleteButton'];
   displayedPdfColumns: string[] = ["id", "title", "imagePath"];
@@ -45,7 +45,7 @@ export class AdministrationComponent implements OnInit {
   strDateTo: string = '';
   orders: Order[] = [];
   filteredOrder: Order[] = [];
-  statusList: Status[] =[];
+  statusList: Status[] = [];
   ordersDataSource = new MatTableDataSource();
   headerDataSource = new MatTableDataSource();
   pdfDataSource = new MatTableDataSource();
@@ -78,61 +78,69 @@ export class AdministrationComponent implements OnInit {
     this.getOrders();
   }
 
-  getUsers(): void{
+  getUsers(): void {
+    this.loadContent = false;
     this.adminService.GetUsers().subscribe((res: User[]) => {
-      if (res) {
-        this.dataSource = res;
-        this.dataSourceFilter = this.dataSource;
-      }
+      this.dataSource = res;
+      this.dataSourceFilter = this.dataSource;
+      this.loadContent = true;
     },
       (error: any) => {
         console.info(error);
+        this.loadContent = true;
       });
   }
 
   getOrders() {
     this.convertDateFormat();
     this.statusList = this.orderService.statusList;
-
     const userId = ''; //admin
+    this.loadContent = false;
     this.orderService.getOrdersByUserID(userId, this.strDateFrom, this.strDateTo).subscribe((value: Order[]) => {
       this.orders = value;
       this.ordersDataSource = new MatTableDataSource(this.orders);
+      this.loadContent = true;
     },
       (error: any) => {
         console.info(error);
+        this.loadContent = true;
       });
   }
 
   changeStatus(order: Order) {
+    this.loadContent = false;
     this.orderService.updateOrder(order).subscribe((res: any) => {
       this.shareSevice.showSuccess(`#status${order.id}`, res.message, "right");
-    },
-    (error: any) => {
-      console.info(error);
-    }); 
-  }
-
-  getHeadInformation(): void{
-    this.headInformationService.GetHeadInformation().subscribe((res: HeadInformation[]) => {
-      if (res) {
-        this.headerDataSource = new MatTableDataSource(res);
-      }
-      this.headInformationService.changeMessage(this.headerDataSource.data.length)
+      this.loadContent = true;
     },
       (error: any) => {
         console.info(error);
+        this.loadContent = true;
       });
   }
 
-  getPdfBoards(): void{
-    this.fileService.GetPdfBoards().subscribe((res: PdfBoard[]) => {
-      if (res) {
-        this.pdfDataSource = new MatTableDataSource(res);
-      }
+  getHeadInformation(): void {
+    this.loadContent = false;
+    this.headInformationService.GetHeadInformation().subscribe((res: HeadInformation[]) => {
+      this.headerDataSource = new MatTableDataSource(res);
+      this.headInformationService.changeMessage(this.headerDataSource.data.length);
+      this.loadContent = true;
     },
       (error: any) => {
         console.info(error);
+        this.loadContent = true;
+      });
+  }
+
+  getPdfBoards(): void {
+    this.loadContent = false;
+    this.fileService.GetPdfBoards().subscribe((res: PdfBoard[]) => {
+      this.pdfDataSource = new MatTableDataSource(res);
+      this.loadContent = true;
+    },
+      (error: any) => {
+        console.info(error);
+        this.loadContent = true;
       });
   }
 
@@ -151,10 +159,7 @@ export class AdministrationComponent implements OnInit {
       Amount: x.totalPrice,
       Status: x.orderStatus
     }));
-
-
     this.fileService.exportAsExcelFile(exportOrdersArray, 'TrojanTrading_Orders_' + this.strDateFrom + '_' + this.strDateTo);
-
   }
 
   addNewUser(): void {
@@ -165,36 +170,27 @@ export class AdministrationComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.loadContent = false;
         let user = {} as User;
         user = result
         this.adminService.AddUser(user).subscribe((res: ApiResponse) => {
           if (res.status == "success") {
             this.shareSevice.showSuccess(".addnewuser", res.message, "right");
             setTimeout(() => {
-              this.adminService.GetUsers().subscribe((res: User[]) => {
-                if (res) {
-                  this.dataSource = res;
-                  this.dataSourceFilter = this.dataSource;
-                }
-              });
-              this.loadContent = true;
-            }, 2000);
+              this.getUsers();
+            }, 1500);
           } else {
             this.shareSevice.showError(".addnewuser", res.message, "right");
-            this.loadContent = true;
           }
         },
           (error: any) => {
             console.info(error);
-            this.loadContent = true;
           });
       }
     });
   }
 
   editOrder(order: Order): void {
-      const dialogRef = this.dialog.open(EditOrderComponent, {
+    const dialogRef = this.dialog.open(EditOrderComponent, {
       width: '700px',
       data: { order: order, statusList: this.orderService.statusList }
     });
@@ -204,44 +200,36 @@ export class AdministrationComponent implements OnInit {
         orderModel = result;
         orderModel.id = order.id;
         orderModel.createdDate = order.createdDate;
-        this.loadContent = false;
         this.orderService.updateOrder(orderModel).subscribe((res: ApiResponse) => {
           if (res.status == "success") {
             this.shareSevice.showSuccess("#editorder" + order.id, res.message, "right");
             setTimeout(() => {
               this.getOrders();
-              this.loadContent = false;
-            }, 2000);
+            }, 1500);
           } else {
             this.shareSevice.showError("#editorder" + order.id, res.message, "right");
-            this.loadContent = true;
           }
         },
           (error: any) => {
             console.info(error);
-            this.loadContent = true;
           });
       }
     });
   }
 
   deleteOrder(order: Order): void {
-    this.loadContent = false;
     this.orderService.DeleteOrder(order.id).subscribe((res: ApiResponse) => {
       if (res.status == "success") {
         this.shareSevice.showSuccess("#deleteorder" + order.id, res.message, "right");
         setTimeout(() => {
           this.getOrders();
-          this.loadContent = true;
-        }, 2000);
+        }, 1500);
       } else {
         this.shareSevice.showError("#deleteorder" + order.id, res.message, "right");
-        this.loadContent = true;
       }
     },
       (error: any) => {
         console.info(error);
-        this.loadContent = true;
       });
   }
 
@@ -253,7 +241,6 @@ export class AdministrationComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.loadContent = false;
         let userModel = {} as User;
         userModel = result;
         userModel.id = user.id;
@@ -263,52 +250,32 @@ export class AdministrationComponent implements OnInit {
           if (res.status == "success") {
             this.shareSevice.showSuccess("#edit" + user.id, res.message, "right");
             setTimeout(() => {
-              this.adminService.GetUsers().subscribe((res: User[]) => {
-                if (res) {
-                  this.dataSource = res;
-                  this.dataSourceFilter = this.dataSource;
-                }
-              });
-              this.loadContent = true;
-            }, 2000);
+              this.getUsers();
+            }, 1500);
           } else {
             this.shareSevice.showError("#edit" + user.id, res.message, "right");
-            this.loadContent = true;
           }
         },
           (error: any) => {
             console.info(error);
-            this.loadContent = true;
           });
       }
     });
   }
 
   deleteUser(user: User): void {
-    this.loadContent = false;
     this.adminService.DeleteUser(user.id).subscribe((res: ApiResponse) => {
       if (res.status == "success") {
         this.shareSevice.showSuccess("#delete" + user.id, res.message, "right");
         setTimeout(() => {
-          this.adminService.GetUsers().subscribe((res: User[]) => {
-            if (res) {
-              this.dataSource = res;
-              this.dataSourceFilter = this.dataSource;
-            }
-          },
-            (error: any) => {
-              console.info(error);
-            });
-            this.loadContent = true;
-        }, 2000);
+          this.getUsers();
+        }, 1500);
       } else {
         this.shareSevice.showError("#delete" + user.id, res.message, "right");
-        this.loadContent = true;
       }
     },
       (error: any) => {
         console.info(error);
-        this.loadContent = true;
       });
   }
 
@@ -324,22 +291,18 @@ export class AdministrationComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.loadContent = false;
         this.headInformationService.AddHeader(result).subscribe((res: ApiResponse) => {
-          if(res.status = "success"){
+          if (res.status = "success") {
             this.shareSevice.showSuccess(".addnewhead", res.message, "right");
             setTimeout(() => {
               this.getHeadInformation();
-              this.loadContent = true;
-            }, 2000);
-          }else{
+            }, 1500);
+          } else {
             this.shareSevice.showError(".addnewhead", res.message, "right");
-            this.loadContent = true;
           }
         },
           (error: any) => {
             console.info(error);
-            this.loadContent = true;
           });
       }
     });
@@ -363,7 +326,6 @@ export class AdministrationComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.loadContent = false;
         element.imagePath = result.imagePath;
         element.content = result.content;
         this.headInformationService.UpdateHeadInfomation(element).subscribe((res: ApiResponse) => {
@@ -371,38 +333,31 @@ export class AdministrationComponent implements OnInit {
             this.shareSevice.showSuccess("#editheader" + element.id, res.message, "right");
             setTimeout(() => {
               this.getHeadInformation();
-              this.loadContent = true;
-            }, 2000);
+            }, 1500);
           } else {
             this.shareSevice.showError("#editheader" + element.id, res.message, "right");
-            this.loadContent = true;
           }
         },
           (error: any) => {
             console.info(error);
-            this.loadContent = true;
           });
       }
     });
   }
 
   deleteHeader(element: HeadInformation): void {
-    this.loadContent = false;
     this.headInformationService.DeleteHeadInfomation(element).subscribe((res: ApiResponse) => {
       if (res.status == "success") {
         this.shareSevice.showSuccess("#deleteheader" + element.id, res.message, "right");
         setTimeout(() => {
           this.getHeadInformation();
-          this.loadContent = true;
-        }, 2000);
+        }, 1500);
       } else {
         this.shareSevice.showError("#deleteheader" + element.id, res.message, "right");
-        this.loadContent = true;
       }
     },
       (error: any) => {
         console.info(error);
-        this.loadContent = true;
       });
   }
 
@@ -410,7 +365,7 @@ export class AdministrationComponent implements OnInit {
     this.loadContent = !currentLoadingStatus;
   }
 
-  uploadPdf(): void{
+  uploadPdf(): void {
     const dialogRef = this.dialog.open(UploadPdfComponent, {
       width: '650px',
     });
@@ -420,7 +375,7 @@ export class AdministrationComponent implements OnInit {
     });
   }
 
-  uploadUsers(): void{
+  uploadUsers(): void {
     const dialogRef = this.dialog.open(UploadUsersComponent, {
       width: '650px',
     });

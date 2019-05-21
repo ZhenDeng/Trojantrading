@@ -261,7 +261,12 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   changeQuantity(element: Product): void {
-    if (element.quantity < 0) {
+    if(element.quantity){
+      if (element.quantity < 0) {
+        element.quantity = 0;
+        this.shareService.showError("#product" + element.id, "Minimum qty is 0", "right");
+      }
+    }else{
       element.quantity = 0;
       this.shareService.showError("#product" + element.id, "Minimum qty is 0", "right");
     }
