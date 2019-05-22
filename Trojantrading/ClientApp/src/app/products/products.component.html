@@ -18,7 +18,7 @@
           {{link.label}}
         </a>
       </nav>
-      
+      <loading-screen *ngIf="!loadContent" [showBlurTable]="false" (currentLoadingStatus)="onLoading($event)"></loading-screen>
       <ng-container *ngIf="!isHomeComponentDestroyed">
         <section class="product-wrapper">
           <h4>{{title}}</h4>

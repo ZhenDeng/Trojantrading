@@ -14,6 +14,7 @@ export class UploadPdfComponent implements OnInit {
   formData = new FormData();
   file: any;
   selectedRole: string;
+  loadContent: boolean = true;
 
   constructor(
     private fileService: FileService,
@@ -31,11 +32,13 @@ export class UploadPdfComponent implements OnInit {
 
   uploadPdf(): void {
     if(this.file){
+      this.loadContent = false;
       this.formData.append(this.file.name, this.file);
       this.fileService.SavePdf(this.selectedRole, this.formData).subscribe((res: ApiResponse) => {
         if (res.status == "success") {
           this.shareService.showSuccess(".uploadpdf", res.message, "right");
           setTimeout(() => {
+            this.loadContent = true;
             this.dialogRef.close();
           }, 1500);
         } else {

@@ -12,6 +12,7 @@ export class EditUserComponent implements OnInit {
 
   userFormGroup: FormGroup;
   roleName: string = "";
+  loadContent: boolean = true;
   account_validation_messages: any = {
     'account': [
       { class: 'accountValidate', message: 'Please enter user name' }

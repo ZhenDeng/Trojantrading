@@ -47,7 +47,6 @@ import { NgbdCarouselBasicModule } from './ngbd-carousel-basic/ngbd-carousel-bas
 import { EditOrderComponent } from './popup-collection/edit-order/edit-order.component';
 import { EditHeaderInfomationComponent } from './popup-collection/edit-header-infomation/edit-header-infomation.component';
 import { HeadInformationService } from './services/head-information.service';
-import { LoadScreenComponent } from './load-screen/load-screen.component';
 import { LoadScreenService } from './services/load-screen.service';
 import { UploadPdfComponent } from './popup-collection/upload-pdf/upload-pdf.component';
 import { UploadUsersComponent } from './popup-collection/upload-users/upload-users.component';
@@ -72,7 +71,6 @@ import { UploadUsersComponent } from './popup-collection/upload-users/upload-use
     EditAddressComponent,
     EditOrderComponent,
     EditHeaderInfomationComponent,
-    LoadScreenComponent,
     UploadPdfComponent,
     UploadUsersComponent
   ],
@@ -98,7 +96,7 @@ import { UploadUsersComponent } from './popup-collection/upload-users/upload-use
     NavMenuModule,
     MatSelectModule,
     SlickCarouselModule,
-    NgbdCarouselBasicModule,
+    NgbdCarouselBasicModule
   ],
   providers: [
     UserService,

@@ -32,6 +32,8 @@ export class ProductsComponent implements OnInit {
 
   categoryList: Category[] = [];
 
+  loadContent: boolean = false;
+
   navLinks: Menu[] = [
     {
       path: '/home',
@@ -66,6 +68,7 @@ export class ProductsComponent implements OnInit {
 
   ngOnInit() {
     this.nav.show();
+    this.loadContent = false;
     this.categoryList = this.productService.categoryList;
     this.role = this.shareService.readCookie("role");
     if (this.shareService.readCookie("role") && this.shareService.readCookie("role") == "admin") {
@@ -89,18 +92,24 @@ export class ProductsComponent implements OnInit {
       } else {
         this.title = 'Sold Out';
       }
-
+      this.loadContent = true;
       if (!this.products.length) {
         this.getProducts(type);
       } else {
         this.filterProducts(type, this.products);
       }
 
-    });
+    },
+      (error: any) => {
+        this.loadContent = true;
+        console.info(error);
+      });
   }
 
   getProducts(type: string) {
+    this.loadContent = false;
     this.productService.getAllProducts().subscribe((value: Product[]) => {
+      this.loadContent = true;
       this.products = value;
       this.filterProducts(type, value);
     });
@@ -136,6 +145,7 @@ export class ProductsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
+        this.loadContent = false;
         this.productService.AddProduct(result).subscribe((res: ApiResponse) => {
           if (res.status == "success") {
             this.shareService.showSuccess(".addnewproduct", res.message, "right");
@@ -158,10 +168,12 @@ export class ProductsComponent implements OnInit {
               });
             }, 2000);
           } else {
+            this.loadContent = true;
             this.shareService.showError(".addnewproduct", res.message, "right");
           }
         },
           (error: any) => {
+            this.loadContent = true;
             console.info(error);
           });
       }
@@ -176,6 +188,7 @@ export class ProductsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
+        this.loadContent = false;
         product.name = result.name;
         product.category = result.category;
         product.agentPrice = result.agentPrice;
@@ -203,10 +216,12 @@ export class ProductsComponent implements OnInit {
               });
             }, 2000);
           } else {
+            this.loadContent = true;
             this.shareService.showError("#" + product.id, res.message, "right");
           }
         },
           (error: any) => {
+            this.loadContent = true;
             console.info(error);
           });
       }
@@ -234,5 +249,9 @@ export class ProductsComponent implements OnInit {
         this.filterProducts(type, this.products);
       });
     }
+  }
+
+  onLoading(currentLoadingStatus: boolean) {
+    this.loadContent = !currentLoadingStatus;
   }
 }

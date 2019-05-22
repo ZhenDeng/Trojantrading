@@ -61,9 +61,15 @@ namespace Trojantrading.Controllers
                                     Directory.GetCurrentDirectory(), "wwwroot",
                                     type.ToUpperInvariant() + " PRICE LIST" + Path.GetExtension(uploadFile.FileName).ToLowerInvariant());
 
+                        if (System.IO.File.Exists(path))
+                        {
+                            System.IO.File.Delete(path);
+                        }
+
                         using (var stream = new FileStream(path, FileMode.Create))
                         {
-                            uploadFile.CopyToAsync(stream);
+                            uploadFile.CopyTo(stream);
+                            stream.Close();
                         }
 
                         PdfBoard pdfBoard = new PdfBoard()
@@ -76,6 +82,7 @@ namespace Trojantrading.Controllers
                         {
                             trojantradingDbContext.PdfBoards.Add(pdfBoard);
                             trojantradingDbContext.SaveChanges();
+                            trojantradingDbContext.Dispose();
                         }
 
                         return Ok(new ApiResponse
@@ -118,9 +125,15 @@ namespace Trojantrading.Controllers
                     if (uploadFile != null && uploadFile.Length > 0)
                     {
                         var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", @"ImportUsers.xlsx");
+                        if (System.IO.File.Exists(path))
+                        {
+                            System.IO.File.Delete(path);
+                        }
+
                         using (var stream = new FileStream(path, FileMode.Create))
                         {
-                            uploadFile.CopyToAsync(stream);
+                            uploadFile.CopyTo(stream);
+                            stream.Close();
                         }
                         FileInfo file = new FileInfo(path);
                         using (ExcelPackage package = new ExcelPackage(file))
@@ -132,11 +145,12 @@ namespace Trojantrading.Controllers
 
                             for (int i = 3; i <= totalRows; i++)
                             {
-                                StringBuilder builder = new StringBuilder();
-                                builder.Append(share.RandomString(4, true));
-                                builder.Append(share.RandomNumber(1000, 9999));
-                                builder.Append(share.RandomString(2, false));
-                                if (workSheet.Cells[i, 1].Value != null) {
+                                if (workSheet.Cells[i, 1].Value != null)
+                                {
+                                    StringBuilder builder = new StringBuilder();
+                                    builder.Append(share.RandomString(4, true));
+                                    builder.Append(share.RandomNumber(1000, 9999));
+                                    builder.Append(share.RandomString(2, false));
                                     userList.Add(new User()
                                     {
                                         Account = workSheet.Cells[i, 1].Value == null ? "" : workSheet.Cells[i, 1].Value.ToString(),
@@ -158,11 +172,12 @@ namespace Trojantrading.Controllers
                                         Email = workSheet.Cells[i, 16].Value == null ? "" : workSheet.Cells[i, 16].Value.ToString()
                                     });
                                 }
-                                
                             }
-
+                            package.Stream.Close();
+                            package.Dispose();
                             trojantradingDbContext.Users.AddRange(userList);
                             trojantradingDbContext.SaveChanges();
+                            trojantradingDbContext.Dispose();
                         }
                         return Ok(new ApiResponse
                         {

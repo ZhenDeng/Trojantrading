@@ -8,6 +8,7 @@ import { productsRoutingModule } from './products-routing.module.';
 import { ProductsComponent } from './products.component';
 import { ProductService } from '../services/product.service';
 import { NavMenuModule } from '../nav-menu/nav-menu.module';
+import { LoadScreenComponent } from '../load-screen/load-screen.component';
 
 
 @NgModule({
@@ -23,8 +24,12 @@ import { NavMenuModule } from '../nav-menu/nav-menu.module';
     NavMenuModule
   ],
   declarations: [
-    ProductsComponent
+    ProductsComponent,
+    LoadScreenComponent
   ],
+  exports:[
+    ProductsComponent,
+    LoadScreenComponent],
   providers: [
     ProductService
   ]

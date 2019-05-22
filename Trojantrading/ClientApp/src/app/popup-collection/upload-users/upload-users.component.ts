@@ -15,6 +15,7 @@ export class UploadUsersComponent implements OnInit {
   formData = new FormData();
   file: any;
   selectedRole: string;
+  loadContent: boolean = true;
 
   constructor(
     private fileService: FileService,
@@ -31,6 +32,7 @@ export class UploadUsersComponent implements OnInit {
 
   uploadUsers(): void {
     if(this.file){
+      this.loadContent = false;
       this.formData.append(this.file.name, this.file);
       if(_.lowerCase(this.file.name.split('.')[1]) != "xlsx" && _.lowerCase(this.file.name.split('.')[1]) != "xls"){
         this.shareService.showError(".uploadusers", "Please upload a excel file", "right");
@@ -39,6 +41,7 @@ export class UploadUsersComponent implements OnInit {
           if(res.status == "success"){
             this.shareService.showSuccess(".uploadusers", res.message, "right");
             setTimeout(() => {
+              this.loadContent = true;
               this.dialogRef.close();
             }, 1500);
           }else{

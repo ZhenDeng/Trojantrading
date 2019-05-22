@@ -120,11 +120,13 @@ export class HomeComponent implements OnInit, OnDestroy {
             console.info(res);
           },
             (error: any) => {
+              this.loadContent = true;
               console.info(error);
             });
         }
       },
         (error: any) => {
+          this.loadContent = true;
           console.info(error);
         });
     }
@@ -133,10 +135,11 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 
   getAllProducts() {
+    this.loadContent = false;
     this.productService.getAllProducts().subscribe((value: Product[]) => {
       this.allProducts = value;
       this.allProducts.forEach(product => product.quantity = 0);
-
+      this.loadContent = true;
       if (value.length && this.category != null && this.category != '') {
         this.filterProductsByCategory();
       } else {
@@ -144,6 +147,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       }
     },
       (error: any) => {
+        this.loadContent = true;
         console.info(error);
       });
   }
@@ -181,26 +185,32 @@ export class HomeComponent implements OnInit, OnDestroy {
       product: product,
       subTotal: 0
     }
+    this.loadContent = false;
     this.shoppingCartService.UpdateShoppingCart(this.user.id, this.shoppingItem).subscribe((res: ApiResponse) => {
       if (res.status == "success") {
         this.adminService.GetUserByAccount(_.toNumber(this.shareService.readCookie("userId"))).subscribe((user: User) => {
           this.shoppingCartService.GetShoppingCart(user.id).subscribe((res: ShoppingCart) => {
+            this.loadContent = true;
             this.shoppingItems = res.shoppingItems;
             this.shoppingCartService.MonitorShoppingItemLength(this.shoppingItems.length);
           },
             (error: any) => {
+              this.loadContent = true;
               console.info(error);
             });
         },
           (error: any) => {
+            this.loadContent = true;
             console.info(error);
           });
         this.shareService.showSuccess("#" + product.id, res.message, "right");
       } else {
+        this.loadContent = true;
         this.shareService.showError("#" + product.id, res.message, "right");
       }
     },
       (error: any) => {
+        this.loadContent = true;
         console.info(error);
       });
   }
@@ -213,6 +223,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
+        this.loadContent = false;
         this.productService.AddProduct(result).subscribe((res: ApiResponse) => {
           if (res.status == "success") {
             this.shareService.showSuccess(".addnewproduct", res.message, "right");
@@ -220,10 +231,12 @@ export class HomeComponent implements OnInit, OnDestroy {
               this.getAllProducts();
             }, 2000);
           } else {
+            this.loadContent = true;
             this.shareService.showError(".addnewproduct", res.message, "right");
           }
         },
           (error: any) => {
+            this.loadContent = true;
             console.info(error);
           });
       }
@@ -238,6 +251,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
+        this.loadContent = false;
         product.name = result.name;
         product.category = result.category;
         product.agentPrice = result.agentPrice;
@@ -250,10 +264,12 @@ export class HomeComponent implements OnInit, OnDestroy {
               this.getAllProducts();
             }, 2000);
           } else {
+            this.loadContent = true;
             this.shareService.showError("#" + product.id, res.message, "right");
           }
         },
           (error: any) => {
+            this.loadContent = true;
             console.info(error);
           });
       }

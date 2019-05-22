@@ -145,8 +145,8 @@ export class AdministrationComponent implements OnInit {
   }
 
   convertDateFormat(): void {
-    this.strDateFrom = this.dateFrom.day + '/' + this.dateFrom.month + '/' + this.dateFrom.year;
-    this.strDateTo = this.dateTo.day + '/' + this.dateTo.month + '/' + this.dateTo.year;
+    this.strDateFrom = this.dateFrom.month + '/' + this.dateFrom.day + '/' + this.dateFrom.year;
+    this.strDateTo = this.dateTo.month + '/' + this.dateTo.day + '/' + this.dateTo.year;
   }
 
   downloadExcel() {
@@ -170,6 +170,7 @@ export class AdministrationComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
+        this.loadContent = false;
         let user = {} as User;
         user = result
         this.adminService.AddUser(user).subscribe((res: ApiResponse) => {
@@ -179,11 +180,13 @@ export class AdministrationComponent implements OnInit {
               this.getUsers();
             }, 1500);
           } else {
+            this.loadContent = true;
             this.shareSevice.showError(".addnewuser", res.message, "right");
           }
         },
           (error: any) => {
             console.info(error);
+            this.loadContent = true;
           });
       }
     });
@@ -196,6 +199,7 @@ export class AdministrationComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
+        this.loadContent = false;
         let orderModel = {} as Order;
         orderModel = result;
         orderModel.id = order.id;
@@ -207,10 +211,12 @@ export class AdministrationComponent implements OnInit {
               this.getOrders();
             }, 1500);
           } else {
+            this.loadContent = true;
             this.shareSevice.showError("#editorder" + order.id, res.message, "right");
           }
         },
           (error: any) => {
+            this.loadContent = true;
             console.info(error);
           });
       }
@@ -218,6 +224,7 @@ export class AdministrationComponent implements OnInit {
   }
 
   deleteOrder(order: Order): void {
+    this.loadContent = false;
     this.orderService.DeleteOrder(order.id).subscribe((res: ApiResponse) => {
       if (res.status == "success") {
         this.shareSevice.showSuccess("#deleteorder" + order.id, res.message, "right");
@@ -225,10 +232,12 @@ export class AdministrationComponent implements OnInit {
           this.getOrders();
         }, 1500);
       } else {
+        this.loadContent = true;
         this.shareSevice.showError("#deleteorder" + order.id, res.message, "right");
       }
     },
       (error: any) => {
+        this.loadContent = true;
         console.info(error);
       });
   }
@@ -241,6 +250,7 @@ export class AdministrationComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
+        this.loadContent = false;
         let userModel = {} as User;
         userModel = result;
         userModel.id = user.id;
@@ -253,10 +263,12 @@ export class AdministrationComponent implements OnInit {
               this.getUsers();
             }, 1500);
           } else {
+            this.loadContent = true;
             this.shareSevice.showError("#edit" + user.id, res.message, "right");
           }
         },
           (error: any) => {
+            this.loadContent = true;
             console.info(error);
           });
       }
@@ -264,6 +276,7 @@ export class AdministrationComponent implements OnInit {
   }
 
   deleteUser(user: User): void {
+    this.loadContent = false;
     this.adminService.DeleteUser(user.id).subscribe((res: ApiResponse) => {
       if (res.status == "success") {
         this.shareSevice.showSuccess("#delete" + user.id, res.message, "right");
@@ -271,10 +284,12 @@ export class AdministrationComponent implements OnInit {
           this.getUsers();
         }, 1500);
       } else {
+        this.loadContent = true;
         this.shareSevice.showError("#delete" + user.id, res.message, "right");
       }
     },
       (error: any) => {
+        this.loadContent = true;
         console.info(error);
       });
   }
@@ -291,6 +306,7 @@ export class AdministrationComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
+        this.loadContent = false;
         this.headInformationService.AddHeader(result).subscribe((res: ApiResponse) => {
           if (res.status = "success") {
             this.shareSevice.showSuccess(".addnewhead", res.message, "right");
@@ -298,10 +314,12 @@ export class AdministrationComponent implements OnInit {
               this.getHeadInformation();
             }, 1500);
           } else {
+            this.loadContent = true;
             this.shareSevice.showError(".addnewhead", res.message, "right");
           }
         },
           (error: any) => {
+            this.loadContent = true;
             console.info(error);
           });
       }
@@ -328,6 +346,7 @@ export class AdministrationComponent implements OnInit {
       if (result) {
         element.imagePath = result.imagePath;
         element.content = result.content;
+        this.loadContent = false;
         this.headInformationService.UpdateHeadInfomation(element).subscribe((res: ApiResponse) => {
           if (res && res.status == "success") {
             this.shareSevice.showSuccess("#editheader" + element.id, res.message, "right");
@@ -335,10 +354,12 @@ export class AdministrationComponent implements OnInit {
               this.getHeadInformation();
             }, 1500);
           } else {
+            this.loadContent = true;
             this.shareSevice.showError("#editheader" + element.id, res.message, "right");
           }
         },
           (error: any) => {
+            this.loadContent = true;
             console.info(error);
           });
       }
@@ -346,6 +367,7 @@ export class AdministrationComponent implements OnInit {
   }
 
   deleteHeader(element: HeadInformation): void {
+    this.loadContent = false;
     this.headInformationService.DeleteHeadInfomation(element).subscribe((res: ApiResponse) => {
       if (res.status == "success") {
         this.shareSevice.showSuccess("#deleteheader" + element.id, res.message, "right");
@@ -353,10 +375,12 @@ export class AdministrationComponent implements OnInit {
           this.getHeadInformation();
         }, 1500);
       } else {
+        this.loadContent = true;
         this.shareSevice.showError("#deleteheader" + element.id, res.message, "right");
       }
     },
       (error: any) => {
+        this.loadContent = true;
         console.info(error);
       });
   }
