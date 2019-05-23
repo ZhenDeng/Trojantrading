@@ -92,7 +92,6 @@ export class EditOrderComponent implements OnInit {
     }
   }
 
-
   isNotValidField(path: string, validation: any): void {
     if (!this.orderFormGroup.get(path).valid) {
       this.shareService.showValidator("." + validation[0].class, validation[0].message, "right", "error");
@@ -100,7 +99,6 @@ export class EditOrderComponent implements OnInit {
   }
 
   getOrdersWithShoppingItems(id: number) {
-      
     this.orderService.getOrdersWithShoppingItems(id).subscribe((value: Order) => {
         //console.info(value);
         this.currentOrder = value;
@@ -111,9 +109,6 @@ export class EditOrderComponent implements OnInit {
         this.selectedPaymentMethod = this.currentCart.paymentMethod;
 
         this.onChangePaymentMethod(this.currentItems, this.selectedPaymentMethod);
-
-        //this.orderFormGroup.get("totalPrice").setValue(this.currentOrder.totalPrice.toFixed(2));
-        
     },
     (error: any) => {
       console.info(error);
@@ -131,30 +126,22 @@ export class EditOrderComponent implements OnInit {
   }
 
   onChangePaymentMethod(items: ShoppingItem[], paymentMethod: string) {
-    //this.selectedPaymentMethod = this.orderFormGroup.get("paymentMethod").value;
-    console.log(paymentMethod);
     this.selectedPaymentMethod = paymentMethod;
 
     if(paymentMethod == 'onaccount') {
       items.forEach(item => {
         if (this.currentRole == 'agent') {
-          item.subTotal = item.product.agentPrice * item.amount;
+          item.subTotal = item.product.agentPrice * (item.amount+0.1);
         } else if (this.currentRole == 'wholesaler') {
-          item.subTotal = item.product.wholesalerPrice * item.amount;
+          item.subTotal = item.product.wholesalerPrice * (item.amount+0.1);
         } else {
-          item.subTotal = item.product.originalPrice * item.amount;
+          item.subTotal = item.product.originalPrice * (item.amount+0.1);
         }
       })
     } else {
       items.forEach(item => {
-        if (this.currentRole == 'agent') {
-          item.subTotal = (item.product.agentPrice * ((100 - item.product.prepaymentDiscount)/100)) * item.amount;
-        } else if (this.currentRole == 'wholesaler') {
-          item.subTotal = (item.product.wholesalerPrice * ((100 - item.product.prepaymentDiscount)/100)) * item.amount;
-        } else {
-          item.subTotal = (item.product.originalPrice * ((100 - item.product.prepaymentDiscount)/100)) * item.amount;
-        }
-      })
+        item.subTotal = item.product.prepaymentDiscount * (item.amount+0.1);
+      });
     }
     this.currentItems = items;
     this.calculateTotalPrice();

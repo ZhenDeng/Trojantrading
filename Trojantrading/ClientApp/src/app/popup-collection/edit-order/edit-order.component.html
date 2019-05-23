@@ -21,7 +21,7 @@
   </mat-form-field>
   <mat-form-field>
     <mat-label>Payment Method</mat-label>
-    <mat-select [value]="selectedPaymentMethod" (change)="onChangePaymentMethod(currentItems, paymentmethod.value);" #paymentmethod>
+    <mat-select [value]="selectedPaymentMethod" [disabled]="currentRole == 'agent'" (change)="onChangePaymentMethod(currentItems, paymentmethod.value);" #paymentmethod>
       <mat-option value="onaccount">
         ON ACCOUNT
       </mat-option>
@@ -40,7 +40,7 @@
             <th class="col" *ngIf="currentRole =='agent'">Agent Price</th>
             <th class="col" *ngIf="currentRole =='wholesaler'">WholeSeller Price</th>
             <th class="col" style="max-width:12%">QTY</th>
-            <th class="col" style="max-width:12%">Sub Total</th>
+            <th class="col" style="max-width:12%">Sub Total Inc Gst</th>
           </tr>
         </thead>
         <tbody>
@@ -74,7 +74,7 @@
     </table>
    </div> 
    <mat-form-field style="margin-top:20px;">
-    <input matInput class="totalPriceValidate" formControlName="totalPrice" placeholder="Total Price"/>
+    <input matInput class="totalPriceValidate" formControlName="totalPrice" placeholder="Total Price Inc Gst"/>
     <span matPrefix>$&nbsp;</span>
   </mat-form-field>
   <mat-form-field>

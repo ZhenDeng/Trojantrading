@@ -25,3 +25,7 @@
     padding-top: 4px !important;
     font-style: normal !important;
 }
+
+.mat-table_2fex{
+    flex: 2 !important;
+}

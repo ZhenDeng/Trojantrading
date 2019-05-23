@@ -67,7 +67,7 @@
               <p style="flex: 7">&nbsp;</p>
               <mat-form-field style="flex: 3">
                 <mat-label>Payment Method</mat-label>
-                <mat-select [(ngModel)]="selectedPayment" (ngModelChange)="changePaymentMethod()">
+                <mat-select [(ngModel)]="selectedPayment" (ngModelChange)="changePaymentMethod()" [disabled]="role=='agent'">
                   <mat-option value="onaccount">
                     ON ACCOUNT
                   </mat-option>

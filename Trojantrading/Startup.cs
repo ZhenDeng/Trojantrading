@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
+using Rotativa.AspNetCore;
 using System;
 using System.IO;
 using System.Text;
@@ -94,7 +95,7 @@ namespace Trojantrading
             {
                 app.UseExceptionHandler("/Error");
             }
-
+            RotativaConfiguration.Setup(env);
             // JWT related code
             app.UseCors(x => x
                 .AllowAnyOrigin()

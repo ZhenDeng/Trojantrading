@@ -32,7 +32,7 @@ export class AdministrationComponent implements OnInit {
   title: string = "Administration";
   displayedColumns: string[] = ["UserName", "Password", "BusinessName", "Role", "Email", "Phone", "Status", "EditButton", "DeleteButton"];
   displayedHeaderColumns: string[] = ["Id", "Content", "ImagePath", "EditButton", "DeleteButton"];
-  displayedOrderColumns: string[] = ['invoiceNo', 'customer', 'createdDate', 'totalPrice', 'orderStatus', 'editButton', 'deleteButton'];
+  displayedOrderColumns: string[] = ['orderId', 'customer', 'createdDate', 'totalPrice', 'orderStatus', 'downloadPdf', 'editButton', 'deleteButton'];
   displayedPdfColumns: string[] = ["id", "title", "imagePath"];
   dataSource: User[];
   dataSourceFilter: User[];
@@ -145,8 +145,8 @@ export class AdministrationComponent implements OnInit {
   }
 
   convertDateFormat(): void {
-    this.strDateFrom = this.dateFrom.month + '/' + this.dateFrom.day + '/' + this.dateFrom.year;
-    this.strDateTo = this.dateTo.month + '/' + this.dateTo.day + '/' + this.dateTo.year;
+    this.strDateFrom = this.dateFrom.day + '/' + this.dateFrom.month + '/' + this.dateFrom.year;
+    this.strDateTo = this.dateTo.day + '/' + this.dateTo.month + '/' + this.dateTo.year;
   }
 
   downloadExcel() {

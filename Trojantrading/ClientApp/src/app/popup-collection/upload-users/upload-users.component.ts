@@ -32,11 +32,11 @@ export class UploadUsersComponent implements OnInit {
 
   uploadUsers(): void {
     if(this.file){
-      this.loadContent = false;
       this.formData.append(this.file.name, this.file);
       if(_.lowerCase(this.file.name.split('.')[1]) != "xlsx" && _.lowerCase(this.file.name.split('.')[1]) != "xls"){
         this.shareService.showError(".uploadusers", "Please upload a excel file", "right");
       }else{
+        this.loadContent = false;
         this.fileService.UploadUsers(this.formData).subscribe((res: ApiResponse) => {
           if(res.status == "success"){
             this.shareService.showSuccess(".uploadusers", res.message, "right");
@@ -46,10 +46,12 @@ export class UploadUsersComponent implements OnInit {
             }, 1500);
           }else{
             this.shareService.showError(".uploadusers", res.message, "right");
+            this.loadContent = true;
           }
         },
           (error: any) => {
             console.info(error);
+            this.loadContent = true;
           });
       }
     }else{

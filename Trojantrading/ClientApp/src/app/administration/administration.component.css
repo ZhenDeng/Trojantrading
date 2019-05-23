@@ -53,6 +53,10 @@ h4{
 	background-color: #C20047 !important;
 }
 
+::ng-deep .mat-column-downloadPdf{
+	flex: 2 !important;
+}
+
 .filter-wrapper{
 	width: 300px;
 	display: block;

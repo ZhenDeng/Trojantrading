@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
+using Rotativa.AspNetCore;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -124,7 +125,7 @@ namespace Trojantrading.Controllers
                     var uploadFile = httpRequest.Form.Files[0];  // get the uploaded file
                     if (uploadFile != null && uploadFile.Length > 0)
                     {
-                        var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", @"ImportUsers.xlsx");
+                        var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ImportUsers.xlsx");
                         if (System.IO.File.Exists(path))
                         {
                             System.IO.File.Delete(path);
@@ -202,5 +203,19 @@ namespace Trojantrading.Controllers
             }
         }
         #endregion
+
+        #region write pdf
+        [Route("WritePdf")]
+        public IActionResult WritePdf()
+        {
+            var model = new TestViewModel { DocTitle = "ABC", DocContent = "This is a test" };
+            return new ViewAsPdf(model);
+        }
+        #endregion
+    }
+
+    public class TestViewModel {
+        public string DocTitle { get; set; }
+        public string DocContent { get; set; }
     }
 }

@@ -113,9 +113,9 @@
               <div class="example-container mat-elevation-z8">
                 <mat-table #table [dataSource]="ordersDataSource">
 
-                  <ng-container matColumnDef="invoiceNo">
-                    <mat-header-cell *matHeaderCellDef class="mat-table_2fex"> Invoice Number </mat-header-cell>
-                    <mat-cell *matCellDef="let element" class="mat-table_2fex">{{element.invoiceNo}}</mat-cell>
+                  <ng-container matColumnDef="orderId">
+                    <mat-header-cell *matHeaderCellDef> Order Number </mat-header-cell>
+                    <mat-cell *matCellDef="let element">{{element.id}}</mat-cell>
                   </ng-container>
 
                   <ng-container matColumnDef="customer">
@@ -125,8 +125,8 @@
                   </ng-container>
 
                   <ng-container matColumnDef="createdDate">
-                    <mat-header-cell *matHeaderCellDef> Created Date </mat-header-cell>
-                    <mat-cell *matCellDef="let element">{{ element.createdDate | date }}</mat-cell>
+                    <mat-header-cell *matHeaderCellDef  class="mat-table_2fex"> Created Date </mat-header-cell>
+                    <mat-cell *matCellDef="let element"  class="mat-table_2fex">{{ element.createdDate | date }}</mat-cell>
                   </ng-container>
 
                   <ng-container matColumnDef="totalPrice">
@@ -143,6 +143,13 @@
                         <mat-option value="{{status?.orderStatus}}" *ngFor="let status of statusList">
                           {{status?.orderStatus}}</mat-option>
                       </mat-select>
+                    </mat-cell>
+                  </ng-container>
+
+                  <ng-container matColumnDef="downloadPdf">
+                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                      <button id="editorder{{element.id}}" class="btn btn-long" [routerLink]="['/api/PdfBoard/WritePdf']" *ngIf="role =='admin'">Download Pdf</button>
                     </mat-cell>
                   </ng-container>
 

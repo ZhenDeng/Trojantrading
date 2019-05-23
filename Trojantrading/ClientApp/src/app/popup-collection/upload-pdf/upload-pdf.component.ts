@@ -3,6 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { FileService } from '../../services/file.service';
 import { ApiResponse } from '../../models/ApiResponse';
 import { ShareService } from '../../services/share.service';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-upload-pdf',
@@ -32,22 +33,28 @@ export class UploadPdfComponent implements OnInit {
 
   uploadPdf(): void {
     if(this.file){
-      this.loadContent = false;
       this.formData.append(this.file.name, this.file);
-      this.fileService.SavePdf(this.selectedRole, this.formData).subscribe((res: ApiResponse) => {
-        if (res.status == "success") {
-          this.shareService.showSuccess(".uploadpdf", res.message, "right");
-          setTimeout(() => {
+      if(_.lowerCase(this.file.name.split('.')[1]) != "pdf"){
+        this.shareService.showError(".uploadpdf", "Please upload a pdf file", "right");
+      }else{
+        this.loadContent = false;
+        this.fileService.SavePdf(this.selectedRole, this.formData).subscribe((res: ApiResponse) => {
+          if (res.status == "success") {
+            this.shareService.showSuccess(".uploadpdf", res.message, "right");
+            setTimeout(() => {
+              this.loadContent = true;
+              this.dialogRef.close();
+            }, 1500);
+          } else {
             this.loadContent = true;
-            this.dialogRef.close();
-          }, 1500);
-        } else {
-          this.shareService.showError(".uploadpdf", res.message, "right");
-        }
-      },
-        (error: any) => {
-          console.info(error);
-        });
+            this.shareService.showError(".uploadpdf", res.message, "right");
+          }
+        },
+          (error: any) => {
+            console.info(error);
+            this.loadContent = true;
+          });
+      }
     }else{
       this.shareService.showError(".uploadpdf", "Upload file is empty", "right");
     }
