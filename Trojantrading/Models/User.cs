@@ -49,6 +49,6 @@ namespace Trojantrading.Models
     public enum RoleName {
         admin,
         agent,
-        reseller
+        wholesaler
     }
 }

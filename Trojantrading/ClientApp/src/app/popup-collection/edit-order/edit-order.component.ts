@@ -8,7 +8,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { OrderService } from '../../services/order.service';
 import { Order } from '../../models/order';
-
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-edit-order',
@@ -100,7 +100,6 @@ export class EditOrderComponent implements OnInit {
 
   getOrdersWithShoppingItems(id: number) {
     this.orderService.getOrdersWithShoppingItems(id).subscribe((value: Order) => {
-        //console.info(value);
         this.currentOrder = value;
         this.currentCart = value.shoppingCart;
         this.currentItems = this.currentCart.shoppingItems;
@@ -118,11 +117,10 @@ export class EditOrderComponent implements OnInit {
   onQtyChange(item: ShoppingItem, qty: number) {
     if (!qty) {
       this.shareService.showValidator("#qty" + item.id, "Please enter quantity number", "right", "error");
-      item.amount = 1;
+      item.amount = 0;
     }
 
     this.onChangePaymentMethod(this.currentItems, this.selectedPaymentMethod);
-    
   }
 
   onChangePaymentMethod(items: ShoppingItem[], paymentMethod: string) {
@@ -130,17 +128,25 @@ export class EditOrderComponent implements OnInit {
 
     if(paymentMethod == 'onaccount') {
       items.forEach(item => {
-        if (this.currentRole == 'agent') {
-          item.subTotal = item.product.agentPrice * (item.amount+0.1);
-        } else if (this.currentRole == 'wholesaler') {
-          item.subTotal = item.product.wholesalerPrice * (item.amount+0.1);
-        } else {
-          item.subTotal = item.product.originalPrice * (item.amount+0.1);
+        if(_.toNumber(item.amount) == 0){
+          item.subTotal = 0;
+        }else{
+          if (this.currentRole == 'agent') {
+            item.subTotal = item.product.agentPrice * (_.toNumber(item.amount)+0.1);
+          } else if (this.currentRole == 'wholesaler') {
+            item.subTotal = item.product.wholesalerPrice * (_.toNumber(item.amount)+0.1);
+          } else {
+            item.subTotal = item.product.originalPrice * (_.toNumber(item.amount)+0.1);
+          }
         }
       })
     } else {
       items.forEach(item => {
-        item.subTotal = item.product.prepaymentDiscount * (item.amount+0.1);
+        if(_.toNumber(item.amount) == 0){
+          item.subTotal = 0;
+        }else{
+          item.subTotal = item.product.prepaymentDiscount * (_.toNumber(item.amount)+0.1);
+        }
       });
     }
     this.currentItems = items;

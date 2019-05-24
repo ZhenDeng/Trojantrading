@@ -62,8 +62,7 @@
                   {{ item.product.wholesalerPrice | currency:'AUD':'symbol-narrow':'.2-2' }}
                 </td>
                 <td class="col-md align-left" style="max-width:12%">
-                  <input type="text" [attr.id]="'qty' + item.id" class="input-box-small" [value]="item.amount" (input)="item.amount = qtyInput.value"
-                   (keyup)="onQtyChange(item, $event.target.value)" (keypress)="_keyPress($event)" #qtyInput />
+                  <input type="text" [attr.id]="'qty' + item.id" class="input-box-small" [value]="item.amount" (keyup)="onQtyChange(item, $event.target.value)" (input)="item.amount = qtyInput.value" (keypress)="_keyPress($event)" #qtyInput />
                 </td>
                 <td class="col-md align-left">
                      {{ item.subTotal | currency:'AUD':'symbol-narrow':'.2-2' }}

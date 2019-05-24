@@ -20,6 +20,8 @@ import { HeadInformationService } from '../services/head-information.service';
 import { EditOrderComponent } from '../popup-collection/edit-order/edit-order.component';
 import { UploadPdfComponent } from '../popup-collection/upload-pdf/upload-pdf.component';
 import { UploadUsersComponent } from '../popup-collection/upload-users/upload-users.component';
+import { ShoppingCartService } from '../services/shopping-cart.service';
+import { ShoppingCart } from '../models/shoppingCart';
 
 @Component({
   selector: 'app-administration',
@@ -50,6 +52,12 @@ export class AdministrationComponent implements OnInit {
   headerDataSource = new MatTableDataSource();
   pdfDataSource = new MatTableDataSource();
   loadContent: boolean = false;
+  priceExclGst: number;
+  gst: number;
+  priceIncGst: number;
+  discount: number;
+  oringinalPriceIncGst: number;
+  oringinalPriceExclGst: number;
 
   constructor(
     public nav: NavbarService,
@@ -60,7 +68,8 @@ export class AdministrationComponent implements OnInit {
     private calendar: NgbCalendar,
     public dialog: MatDialog,
     private datePipe: DatePipe,
-    private headInformationService: HeadInformationService
+    private headInformationService: HeadInformationService,
+    private shoppingCartService: ShoppingCartService
   ) { }
 
   ngOnInit() {
@@ -407,5 +416,55 @@ export class AdministrationComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       this.getUsers();
     });
+  }
+
+  downloadPdf(element: Order): void{
+    this.priceExclGst = 0;
+    this.gst = 0;
+    this.priceIncGst = 0;
+    this.discount = 0;
+    this.oringinalPriceExclGst = 0;
+    this.oringinalPriceIncGst = 0;
+    this.shoppingCartService.GetShoppingCart(element.userId).subscribe((res: ShoppingCart) => {
+      if(res && res.shoppingItems){
+        if(res.paymentMethod == "onaccount"){
+          res.shoppingItems.forEach(si => {
+            this.oringinalPriceExclGst += si.amount * si.product.originalPrice;
+            if (this.role == "agent") {
+              si.subTotal = si.amount * si.product.agentPrice;
+              this.priceExclGst += si.subTotal;
+            } else if (this.role == "wholesaler") {
+              si.subTotal = si.amount * si.product.wholesalerPrice;
+              this.priceExclGst += si.subTotal;
+            }
+          });
+          this.gst = this.priceExclGst * 0.1;
+          this.oringinalPriceIncGst = this.oringinalPriceExclGst + this.oringinalPriceExclGst * 0.1;
+          this.priceIncGst = this.gst + this.priceExclGst;
+          this.discount = this.oringinalPriceIncGst - this.priceIncGst;
+        }else{
+          res.shoppingItems.forEach(si => {
+            this.oringinalPriceExclGst += si.amount * si.product.originalPrice;
+            si.subTotal = si.amount * si.product.prepaymentDiscount;
+            this.priceExclGst += si.subTotal;
+          });
+          this.gst = this.priceExclGst * 0.1;
+          this.oringinalPriceIncGst = this.oringinalPriceExclGst + this.oringinalPriceExclGst * 0.1;
+          this.priceIncGst = this.gst + this.priceExclGst;
+          this.discount = this.oringinalPriceIncGst - this.priceIncGst;
+        }
+        this.fileService.WritePdf(element.id, this.gst, this.priceExclGst, this.discount, element.userId).subscribe((res: ApiResponse) => {
+
+        },
+          (error: any) => {
+            this.loadContent = true;
+            console.info(error);
+          });
+      }
+    },
+      (error: any) => {
+        this.loadContent = true;
+        console.info(error);
+      });
   }
 }

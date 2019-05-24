@@ -1,12 +1,15 @@
+using iTextSharp.text;
+using iTextSharp.text.html.simpleparser;
+using iTextSharp.text.pdf;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
-using Rotativa.AspNetCore;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using Trojantrading.Models;
 using Trojantrading.Repositories;
@@ -23,15 +26,21 @@ namespace Trojantrading.Controllers
         private readonly IPdfBoardRepository pdfBoardRepository;
         private readonly TrojantradingDbContext trojantradingDbContext;
         private readonly IShare share;
+        private readonly IUserRepository userRepository;
+        private readonly IShoppingCartRepository shoppingCartRepository;
 
         public PdfBoardController(
             IPdfBoardRepository pdfBoardRepository,
             TrojantradingDbContext trojantradingDbContext,
-            IShare share)
+            IShare share,
+            IUserRepository userRepository,
+            IShoppingCartRepository shoppingCartRepository)
         {
             this.pdfBoardRepository = pdfBoardRepository;
             this.trojantradingDbContext = trojantradingDbContext;
             this.share = share;
+            this.userRepository = userRepository;
+            this.shoppingCartRepository = shoppingCartRepository;
         }
 
         [HttpGet("GetPdfBoards")]
@@ -205,17 +214,124 @@ namespace Trojantrading.Controllers
         #endregion
 
         #region write pdf
-        [Route("WritePdf")]
-        public IActionResult WritePdf()
+        [HttpGet("WritePdf")]
+        [AllowAnonymous]
+        [ProducesResponseType(typeof(ApiResponse), 200)]
+        [ProducesResponseType(typeof(ApiResponse), 400)]
+        public IActionResult WritePdf(int orderId, double gst, double priceExclGst, double discount, int userId)
         {
-            var model = new TestViewModel { DocTitle = "ABC", DocContent = "This is a test" };
-            return new ViewAsPdf(model);
+            try
+            {
+                var order = trojantradingDbContext.Orders.Where(x => x.Id == orderId).FirstOrDefault();
+                var cart = shoppingCartRepository.GetShoppingCartByID(order.ShoppingCartId, userId);
+                var currentUser = userRepository.GetUserByAccount(userId);
+                double priceIncGst = priceExclGst + gst;
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.Append("<div style='padding: 0; margin: 0; height: 100%; background:#fbfaf7;'>");
+                stringBuilder.Append("<table width='100%' height='100%' align='center' cellspacing='0' cellpadding='0' bgcolor='#fbfaf7'>");
+                stringBuilder.Append("<tbody>");
+                stringBuilder.Append("<tr><td style='font:12px/1.5 Arial,Helvetica,sans-serif;color:#454545'>&nbsp;</td></tr>");
+                stringBuilder.Append("<tr>");
+                stringBuilder.Append("<td style='color:#343731;'><table width='600px' bgcolor='#ffffff' cellspacing='0' cellpadding='0' align='center' border='0' style='border:1px solid #232323;text-align:center'><tbody><tr><td style='padding:10px;color:#343731'>");
+                stringBuilder.Append("<img src='https://via.placeholder.com/150' width='80px' style='margin:0 auto;display:block'>");
+                stringBuilder.Append("<h2 style='font-weight:400;text-transform:uppercase'>Trojan Trading Company PTY LTD</h2><h4 style='font-weight:400;text-transform:uppercase'>Australia</h4>");
+                stringBuilder.Append("</td></tr>");
+                stringBuilder.Append("<tr style='text-align:left'><td style='font:12px/1.5 Arial,Helvetica,sans-serif;color:#454545'><table width='90%'><tbody>");
+                stringBuilder.Append("<tr><td valign='top' width='50%' style='font:12px/1.5 Arial,Helvetica,sans-serif;color:#454545'><h3 style='margin:15px 20px 10px 20px;font-size:1.1em;color:#454545;text-align:left'>Shipping Address</h3>");
+                stringBuilder.Append("<p style='font:12px/1.5 Arial,Helvetica,sans-serif;color:#454545;margin:12px 20px 10px 20px;margin-bottom:0'>" + currentUser.Account + "<br>" + currentUser.ShippingCustomerName + "<br>");
+                stringBuilder.Append(currentUser.ShippingStreetNumber + " " + currentUser.ShippingAddressLine + "<br> " + currentUser.ShippingSuburb + ", " + currentUser.ShippingState + ", " + currentUser.ShippingPostCode + "<br>");
+                stringBuilder.Append("<strong>Email:</strong><a href='" + currentUser.Email + "' target='_blank'>" + currentUser.Email + "</a><br><strong>Phone:</strong>" + currentUser.Phone + "</p></td>");
+                stringBuilder.Append("<td valign='top' width='50%' style='font:12px/1.5 Arial,Helvetica,sans-serif;color:#454545'><h3 style='margin:15px 20px 10px 20px;font-size:1.1em;color:#454545;text-align:left'>Billing Address</h3>");
+                stringBuilder.Append("<p style='font:12px/1.5 Arial,Helvetica,sans-serif;color:#454545;margin:12px 20px 10px 20px;margin-bottom:0'>" + currentUser.Account + "<br>" + currentUser.BillingCustomerName + "<br>");
+                stringBuilder.Append(currentUser.BillingStreetNumber + " " + currentUser.BillingAddressLine + "<br> " + currentUser.BillingSuburb + ", " + currentUser.BillingState + ", " + currentUser.BillingPostCode + "<br>");
+                stringBuilder.Append("<strong>Email:</strong><a href='" + currentUser.Email + "' target='_blank'>" + currentUser.Email + "</a><br><strong>Phone:</strong>" + currentUser.Phone + "</p></td>");
+                stringBuilder.Append("</tr></tbody></table></td></tr>");
+                stringBuilder.Append("</tbody></table></td></tr>");
+                stringBuilder.Append("<tr><td width='600' style='font:12px/1.5 Arial,Helvetica,sans-serif;color:#454545'>");
+                stringBuilder.Append("<table cellspacing='0' cellpadding='0' width='600' align='center' bgcolor='#ffffff' border='0' style='border-right:1px solid #d3d3d3;border-left:1px solid #d3d3d3'>");
+                stringBuilder.Append("<tbody><tr><td align='center' style='font:12px/1.5 Arial,Helvetica,sans-serif;color:#454545'>&nbsp;</td></tr>");
+                stringBuilder.Append("<tr><td style='font:12px/1.5 Arial,Helvetica,sans-serif;color:#454545'>");
+                stringBuilder.Append("<h3 style='margin:15px 20px 10px 20px;font-size:1.1em;color:#454545;text-align:center'>Your Order #" + orderId + " for Customer " + currentUser.Account + "</h3>");
+                stringBuilder.Append("</td></tr>");
+                stringBuilder.Append("<tr><td style='font:12px/1.5 Arial,Helvetica,sans-serif;color:#454545'><table width='90%' cellspacing='0' cellpadding='0' align='center' bgcolor='#ffffff' border='0'>");
+                stringBuilder.Append("<tbody><tr>");
+                stringBuilder.Append("<td style='padding:1em 0.25em;border-bottom:1px solid #c4c4c4'></td>");
+                stringBuilder.Append("<td style='padding:1em 0.25em;border-bottom:1px solid #c4c4c4;text-align:right'><strong style ='font-size:10px'>WLP ex.GST</strong></td>");
+                stringBuilder.Append("<td style='padding:1em 0.25em;border-bottom:1px solid #c4c4c4;text-align:right'><strong style='font-size:10px'>Buy Price ex.GST</strong></td>");
+                stringBuilder.Append("<td style='padding:1em 0.25em;border-bottom:1px solid #c4c4c4;text-align:center'><strong style ='font-size:10px'>Order Qty</strong></td>");
+                stringBuilder.Append("<td style='padding:1em 0.25em;border-bottom:1px solid #c4c4c4;text-align:right'><strong style='font-size:10px'>Line Amount ex.GST</strong></td></tr>");
+                foreach (var item in cart.ShoppingItems)
+                {
+                    stringBuilder.Append("<tr><td style='padding:0 0.25em;border-bottom:1px solid #c4c4c4'><h4 style='margin:0'>#" + item.Product.Id + " " + item.Product.Name + "</h4></td>");
+                    stringBuilder.Append("<td style='padding:0 0.25em;border-bottom:1px solid #c4c4c4;text-align:right'><p style='font:12px/1.5 Arial,Helvetica,sans-serif;margin:0 0 0 0'>$" + item.Product.OriginalPrice + "</p></td>");
+                    if (currentUser.Role.ToLower() == "agent")
+                    {
+                        stringBuilder.Append("<td style='padding:0 0.25em;border-bottom:1px solid #c4c4c4;text-align:right'><strong>$" + String.Format("{0:0.00}", item.Product.AgentPrice) + "</strong></td>");
+                    }
+                    else if (currentUser.Role.ToLower() == "wholesaler")
+                    {
+                        stringBuilder.Append("<td style='padding:0 0.25em;border-bottom:1px solid #c4c4c4;text-align:right'><strong>$" + String.Format("{0:0.00}", item.Product.WholesalerPrice) + "</strong></td>");
+                    }
+                    stringBuilder.Append("<td style='padding:0 0.25em;border-bottom:1px solid #c4c4c4;text-align:center'>" + item.Amount + "</td>");
+                    if (currentUser.Role.ToLower() == "agent")
+                    {
+                        stringBuilder.Append("<td style='padding:0 0.25em;border-bottom:1px solid #c4c4c4;text-align:right'><span><strong>$" + String.Format("{0:0.00}", item.Product.AgentPrice * item.Amount) + "</strong></span></td></tr>");
+                    }
+                    else if (currentUser.Role.ToLower() == "wholesaler")
+                    {
+                        stringBuilder.Append("<td style='padding:0 0.25em;border-bottom:1px solid #c4c4c4;text-align:right'><span><strong>$" + String.Format("{0:0.00}", item.Product.WholesalerPrice * item.Amount) + "</strong></span></td></tr>");
+                    }
+                }
+                stringBuilder.Append("</tbody>");
+                stringBuilder.Append("<tfoot>");
+                stringBuilder.Append("<tr><td colspan='1'>&nbsp;</td><td colspan='3' width='100' style='padding:0.5em 0.25em;border-bottom:1px solid #c4c4c4'>Payment Method</td>");
+                stringBuilder.Append("<td width='100' style='padding:0.5em 0.25em;border-bottom:1px solid #c4c4c4;text-align:right'><strong><span>" + order.ClientMessage + "</span></strong></td></tr>");
+                stringBuilder.Append("<tr><td colspan='1'>&nbsp;</td><td colspan='3' width='100' style='padding:0.5em 0.25em;border-bottom:1px solid #c4c4c4'>You Will Pay Excl.GST</td>");
+                stringBuilder.Append("<td width='100' style='padding:0.5em 0.25em;border-bottom:1px solid #c4c4c4;text-align:right'><strong>$<span>" + String.Format("{0:0.00}", priceExclGst) + "</span></strong></td></tr>");
+                stringBuilder.Append("<tr><td colspan='1'>&nbsp;</td><td colspan='3' width='100' style='padding:0.5em 0.25em;border-bottom:1px solid #c4c4c4'>GST</td>");
+                stringBuilder.Append("<td width='100' style='padding:0.5em 0.25em;border-bottom:1px solid #c4c4c4;text-align:right'><strong>$<span>" + String.Format("{0:0.00}", gst) + "</span></strong></td></tr>");
+                stringBuilder.Append("<tr><td colspan='1'>&nbsp;</td><td colspan='3' width='100' style='padding:0.5em 0.25em;border-bottom:1px solid #c4c4c4'>You will pay Inc.GST</td>");
+                stringBuilder.Append("<td width='100' style='padding:0.5em 0.25em;border-bottom:1px solid #c4c4c4;text-align:right'><strong>$<span>" + String.Format("{0:0.00}", priceIncGst) + "</span></strong></td></tr>");
+                stringBuilder.Append("<tr><td colspan='1'>&nbsp;</td><td colspan='3' width='100' style='padding:0.5em 0.25em;border-bottom:1px solid #c4c4c4'>Total Discount Earned</td>");
+                stringBuilder.Append("<td width='100' style='padding:0.5em 0.25em;border-bottom:1px solid #c4c4c4;text-align:right'><strong>$<span>" + String.Format("{0:0.00}", discount) + "</span></strong></td></tr>");
+                stringBuilder.Append("</tfoot></table></td></tr>");
+                stringBuilder.Append("<tr><td style='font:12px/1.5 Arial,Helvetica,sans-serif;color:#454545'>&nbsp;</td></tr>");
+                stringBuilder.Append("<tr><td style='font:12px/1.5 Arial,Helvetica,sans-serif;color:#454545;background:#f6f4ef;text-align:center;border-bottom:1px solid #d3d3d3'><p style='font:12px/1.5 Arial,Helvetica,sans-serif;color:#45659d;margin:12px 20px 10px 20px;text-decoration:none'><a style='color:#454545;text-decoration:none' target='_blank'><strong>https://XXXXXXXX</strong></a></p></td></tr>");
+                stringBuilder.Append("</tbody></table></td></tr>");
+                stringBuilder.Append("<tr><td style='font:12px/1.5 Arial,Helvetica,sans-serif;color:#454545'>&nbsp;</td></tr>");
+                stringBuilder.Append("</tbody></table></div>");
+
+                StringReader sr = new StringReader(stringBuilder.ToString());
+
+                iTextSharp.text.Document pdfDoc = new iTextSharp.text.Document(PageSize.A4, 10f, 10f, 10f, 0f);
+                HTMLWorker htmlparser = new HTMLWorker(pdfDoc);
+                using (MemoryStream memoryStream = new MemoryStream())
+                {
+                    PdfWriter writer = PdfWriter.GetInstance(pdfDoc, memoryStream);
+                    pdfDoc.Open();
+
+                    htmlparser.Parse(sr);
+                    pdfDoc.Close();
+
+                    byte[] bytes = memoryStream.ToArray();
+                    memoryStream.Close();
+                }
+                
+                return Ok(new ApiResponse
+                {
+                    Status = "success",
+                    Message = "Successfully write order to pdf file"
+                });
+            }
+            catch (Exception ex)
+            {
+                return Ok(new ApiResponse
+                {
+                    Status = "fail",
+                    Message = ex.Message
+                });
+            }
         }
         #endregion
-    }
-
-    public class TestViewModel {
-        public string DocTitle { get; set; }
-        public string DocContent { get; set; }
     }
 }

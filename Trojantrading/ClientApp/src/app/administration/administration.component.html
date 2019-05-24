@@ -130,7 +130,7 @@
                   </ng-container>
 
                   <ng-container matColumnDef="totalPrice">
-                    <mat-header-cell *matHeaderCellDef> Amount </mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef> Total Price Inc GST </mat-header-cell>
                     <mat-cell *matCellDef="let element"> {{element.totalPrice | currency:'AUD':'symbol-narrow':'.2-2'}}
                     </mat-cell>
                   </ng-container>
@@ -149,7 +149,7 @@
                   <ng-container matColumnDef="downloadPdf">
                     <mat-header-cell *matHeaderCellDef></mat-header-cell>
                     <mat-cell *matCellDef="let element">
-                      <button id="editorder{{element.id}}" class="btn btn-long" [routerLink]="['/api/PdfBoard/WritePdf']" *ngIf="role =='admin'">Download Pdf</button>
+                      <button id="editorder{{element.id}}" class="btn btn-long" (click)="downloadPdf(element)" *ngIf="role =='admin'">Download Pdf</button>
                     </mat-cell>
                   </ng-container>
 

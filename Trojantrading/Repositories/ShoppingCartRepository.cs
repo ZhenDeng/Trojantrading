@@ -224,14 +224,14 @@ namespace Trojantrading.Repositories
 
         private void updateShoppingCartPrice(ShoppingCart shoppingCart, User user, ShoppingItem shoppingItem)
         {
-            shoppingCart.OriginalPrice += (shoppingItem.Amount * shoppingItem.Product.OriginalPrice);
-            if (user.Role == RoleName.agent.ToString())
+            shoppingCart.OriginalPrice += ((shoppingItem.Amount+0.1) * shoppingItem.Product.OriginalPrice);
+            if (user.Role.ToLower() == "agent")
             {
-                shoppingCart.TotalPrice += (shoppingItem.Amount * shoppingItem.Product.AgentPrice);
+                shoppingCart.TotalPrice += ((shoppingItem.Amount + 0.1) * shoppingItem.Product.AgentPrice);
             }
-            else if (user.Role == RoleName.reseller.ToString())
+            else if (user.Role.ToLower() == "wholesaler")
             {
-                shoppingCart.TotalPrice += (shoppingItem.Amount * shoppingItem.Product.WholesalerPrice);
+                shoppingCart.TotalPrice += ((shoppingItem.Amount + 0.1) * shoppingItem.Product.WholesalerPrice);
             }
         }
     }
