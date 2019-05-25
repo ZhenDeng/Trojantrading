@@ -299,7 +299,7 @@ namespace Trojantrading.Controllers
 
                 string pdfBody = stringBuilder.ToString();
                 HtmlToPdf Renderer = new HtmlToPdf();
-                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "order#"+orderId+".pdf");
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "order_"+orderId+".pdf");
                 var PDF = Renderer.RenderHtmlAsPdf(pdfBody);
                 using (var stream = new FileStream(path, FileMode.Create))
                 {
