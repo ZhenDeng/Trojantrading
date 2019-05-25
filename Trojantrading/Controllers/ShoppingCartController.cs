@@ -30,6 +30,15 @@ namespace Trojantrading.Controllers
             return Ok(_shoppingCartRepository.GetCartWithShoppingItems(userId));
         }
 
+        [HttpGet("GetCartInIdWithShoppingItems")]
+        [NoCache]
+        [ProducesResponseType(typeof(ShoppingCart), 200)]
+        [ProducesResponseType(typeof(ApiResponse), 400)]
+        public IActionResult GetCartInIdWithShoppingItems(int shoppingCartId)
+        {
+            return Ok(_shoppingCartRepository.GetCartInIdWithShoppingItems(shoppingCartId));
+        }
+
         [HttpGet("AddShoppingCart")]
         [NoCache]
         [ProducesResponseType(typeof(ApiResponse), 200)]

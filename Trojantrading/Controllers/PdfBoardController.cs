@@ -1,6 +1,3 @@
-using iTextSharp.text;
-using iTextSharp.text.html.simpleparser;
-using iTextSharp.text.pdf;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,12 +6,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection.Metadata;
 using System.Text;
 using Trojantrading.Models;
 using Trojantrading.Repositories;
 using Trojantrading.Service;
 using Trojantrading.Util;
+using IronPdf;
 
 namespace Trojantrading.Controllers
 {
@@ -215,7 +212,6 @@ namespace Trojantrading.Controllers
 
         #region write pdf
         [HttpGet("WritePdf")]
-        [AllowAnonymous]
         [ProducesResponseType(typeof(ApiResponse), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
         public IActionResult WritePdf(int orderId, double gst, double priceExclGst, double discount, int userId)
@@ -301,26 +297,19 @@ namespace Trojantrading.Controllers
                 stringBuilder.Append("<tr><td style='font:12px/1.5 Arial,Helvetica,sans-serif;color:#454545'>&nbsp;</td></tr>");
                 stringBuilder.Append("</tbody></table></div>");
 
-                StringReader sr = new StringReader(stringBuilder.ToString());
-
-                iTextSharp.text.Document pdfDoc = new iTextSharp.text.Document(PageSize.A4, 10f, 10f, 10f, 0f);
-                HTMLWorker htmlparser = new HTMLWorker(pdfDoc);
-                using (MemoryStream memoryStream = new MemoryStream())
+                string pdfBody = stringBuilder.ToString();
+                HtmlToPdf Renderer = new HtmlToPdf();
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "order#"+orderId+".pdf");
+                var PDF = Renderer.RenderHtmlAsPdf(pdfBody);
+                using (var stream = new FileStream(path, FileMode.Create))
                 {
-                    PdfWriter writer = PdfWriter.GetInstance(pdfDoc, memoryStream);
-                    pdfDoc.Open();
-
-                    htmlparser.Parse(sr);
-                    pdfDoc.Close();
-
-                    byte[] bytes = memoryStream.ToArray();
-                    memoryStream.Close();
+                    PDF.Stream.CopyTo(stream);
+                    stream.Close();
                 }
-                
                 return Ok(new ApiResponse
                 {
                     Status = "success",
-                    Message = "Successfully write order to pdf file"
+                    Message = "Successfully write order to pdf file",
                 });
             }
             catch (Exception ex)

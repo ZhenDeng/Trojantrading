@@ -92,13 +92,12 @@ export class ProductsComponent implements OnInit {
       } else {
         this.title = 'Sold Out';
       }
-      this.loadContent = true;
       if (!this.products.length) {
         this.getProducts(type);
       } else {
         this.filterProducts(type, this.products);
       }
-
+      this.loadContent = true;
     },
       (error: any) => {
         this.loadContent = true;

@@ -12,6 +12,7 @@ namespace Trojantrading.Repositories
         ShoppingCart GetShoppingCartByID(int shoppingCartId, int userId);
         ShoppingCart GetCartWithShoppingItems(int userId);
         ApiResponse deleteShoppingItem(int shoppingItemId);
+        ShoppingCart GetCartInIdWithShoppingItems(int shoppingCartId);
     }
     public class ShoppingCartRepository : IShoppingCartRepository
     {
@@ -125,6 +126,41 @@ namespace Trojantrading.Repositories
                                     ShoppingItems = join.ShoppingItems.ToList(),
                                     OriginalPrice = join.ShoppingCart.OriginalPrice,
                                     UserId = userId,
+                                    Status = join.ShoppingCart.Status,
+                                    PaymentMethod = join.ShoppingCart.PaymentMethod
+                                }).FirstOrDefault();
+
+
+            if (shoppingCart.TotalItems > 0)
+            {
+                shoppingCart.ShoppingItems = shoppingCart.ShoppingItems
+                            .Join(trojantradingDbContext.Products, si => si.ProductId, p => p.Id, (shoppingItem, product) => new { ShoppingItem = shoppingItem, Product = product })
+                            .Select(join => new ShoppingItem
+                            {
+                                Id = join.ShoppingItem.Id,
+                                Amount = join.ShoppingItem.Amount,
+                                Product = join.Product,
+                                ProductId = join.Product.Id,
+                                Status = join.ShoppingItem.Status
+                            }).ToList();
+            }
+
+
+            return shoppingCart;
+        }
+
+        public ShoppingCart GetCartInIdWithShoppingItems(int shoppingCartId)
+        {
+            var shoppingCart = trojantradingDbContext.ShoppingCarts.Where(sc => sc.Id == shoppingCartId)
+                                .GroupJoin(trojantradingDbContext.ShoppingItems, sc => sc.Id, si => si.ShoppingCartId, (shoppingCartModel, shoppingItems) => new { ShoppingCart = shoppingCartModel, ShoppingItems = shoppingItems })
+                                .Select(join => new ShoppingCart()
+                                {
+                                    Id = join.ShoppingCart.Id,
+                                    TotalItems = join.ShoppingCart.TotalItems,
+                                    TotalPrice = join.ShoppingCart.TotalPrice,
+                                    ShoppingItems = join.ShoppingItems.ToList(),
+                                    OriginalPrice = join.ShoppingCart.OriginalPrice,
+                                    UserId = join.ShoppingCart.UserId,
                                     Status = join.ShoppingCart.Status,
                                     PaymentMethod = join.ShoppingCart.PaymentMethod
                                 }).FirstOrDefault();

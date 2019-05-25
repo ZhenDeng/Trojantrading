@@ -14,7 +14,7 @@
 
   <ItemGroup>
     <PackageReference Include="EPPlus" Version="4.5.1" />
-    <PackageReference Include="iTextSharp" Version="5.5.13" />
+    <PackageReference Include="IronPdf" Version="5.2.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="2.1.1" />

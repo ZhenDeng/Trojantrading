@@ -31,6 +31,11 @@ export class ShoppingCartService {
       .pipe(catchError(this.handleError));
   }
 
+  GetCartInIdWithShoppingItems(shoppingCartId: number): Observable<ShoppingCart>{
+    return this.http.get(this.base_url + "/GetCartInIdWithShoppingItems?shoppingCartId=" + shoppingCartId)
+      .pipe(catchError(this.handleError));
+  }
+
   UpdateShoppingCart(userId: number, shoppingCartItem: ShoppingItem): Observable<ApiResponse>{
     return this.http.post(this.base_url + "/UpdateShoppingCart?userId=" + userId, shoppingCartItem)
       .pipe(catchError(this.handleError));
