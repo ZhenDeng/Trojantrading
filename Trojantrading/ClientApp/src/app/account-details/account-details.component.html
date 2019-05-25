@@ -1,14 +1,15 @@
 <app-nav-menu></app-nav-menu>
 
-<section class="topbar">
+<!-- <section class="topbar">
   <div class="backproductbar">
     <span class="backtoproduct" (click)="backToProduct()"><i class="fas fa-arrow-left fa-fw"></i> Back to Product</span>
   </div>
-</section>
+</section> -->
 <loading-screen *ngIf="!loadContent" [showBlurTable]="false" (currentLoadingStatus)="onLoading($event)"></loading-screen>
 <div class="accountbody">
   <div class="page-title-wrapper">
     <div class="page-title-position">
+      <i class="fas fa-user fa-fw"></i>
       {{title}}
     </div>
   </div>

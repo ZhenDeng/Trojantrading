@@ -5,10 +5,15 @@
     <div class='col-sm-12 body-content'>
       <ng-container>
         <section class="product-wrapper" *ngIf="!successCheckout">
-          <h4>Checkout</h4>
+          <div class="page-title-wrapper">
+            <div class="page-title-position">
+                <i class="fas fa-shopping-cart fa-fw"></i>
+              My Cart
+            </div>
+          </div>
 
           <div class="emptycart" *ngIf="!dataSource?.length">
-            <p>Your Cart Is Empty</p>
+            <p>Shopping cart is empty</p>
             <button class="btn btn-long" (click)="continueShopping()">Start Shopping</button>
           </div>
           <loading-screen *ngIf="!loadContent" [showBlurTable]="false" (currentLoadingStatus)="onLoading($event)"></loading-screen>

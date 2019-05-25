@@ -17,11 +17,12 @@ h4{
 	padding: 20px;
   border: 1px solid rgba(0,0,0,.03);
   box-shadow: 0 2px 2px rgba(0,0,0,.24), 0 0 2px rgba(0,0,0,.12);
+  background: white;
 }
 /* Overwrite default google material styles */
 
 ::ng-deep .mat-tab-link.mat-tab-label-active{
-	/* background: #eeede1 !important; */
+	background: white !important;
 	opacity: 1 !important;
 	color: #C20047;
 	border-bottom: 1px solid #C20047;
@@ -95,7 +96,7 @@ input[type=number]::-webkit-outer-spin-button {
 
 .navbar-button button {
   color: #0a0a0a88;
-  background: transparent;
+  background: white;
   margin: 10px 5px;
   padding: 5px 15px;
   border-radius: 50px;
@@ -105,6 +106,7 @@ input[type=number]::-webkit-outer-spin-button {
 
 .navbar-button button:hover {
   box-shadow: 0px 1px 3px 0 rgba(138, 139, 140, 0.302), 0px 4px 8px 3px rgba(35, 35, 35, 0.149);
+  color:#C20047;
 }
 
 .navbar-button_flexWrapper {

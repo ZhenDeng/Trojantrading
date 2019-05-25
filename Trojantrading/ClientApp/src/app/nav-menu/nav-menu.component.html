@@ -67,7 +67,7 @@
                 </mat-list-item>
                 <button class="btn btn-long" (click)="proceedToCheckout()" *ngIf="shoppingItems?.length">Procees To
                   Checkout</button>
-                <button class="btn btn-long" (click)="continueShopping()" *ngIf="!shoppingItems?.length">Start
+                <button class="btn btn-long" (click)="continueShopping()" style="margin-left:75px!important;" *ngIf="!shoppingItems?.length">Start
                   Shopping</button>
               </mat-list>
               <mat-list role="list" *ngIf="role =='wholesaler'">

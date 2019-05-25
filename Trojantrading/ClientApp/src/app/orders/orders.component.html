@@ -6,7 +6,12 @@
       
       <ng-container>
         <section class="product-wrapper">
-          <h4>{{title}}</h4>
+          <div class="page-title-wrapper">
+            <div class="page-title-position">
+              <i class="fas fa-list fa-fw"></i>
+              {{title}}
+            </div>
+          </div>
           <loading-screen *ngIf="!loadContent" [showBlurTable]="false" (currentLoadingStatus)="onLoading($event)"></loading-screen>
           <div class="filter-wrapper" style="width:700px;">
             <span class="searchInputGroup">

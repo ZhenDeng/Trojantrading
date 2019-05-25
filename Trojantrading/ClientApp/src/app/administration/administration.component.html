@@ -5,7 +5,12 @@
     <div class='col-sm-12 body-content'>
       <ng-container>
         <section class="product-wrapper">
-          <h4 style="text-transform:capitalize;">{{title}}</h4>
+          <div class="page-title-wrapper">
+              <div class="page-title-position">
+                <i class="fas fa-list fa-fw"></i>
+                {{title}}
+              </div>
+            </div>
           <loading-screen *ngIf="!loadContent" [showBlurTable]="false" (currentLoadingStatus)="onLoading($event)">
           </loading-screen>
           <mat-tab-group mat-stretch-tabs>

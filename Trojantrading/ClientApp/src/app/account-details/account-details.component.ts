@@ -24,7 +24,7 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
 
   user: User;
   shoppingCart: ShoppingCart;
-  title: string = "Your Account";
+  title: string = "My Account";
   userFormGroup: FormGroup;
   userPasswordGroup: FormGroup;
   shoppingItems: ShoppingItem[];

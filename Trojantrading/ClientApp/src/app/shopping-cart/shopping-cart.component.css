@@ -14,12 +14,15 @@ h4{
 
 .product-wrapper{
 	padding: 20px;
-	background: #eeede1;
+	border: 1px solid rgba(0,0,0,.03);
+	box-shadow: 0 2px 2px rgba(0,0,0,.24), 0 0 2px rgba(0,0,0,.12);
+	background: white;
+	margin:70px;
 }
 /* Overwrite default google material styles */
 
 ::ng-deep .mat-tab-link.mat-tab-label-active{
-	background: #eeede1!important;
+	background: white!important;
 	opacity: 1!important;
 }
 
@@ -89,6 +92,10 @@ h4{
     margin-bottom: 20px !important;
 }
 
+.btn-shop {
+	margin-left: 75px !important;
+}
+
 .mat-table_1fex{
 	flex: 1 !important;
 	color: #C20047;
@@ -114,7 +121,7 @@ h4{
 
 .emptycart p{
 	color: #C20047;
-	font-size: 28px;
+	font-size: 18px;
 }
 
 input[type="number"] {
@@ -143,3 +150,23 @@ input[type=number]::-webkit-outer-spin-button {
 	color: green;
 	font-size: 28px;
 }
+
+.page-title-position {
+	padding-bottom: 0px;
+	width: 100%;
+	display: inline-block;
+	padding: 0px;
+	text-transform: capitalize;
+	font-weight: 300;
+	font-size: 20px;
+	color: gray;
+  }
+
+  
+.page-title-wrapper, .page-main-wrapper {
+	padding: 15px 20px 30px 10px;
+	font-size: 4.5rem;
+	line-height: 1.5rem;
+	vertical-align: middle;
+  }
+  
