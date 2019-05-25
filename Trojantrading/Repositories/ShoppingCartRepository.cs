@@ -12,6 +12,7 @@ namespace Trojantrading.Repositories
         ShoppingCart GetShoppingCartByID(int shoppingCartId, int userId);
         ShoppingCart GetCartWithShoppingItems(int userId);
         ApiResponse deleteShoppingItem(int shoppingItemId);
+        ShoppingCart GetCartInIdWithShoppingItems(int shoppingCartId);
     }
     public class ShoppingCartRepository : IShoppingCartRepository
     {
@@ -148,6 +149,41 @@ namespace Trojantrading.Repositories
             return shoppingCart;
         }
 
+        public ShoppingCart GetCartInIdWithShoppingItems(int shoppingCartId)
+        {
+            var shoppingCart = trojantradingDbContext.ShoppingCarts.Where(sc => sc.Id == shoppingCartId)
+                                .GroupJoin(trojantradingDbContext.ShoppingItems, sc => sc.Id, si => si.ShoppingCartId, (shoppingCartModel, shoppingItems) => new { ShoppingCart = shoppingCartModel, ShoppingItems = shoppingItems })
+                                .Select(join => new ShoppingCart()
+                                {
+                                    Id = join.ShoppingCart.Id,
+                                    TotalItems = join.ShoppingCart.TotalItems,
+                                    TotalPrice = join.ShoppingCart.TotalPrice,
+                                    ShoppingItems = join.ShoppingItems.ToList(),
+                                    OriginalPrice = join.ShoppingCart.OriginalPrice,
+                                    UserId = join.ShoppingCart.UserId,
+                                    Status = join.ShoppingCart.Status,
+                                    PaymentMethod = join.ShoppingCart.PaymentMethod
+                                }).FirstOrDefault();
+
+
+            if (shoppingCart.TotalItems > 0)
+            {
+                shoppingCart.ShoppingItems = shoppingCart.ShoppingItems
+                            .Join(trojantradingDbContext.Products, si => si.ProductId, p => p.Id, (shoppingItem, product) => new { ShoppingItem = shoppingItem, Product = product })
+                            .Select(join => new ShoppingItem
+                            {
+                                Id = join.ShoppingItem.Id,
+                                Amount = join.ShoppingItem.Amount,
+                                Product = join.Product,
+                                ProductId = join.Product.Id,
+                                Status = join.ShoppingItem.Status
+                            }).ToList();
+            }
+
+
+            return shoppingCart;
+        }
+
         public ApiResponse UpdateShoppingCart(int userId, ShoppingItem shoppingItem)
         {
             try
@@ -224,14 +260,14 @@ namespace Trojantrading.Repositories
 
         private void updateShoppingCartPrice(ShoppingCart shoppingCart, User user, ShoppingItem shoppingItem)
         {
-            shoppingCart.OriginalPrice += (shoppingItem.Amount * shoppingItem.Product.OriginalPrice);
-            if (user.Role == RoleName.agent.ToString())
+            shoppingCart.OriginalPrice += ((shoppingItem.Amount+0.1) * shoppingItem.Product.OriginalPrice);
+            if (user.Role.ToLower() == "agent")
             {
-                shoppingCart.TotalPrice += (shoppingItem.Amount * shoppingItem.Product.AgentPrice);
+                shoppingCart.TotalPrice += ((shoppingItem.Amount + 0.1) * shoppingItem.Product.AgentPrice);
             }
-            else if (user.Role == RoleName.reseller.ToString())
+            else if (user.Role.ToLower() == "wholesaler")
             {
-                shoppingCart.TotalPrice += (shoppingItem.Amount * shoppingItem.Product.WholesalerPrice);
+                shoppingCart.TotalPrice += ((shoppingItem.Amount + 0.1) * shoppingItem.Product.WholesalerPrice);
             }
         }
     }

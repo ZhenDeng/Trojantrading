@@ -20,6 +20,9 @@ import { HeadInformationService } from '../services/head-information.service';
 import { EditOrderComponent } from '../popup-collection/edit-order/edit-order.component';
 import { UploadPdfComponent } from '../popup-collection/upload-pdf/upload-pdf.component';
 import { UploadUsersComponent } from '../popup-collection/upload-users/upload-users.component';
+import { ShoppingCartService } from '../services/shopping-cart.service';
+import { ShoppingCart } from '../models/shoppingCart';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-administration',
@@ -50,6 +53,12 @@ export class AdministrationComponent implements OnInit {
   headerDataSource = new MatTableDataSource();
   pdfDataSource = new MatTableDataSource();
   loadContent: boolean = false;
+  priceExclGst: number;
+  gst: number;
+  priceIncGst: number;
+  discount: number;
+  oringinalPriceIncGst: number;
+  oringinalPriceExclGst: number;
 
   constructor(
     public nav: NavbarService,
@@ -60,7 +69,9 @@ export class AdministrationComponent implements OnInit {
     private calendar: NgbCalendar,
     public dialog: MatDialog,
     private datePipe: DatePipe,
-    private headInformationService: HeadInformationService
+    private headInformationService: HeadInformationService,
+    private shoppingCartService: ShoppingCartService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -145,8 +156,8 @@ export class AdministrationComponent implements OnInit {
   }
 
   convertDateFormat(): void {
-    this.strDateFrom = this.dateFrom.day + '/' + this.dateFrom.month + '/' + this.dateFrom.year;
-    this.strDateTo = this.dateTo.day + '/' + this.dateTo.month + '/' + this.dateTo.year;
+    this.strDateFrom = this.dateFrom.month + '/' + this.dateFrom.day + '/' + this.dateFrom.year;
+    this.strDateTo = this.dateTo.month + '/' + this.dateTo.day + '/' + this.dateTo.year;
   }
 
   downloadExcel() {
@@ -407,5 +418,68 @@ export class AdministrationComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       this.getUsers();
     });
+  }
+
+  downloadPdf(element: Order): void{
+    this.priceExclGst = 0;
+    this.gst = 0;
+    this.priceIncGst = 0;
+    this.discount = 0;
+    this.oringinalPriceExclGst = 0;
+    this.oringinalPriceIncGst = 0;
+    this.loadContent = false;
+    this.shoppingCartService.GetCartInIdWithShoppingItems(element.shoppingCartId).subscribe((res: ShoppingCart) => {
+      if(res && res.shoppingItems){
+        this.adminService.GetUserByAccount(element.userId).subscribe((user: User) => {
+          if(res.paymentMethod == "onaccount"){
+            res.shoppingItems.forEach(si => {
+              this.oringinalPriceExclGst += _.toNumber(si.amount) * si.product.originalPrice;
+              if (user.role == "agent") {
+                si.subTotal = _.toNumber(si.amount) * si.product.agentPrice;
+                this.priceExclGst += si.subTotal;
+              } else if (user.role == "wholesaler") {
+                si.subTotal = _.toNumber(si.amount) * si.product.wholesalerPrice;
+                this.priceExclGst += si.subTotal;
+              }
+            });
+            this.gst = this.priceExclGst * 0.1;
+            this.oringinalPriceIncGst = this.oringinalPriceExclGst * 1.1;
+            this.priceIncGst = this.gst + this.priceExclGst;
+            this.discount = this.oringinalPriceIncGst - this.priceIncGst;
+          }else{
+            res.shoppingItems.forEach(si => {
+              this.oringinalPriceExclGst += _.toNumber(si.amount) * si.product.originalPrice;
+              si.subTotal = _.toNumber(si.amount) * si.product.prepaymentDiscount;
+              this.priceExclGst += si.subTotal;
+            });
+            this.gst = this.priceExclGst * 0.1;
+            this.oringinalPriceIncGst = this.oringinalPriceExclGst * 1.1;
+            this.priceIncGst = this.gst + this.priceExclGst;
+            this.discount = this.oringinalPriceIncGst - this.priceIncGst;
+          }
+          this.fileService.WritePdf(element.id, this.gst, this.priceExclGst, this.discount, element.userId).subscribe((res: ApiResponse) => {
+            if(res.status == "success"){
+              this.shareSevice.showSuccess("#pdf"+element.id, res.message, "right");
+              window.open("/order#"+element.id+".pdf", "_blank");
+            }else{
+              this.shareSevice.showError("#pdf"+element.id, res.message, "right");
+            }
+            this.loadContent = true;
+          },
+            (error: any) => {
+              this.loadContent = true;
+              console.info(error);
+            });
+        },
+          (error: any) => {
+            this.loadContent = true;
+            console.info(error);
+          });
+      }
+    },
+      (error: any) => {
+        this.loadContent = true;
+        console.info(error);
+      });
   }
 }

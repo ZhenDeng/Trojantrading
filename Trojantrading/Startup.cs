@@ -1,17 +1,13 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
-using Rotativa.AspNetCore;
 using System;
 using System.IO;
 using System.Text;
@@ -95,7 +91,7 @@ namespace Trojantrading
             {
                 app.UseExceptionHandler("/Error");
             }
-            RotativaConfiguration.Setup(env);
+
             // JWT related code
             app.UseCors(x => x
                 .AllowAnyOrigin()

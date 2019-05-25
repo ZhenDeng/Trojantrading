@@ -43,6 +43,11 @@ export class FileService {
     .pipe(catchError(this.handleError));
   }
 
+  WritePdf(orderId: number, gst: number, priceExclGst: number, discount: number, userId: number): Observable<ApiResponse>{
+    return this.http.get(this.base_url + "/WritePdf?orderId="+orderId+"&gst="+gst+"&priceExclGst="+priceExclGst+"&discount="+discount+"&userId="+userId)
+    .pipe(catchError(this.handleError));
+  }
+
   saveFile(url: string): Observable<any> {
     return this.http.get<Blob>(url, { responseType: 'blob' as 'json' })
       .pipe(catchError(this.handleError));
