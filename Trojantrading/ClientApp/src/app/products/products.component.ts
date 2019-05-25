@@ -1,6 +1,6 @@
 import { ProductService } from './../services/product.service';
 import { Product, Category } from './../models/Product';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatTableDataSource, MatDialog } from '@angular/material';
 import { Menu } from '../models/menu';
@@ -8,13 +8,15 @@ import { ShareService } from '../services/share.service';
 import { NavbarService } from '../services/navbar.service';
 import { ApiResponse } from '../models/ApiResponse';
 import { EditProductComponent } from '../popup-collection/edit-product/edit-product.component';
+import { Subject } from 'rxjs';
+import 'rxjs/add/operator/takeUntil';
 
 @Component({
   selector: 'app-products',
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.css']
 })
-export class ProductsComponent implements OnInit {
+export class ProductsComponent implements OnInit, OnDestroy {
 
   products: Product[] = [];
 
@@ -56,6 +58,9 @@ export class ProductsComponent implements OnInit {
       id: 'soldout'
     },
   ];
+
+   //unsubscribe
+   ngUnsubscribe: Subject<void> = new Subject<void>();
 
   constructor(
     private router: Router,
@@ -107,7 +112,8 @@ export class ProductsComponent implements OnInit {
 
   getProducts(type: string) {
     this.loadContent = false;
-    this.productService.getAllProducts().subscribe((value: Product[]) => {
+    this.productService.getAllProducts().takeUntil(this.ngUnsubscribe)
+    .subscribe((value: Product[]) => {
       this.loadContent = true;
       this.products = value;
       this.filterProducts(type, value);
@@ -252,5 +258,10 @@ export class ProductsComponent implements OnInit {
 
   onLoading(currentLoadingStatus: boolean) {
     this.loadContent = !currentLoadingStatus;
+  }
+
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 }

@@ -15,6 +15,8 @@ import { ShoppingCart } from '../models/shoppingCart';
 import * as _ from 'lodash';
 import { EditProductComponent } from '../popup-collection/edit-product/edit-product.component';
 import { NgbDropdownConfig } from '@ng-bootstrap/ng-bootstrap';
+import { Subject } from 'rxjs';
+import 'rxjs/add/operator/takeUntil';
 
 @Component({
   selector: 'app-home',
@@ -65,6 +67,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   isHomeComponentDestroyed: boolean = false;
 
+   //unsubscribe
+   ngUnsubscribe: Subject<void> = new Subject<void>();
+
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -112,7 +117,8 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.role = this.shareService.readCookie("role");
       this.nav.show();
       this.getAllProducts();
-      this.adminService.GetUserByAccount(_.toNumber(this.shareService.readCookie("userId"))).subscribe((res: User) => {
+      this.adminService.GetUserByAccount(_.toNumber(this.shareService.readCookie("userId"))).takeUntil(this.ngUnsubscribe)
+      .subscribe((res: User) => {
         this.loadContent = true;
         if (res) {
           this.user = res;
@@ -136,7 +142,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   getAllProducts() {
     this.loadContent = false;
-    this.productService.getAllProducts().subscribe((value: Product[]) => {
+    this.productService.getAllProducts().takeUntil(this.ngUnsubscribe)
+    .subscribe((value: Product[]) => {
       this.allProducts = value;
       this.allProducts.forEach(product => product.quantity = 0);
       this.loadContent = true;
@@ -299,6 +306,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    console.log("destroy home page");
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 }

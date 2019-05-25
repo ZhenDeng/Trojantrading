@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Subject } from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AdminService } from '../services/admin.service';
 import { User } from '../models/user';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
@@ -12,13 +13,14 @@ import { ApiResponse } from '../models/ApiResponse';
 import * as _ from 'lodash';
 import { MatDialog } from '@angular/material';
 import { EditAddressComponent } from '../popup-collection/edit-address/edit-address.component';
+import 'rxjs/add/operator/takeUntil';
 
 @Component({
   selector: 'app-account-details',
   templateUrl: './account-details.component.html',
   styleUrls: ['./account-details.component.css']
 })
-export class AccountDetailsComponent implements OnInit {
+export class AccountDetailsComponent implements OnInit, OnDestroy {
 
   user: User;
   shoppingCart: ShoppingCart;
@@ -31,6 +33,9 @@ export class AccountDetailsComponent implements OnInit {
   hideNewPassword: boolean = true;
   hideConfirmPassword: boolean = true;
   loadContent: boolean = false;
+
+  //unsubscribe
+  ngUnsubscribe: Subject<void> = new Subject<void>();
 
   constructor(
     private adminService: AdminService,
@@ -58,7 +63,8 @@ export class AccountDetailsComponent implements OnInit {
   ngOnInit() {
     
     this.nav.show();
-    this.adminService.GetUserByAccount(_.toNumber(this.shareService.readCookie("userId"))).subscribe((res: User) => {
+    this.adminService.GetUserByAccount(_.toNumber(this.shareService.readCookie("userId"))).takeUntil(this.ngUnsubscribe)
+    .subscribe((res: User) => {
       this.user = res;
       this.userFormGroup.get("trn").setValue(this.user.trn);
       this.userFormGroup.get("abn").setValue(this.user.abn);
@@ -197,6 +203,11 @@ export class AccountDetailsComponent implements OnInit {
 
   onLoading(currentLoadingStatus: boolean) {
     this.loadContent = !currentLoadingStatus;
+  }
+
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   backToProduct(): void {

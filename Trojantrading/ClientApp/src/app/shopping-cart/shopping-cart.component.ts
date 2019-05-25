@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NavbarService } from '../services/navbar.service';
 import { ShareService } from '../services/share.service';
 import { ShoppingCartService } from '../services/shopping-cart.service';
@@ -10,13 +10,15 @@ import { ShoppingItem } from '../models/shoppingItem';
 import { ApiResponse } from '../models/ApiResponse';
 import { OrderService } from '../services/order.service';
 import * as _ from 'lodash';
+import { Subject } from 'rxjs';
+import 'rxjs/add/operator/takeUntil';
 
 @Component({
   selector: 'app-shopping-cart',
   templateUrl: './shopping-cart.component.html',
   styleUrls: ['./shopping-cart.component.css']
 })
-export class ShoppingCartComponent implements OnInit {
+export class ShoppingCartComponent implements OnInit, OnDestroy {
 
   dataSource: ShoppingItem[];
   displayedColumns: string[] = [];
@@ -31,6 +33,9 @@ export class ShoppingCartComponent implements OnInit {
   successCheckout: boolean = false;
   selectedPayment: string;
   loadContent = false;
+
+   //unsubscribe
+   ngUnsubscribe: Subject<void> = new Subject<void>();
 
   constructor(
     private nav: NavbarService,
@@ -54,8 +59,10 @@ export class ShoppingCartComponent implements OnInit {
     this.selectedPayment = "onaccount";
     this.successCheckout = false;
     this.shoppingCartService.currentShoppingItemLength.subscribe((length: number) => {
-      this.adminService.GetUserByAccount(_.toNumber(this.shareService.readCookie("userId"))).subscribe((user: User) => {
-        this.shoppingCartService.GetShoppingCart(user.id).subscribe((res: ShoppingCart) => {
+      this.adminService.GetUserByAccount(_.toNumber(this.shareService.readCookie("userId"))).takeUntil(this.ngUnsubscribe)
+      .subscribe((user: User) => {
+        this.shoppingCartService.GetShoppingCart(user.id).takeUntil(this.ngUnsubscribe)
+        .subscribe((res: ShoppingCart) => {
           this.priceExclGst = 0;
           this.gst = 0;
           this.priceIncGst = 0;
@@ -226,5 +233,10 @@ export class ShoppingCartComponent implements OnInit {
       // invalid character, prevent input
       event.preventDefault();
     }
+  }
+
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 }

@@ -1,6 +1,6 @@
 import { Status } from './../models/order';
 import { FileService } from './../services/file.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NavbarService } from '../services/navbar.service';
 import { AdminService } from '../services/admin.service';
 import { MatDialog, MatTableDataSource } from '@angular/material';
@@ -23,6 +23,8 @@ import { UploadUsersComponent } from '../popup-collection/upload-users/upload-us
 import { ShoppingCartService } from '../services/shopping-cart.service';
 import { ShoppingCart } from '../models/shoppingCart';
 import { Router } from '@angular/router';
+import { Subject } from 'rxjs';
+import 'rxjs/add/operator/takeUntil';
 
 @Component({
   selector: 'app-administration',
@@ -30,7 +32,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./administration.component.css'],
   providers: [DatePipe]
 })
-export class AdministrationComponent implements OnInit {
+export class AdministrationComponent implements OnInit, OnDestroy {
 
   title: string = "Administration";
   displayedColumns: string[] = ["UserName", "Password", "BusinessName", "Role", "Email", "Phone", "Status", "EditButton", "DeleteButton"];
@@ -59,7 +61,10 @@ export class AdministrationComponent implements OnInit {
   discount: number;
   oringinalPriceIncGst: number;
   oringinalPriceExclGst: number;
-
+  
+   //unsubscribe
+   ngUnsubscribe: Subject<void> = new Subject<void>();
+   
   constructor(
     public nav: NavbarService,
     private adminService: AdminService,
@@ -89,9 +94,15 @@ export class AdministrationComponent implements OnInit {
     this.getOrders();
   }
 
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
+  }
+
   getUsers(): void {
     this.loadContent = false;
-    this.adminService.GetUsers().subscribe((res: User[]) => {
+    this.adminService.GetUsers().takeUntil(this.ngUnsubscribe)
+     .subscribe((res: User[]) => {
       this.dataSource = res;
       this.dataSourceFilter = this.dataSource;
       this.loadContent = true;
@@ -107,7 +118,8 @@ export class AdministrationComponent implements OnInit {
     this.statusList = this.orderService.statusList;
     const userId = ''; //admin
     this.loadContent = false;
-    this.orderService.getOrdersByUserID(userId, this.strDateFrom, this.strDateTo).subscribe((value: Order[]) => {
+    this.orderService.getOrdersByUserID(userId, this.strDateFrom, this.strDateTo).takeUntil(this.ngUnsubscribe)
+    .subscribe((value: Order[]) => {
       this.orders = value;
       this.ordersDataSource = new MatTableDataSource(this.orders);
       this.loadContent = true;
@@ -132,7 +144,8 @@ export class AdministrationComponent implements OnInit {
 
   getHeadInformation(): void {
     this.loadContent = false;
-    this.headInformationService.GetHeadInformation().subscribe((res: HeadInformation[]) => {
+    this.headInformationService.GetHeadInformation().takeUntil(this.ngUnsubscribe)
+    .subscribe((res: HeadInformation[]) => {
       this.headerDataSource = new MatTableDataSource(res);
       this.headInformationService.changeMessage(this.headerDataSource.data.length);
       this.loadContent = true;
@@ -145,7 +158,8 @@ export class AdministrationComponent implements OnInit {
 
   getPdfBoards(): void {
     this.loadContent = false;
-    this.fileService.GetPdfBoards().subscribe((res: PdfBoard[]) => {
+    this.fileService.GetPdfBoards().takeUntil(this.ngUnsubscribe)
+    .subscribe((res: PdfBoard[]) => {
       this.pdfDataSource = new MatTableDataSource(res);
       this.loadContent = true;
     },

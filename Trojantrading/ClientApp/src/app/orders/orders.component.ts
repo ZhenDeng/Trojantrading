@@ -1,6 +1,6 @@
 import { FileService } from './../services/file.service';
 import { MatTableDataSource } from '@angular/material';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NavbarService } from '../services/navbar.service';
 import { ShareService } from '../services/share.service';
 import { OrderService } from '../services/order.service';
@@ -8,6 +8,8 @@ import { Order } from '../models/order';
 import { NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 import { NgbDate } from '@ng-bootstrap/ng-bootstrap/datepicker/ngb-date';
 import { DatePipe } from '@angular/common';
+import { Subject } from 'rxjs';
+import 'rxjs/add/operator/takeUntil';
 
 
 @Component({
@@ -16,7 +18,7 @@ import { DatePipe } from '@angular/common';
   styleUrls: ['./orders.component.css'],
   providers: [DatePipe]
 })
-export class OrdersComponent implements OnInit {
+export class OrdersComponent implements OnInit, OnDestroy {
 
   title = 'Order History';
   url = '';
@@ -31,6 +33,9 @@ export class OrdersComponent implements OnInit {
   dataSource = new MatTableDataSource();
   loadContent: boolean = false;
   displayedColumns: string[] = ['invoiceNo', 'customer', 'createdDate', 'totalPrice', 'payment', 'orderStatus'];
+  
+   //unsubscribe
+   ngUnsubscribe: Subject<void> = new Subject<void>();
 
   constructor(
     private nav: NavbarService,
@@ -54,7 +59,8 @@ export class OrdersComponent implements OnInit {
 
     this.convertDateFormat();
 
-    this.orderService.getOrdersByUserID(this.userId, this.strDateFrom, this.strDateTo).subscribe((value: Order[]) => {
+    this.orderService.getOrdersByUserID(this.userId, this.strDateFrom, this.strDateTo).takeUntil(this.ngUnsubscribe)
+    .subscribe((value: Order[]) => {
       console.info(value);
       this.orders = value;
       this.dataSource = new MatTableDataSource(this.orders);
@@ -66,8 +72,8 @@ export class OrdersComponent implements OnInit {
   }
 
   convertDateFormat(): void {
-    this.strDateFrom = this.dateFrom.month + '/' + this.dateFrom.day + '/' + this.dateFrom.year;
-    this.strDateTo = this.dateTo.month + '/' + this.dateTo.day + '/' + this.dateTo.year;
+    this.strDateFrom = this.dateFrom.day + '/' + this.dateFrom.month + '/' + this.dateFrom.year;
+    this.strDateTo = this.dateTo.day + '/' + this.dateTo.month + '/' + this.dateTo.year;
   }
 
   downloadExcel() {
@@ -94,6 +100,11 @@ export class OrdersComponent implements OnInit {
     value = value.trim();
     value = value.toLowerCase();
     this.dataSource.filter = value;
+  }
+
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
 }
