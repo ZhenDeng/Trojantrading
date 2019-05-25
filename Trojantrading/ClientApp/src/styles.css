@@ -365,11 +365,11 @@ a:hover{
 
 .globalfooter{
     width: 100%;
-    background: #eeede1;
-    color: #757575;
+    background: #3a3633;
+    color: white;
     text-align: center;
     padding: 17px 0;
-    margin-top: 200px;
+    margin-top: 100px;
     box-shadow: 0px 19px 19px 27px rgba(43, 43, 43, 0.2);
 }
 
@@ -524,3 +524,4 @@ a:hover{
     animation: lol 3s 500ms infinite ease-in-out;
 }
 /*#endregion */
+

@@ -1,9 +1,3 @@
-.navbar {
-  border: 0;
-  border-radius: 0;
-  margin-bottom: 0;
-  font-size: 14px;
-}
 
 .navbar-button {
   padding-top: 10px;
@@ -36,9 +30,13 @@
 }
 
 .navbar {
-  background: #eeede1;
+  background: #3a3633;
   border-bottom: 1px solid rgba(0, 0, 0, .1);
   box-shadow: 6px 3px 13px 0px rgba(43, 43, 43, 0.2);
+  border: 0;
+  border-radius: 0;
+  margin-bottom: 0;
+  font-size: 14px;
 }
 
 .navbar-header {
@@ -62,15 +60,15 @@
 }
 
 .link-active a{
-  color: #C20047;
+  color: white;
 }
 
 /* overwrite defalut bootstrap styles */
 a{
-  color: #757575;
+  color:#c0bbb7;
 }
 .nav>li>a:focus, .nav>li>a:hover {
-  color: #337ab7;
+  color: white;
   text-decoration: none;
   background-color:transparent;
 }

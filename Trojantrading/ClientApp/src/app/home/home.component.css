@@ -15,16 +15,20 @@ h4{
 
 .product-wrapper{
 	padding: 20px;
-	background: #eeede1;
+  border: 1px solid rgba(0,0,0,.03);
+  box-shadow: 0 2px 2px rgba(0,0,0,.24), 0 0 2px rgba(0,0,0,.12);
 }
 /* Overwrite default google material styles */
 
 ::ng-deep .mat-tab-link.mat-tab-label-active{
-	background: #eeede1 !important;
+	/* background: #eeede1 !important; */
 	opacity: 1 !important;
 	color: #C20047;
 	border-bottom: 1px solid #C20047;
-	font-weight: bolder;
+  font-weight: bolder;
+  border: 1px solid rgba(0,0,0,.03);
+  box-shadow: 2px 2px 2px rgba(0,0,0,.24), 0 0 2px rgba(0,0,0,.12);
+  border-bottom: none;
 }
 
 ::ng-deep .mat-ink-bar{
