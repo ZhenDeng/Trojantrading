@@ -56,7 +56,7 @@
             </a>
             <div ngbDropdownMenu aria-labelledby="dropdownConfig" (mouseleave)="myDrop.close()" *ngIf="role !='admin'">
               <mat-list role="list" *ngIf="role =='agent'">
-                <h3 mat-subheader>Your Order</h3>
+                <h3 mat-subheader>My Order</h3>
                 <mat-list-item role="listitem" *ngFor="let shoppingItem of shoppingItems">
                   <span class="carttext">{{shoppingItem?.product?.name}}&nbsp;&nbsp;&nbsp;
                     {{shoppingItem?.product?.agentPrice | currency:'AUD':'symbol-narrow':'.2-2'}} *
@@ -71,7 +71,7 @@
                   Shopping</button>
               </mat-list>
               <mat-list role="list" *ngIf="role =='wholesaler'">
-                <h3 mat-subheader>Your Order</h3>
+                <h3 mat-subheader>My Order</h3>
                 <mat-list-item role="listitem" *ngFor="let shoppingItem of shoppingItems">
                   <span class="carttext">{{shoppingItem?.product?.name}}&nbsp;&nbsp;&nbsp;
                     {{shoppingItem?.product?.wholesalerPrice | currency:'AUD':'symbol-narrow':'.2-2'}} *
