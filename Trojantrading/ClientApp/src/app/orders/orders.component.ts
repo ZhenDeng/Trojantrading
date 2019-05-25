@@ -80,11 +80,12 @@ export class OrdersComponent implements OnInit, OnDestroy {
     this.convertDateFormat();
 
     let exportOrdersArray = this.orders.map(x => ({
-      InvoiceNumber: x.invoiceNo,
-      Customer: x.user.bussinessName,
-      CreatedDate: this.datePipe.transform(x.createdDate, 'yyyy-MM-dd'),
-      Amount: x.totalPrice,
-      Status: x.orderStatus
+      "Invoice Number": x.invoiceNo,
+      "Customer": x.user.bussinessName,
+      "Created Date": this.datePipe.transform(x.createdDate, 'yyyy-MM-dd'),
+      "Total Price Inc GST": x.totalPrice,
+      "Payment Method": x.clientMessage,
+      "Status": x.orderStatus
     }));
 
 

@@ -41,8 +41,8 @@
             <mat-table #table [dataSource]="dataSource">
           
               <ng-container matColumnDef="invoiceNo">
-                <mat-header-cell *matHeaderCellDef> Order Number </mat-header-cell>
-                <mat-cell *matCellDef="let element">{{element.id}}</mat-cell>
+                <mat-header-cell *matHeaderCellDef> Invoice Number </mat-header-cell>
+                <mat-cell *matCellDef="let element">{{element.invoiceNo}}</mat-cell>
               </ng-container>
 
               <ng-container matColumnDef="customer">
