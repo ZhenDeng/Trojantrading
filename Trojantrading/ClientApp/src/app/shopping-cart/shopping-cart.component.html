@@ -41,14 +41,14 @@
 
               <!-- buyPrice Column -->
               <ng-container matColumnDef="agentPrice" *ngIf="role=='agent'">
-                <mat-header-cell *matHeaderCellDef> Agent Price ex. GST </mat-header-cell>
-                <mat-cell *matCellDef="let element"> {{element.product.agentPrice | currency:'AUD':'symbol-narrow':'.2-2'}} </mat-cell>
+                <mat-header-cell *matHeaderCellDef class="mat-table_2fex"> Agent Price ex. GST </mat-header-cell>
+                <mat-cell *matCellDef="let element" class="mat-table_2fex"> {{element.product.agentPrice | currency:'AUD':'symbol-narrow':'.2-2'}} </mat-cell>
               </ng-container>
 
               <!-- buyPrice Column -->
               <ng-container matColumnDef="wholesalerPrice" *ngIf="role=='wholesaler'">
-                <mat-header-cell *matHeaderCellDef> Wholesaler Price ex. GST </mat-header-cell>
-                <mat-cell *matCellDef="let element"> {{element.product.wholesalerPrice | currency:'AUD':'symbol-narrow':'.2-2'}} </mat-cell>
+                <mat-header-cell *matHeaderCellDef class="mat-table_2fex"> Wholesaler Price ex. GST </mat-header-cell>
+                <mat-cell *matCellDef="let element" class="mat-table_2fex"> {{element.product.wholesalerPrice | currency:'AUD':'symbol-narrow':'.2-2'}} </mat-cell>
               </ng-container>
       
               <ng-container matColumnDef="qty">
@@ -72,7 +72,7 @@
               <p style="flex: 7">&nbsp;</p>
               <mat-form-field style="flex: 3">
                 <mat-label>Payment Method</mat-label>
-                <mat-select [(ngModel)]="selectedPayment" (ngModelChange)="changePaymentMethod()" [disabled]="role=='agent'">
+                <mat-select class="payment" [(ngModel)]="selectedPayment" (ngModelChange)="changePaymentMethod()" [disabled]="role=='agent'">
                   <mat-option value="onaccount">
                     ON ACCOUNT
                   </mat-option>

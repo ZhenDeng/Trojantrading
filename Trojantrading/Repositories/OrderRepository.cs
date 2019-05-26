@@ -158,7 +158,8 @@ namespace Trojantrading.Repositories
                     OriginalPrice = 0,
                     TotalPrice = 0,
                     UserId = order.UserId,
-                    Status = "0"
+                    Status = "0",
+                    PaymentMethod = "onaccount"
                 };
 
                 trojantradingDbContext.ShoppingCarts.Add(sc);

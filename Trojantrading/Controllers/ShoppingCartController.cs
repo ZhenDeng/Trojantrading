@@ -57,6 +57,15 @@ namespace Trojantrading.Controllers
             return Ok(_shoppingCartRepository.UpdateShoppingCart(userId, shoppingItem));
         }
 
+        [HttpGet("UpdateShoppingCartPaymentMethod")]
+        [NoCache]
+        [ProducesResponseType(typeof(ApiResponse), 200)]
+        [ProducesResponseType(typeof(ApiResponse), 400)]
+        public IActionResult UpdateShoppingCartPaymentMethod(int userId, string selectedPayment)
+        {
+            return Ok(_shoppingCartRepository.UpdateShoppingCartPaymentMethod(userId, selectedPayment));
+        }
+
         [HttpDelete("deleteShoppingItem")]
         [NoCache]
         [ProducesResponseType(typeof(ApiResponse), 200)]

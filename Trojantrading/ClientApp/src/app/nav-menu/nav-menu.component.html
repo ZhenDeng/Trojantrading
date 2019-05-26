@@ -54,7 +54,7 @@
               (mouseenter)="myDrop.open()">
               <i class="fas fa-shopping-cart fa-fw"></i> My Cart
             </a>
-            <div ngbDropdownMenu aria-labelledby="dropdownConfig" (mouseleave)="myDrop.close()" *ngIf="role !='admin'">
+            <div ngbDropdownMenu aria-labelledby="dropdownConfig" (mouseleave)="myDrop.close()" *ngIf="!inCartPage">
               <mat-list role="list" *ngIf="role =='agent'">
                 <h3 mat-subheader>My Order</h3>
                 <mat-list-item role="listitem" *ngFor="let shoppingItem of shoppingItems">

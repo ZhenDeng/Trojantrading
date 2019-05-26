@@ -28,6 +28,7 @@ export class NavMenuComponent implements OnInit {
   categoryList: Category[];
   headerDataSource: HeadInformation[] = [];
   filePath: string;
+  inCartPage: boolean = false;
 
   constructor(
     public nav: NavbarService,
@@ -54,6 +55,19 @@ export class NavMenuComponent implements OnInit {
       (error: any) => {
         console.info(error);
       });
+
+    this.activatedRouter.url.subscribe((url: any) => {
+      if(url && url[0]){
+        if(url[0].path == "cart"){
+          this.inCartPage = true;
+        }else{
+          this.inCartPage = false;
+        }
+      }
+    },
+      (error: any) => {
+        console.info(error);
+      })
 
     this.shoppingCartService.currentShoppingItemLength.subscribe((length: number) => {
       this.shoppingCartService.AddShoppingCart(_.toNumber(this.shareService.readCookie("userId"))).subscribe((sc: ApiResponse) => {

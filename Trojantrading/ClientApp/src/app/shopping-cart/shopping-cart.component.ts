@@ -33,9 +33,10 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
   successCheckout: boolean = false;
   selectedPayment: string;
   loadContent = false;
+  shoppingCartId: number;
 
-   //unsubscribe
-   ngUnsubscribe: Subject<void> = new Subject<void>();
+  //unsubscribe
+  ngUnsubscribe: Subject<void> = new Subject<void>();
 
   constructor(
     private nav: NavbarService,
@@ -59,9 +60,7 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
     this.selectedPayment = "onaccount";
     this.successCheckout = false;
     this.shoppingCartService.currentShoppingItemLength.subscribe((length: number) => {
-      this.adminService.GetUserByAccount(_.toNumber(this.shareService.readCookie("userId"))).takeUntil(this.ngUnsubscribe)
-      .subscribe((user: User) => {
-        this.shoppingCartService.GetShoppingCart(user.id).takeUntil(this.ngUnsubscribe)
+      this.shoppingCartService.GetShoppingCart(_.toNumber(this.shareService.readCookie("userId"))).takeUntil(this.ngUnsubscribe)
         .subscribe((res: ShoppingCart) => {
           this.priceExclGst = 0;
           this.gst = 0;
@@ -72,29 +71,12 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
           this.shoppingCart = res;
           this.dataSource = this.shoppingCart.shoppingItems;
           if (res.shoppingItems.length) {
-            this.dataSource.forEach(si => {
-              this.oringinalPriceExclGst += si.amount * si.product.originalPrice;
-              if (this.role == "agent") {
-                si.subTotal = si.amount * si.product.agentPrice;
-                this.priceExclGst += si.subTotal;
-              } else if (this.role == "wholesaler") {
-                si.subTotal = si.amount * si.product.wholesalerPrice;
-                this.priceExclGst += si.subTotal;
-              }
-            });
-            this.gst = this.priceExclGst * 0.1;
-            this.oringinalPriceIncGst = this.oringinalPriceExclGst + this.oringinalPriceExclGst * 0.1;
-            this.priceIncGst = this.gst + this.priceExclGst;
-            this.discount = this.oringinalPriceIncGst - this.priceIncGst;
+            this.updatePrice();
           }
         },
           (error: any) => {
             console.info(error);
           });
-      },
-        (error: any) => {
-          console.info(error);
-        });
     },
       (error: any) => {
         console.info(error);
@@ -111,24 +93,18 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
     this.loadContent = false;
     this.orderService.AddOrder(this.shoppingCart, this.gst, this.priceExclGst, this.discount).subscribe((res: ApiResponse) => {
       if (res && res.status == "success") {
-        this.adminService.GetUserByAccount(_.toNumber(this.shareService.readCookie("userId"))).subscribe((user: User) => {
-          this.shoppingCartService.GetShoppingCart(user.id).subscribe((res: ShoppingCart) => {
-            this.priceExclGst = 0;
-            this.gst = 0;
-            this.priceIncGst = 0;
-            this.discount = 0;
-            this.oringinalPriceExclGst = 0;
-            this.oringinalPriceIncGst = 0;
-            this.shoppingCart = res;
-            this.dataSource = this.shoppingCart.shoppingItems;
-            this.successCheckout = true;
-            this.shoppingCartService.MonitorShoppingItemLength(this.dataSource.length);
-            this.loadContent = true;
-          },
-            (error: any) => {
-              console.info(error);
-              this.loadContent = true;
-            });
+        this.shoppingCartService.GetCartInIdWithShoppingItems(this.shoppingCart.id).subscribe((res: ShoppingCart) => {
+          this.priceExclGst = 0;
+          this.gst = 0;
+          this.priceIncGst = 0;
+          this.discount = 0;
+          this.oringinalPriceExclGst = 0;
+          this.oringinalPriceIncGst = 0;
+          this.shoppingCart = res;
+          this.dataSource = this.shoppingCart.shoppingItems;
+          this.successCheckout = true;
+          this.shoppingCartService.MonitorShoppingItemLength(this.dataSource.length);
+          this.loadContent = true;
         },
           (error: any) => {
             console.info(error);
@@ -146,18 +122,14 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
   deleteShoppingItem(shoppingItem: ShoppingItem): void {
     this.shoppingCartService.DeleteShoppingItem(shoppingItem.id).subscribe((res: ApiResponse) => {
       if (res && res.status == "success") {
-        this.adminService.GetUserByAccount(_.toNumber(this.shareService.readCookie("userId"))).subscribe((user: User) => {
-          this.shoppingCartService.GetShoppingCart(user.id).subscribe((res: ShoppingCart) => {
-            this.shoppingCart = res;
-            this.dataSource = this.shoppingCart.shoppingItems;
-            this.shoppingCartService.MonitorShoppingItemLength(this.dataSource.length);
-            if (res && res.shoppingItems.length) {
-              this.changePaymentMethod();
-            }
-          },
-            (error: any) => {
-              console.info(error);
-            });
+        this.shoppingCartService.GetShoppingCart(_.toNumber(this.shareService.readCookie("userId"))).subscribe((res: ShoppingCart) => {
+          this.shoppingCart = res;
+          this.dataSource = this.shoppingCart.shoppingItems;
+          console.info(this.dataSource);
+          this.shoppingCartService.MonitorShoppingItemLength(this.dataSource.length);
+          if (res && res.shoppingItems.length) {
+            this.updatePrice();
+          }
         },
           (error: any) => {
             console.info(error);
@@ -172,11 +144,11 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
   }
 
   changeQuantity(item: ShoppingItem): void {
-    if(item.amount<1){
+    if (item.amount < 1) {
       item.amount = 1;
-      this.shareService.showError("#qty"+item.id, "Minimum qty is 1", "right");
-    }else{
-      this.changePaymentMethod();
+      this.shareService.showError("#qty" + item.id, "Minimum qty is 1", "right");
+    } else {
+      this.updatePrice();
     }
     this.shoppingCart.totalItems = 0;
     this.dataSource.forEach(si => {
@@ -184,14 +156,14 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
     });
   }
 
-  changePaymentMethod(): void{
+  updatePrice():void{
     this.priceExclGst = 0;
     this.gst = 0;
     this.priceIncGst = 0;
     this.discount = 0;
     this.oringinalPriceExclGst = 0;
     this.oringinalPriceIncGst = 0;
-    if(this.selectedPayment == "onaccount"){
+    if (this.selectedPayment == "onaccount") {
       this.dataSource.forEach(si => {
         this.oringinalPriceExclGst += si.amount * si.product.originalPrice;
         if (this.role == "agent") {
@@ -207,7 +179,7 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
       this.priceIncGst = this.gst + this.priceExclGst;
       this.shoppingCart.totalPrice = this.priceIncGst;
       this.discount = this.oringinalPriceIncGst - this.priceIncGst;
-    }else{
+    } else {
       this.dataSource.forEach(si => {
         this.oringinalPriceExclGst += si.amount * si.product.originalPrice;
         si.subTotal = si.amount * si.product.prepaymentDiscount;
@@ -219,6 +191,60 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
       this.shoppingCart.totalPrice = this.priceIncGst;
       this.discount = this.oringinalPriceIncGst - this.priceIncGst;
     }
+  }
+
+  changePaymentMethod(): void {
+    this.priceExclGst = 0;
+    this.gst = 0;
+    this.priceIncGst = 0;
+    this.discount = 0;
+    this.oringinalPriceExclGst = 0;
+    this.oringinalPriceIncGst = 0;
+    this.loadContent = false;
+    this.shoppingCartService.UpdateShoppingCartPaymentMethod(_.toNumber(this.shareService.readCookie("userId")), this.selectedPayment).subscribe((res: ApiResponse) => {
+      this.loadContent = true;
+      if(res && res.status == "success"){
+        if (this.selectedPayment == "onaccount") {
+          this.dataSource.forEach(si => {
+            this.oringinalPriceExclGst += si.amount * si.product.originalPrice;
+            if (this.role == "agent") {
+              si.subTotal = si.amount * si.product.agentPrice;
+              this.priceExclGst += si.subTotal;
+            } else if (this.role == "wholesaler") {
+              si.subTotal = si.amount * si.product.wholesalerPrice;
+              this.priceExclGst += si.subTotal;
+            }
+          });
+          this.gst = this.priceExclGst * 0.1;
+          this.oringinalPriceIncGst = this.oringinalPriceExclGst + this.oringinalPriceExclGst * 0.1;
+          this.priceIncGst = this.gst + this.priceExclGst;
+          this.shoppingCart.totalPrice = this.priceIncGst;
+          this.discount = this.oringinalPriceIncGst - this.priceIncGst;
+        } else {
+          this.dataSource.forEach(si => {
+            this.oringinalPriceExclGst += si.amount * si.product.originalPrice;
+            si.subTotal = si.amount * si.product.prepaymentDiscount;
+            this.priceExclGst += si.subTotal;
+          });
+          this.gst = this.priceExclGst * 0.1;
+          this.oringinalPriceIncGst = this.oringinalPriceExclGst + this.oringinalPriceExclGst * 0.1;
+          this.priceIncGst = this.gst + this.priceExclGst;
+          this.shoppingCart.totalPrice = this.priceIncGst;
+          this.discount = this.oringinalPriceIncGst - this.priceIncGst;
+        }
+      }else{
+        if(this.selectedPayment == "prepay"){
+          this.selectedPayment = "onaccount";
+        }else{
+          this.selectedPayment = "prepay";
+        }
+        this.shareService.showError(".payment", res.message,"right");
+      }
+    },
+      (error: any) => {
+        console.info(error);
+        this.loadContent = true;
+      });
   }
 
   onLoading(currentLoadingStatus: boolean) {

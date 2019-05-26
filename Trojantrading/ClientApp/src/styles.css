@@ -523,5 +523,17 @@ a:hover{
     -webkit-animation: lol 3s 500ms infinite ease-in-out;
     animation: lol 3s 500ms infinite ease-in-out;
 }
+
+.mat-table_4fex{
+	flex: 4 !important;
+}
+
+.mat-table_3fex{
+	flex: 3 !important;
+}
+
+.mat-table_2fex{
+	flex: 2 !important;
+}
 /*#endregion */
 
