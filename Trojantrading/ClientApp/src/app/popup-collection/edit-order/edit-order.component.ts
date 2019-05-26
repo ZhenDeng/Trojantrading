@@ -28,11 +28,7 @@ export class EditOrderComponent implements OnInit {
   account_validation_messages: any = {
     'name': [
       { class: 'customerValidate', message: 'Please enter customer name' }
-    ],
-    'invoiceNumber': [
-      { class: 'invoicenoValidate', message: 'Please enter invoice number' }
-    ],
-
+    ]
   }
 
   constructor(
@@ -45,7 +41,7 @@ export class EditOrderComponent implements OnInit {
   ) {
     this.orderFormGroup = this.formBuilder.group({
       customer: new FormControl(""),
-      invoiceNo: new FormControl("", Validators.compose([Validators.required])),
+      orderNumber: new FormControl("", Validators.compose([Validators.required])),
       createdDate: new FormControl("", Validators.compose([Validators.required])),
       orderStatus: new FormControl(""),
       totalPrice: new FormControl(""),
@@ -61,8 +57,9 @@ export class EditOrderComponent implements OnInit {
       this.orderFormGroup.controls["customer"].disable();
       this.orderFormGroup.controls["createdDate"].disable();
       this.orderFormGroup.controls["totalPrice"].disable();
+      this.orderFormGroup.controls["orderNumber"].disable();
       this.orderFormGroup.get("customer").setValue(this.data.order.user.bussinessName);
-      this.orderFormGroup.get("invoiceNo").setValue(this.data.order.invoiceNo);
+      this.orderFormGroup.get("orderNumber").setValue(this.data.order.id);
       this.orderFormGroup.get("createdDate").setValue(this.datePipe.transform(this.data.order.createdDate, 'yyyy-MM-dd'));
       this.orderFormGroup.get("orderStatus").setValue(this.data.order.orderStatus);
       this.orderFormGroup.get("balance").setValue(this.data.order.balance.toFixed(2));
@@ -73,7 +70,7 @@ export class EditOrderComponent implements OnInit {
 
   updateOrderDetails(): void {
     if (this.orderFormGroup.valid) {
-      this.currentOrder.invoiceNo = this.orderFormGroup.value.invoiceNo;
+      this.currentOrder.id = this.orderFormGroup.value.orderNumber;
       this.currentOrder.orderStatus = this.orderFormGroup.value.orderStatus;
       //this.currentOrder.totalPrice = this.orderFormGroup.value.totalPrice;
       this.currentOrder.balance = this.orderFormGroup.value.balance;
@@ -87,8 +84,6 @@ export class EditOrderComponent implements OnInit {
       this.dialogRef.close(this.currentOrder);
     } else {
       this.isNotValidField('name', this.account_validation_messages.name);
-      this.isNotValidField('invoiceNo', this.account_validation_messages.invoiceNumber);
-
     }
   }
 

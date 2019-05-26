@@ -58,9 +58,9 @@ export class HomeComponent implements OnInit, OnDestroy {
       id: 'promotions'
     },
     {
-      path: '/productsview/soldout',
-      label: 'Sold Out',
-      id: 'soldout'
+      path: '/productsview/outofstock',
+      label: 'Out of Stock',
+      id: 'outofstock'
     },
   ];
 
@@ -264,6 +264,8 @@ export class HomeComponent implements OnInit, OnDestroy {
         product.agentPrice = result.agentPrice;
         product.originalPrice = result.originalPrice;
         product.wholesalerPrice = result.wholesalerPrice;
+        product.status = result.status;
+        product.prepaymentDiscount = result.prepaymentDiscount;
         this.productService.UpdateProduct(product).subscribe((res: ApiResponse) => {
           if (res.status == "success") {
             this.shareService.showSuccess("#" + product.id, res.message, "right");

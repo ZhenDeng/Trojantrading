@@ -46,7 +46,7 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
     public dialog: MatDialog
   ) {
     this.userFormGroup = this.formBuilder.group({
-      trn: new FormControl("", Validators.compose([Validators.required])),
+      trn: new FormControl(""),
       abn: new FormControl("", Validators.compose([Validators.required])),
       email: new FormControl("", Validators.compose([Validators.required])),
       phone: new FormControl("", Validators.compose([Validators.required])),
@@ -78,9 +78,6 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
   }
 
   updateInfo(): void {
-    if (!this.userFormGroup.get("trn").valid) {
-      this.shareService.showError(".trn", "Tobacco Licence Number can not be empty", "right");
-    }
     if (!this.userFormGroup.get("abn").valid) {
       this.shareService.showError(".abn", "Australian Business Number can not be empty", "right");
     }

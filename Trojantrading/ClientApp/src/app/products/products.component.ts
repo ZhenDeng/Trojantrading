@@ -53,9 +53,9 @@ export class ProductsComponent implements OnInit, OnDestroy {
       id: 'promotions'
     },
     {
-      path: '/productsview/soldout',
-      label: 'Sold Out',
-      id: 'soldout'
+      path: '/productsview/outofstock',
+      label: 'Out of Stock',
+      id: 'outofstock'
     },
   ];
 
@@ -95,7 +95,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
       } else if (type.includes('promotion')) {
         this.title = 'Promotions';
       } else {
-        this.title = 'Sold Out';
+        this.title = 'Out of Stock';
       }
       if (!this.products.length) {
         this.getProducts(type);
@@ -163,7 +163,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
                 } else if (type.includes('promotion')) {
                   this.title = 'Promotions';
                 } else {
-                  this.title = 'Sold Out';
+                  this.title = 'Out of Stock';
                 }
                 if (!this.products.length) {
                   this.getProducts(type);
@@ -194,11 +194,14 @@ export class ProductsComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.loadContent = false;
+        console.info(result);
         product.name = result.name;
         product.category = result.category;
         product.agentPrice = result.agentPrice;
         product.originalPrice = result.originalPrice;
         product.wholesalerPrice = result.wholesalerPrice;
+        product.status = result.status;
+        product.prepaymentDiscount = result.prepaymentDiscount;
         this.productService.UpdateProduct(product).subscribe((res: ApiResponse) => {
           if (res.status == "success") {
             this.shareService.showSuccess("#" + product.id, res.message, "right");
@@ -211,7 +214,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
                 } else if (type.includes('promotion')) {
                   this.title = 'Promotions';
                 } else {
-                  this.title = 'Sold Out';
+                  this.title = 'Out of Stock';
                 }
                 if (!this.products.length) {
                   this.getProducts(type);
