@@ -37,7 +37,7 @@ export class AdministrationComponent implements OnInit, OnDestroy {
   title: string = "Administration";
   displayedColumns: string[] = ["UserName", "Password", "BusinessName", "Role", "Email", "Phone", "Status", "EditButton", "DeleteButton"];
   displayedHeaderColumns: string[] = ["Id", "Content", "ImagePath", "EditButton", "DeleteButton"];
-  displayedOrderColumns: string[] = ['orderId', 'customer', 'createdDate', 'totalPrice', 'orderStatus', 'downloadPdf', 'editButton', 'deleteButton'];
+  displayedOrderColumns: string[] = ['invoiceNo', 'customer', 'createdDate', 'totalPrice', 'orderStatus', 'downloadPdf', 'editButton', 'deleteButton'];
   displayedPdfColumns: string[] = ["id", "title", "imagePath"];
   dataSource: User[];
   dataSourceFilter: User[];
@@ -178,11 +178,12 @@ export class AdministrationComponent implements OnInit, OnDestroy {
     this.convertDateFormat();
 
     let exportOrdersArray = this.orders.map(x => ({
-      Id: x.id,
-      Customer: x.user.bussinessName,
-      CreatedDate: this.datePipe.transform(x.createdDate, 'yyyy-MM-dd'),
-      Amount: x.totalPrice,
-      Status: x.orderStatus
+      "Invoice Number": x.invoiceNo,
+      "Customer": x.user.bussinessName,
+      "CreatedDate": this.datePipe.transform(x.createdDate, 'yyyy-MM-dd'),
+      "Total Price Inc GST": x.totalPrice,
+      "Payment Method": x.clientMessage,
+      "Status": x.orderStatus
     }));
     this.fileService.exportAsExcelFile(exportOrdersArray, 'TrojanTrading_Orders_' + this.strDateFrom + '_' + this.strDateTo);
   }
