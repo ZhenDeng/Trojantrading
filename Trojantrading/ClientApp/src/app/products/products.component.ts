@@ -223,7 +223,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
                   this.filterProducts(type, this.products);
                 }
               });
-            }, 2000);
+            }, 1500);
           } else {
             this.loadContent = true;
             this.shareService.showError("#" + product.id, res.message, "right");
@@ -264,7 +264,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
                   this.filterProducts(type, this.products);
                 }
               });
-            }, 2000);
+            }, 1500);
           } else {
             this.loadContent = true;
             this.shareService.showError(".delete" + element.id, res.message, "right");
