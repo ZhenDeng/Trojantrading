@@ -160,7 +160,7 @@ export class EditOrderComponent implements OnInit {
 
   }
   
-  _keyPress(event: any) {
+  isNumberKey(event: any) {
     const pattern = /[0-9\+\-\ ]/;
     let inputChar = String.fromCharCode(event.charCode);
 

@@ -26,6 +26,7 @@ import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import 'rxjs/add/operator/takeUntil';
 import { UploadImageComponent } from '../popup-collection/upload-image/upload-image.component';
+import { DeleteConfirmComponent } from '../popup-collection/delete-confirm/delete-confirm.component';
 
 @Component({
   selector: 'app-administration',
@@ -62,10 +63,10 @@ export class AdministrationComponent implements OnInit, OnDestroy {
   discount: number;
   oringinalPriceIncGst: number;
   oringinalPriceExclGst: number;
-  
-   //unsubscribe
-   ngUnsubscribe: Subject<void> = new Subject<void>();
-   
+
+  //unsubscribe
+  ngUnsubscribe: Subject<void> = new Subject<void>();
+
   constructor(
     public nav: NavbarService,
     private adminService: AdminService,
@@ -103,15 +104,15 @@ export class AdministrationComponent implements OnInit, OnDestroy {
   getUsers(): void {
     this.loadContent = false;
     this.adminService.GetUsers().takeUntil(this.ngUnsubscribe)
-     .subscribe((res: User[]) => {
-      this.dataSource = res;
-      this.dataSourceFilter = this.dataSource;
-      this.loadContent = true;
-    },
-      (error: any) => {
-        console.info(error);
+      .subscribe((res: User[]) => {
+        this.dataSource = res;
+        this.dataSourceFilter = this.dataSource;
         this.loadContent = true;
-      });
+      },
+        (error: any) => {
+          console.info(error);
+          this.loadContent = true;
+        });
   }
 
   getOrders() {
@@ -120,15 +121,15 @@ export class AdministrationComponent implements OnInit, OnDestroy {
     const userId = ''; //admin
     this.loadContent = false;
     this.orderService.getOrdersByUserID(userId, this.strDateFrom, this.strDateTo).takeUntil(this.ngUnsubscribe)
-    .subscribe((value: Order[]) => {
-      this.orders = value;
-      this.ordersDataSource = new MatTableDataSource(this.orders);
-      this.loadContent = true;
-    },
-      (error: any) => {
-        console.info(error);
+      .subscribe((value: Order[]) => {
+        this.orders = value;
+        this.ordersDataSource = new MatTableDataSource(this.orders);
         this.loadContent = true;
-      });
+      },
+        (error: any) => {
+          console.info(error);
+          this.loadContent = true;
+        });
   }
 
   changeStatus(order: Order) {
@@ -146,33 +147,33 @@ export class AdministrationComponent implements OnInit, OnDestroy {
   getHeadInformation(): void {
     this.loadContent = false;
     this.headInformationService.GetHeadInformation().takeUntil(this.ngUnsubscribe)
-    .subscribe((res: HeadInformation[]) => {
-      this.headerDataSource = new MatTableDataSource(res);
-      this.headInformationService.changeMessage(this.headerDataSource.data.length);
-      this.loadContent = true;
-    },
-      (error: any) => {
-        console.info(error);
+      .subscribe((res: HeadInformation[]) => {
+        this.headerDataSource = new MatTableDataSource(res);
+        this.headInformationService.changeMessage(this.headerDataSource.data.length);
         this.loadContent = true;
-      });
+      },
+        (error: any) => {
+          console.info(error);
+          this.loadContent = true;
+        });
   }
 
   getPdfBoards(): void {
     this.loadContent = false;
     this.fileService.GetPdfBoards().takeUntil(this.ngUnsubscribe)
-    .subscribe((res: PdfBoard[]) => {
-      this.pdfDataSource = new MatTableDataSource(res);
-      this.loadContent = true;
-    },
-      (error: any) => {
-        console.info(error);
+      .subscribe((res: PdfBoard[]) => {
+        this.pdfDataSource = new MatTableDataSource(res);
         this.loadContent = true;
-      });
+      },
+        (error: any) => {
+          console.info(error);
+          this.loadContent = true;
+        });
   }
 
   convertDateFormat(): void {
-    this.strDateFrom = this.dateFrom.day + '/' + this.dateFrom.month + '/' + this.dateFrom.year;
-    this.strDateTo = this.dateTo.day + '/' + this.dateTo.month + '/' + this.dateTo.year;
+    this.strDateFrom = this.dateFrom.month + '/' + this.dateFrom.day + '/' + this.dateFrom.year;
+    this.strDateTo = this.dateTo.month + '/' + this.dateTo.day + '/' + this.dateTo.year;
   }
 
   downloadExcel() {
@@ -251,22 +252,30 @@ export class AdministrationComponent implements OnInit, OnDestroy {
   }
 
   deleteOrder(order: Order): void {
-    this.loadContent = false;
-    this.orderService.DeleteOrder(order.id).subscribe((res: ApiResponse) => {
-      if (res.status == "success") {
-        this.shareSevice.showSuccess("#deleteorder" + order.id, res.message, "right");
-        setTimeout(() => {
-          this.getOrders();
-        }, 1500);
-      } else {
-        this.loadContent = true;
-        this.shareSevice.showError("#deleteorder" + order.id, res.message, "right");
+    const dialogRef = this.dialog.open(DeleteConfirmComponent, {
+      width: '500px',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadContent = false;
+        this.orderService.DeleteOrder(order.id).subscribe((res: ApiResponse) => {
+          if (res.status == "success") {
+            this.shareSevice.showSuccess("#deleteorder" + order.id, res.message, "right");
+            setTimeout(() => {
+              this.getOrders();
+            }, 1500);
+          } else {
+            this.loadContent = true;
+            this.shareSevice.showError("#deleteorder" + order.id, res.message, "right");
+          }
+        },
+          (error: any) => {
+            this.loadContent = true;
+            console.info(error);
+          });
       }
-    },
-      (error: any) => {
-        this.loadContent = true;
-        console.info(error);
-      });
+    });
   }
 
   editUser(user: User): void {
@@ -303,22 +312,30 @@ export class AdministrationComponent implements OnInit, OnDestroy {
   }
 
   deleteUser(user: User): void {
-    this.loadContent = false;
-    this.adminService.DeleteUser(user.id).subscribe((res: ApiResponse) => {
-      if (res.status == "success") {
-        this.shareSevice.showSuccess("#delete" + user.id, res.message, "right");
-        setTimeout(() => {
-          this.getUsers();
-        }, 1500);
-      } else {
-        this.loadContent = true;
-        this.shareSevice.showError("#delete" + user.id, res.message, "right");
+    const dialogRef = this.dialog.open(DeleteConfirmComponent, {
+      width: '500px',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadContent = false;
+        this.adminService.DeleteUser(user.id).subscribe((res: ApiResponse) => {
+          if (res.status == "success") {
+            this.shareSevice.showSuccess("#delete" + user.id, res.message, "right");
+            setTimeout(() => {
+              this.getUsers();
+            }, 1500);
+          } else {
+            this.loadContent = true;
+            this.shareSevice.showError("#delete" + user.id, res.message, "right");
+          }
+        },
+          (error: any) => {
+            this.loadContent = true;
+            console.info(error);
+          });
       }
-    },
-      (error: any) => {
-        this.loadContent = true;
-        console.info(error);
-      });
+    });
   }
 
   applyFilter(value: string): void {
@@ -366,41 +383,57 @@ export class AdministrationComponent implements OnInit, OnDestroy {
   }
 
   deleteHeader(element: HeadInformation): void {
-    this.loadContent = false;
-    this.headInformationService.DeleteHeadInfomation(element).subscribe((res: ApiResponse) => {
-      if (res.status == "success") {
-        this.shareSevice.showSuccess("#deleteheader" + element.id, res.message, "right");
-        setTimeout(() => {
-          this.getHeadInformation();
-        }, 1500);
-      } else {
-        this.loadContent = true;
-        this.shareSevice.showError("#deleteheader" + element.id, res.message, "right");
+    const dialogRef = this.dialog.open(DeleteConfirmComponent, {
+      width: '500px',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadContent = false;
+        this.headInformationService.DeleteHeadInfomation(element).subscribe((res: ApiResponse) => {
+          if (res.status == "success") {
+            this.shareSevice.showSuccess("#deleteheader" + element.id, res.message, "right");
+            setTimeout(() => {
+              this.getHeadInformation();
+            }, 1500);
+          } else {
+            this.loadContent = true;
+            this.shareSevice.showError("#deleteheader" + element.id, res.message, "right");
+          }
+        },
+          (error: any) => {
+            this.loadContent = true;
+            console.info(error);
+          });
       }
-    },
-      (error: any) => {
-        this.loadContent = true;
-        console.info(error);
-      });
+    });
   }
 
-  deletePdf(element:PdfBoard): void{
-    this.loadContent = false;
-    this.fileService.DeletePdfBoards(element).subscribe((res: ApiResponse) => {
-      if (res.status == "success") {
-        this.shareSevice.showSuccess("#deletepdf" + element.id, res.message, "right");
-        setTimeout(() => {
-          this.getPdfBoards();
-        }, 1500);
-      } else {
-        this.loadContent = true;
-        this.shareSevice.showError("#deletepdf" + element.id, res.message, "right");
+  deletePdf(element: PdfBoard): void {
+    const dialogRef = this.dialog.open(DeleteConfirmComponent, {
+      width: '500px',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadContent = false;
+        this.fileService.DeletePdfBoards(element).subscribe((res: ApiResponse) => {
+          if (res.status == "success") {
+            this.shareSevice.showSuccess("#deletepdf" + element.id, res.message, "right");
+            setTimeout(() => {
+              this.getPdfBoards();
+            }, 1500);
+          } else {
+            this.loadContent = true;
+            this.shareSevice.showError("#deletepdf" + element.id, res.message, "right");
+          }
+        },
+          (error: any) => {
+            this.loadContent = true;
+            console.info(error);
+          });
       }
-    },
-      (error: any) => {
-        this.loadContent = true;
-        console.info(error);
-      });
+    });
   }
 
   onLoading(currentLoadingStatus: boolean) {
@@ -427,7 +460,7 @@ export class AdministrationComponent implements OnInit, OnDestroy {
     });
   }
 
-  uploadImage(): void{
+  uploadImage(): void {
     const dialogRef = this.dialog.open(UploadImageComponent, {
       width: '650px',
     });
@@ -437,7 +470,7 @@ export class AdministrationComponent implements OnInit, OnDestroy {
     });
   }
 
-  downloadPdf(element: Order): void{
+  downloadPdf(element: Order): void {
     this.priceExclGst = 0;
     this.gst = 0;
     this.priceIncGst = 0;
@@ -446,9 +479,9 @@ export class AdministrationComponent implements OnInit, OnDestroy {
     this.oringinalPriceIncGst = 0;
     this.loadContent = false;
     this.shoppingCartService.GetCartInIdWithShoppingItems(element.shoppingCartId).subscribe((res: ShoppingCart) => {
-      if(res && res.shoppingItems){
+      if (res && res.shoppingItems) {
         this.adminService.GetUserByAccount(element.userId).subscribe((user: User) => {
-          if(res.paymentMethod == "onaccount"){
+          if (res.paymentMethod == "onaccount") {
             res.shoppingItems.forEach(si => {
               this.oringinalPriceExclGst += _.toNumber(si.amount) * si.product.originalPrice;
               if (user.role == "agent") {
@@ -463,7 +496,7 @@ export class AdministrationComponent implements OnInit, OnDestroy {
             this.oringinalPriceIncGst = this.oringinalPriceExclGst * 1.1;
             this.priceIncGst = this.gst + this.priceExclGst;
             this.discount = this.oringinalPriceIncGst - this.priceIncGst;
-          }else{
+          } else {
             res.shoppingItems.forEach(si => {
               this.oringinalPriceExclGst += _.toNumber(si.amount) * si.product.originalPrice;
               si.subTotal = _.toNumber(si.amount) * si.product.prepaymentDiscount;
@@ -475,11 +508,11 @@ export class AdministrationComponent implements OnInit, OnDestroy {
             this.discount = this.oringinalPriceIncGst - this.priceIncGst;
           }
           this.fileService.WritePdf(element.id, this.gst, this.priceExclGst, this.discount, element.userId).subscribe((res: ApiResponse) => {
-            if(res.status == "success"){
-              this.shareSevice.showSuccess("#pdf"+element.id, res.message, "right");
-              window.open("/order_"+element.id+".pdf", "_blank");
-            }else{
-              this.shareSevice.showError("#pdf"+element.id, res.message, "right");
+            if (res.status == "success") {
+              this.shareSevice.showSuccess("#pdf" + element.id, res.message, "right");
+              window.open("/order_" + element.id + ".pdf", "_blank");
+            } else {
+              this.shareSevice.showError("#pdf" + element.id, res.message, "right");
             }
             this.loadContent = true;
           },

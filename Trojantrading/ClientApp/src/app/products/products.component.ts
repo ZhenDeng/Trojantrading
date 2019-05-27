@@ -11,6 +11,7 @@ import { EditProductComponent } from '../popup-collection/edit-product/edit-prod
 import { Subject } from 'rxjs';
 import 'rxjs/add/operator/takeUntil';
 import { DeleteConfirmComponent } from '../popup-collection/delete-confirm/delete-confirm.component';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-products',
@@ -124,7 +125,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
   filterProducts(type: string, value: Product[]) {
     this.filteredProducts = value.filter(x => x.status && x.status.toLowerCase().trim().includes(type.toLowerCase().trim()));
     this.filteredProducts.forEach(product => product.quantity = 0);
-    this.dataSource = new MatTableDataSource(this.filteredProducts);
+    this.dataSource = new MatTableDataSource(_.orderBy(this.filteredProducts, 'name'));
   }
 
   applyFilter(value: string) {
@@ -133,7 +134,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
     this.dataSource.filter = value;
   }
 
-  _keyPress(event: any) {
+  isNumberKey(event: any) {
     const pattern = /[0-9\+\-\ ]/;
     let inputChar = String.fromCharCode(event.charCode);
 
@@ -258,11 +259,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
                 } else {
                   this.title = 'Out of Stock';
                 }
-                if (!this.products.length) {
-                  this.getProducts(type);
-                } else {
-                  this.filterProducts(type, this.products);
-                }
+                this.getProducts(type);
               });
             }, 1500);
           } else {

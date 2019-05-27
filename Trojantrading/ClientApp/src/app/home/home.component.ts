@@ -151,7 +151,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       if (value.length && this.category != null && this.category != '') {
         this.filterProductsByCategory();
       } else {
-        this.dataSource = new MatTableDataSource(this.allProducts);
+        this.dataSource = new MatTableDataSource(_.orderBy(this.allProducts, 'name'));
       }
     },
       (error: any) => {
@@ -167,7 +167,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   filterProductsByCategory() {
     this.title = `Products ${this.category}`;
     this.filteredProducts = this.allProducts.filter(x => x.category.toLowerCase().includes(this.category.toLowerCase()));
-    this.dataSource = new MatTableDataSource(this.filteredProducts);
+    this.dataSource = new MatTableDataSource(_.orderBy(this.filteredProducts, 'name'));
   }
 
   applyFilter(value: string) {
@@ -176,7 +176,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.dataSource.filter = value;
   }
 
-  _keyPress(event: any) {
+  isNumberKey(event: any) {
     const pattern = /[0-9\+\-\ ]/;
     let inputChar = String.fromCharCode(event.charCode);
 

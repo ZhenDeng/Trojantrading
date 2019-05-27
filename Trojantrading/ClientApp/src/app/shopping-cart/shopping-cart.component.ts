@@ -12,6 +12,8 @@ import { OrderService } from '../services/order.service';
 import * as _ from 'lodash';
 import { Subject } from 'rxjs';
 import 'rxjs/add/operator/takeUntil';
+import { DeleteConfirmComponent } from '../popup-collection/delete-confirm/delete-confirm.component';
+import { MatDialog } from '@angular/material';
 
 @Component({
   selector: 'app-shopping-cart',
@@ -44,7 +46,8 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
     private shoppingCartService: ShoppingCartService,
     private adminService: AdminService,
     private router: Router,
-    private orderService: OrderService
+    private orderService: OrderService,
+    private dialog: MatDialog
   ) {
     if (this.shareService.readCookie("role") && this.shareService.readCookie("role") == "agent") {
       this.displayedColumns = ['name', 'category', 'originalPrice', 'agentPrice', 'qty', 'subTotal', 'remove'];
@@ -120,27 +123,36 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
   }
 
   deleteShoppingItem(shoppingItem: ShoppingItem): void {
-    this.shoppingCartService.DeleteShoppingItem(shoppingItem.id).subscribe((res: ApiResponse) => {
-      if (res && res.status == "success") {
-        this.shoppingCartService.GetShoppingCart(_.toNumber(this.shareService.readCookie("userId"))).subscribe((res: ShoppingCart) => {
-          this.shoppingCart = res;
-          this.dataSource = this.shoppingCart.shoppingItems;
-          console.info(this.dataSource);
-          this.shoppingCartService.MonitorShoppingItemLength(this.dataSource.length);
-          if (res && res.shoppingItems.length) {
-            this.updatePrice();
+    const dialogRef = this.dialog.open(DeleteConfirmComponent, {
+      width: '500px',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.shoppingCartService.DeleteShoppingItem(shoppingItem.id).subscribe((res: ApiResponse) => {
+          if (res && res.status == "success") {
+            this.shoppingCartService.GetShoppingCart(_.toNumber(this.shareService.readCookie("userId"))).subscribe((res: ShoppingCart) => {
+              this.shoppingCart = res;
+              this.dataSource = this.shoppingCart.shoppingItems;
+              console.info(this.dataSource);
+              this.shoppingCartService.MonitorShoppingItemLength(this.dataSource.length);
+              if (res && res.shoppingItems.length) {
+                this.updatePrice();
+              }
+            },
+              (error: any) => {
+                console.info(error);
+              });
+          } else {
+            this.shareService.showError(".shoppingItem" + shoppingItem.id, res.message, "right");
           }
         },
           (error: any) => {
             console.info(error);
           });
-      } else {
-        this.shareService.showError(".shoppingItem" + shoppingItem.id, res.message, "right");
       }
-    },
-      (error: any) => {
-        console.info(error);
-      });
+    });
+
   }
 
   changeQuantity(item: ShoppingItem): void {
@@ -156,7 +168,7 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
     });
   }
 
-  updatePrice():void{
+  updatePrice(): void {
     this.priceExclGst = 0;
     this.gst = 0;
     this.priceIncGst = 0;
@@ -203,7 +215,7 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
     this.loadContent = false;
     this.shoppingCartService.UpdateShoppingCartPaymentMethod(_.toNumber(this.shareService.readCookie("userId")), this.selectedPayment).subscribe((res: ApiResponse) => {
       this.loadContent = true;
-      if(res && res.status == "success"){
+      if (res && res.status == "success") {
         if (this.selectedPayment == "onaccount") {
           this.dataSource.forEach(si => {
             this.oringinalPriceExclGst += si.amount * si.product.originalPrice;
@@ -232,13 +244,13 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
           this.shoppingCart.totalPrice = this.priceIncGst;
           this.discount = this.oringinalPriceIncGst - this.priceIncGst;
         }
-      }else{
-        if(this.selectedPayment == "prepay"){
+      } else {
+        if (this.selectedPayment == "prepay") {
           this.selectedPayment = "onaccount";
-        }else{
+        } else {
           this.selectedPayment = "prepay";
         }
-        this.shareService.showError(".payment", res.message,"right");
+        this.shareService.showError(".payment", res.message, "right");
       }
     },
       (error: any) => {
@@ -251,7 +263,7 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
     this.loadContent = !currentLoadingStatus;
   }
 
-  _keyPress(event: any) {
+  isNumberKey(event: any) {
     const pattern = /[0-9\+\-\ ]/;
     let inputChar = String.fromCharCode(event.charCode);
 

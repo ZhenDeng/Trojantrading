@@ -71,7 +71,7 @@
       
               <ng-container matColumnDef="qty" *ngIf="role!='admin'">
                 <mat-header-cell *matHeaderCellDef> Quantity </mat-header-cell>
-                <mat-cell *matCellDef="let element"> <input id="product{{element.id}}" type="number" (keypress)="_keyPress($event)" (keyup)="changeQuantity(element)" [(ngModel)]="element.quantity"> </mat-cell>
+                <mat-cell *matCellDef="let element"> <input id="product{{element.id}}" type="number" (keypress)="isNumberKey($event)" (keyup)="changeQuantity(element)" [(ngModel)]="element.quantity"> </mat-cell>
               </ng-container>
 
               <ng-container matColumnDef="status">

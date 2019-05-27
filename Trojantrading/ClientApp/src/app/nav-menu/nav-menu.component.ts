@@ -14,6 +14,8 @@ import { Category } from '../models/Product';
 import { ProductService } from '../services/product.service';
 import { HeadInformationService } from '../services/head-information.service';
 import { HeadInformation } from '../models/header-info';
+import { DeleteConfirmComponent } from '../popup-collection/delete-confirm/delete-confirm.component';
+import { MatDialog } from '@angular/material';
 
 @Component({
   selector: 'app-nav-menu',
@@ -38,13 +40,14 @@ export class NavMenuComponent implements OnInit {
     private shoppingCartService: ShoppingCartService,
     private adminService: AdminService,
     private productService: ProductService,
-    private headInformationService: HeadInformationService
-  ) { 
+    private headInformationService: HeadInformationService,
+    private dialog: MatDialog
+  ) {
   }
 
   ngOnInit() {
     this.role = this.shareService.readCookie("role");
-    this.filePath = this.role.toUpperCase()+" PRICE LIST.pdf";
+    this.filePath = this.role.toUpperCase() + " PRICE LIST.pdf";
     this.categoryList = this.productService.categoryList;
 
     this.headInformationService.GetHeadInformation().subscribe((res: HeadInformation[]) => {
@@ -57,10 +60,10 @@ export class NavMenuComponent implements OnInit {
       });
 
     this.activatedRouter.url.subscribe((url: any) => {
-      if(url && url[0]){
-        if(url[0].path == "cart"){
+      if (url && url[0]) {
+        if (url[0].path == "cart") {
           this.inCartPage = true;
-        }else{
+        } else {
           this.inCartPage = false;
         }
       }
@@ -72,7 +75,7 @@ export class NavMenuComponent implements OnInit {
     this.shoppingCartService.currentShoppingItemLength.subscribe((length: number) => {
       this.shoppingCartService.AddShoppingCart(_.toNumber(this.shareService.readCookie("userId"))).subscribe((sc: ApiResponse) => {
         this.shoppingCartService.GetShoppingCart(_.toNumber(this.shareService.readCookie("userId"))).subscribe((res: ShoppingCart) => {
-          if(res && res.shoppingItems.length){
+          if (res && res.shoppingItems.length) {
             this.shoppingItems = res.shoppingItems;
           }
         },
@@ -94,27 +97,36 @@ export class NavMenuComponent implements OnInit {
   }
 
   deleteShoppingItem(shoppingItem: ShoppingItem): void {
-    this.shoppingCartService.DeleteShoppingItem(shoppingItem.id).subscribe((res: ApiResponse) => {
-      if (res && res.status == "success") {
-        this.adminService.GetUserByAccount(_.toNumber(this.shareService.readCookie("userId"))).subscribe((user: User) => {
-          this.shoppingCartService.GetShoppingCart(user.id).subscribe((res: ShoppingCart) => {
-            this.shoppingItems = res.shoppingItems;
-            this.shoppingCartService.MonitorShoppingItemLength(this.shoppingItems.length);
-          },
-            (error: any) => {
-              console.info(error);
-            });
+    const dialogRef = this.dialog.open(DeleteConfirmComponent, {
+      width: '500px',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.shoppingCartService.DeleteShoppingItem(shoppingItem.id).subscribe((res: ApiResponse) => {
+          if (res && res.status == "success") {
+            this.adminService.GetUserByAccount(_.toNumber(this.shareService.readCookie("userId"))).subscribe((user: User) => {
+              this.shoppingCartService.GetShoppingCart(user.id).subscribe((res: ShoppingCart) => {
+                this.shoppingItems = res.shoppingItems;
+                this.shoppingCartService.MonitorShoppingItemLength(this.shoppingItems.length);
+              },
+                (error: any) => {
+                  console.info(error);
+                });
+            },
+              (error: any) => {
+                console.info(error);
+              });
+          } else {
+            this.shareService.showError("shoppingItem" + shoppingItem.id, res.message, "right");
+          }
         },
           (error: any) => {
             console.info(error);
           });
-      } else {
-        this.shareService.showError("shoppingItem" + shoppingItem.id, res.message, "right");
       }
-    },
-      (error: any) => {
-        console.info(error);
-      });
+    });
+
   }
 
   continueShopping(): void {
