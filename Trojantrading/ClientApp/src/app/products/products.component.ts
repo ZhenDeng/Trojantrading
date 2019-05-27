@@ -10,6 +10,7 @@ import { ApiResponse } from '../models/ApiResponse';
 import { EditProductComponent } from '../popup-collection/edit-product/edit-product.component';
 import { Subject } from 'rxjs';
 import 'rxjs/add/operator/takeUntil';
+import { DeleteConfirmComponent } from '../popup-collection/delete-confirm/delete-confirm.component';
 
 @Component({
   selector: 'app-products',
@@ -77,7 +78,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
     this.categoryList = this.productService.categoryList;
     this.role = this.shareService.readCookie("role");
     if (this.shareService.readCookie("role") && this.shareService.readCookie("role") == "admin") {
-      this.displayedColumns = ['name', 'category', 'originalPrice', 'agentPrice', 'wholesalerPrice', 'status', 'button']
+      this.displayedColumns = ['name', 'category', 'originalPrice', 'agentPrice', 'wholesalerPrice', 'status', 'button', 'deletebutton']
     }
     else if (this.shareService.readCookie("role") && this.shareService.readCookie("role") == "agent") {
       this.displayedColumns = ['name', 'category', 'originalPrice', 'agentPrice', 'qty', 'status', 'button']
@@ -226,6 +227,47 @@ export class ProductsComponent implements OnInit, OnDestroy {
           } else {
             this.loadContent = true;
             this.shareService.showError("#" + product.id, res.message, "right");
+          }
+        },
+          (error: any) => {
+            this.loadContent = true;
+            console.info(error);
+          });
+      }
+    });
+  }
+
+  deleteProduct(element: Product): void{
+    const dialogRef = this.dialog.open(DeleteConfirmComponent, {
+      width: '500px',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result){
+        this.productService.DeleteProduct(element).subscribe((res: ApiResponse) => {
+          if (res.status == "success") {
+            this.shareService.showSuccess(".delete" + element.id, res.message, "right");
+            setTimeout(() => {
+              this.activatedRouter.paramMap.subscribe(param => {
+                this.viewType = param.get('type');
+                const type = this.viewType.toLowerCase();
+                if (type === 'new') {
+                  this.title = 'New Products';
+                } else if (type.includes('promotion')) {
+                  this.title = 'Promotions';
+                } else {
+                  this.title = 'Out of Stock';
+                }
+                if (!this.products.length) {
+                  this.getProducts(type);
+                } else {
+                  this.filterProducts(type, this.products);
+                }
+              });
+            }, 2000);
+          } else {
+            this.loadContent = true;
+            this.shareService.showError(".delete" + element.id, res.message, "right");
           }
         },
           (error: any) => {

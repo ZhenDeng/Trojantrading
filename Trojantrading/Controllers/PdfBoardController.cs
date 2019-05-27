@@ -48,6 +48,15 @@ namespace Trojantrading.Controllers
             return Ok(pdfBoardRepository.GetPdfBoards());
         }
 
+        [HttpPost("DeletePdfBoards")]
+        [NoCache]
+        [ProducesResponseType(typeof(ApiResponse), 200)]
+        [ProducesResponseType(typeof(ApiResponse), 400)]
+        public IActionResult DeletePdfBoards([FromBody]PdfBoard pdf)
+        {
+            return Ok(pdfBoardRepository.DeletePdfBoards(pdf));
+        }
+
         #region SavePdf
         [HttpPost("SavePdf"), DisableRequestSizeLimit]
         [NoCache]
@@ -310,6 +319,70 @@ namespace Trojantrading.Controllers
                 {
                     Status = "success",
                     Message = "Successfully write order to pdf file",
+                });
+            }
+            catch (Exception ex)
+            {
+                return Ok(new ApiResponse
+                {
+                    Status = "fail",
+                    Message = ex.Message
+                });
+            }
+        }
+        #endregion
+
+        #region SaveImage
+        [HttpPost("SaveImage"), DisableRequestSizeLimit]
+        [NoCache]
+        [ProducesResponseType(typeof(ApiResponse), 200)]
+        [ProducesResponseType(typeof(ApiResponse), 400)]
+        public IActionResult SaveImage()
+        {
+            try
+            {
+                var httpRequest = HttpContext.Request;
+                if (httpRequest.Form.Files.Count > 0)
+                {
+                    var uploadFile = httpRequest.Form.Files[0];  // get the uploaded file
+                    if (uploadFile != null && uploadFile.Length > 0)
+                    {
+
+                        var path = Path.Combine(
+                                    Directory.GetCurrentDirectory(), "wwwroot", "img", uploadFile.FileName);
+
+                        if (System.IO.File.Exists(path))
+                        {
+                            System.IO.File.Delete(path);
+                        }
+
+                        using (var stream = new FileStream(path, FileMode.Create))
+                        {
+                            uploadFile.CopyTo(stream);
+                            stream.Close();
+                        }
+
+                        if (trojantradingDbContext.HeadInformations.Where(img => img.ImagePath == path).Count() == 0)
+                        {
+                            HeadInformation imageModel = new HeadInformation();
+                            imageModel.Content = "";
+                            imageModel.ImagePath = uploadFile.FileName;
+                            trojantradingDbContext.HeadInformations.Add(imageModel);
+                            trojantradingDbContext.SaveChanges();
+                            trojantradingDbContext.Dispose();
+                        }
+
+                        return Ok(new ApiResponse
+                        {
+                            Status = "success",
+                            Message = "Image file uploaded."
+                        });
+                    }
+                }
+                return Ok(new ApiResponse
+                {
+                    Status = "fail",
+                    Message = "Upload file is empty"
                 });
             }
             catch (Exception ex)

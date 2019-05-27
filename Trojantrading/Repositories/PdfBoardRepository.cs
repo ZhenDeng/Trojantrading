@@ -11,6 +11,7 @@ namespace Trojantrading.Repositories
     public interface IPdfBoardRepository
     {
         List<PdfBoard> GetPdfBoards();
+        ApiResponse DeletePdfBoards(PdfBoard pdf);
     }
     public class PdfBoardRepository:IPdfBoardRepository
     {
@@ -24,6 +25,34 @@ namespace Trojantrading.Repositories
         public List<PdfBoard> GetPdfBoards() {
             var pdfBoards = trojantradingDbContext.PdfBoards.ToList();
             return pdfBoards;
+        }
+
+        public ApiResponse DeletePdfBoards(PdfBoard pdf)
+        {
+            try
+            {
+                trojantradingDbContext.PdfBoards.Remove(pdf);
+                trojantradingDbContext.SaveChanges();
+
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", pdf.Title);
+                if (File.Exists(path))
+                {
+                    File.Delete(path);
+                }
+                return new ApiResponse()
+                {
+                    Status = "success",
+                    Message = "Successfully delete Pdf Boards file"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse()
+                {
+                    Status = "fail",
+                    Message = ex.Message
+                };
+            }
         }
     }
 }

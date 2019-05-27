@@ -25,6 +25,7 @@ import { ShoppingCart } from '../models/shoppingCart';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import 'rxjs/add/operator/takeUntil';
+import { UploadImageComponent } from '../popup-collection/upload-image/upload-image.component';
 
 @Component({
   selector: 'app-administration',
@@ -36,9 +37,9 @@ export class AdministrationComponent implements OnInit, OnDestroy {
 
   title: string = "Administration";
   displayedColumns: string[] = ["UserName", "Password", "BusinessName", "Role", "Email", "Phone", "Status", "EditButton", "DeleteButton"];
-  displayedHeaderColumns: string[] = ["Id", "Content", "ImagePath", "EditButton", "DeleteButton"];
+  displayedHeaderColumns: string[] = ["Id", "Content", "ImagePath", "DeleteButton"];
   displayedOrderColumns: string[] = ['invoiceNo', 'customer', 'createdDate', 'totalPrice', 'orderStatus', 'downloadPdf', 'editButton', 'deleteButton'];
-  displayedPdfColumns: string[] = ["id", "title", "imagePath"];
+  displayedPdfColumns: string[] = ["id", "title", "pdfPath", "DeleteButton"];
   dataSource: User[];
   dataSourceFilter: User[];
   dataSourceHeader: HeadInformation[];
@@ -170,8 +171,8 @@ export class AdministrationComponent implements OnInit, OnDestroy {
   }
 
   convertDateFormat(): void {
-    this.strDateFrom = this.dateFrom.month + '/' + this.dateFrom.day + '/' + this.dateFrom.year;
-    this.strDateTo = this.dateTo.month + '/' + this.dateTo.day + '/' + this.dateTo.year;
+    this.strDateFrom = this.dateFrom.day + '/' + this.dateFrom.month + '/' + this.dateFrom.year;
+    this.strDateTo = this.dateTo.day + '/' + this.dateTo.month + '/' + this.dateTo.year;
   }
 
   downloadExcel() {
@@ -324,34 +325,6 @@ export class AdministrationComponent implements OnInit, OnDestroy {
     this.dataSourceFilter = this.dataSource.filter(user => user.account.toLowerCase().trim().includes(value.toLowerCase().trim()) || user.bussinessName.toLowerCase().trim().includes(value.toLowerCase().trim()));
   }
 
-  addNewHeader(): void {
-    const dialogRef = this.dialog.open(EditHeaderInfomationComponent, {
-      width: '700px',
-      data: { type: "Add" }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.loadContent = false;
-        this.headInformationService.AddHeader(result).subscribe((res: ApiResponse) => {
-          if (res.status = "success") {
-            this.shareSevice.showSuccess(".addnewhead", res.message, "right");
-            setTimeout(() => {
-              this.getHeadInformation();
-            }, 1500);
-          } else {
-            this.loadContent = true;
-            this.shareSevice.showError(".addnewhead", res.message, "right");
-          }
-        },
-          (error: any) => {
-            this.loadContent = true;
-            console.info(error);
-          });
-      }
-    });
-  }
-
   applyHeaderFilter(value: string): void {
     value = value.trim().toLowerCase();
     this.headerDataSource.filter = value;
@@ -411,6 +384,25 @@ export class AdministrationComponent implements OnInit, OnDestroy {
       });
   }
 
+  deletePdf(element:PdfBoard): void{
+    this.loadContent = false;
+    this.fileService.DeletePdfBoards(element).subscribe((res: ApiResponse) => {
+      if (res.status == "success") {
+        this.shareSevice.showSuccess("#deletepdf" + element.id, res.message, "right");
+        setTimeout(() => {
+          this.getPdfBoards();
+        }, 1500);
+      } else {
+        this.loadContent = true;
+        this.shareSevice.showError("#deletepdf" + element.id, res.message, "right");
+      }
+    },
+      (error: any) => {
+        this.loadContent = true;
+        console.info(error);
+      });
+  }
+
   onLoading(currentLoadingStatus: boolean) {
     this.loadContent = !currentLoadingStatus;
   }
@@ -432,6 +424,16 @@ export class AdministrationComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
       this.getUsers();
+    });
+  }
+
+  uploadImage(): void{
+    const dialogRef = this.dialog.open(UploadImageComponent, {
+      width: '650px',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.getHeadInformation();
     });
   }
 

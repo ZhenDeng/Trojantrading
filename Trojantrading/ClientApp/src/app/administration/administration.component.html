@@ -182,8 +182,7 @@
             </mat-tab>
 
             <mat-tab label="HEADER INFORMATIONS">
-              <button class="btn btn-green addnewhead" (click)="addNewHeader()" *ngIf="role =='admin'">Add New Header
-                Information</button>
+              <button class="btn btn-green addnewhead" (click)="uploadImage()">Upload Image</button>
               <span class="filter-wrapper">
                 <span class="searchInputGroup">
                   <span class="searchIcon">
@@ -193,33 +192,27 @@
                     placeholder="Search">
                 </span>
               </span>
-
               <div class="example-container mat-elevation-z8">
                 <mat-table #table [dataSource]="headerDataSource">
-
                   <ng-container matColumnDef="Id">
                     <mat-header-cell *matHeaderCellDef> Id </mat-header-cell>
                     <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
                   </ng-container>
-
                   <ng-container matColumnDef="Content">
-                    <mat-header-cell *matHeaderCellDef> Content </mat-header-cell>
-                    <mat-cell *matCellDef="let element"> {{element.content}} </mat-cell>
+                    <mat-header-cell *matHeaderCellDef class="mat-table_2fex"> Content </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="mat-table_2fex"> {{element.content}} </mat-cell>
                   </ng-container>
-
                   <ng-container matColumnDef="ImagePath">
-                    <mat-header-cell *matHeaderCellDef> ImagePath </mat-header-cell>
-                    <mat-cell *matCellDef="let element"> {{element.imagePath}} </mat-cell>
+                    <mat-header-cell *matHeaderCellDef class="mat-table_2fex"> ImagePath </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="mat-table_2fex"> {{element.imagePath}} </mat-cell>
                   </ng-container>
-
-                  <ng-container matColumnDef="EditButton">
+                  <!-- <ng-container matColumnDef="EditButton">
                     <mat-header-cell *matHeaderCellDef></mat-header-cell>
                     <mat-cell *matCellDef="let element">
                       <button id="editheader{{element.id}}" class="btn btn-long"
                         (click)="editHeader(element)">Edit</button>
                     </mat-cell>
-                  </ng-container>
-
+                  </ng-container> -->
                   <ng-container matColumnDef="DeleteButton">
                     <mat-header-cell *matHeaderCellDef></mat-header-cell>
                     <mat-cell *matCellDef="let element">
@@ -227,7 +220,6 @@
                         (click)="deleteHeader(element)">Delete</button>
                     </mat-cell>
                   </ng-container>
-
                   <mat-header-row *matHeaderRowDef="displayedHeaderColumns"></mat-header-row>
                   <mat-row *matRowDef="let row; columns: displayedHeaderColumns;"></mat-row>
                 </mat-table>
@@ -243,29 +235,31 @@
 
               <div class="example-container mat-elevation-z8">
                 <mat-table #table [dataSource]="pdfDataSource">
-
                   <ng-container matColumnDef="id">
                     <mat-header-cell *matHeaderCellDef> Id </mat-header-cell>
                     <mat-cell *matCellDef="let element">#{{element.id}}</mat-cell>
                   </ng-container>
-
                   <ng-container matColumnDef="title">
-                    <mat-header-cell *matHeaderCellDef> Title </mat-header-cell>
-                    <mat-cell *matCellDef="let element"> {{element.title}} </mat-cell>
+                    <mat-header-cell *matHeaderCellDef class="mat-table_2fex"> Title </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="mat-table_2fex"> {{element.title}} </mat-cell>
                   </ng-container>
-
-                  <ng-container matColumnDef="imagePath">
-                    <mat-header-cell *matHeaderCellDef> Path </mat-header-cell>
-                    <mat-cell *matCellDef="let element"> {{element.path}} </mat-cell>
+                  <ng-container matColumnDef="pdfPath">
+                    <mat-header-cell *matHeaderCellDef class="mat-table_3fex"> Path </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="mat-table_3fex"> {{element.path}} </mat-cell>
                   </ng-container>
-
+                  <ng-container matColumnDef="DeleteButton">
+                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                      <button id="deletepdf{{element.id}}" class="btn btn-long"
+                        (click)="deletePdf(element)">Delete</button>
+                    </mat-cell>
+                  </ng-container>
                   <mat-header-row *matHeaderRowDef="displayedPdfColumns"></mat-header-row>
                   <mat-row *matRowDef="let row; columns: displayedPdfColumns;"></mat-row>
                 </mat-table>
               </div>
             </mat-tab>
           </mat-tab-group>
-
         </section>
       </ng-container>
     </div>

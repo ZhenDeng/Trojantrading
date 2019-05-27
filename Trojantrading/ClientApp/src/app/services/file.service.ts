@@ -28,8 +28,18 @@ export class FileService {
     .pipe(catchError(this.handleError));
   }
 
+  DeletePdfBoards(pdf: PdfBoard): Observable<ApiResponse> {
+    return this.http.post(this.base_url + "/DeletePdfBoards", pdf)
+      .pipe(catchError(this.handleError));
+  }
+
   SavePdf(type: string, file: any): Observable<ApiResponse>{
     return this.http.post(this.base_url + "/SavePdf?type="+type, file)
+    .pipe(catchError(this.handleError));
+  }
+
+  SaveImage(file: any): Observable<ApiResponse>{
+    return this.http.post(this.base_url + "/SaveImage", file)
     .pipe(catchError(this.handleError));
   }
 
