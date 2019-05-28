@@ -267,10 +267,10 @@ namespace Trojantrading.Controllers
                     }
                 }
                 stringBuilder.Append("<tr><td colspan='4'> Payment Method</ td ><td class='total'>" + String.Format("{0}", cart.PaymentMethod == "onaccount" ? "On Account" : "Prepayment") + "</td></tr>");
-                stringBuilder.Append("<tr><td colspan='4'>Price Excl.GST</ td ><td class='total'>" + String.Format("{0:0.00}", priceExclGst) + "</td></tr>");
+                stringBuilder.Append("<tr><td colspan='4'> Total Price Excl.GST</ td ><td class='total'>" + String.Format("{0:0.00}", priceExclGst) + "</td></tr>");
                 stringBuilder.Append("<tr><td colspan='4'> GST</ td ><td class='total'>" + String.Format("{0:0.00}", gst) + "</td></tr>");
                 stringBuilder.Append("<tr><td colspan='4'> Total Discount Earned</ td ><td class='total'>" + String.Format("{0:0.00}", discount) + "</td></tr>");
-                stringBuilder.Append("<tr><td colspan='4' class='grand total'> Price Inc.GST</ td ><td class='grand total'>" + String.Format("{0:0.00}", priceIncGst) + "</td></tr>");
+                stringBuilder.Append("<tr><td colspan='4' class='grand total'> Total Price Inc.GST</ td ><td class='grand total'>" + String.Format("{0:0.00}", priceIncGst) + "</td></tr>");
                 stringBuilder.Append("</tbody></table>");
                 stringBuilder.Append("<div id='notices'><div>NOTICE:</div><div class='notice'>A finance charge of 1.5% will be made on unpaid balances after 30 days.</div></div>");
                 stringBuilder.Append("</main>");
