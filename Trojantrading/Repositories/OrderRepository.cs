@@ -67,7 +67,7 @@ namespace Trojantrading.Repositories
                 var currentUser = userRepository.GetUserByAccount(cart.UserId);
                 double priceIncGst = priceExclGst + gst;
                 StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.Append("<div style='padding: 0; margin: 0; height: 100%; background:#fbfaf7;'>");
+                stringBuilder.Append("<div style='padding: 0; margin: 0; width:100%; height: 100%; background:#fbfaf7;'>");
                 stringBuilder.Append("<table width='100%' height='100%' align='center' cellspacing='0' cellpadding='0' bgcolor='#fbfaf7'>");
                 stringBuilder.Append("<tbody>");
                 stringBuilder.Append("<tr><td style='font:12px/1.5 Arial,Helvetica,sans-serif;color:#454545'>&nbsp;</td></tr>");
@@ -124,7 +124,7 @@ namespace Trojantrading.Repositories
                 stringBuilder.Append("</tbody>");
                 stringBuilder.Append("<tfoot>");
                 stringBuilder.Append("<tr><td colspan='1'>&nbsp;</td><td colspan='3' width='100' style='padding:0.5em 0.25em;border-bottom:1px solid #c4c4c4'>Payment Method</td>");
-                stringBuilder.Append("<td width='100' style='padding:0.5em 0.25em;border-bottom:1px solid #c4c4c4;text-align:right'><strong><span>" + order.ClientMessage + "</span></strong></td></tr>");
+                stringBuilder.Append("<td width='100' style='padding:0.5em 0.25em;border-bottom:1px solid #c4c4c4;text-align:right'><strong><span>" + String.Format("{0}", cart.PaymentMethod == "onaccount" ? "On Account" : "Prepayment") + "</span></strong></td></tr>");
                 stringBuilder.Append("<tr><td colspan='1'>&nbsp;</td><td colspan='3' width='100' style='padding:0.5em 0.25em;border-bottom:1px solid #c4c4c4'>You Will Pay Excl.GST</td>");
                 stringBuilder.Append("<td width='100' style='padding:0.5em 0.25em;border-bottom:1px solid #c4c4c4;text-align:right'><strong>$<span>" + String.Format("{0:0.00}", priceExclGst) + "</span></strong></td></tr>");
                 stringBuilder.Append("<tr><td colspan='1'>&nbsp;</td><td colspan='3' width='100' style='padding:0.5em 0.25em;border-bottom:1px solid #c4c4c4'>GST</td>");
