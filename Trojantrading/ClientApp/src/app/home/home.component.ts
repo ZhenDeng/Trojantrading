@@ -17,6 +17,7 @@ import { EditProductComponent } from '../popup-collection/edit-product/edit-prod
 import { NgbDropdownConfig } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs';
 import 'rxjs/add/operator/takeUntil';
+import { DeleteConfirmComponent } from '../popup-collection/delete-confirm/delete-confirm.component';
 
 @Component({
   selector: 'app-home',
@@ -58,9 +59,9 @@ export class HomeComponent implements OnInit, OnDestroy {
       id: 'promotions'
     },
     {
-      path: '/productsview/soldout',
-      label: 'Sold Out',
-      id: 'soldout'
+      path: '/productsview/outofstock',
+      label: 'Out of Stock',
+      id: 'outofstock'
     },
   ];
 
@@ -68,7 +69,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   isHomeComponentDestroyed: boolean = false;
 
    //unsubscribe
-   ngUnsubscribe: Subject<void> = new Subject<void>();
+  ngUnsubscribe: Subject<void> = new Subject<void>();
 
   constructor(
     private router: Router,
@@ -93,7 +94,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
         this.title = 'Products in All Categories';
         if (this.shareService.readCookie("role") && this.shareService.readCookie("role") == "admin") {
-          this.displayedColumns = ['name', 'category', 'originalPrice', 'agentPrice', 'wholesalerPrice', 'status', 'button']
+          this.displayedColumns = ['name', 'category', 'originalPrice', 'agentPrice', 'wholesalerPrice', 'status', 'button', 'deletebutton']
         }
         else if (this.shareService.readCookie("role") && this.shareService.readCookie("role") == "agent") {
           this.displayedColumns = ['name', 'category', 'originalPrice', 'agentPrice', 'qty', 'status', 'button']
@@ -150,7 +151,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       if (value.length && this.category != null && this.category != '') {
         this.filterProductsByCategory();
       } else {
-        this.dataSource = new MatTableDataSource(this.allProducts);
+        this.dataSource = new MatTableDataSource(_.orderBy(this.allProducts, 'name'));
       }
     },
       (error: any) => {
@@ -166,7 +167,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   filterProductsByCategory() {
     this.title = `Products ${this.category}`;
     this.filteredProducts = this.allProducts.filter(x => x.category.toLowerCase().includes(this.category.toLowerCase()));
-    this.dataSource = new MatTableDataSource(this.filteredProducts);
+    this.dataSource = new MatTableDataSource(_.orderBy(this.filteredProducts, 'name'));
   }
 
   applyFilter(value: string) {
@@ -175,7 +176,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.dataSource.filter = value;
   }
 
-  _keyPress(event: any) {
+  isNumberKey(event: any) {
     const pattern = /[0-9\+\-\ ]/;
     let inputChar = String.fromCharCode(event.charCode);
 
@@ -264,6 +265,8 @@ export class HomeComponent implements OnInit, OnDestroy {
         product.agentPrice = result.agentPrice;
         product.originalPrice = result.originalPrice;
         product.wholesalerPrice = result.wholesalerPrice;
+        product.status = result.status;
+        product.prepaymentDiscount = result.prepaymentDiscount;
         this.productService.UpdateProduct(product).subscribe((res: ApiResponse) => {
           if (res.status == "success") {
             this.shareService.showSuccess("#" + product.id, res.message, "right");
@@ -273,6 +276,32 @@ export class HomeComponent implements OnInit, OnDestroy {
           } else {
             this.loadContent = true;
             this.shareService.showError("#" + product.id, res.message, "right");
+          }
+        },
+          (error: any) => {
+            this.loadContent = true;
+            console.info(error);
+          });
+      }
+    });
+  }
+
+  deleteProduct(element: Product): void{
+    const dialogRef = this.dialog.open(DeleteConfirmComponent, {
+      width: '500px',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result){
+        this.productService.DeleteProduct(element).subscribe((res: ApiResponse) => {
+          if (res.status == "success") {
+            this.shareService.showSuccess(".delete" + element.id, res.message, "right");
+            setTimeout(() => {
+              this.getAllProducts();
+            }, 2000);
+          } else {
+            this.loadContent = true;
+            this.shareService.showError(".delete" + element.id, res.message, "right");
           }
         },
           (error: any) => {

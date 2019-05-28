@@ -50,7 +50,7 @@
         <div class="card-body">
           <div class="detail">
             <span>{{user?.billingCustomerName}}</span>
-            <span>{{user?.shippingStreetNumber}} {{user?.billingAddressLine}}</span>
+            <span>{{user?.billingStreetNumber}} {{user?.billingAddressLine}}</span>
             <span>{{user?.billingSuburb}} {{user?.billingState}} {{user?.billingPostCode}}</span>
           </div>
         </div>
@@ -66,7 +66,7 @@
         <div class="card-body">
           <div class="detail" [formGroup]="userFormGroup">
             <mat-form-field [floatLabel]="'always'">
-              <input matInput class="trn" formControlName="trn" placeholder="Tobacco Licence Number" required>
+              <input matInput class="trn" formControlName="trn" placeholder="TRN">
             </mat-form-field>
             <mat-form-field [floatLabel]="'always'">
               <input matInput class="abn" formControlName="abn" placeholder="Australian Business Number" required>

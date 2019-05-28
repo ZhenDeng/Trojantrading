@@ -48,6 +48,15 @@ namespace Trojantrading.Controllers
             return Ok(pdfBoardRepository.GetPdfBoards());
         }
 
+        [HttpPost("DeletePdfBoards")]
+        [NoCache]
+        [ProducesResponseType(typeof(ApiResponse), 200)]
+        [ProducesResponseType(typeof(ApiResponse), 400)]
+        public IActionResult DeletePdfBoards([FromBody]PdfBoard pdf)
+        {
+            return Ok(pdfBoardRepository.DeletePdfBoards(pdf));
+        }
+
         #region SavePdf
         [HttpPost("SavePdf"), DisableRequestSizeLimit]
         [NoCache]
@@ -176,7 +185,8 @@ namespace Trojantrading.Controllers
                                         Phone = workSheet.Cells[i, 13].Value == null ? "" : workSheet.Cells[i, 13].Value.ToString(),
                                         CompanyPhone = workSheet.Cells[i, 14].Value == null ? "" : workSheet.Cells[i, 14].Value.ToString(),
                                         Mobile = workSheet.Cells[i, 15].Value == null ? "" : workSheet.Cells[i, 15].Value.ToString(),
-                                        Email = workSheet.Cells[i, 16].Value == null ? "" : workSheet.Cells[i, 16].Value.ToString()
+                                        Email = workSheet.Cells[i, 16].Value == null ? "" : workSheet.Cells[i, 16].Value.ToString(),
+                                        Role = workSheet.Cells[i, 17].Value == null ? "" : workSheet.Cells[i, 17].Value.ToString()
                                     });
                                 }
                             }
@@ -229,8 +239,7 @@ namespace Trojantrading.Controllers
                 stringBuilder.Append("<tr><td style='font:12px/1.5 Arial,Helvetica,sans-serif;color:#454545'>&nbsp;</td></tr>");
                 stringBuilder.Append("<tr>");
                 stringBuilder.Append("<td style='color:#343731;'><table width='600px' bgcolor='#ffffff' cellspacing='0' cellpadding='0' align='center' border='0' style='border:1px solid #232323;text-align:center'><tbody><tr><td style='padding:10px;color:#343731'>");
-                stringBuilder.Append("<img src='https://via.placeholder.com/150' width='80px' style='margin:0 auto;display:block'>");
-                stringBuilder.Append("<h2 style='font-weight:400;text-transform:uppercase'>Trojan Trading Company PTY LTD</h2><h4 style='font-weight:400;text-transform:uppercase'>Australia</h4>");
+                stringBuilder.Append("<h2 style='font-weight:400;text-transform:uppercase'>Trojan Trading Company PTY LTD</h2>");
                 stringBuilder.Append("</td></tr>");
                 stringBuilder.Append("<tr style='text-align:left'><td style='font:12px/1.5 Arial,Helvetica,sans-serif;color:#454545'><table width='90%'><tbody>");
                 stringBuilder.Append("<tr><td valign='top' width='50%' style='font:12px/1.5 Arial,Helvetica,sans-serif;color:#454545'><h3 style='margin:15px 20px 10px 20px;font-size:1.1em;color:#454545;text-align:left'>Shipping Address</h3>");
@@ -310,6 +319,70 @@ namespace Trojantrading.Controllers
                 {
                     Status = "success",
                     Message = "Successfully write order to pdf file",
+                });
+            }
+            catch (Exception ex)
+            {
+                return Ok(new ApiResponse
+                {
+                    Status = "fail",
+                    Message = ex.Message
+                });
+            }
+        }
+        #endregion
+
+        #region SaveImage
+        [HttpPost("SaveImage"), DisableRequestSizeLimit]
+        [NoCache]
+        [ProducesResponseType(typeof(ApiResponse), 200)]
+        [ProducesResponseType(typeof(ApiResponse), 400)]
+        public IActionResult SaveImage()
+        {
+            try
+            {
+                var httpRequest = HttpContext.Request;
+                if (httpRequest.Form.Files.Count > 0)
+                {
+                    var uploadFile = httpRequest.Form.Files[0];  // get the uploaded file
+                    if (uploadFile != null && uploadFile.Length > 0)
+                    {
+
+                        var path = Path.Combine(
+                                    Directory.GetCurrentDirectory(), "wwwroot", "img", uploadFile.FileName);
+
+                        if (System.IO.File.Exists(path))
+                        {
+                            System.IO.File.Delete(path);
+                        }
+
+                        using (var stream = new FileStream(path, FileMode.Create))
+                        {
+                            uploadFile.CopyTo(stream);
+                            stream.Close();
+                        }
+
+                        if (trojantradingDbContext.HeadInformations.Where(img => img.ImagePath == path).Count() == 0)
+                        {
+                            HeadInformation imageModel = new HeadInformation();
+                            imageModel.Content = "";
+                            imageModel.ImagePath = uploadFile.FileName;
+                            trojantradingDbContext.HeadInformations.Add(imageModel);
+                            trojantradingDbContext.SaveChanges();
+                            trojantradingDbContext.Dispose();
+                        }
+
+                        return Ok(new ApiResponse
+                        {
+                            Status = "success",
+                            Message = "Image file uploaded."
+                        });
+                    }
+                }
+                return Ok(new ApiResponse
+                {
+                    Status = "fail",
+                    Message = "Upload file is empty"
                 });
             }
             catch (Exception ex)

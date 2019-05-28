@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Trojantrading.Models;
 
@@ -81,6 +82,12 @@ namespace Trojantrading.Repositories
             {
                 trojantradingDbContext.HeadInformations.Remove(headInformation);
                 trojantradingDbContext.SaveChanges();
+
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img", headInformation.ImagePath);
+                if (File.Exists(path))
+                {
+                    File.Delete(path);
+                }
                 return new ApiResponse()
                 {
                     Status = "success",

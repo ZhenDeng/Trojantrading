@@ -67,5 +67,14 @@ namespace Trojantrading.Controllers
         {
             return Ok(_productRepository.UpdateProduct(product));
         }
+
+        [HttpPost("DeleteProduct")]
+        [NoCache]
+        [ProducesResponseType(typeof(ApiResponse), 200)]
+        [ProducesResponseType(typeof(ApiResponse), 400)]
+        public IActionResult DeleteProduct([FromBody]Product product)
+        {
+            return Ok(_productRepository.DeleteProduct(product));
+        }
     }
 }

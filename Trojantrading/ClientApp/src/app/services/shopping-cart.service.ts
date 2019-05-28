@@ -41,6 +41,11 @@ export class ShoppingCartService {
       .pipe(catchError(this.handleError));
   }
 
+  UpdateShoppingCartPaymentMethod(userId: number, selectedPayment: string): Observable<ApiResponse>{
+    return this.http.get(this.base_url + "/UpdateShoppingCartPaymentMethod?userId=" + userId + "&selectedPayment=" + selectedPayment)
+      .pipe(catchError(this.handleError));
+  }
+
   DeleteShoppingItem(shoppingItemId: number): Observable<ApiResponse>{
     return this.http.delete(this.base_url + "/deleteShoppingItem?shoppingItemId=" + shoppingItemId)
       .pipe(catchError(this.handleError));

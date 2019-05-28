@@ -1,0 +1,13 @@
+<div mat-dialog-title>
+  <div class="icon-box">
+    <i class="material-icons">&#xE5CD;</i>
+  </div>
+</div>
+<div mat-dialog-content style="text-align: center">
+  <h4>Are you sure?</h4>
+  <p>Do you really want to delete this record?This process cannot be undone</p>
+</div>
+<div mat-dialog-actions>
+  <button mat-button class="btn btn-tiny" (click)="onNoClick()">Cancel</button>
+  <button mat-button class="btn btn-tiny" (click)="confirmDelete()">Delete</button>
+</div>

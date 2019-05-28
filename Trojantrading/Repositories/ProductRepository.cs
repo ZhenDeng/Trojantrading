@@ -11,7 +11,7 @@ namespace Trojantrading.Repositories
         ApiResponse Add(Product product);
         Product Get(int id);
         List<Product> GetAllProducts();
-        void Delete(int id);
+        ApiResponse DeleteProduct(Product product);
         int GetTotalProducts();
         ApiResponse UpdateProduct(Product product);
     }
@@ -65,11 +65,27 @@ namespace Trojantrading.Repositories
             return allProducts;
         }
 
-        public void Delete(int id)
+        public ApiResponse DeleteProduct(Product product)
         {
-            var product = Get(id);
-            trojantradingDbContext.Products.Remove(product);
-            trojantradingDbContext.SaveChanges();
+            try
+            {
+                trojantradingDbContext.Products.Remove(product);
+                trojantradingDbContext.SaveChanges();
+                return new ApiResponse()
+                {
+                    Status = "success",
+                    Message = "Successfully delete product"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse()
+                {
+                    Status = "fail",
+                    Message = ex.Message
+                };
+            }
+            
         }
 
         public int GetTotalProducts()

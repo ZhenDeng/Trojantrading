@@ -13,6 +13,7 @@ namespace Trojantrading.Repositories
         ShoppingCart GetCartWithShoppingItems(int userId);
         ApiResponse deleteShoppingItem(int shoppingItemId);
         ShoppingCart GetCartInIdWithShoppingItems(int shoppingCartId);
+        ApiResponse UpdateShoppingCartPaymentMethod(int userId, string selectedPayment);
     }
     public class ShoppingCartRepository : IShoppingCartRepository
     {
@@ -42,7 +43,7 @@ namespace Trojantrading.Repositories
                         UserId = userId,
                         Note = "",
                         Status = "0",
-                        PaymentMethod = "ON ACCOUNT"
+                        PaymentMethod = "onaccount"
                     };
 
                     trojantradingDbContext.ShoppingCarts.Add(sc);
@@ -184,6 +185,32 @@ namespace Trojantrading.Repositories
             return shoppingCart;
         }
 
+        public ApiResponse UpdateShoppingCartPaymentMethod(int userId, string selectedPayment) {
+            try
+            {
+                var shoppingCart = GetCart(userId);
+                if (!string.IsNullOrEmpty(selectedPayment))
+                {
+                    shoppingCart.PaymentMethod = selectedPayment;
+                }
+                trojantradingDbContext.ShoppingCarts.Update(shoppingCart);
+                trojantradingDbContext.SaveChanges();
+                return new ApiResponse()
+                {
+                    Status = "success",
+                    Message = "Successfully Update Shopping Cart Payment Method"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse()
+                {
+                    Status = "fail",
+                    Message = ex.Message
+                };
+            }
+        }
+
         public ApiResponse UpdateShoppingCart(int userId, ShoppingItem shoppingItem)
         {
             try
@@ -213,7 +240,7 @@ namespace Trojantrading.Repositories
                     trojantradingDbContext.ShoppingItems.Add(si);
                     trojantradingDbContext.SaveChanges();
                 }
-
+                
                 shoppingCart.TotalItems += shoppingItem.Amount;
                 updateShoppingCartPrice(shoppingCart, user, shoppingItem);
                 trojantradingDbContext.ShoppingCarts.Update(shoppingCart);

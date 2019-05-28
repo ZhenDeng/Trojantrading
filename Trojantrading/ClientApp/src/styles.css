@@ -25,6 +25,10 @@ body{
     transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
 
+.btn:focus{
+    color: white !important;
+}
+
 .btn-long {
     width: 100%;
     max-width: 270px;
@@ -45,6 +49,31 @@ body{
 }
 
 .btn-long:hover {
+    border: 1px #CA1845 solid;
+    color: #CA1845 !important;
+    background: white;
+}
+
+.btn-tiny {
+    width: 45%;
+    max-width: 270px;
+    padding: 4px 10px 2px 10px;
+    font-size: 12px;
+    margin: 0px 8px;
+    background-color: #C20047;
+    color: white;
+    text-align: center;
+    border-radius: 20px;
+    cursor: pointer;
+    vertical-align: middle;
+    text-align: center;
+    display: inline-block;
+    border: 1px #CA1845 solid;
+    white-space: nowrap;
+    margin-top: 25px;
+}
+
+.btn-tiny:hover {
     border: 1px #CA1845 solid;
     color: #CA1845 !important;
     background: white;
@@ -522,6 +551,18 @@ a:hover{
 .app-loader-inner label:nth-child(1) {
     -webkit-animation: lol 3s 500ms infinite ease-in-out;
     animation: lol 3s 500ms infinite ease-in-out;
+}
+
+.mat-table_4fex{
+	flex: 4 !important;
+}
+
+.mat-table_3fex{
+	flex: 3 !important;
+}
+
+.mat-table_2fex{
+	flex: 2 !important;
 }
 /*#endregion */
 

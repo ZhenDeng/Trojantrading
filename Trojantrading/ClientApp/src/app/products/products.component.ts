@@ -10,6 +10,8 @@ import { ApiResponse } from '../models/ApiResponse';
 import { EditProductComponent } from '../popup-collection/edit-product/edit-product.component';
 import { Subject } from 'rxjs';
 import 'rxjs/add/operator/takeUntil';
+import { DeleteConfirmComponent } from '../popup-collection/delete-confirm/delete-confirm.component';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-products',
@@ -53,9 +55,9 @@ export class ProductsComponent implements OnInit, OnDestroy {
       id: 'promotions'
     },
     {
-      path: '/productsview/soldout',
-      label: 'Sold Out',
-      id: 'soldout'
+      path: '/productsview/outofstock',
+      label: 'Out of Stock',
+      id: 'outofstock'
     },
   ];
 
@@ -77,7 +79,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
     this.categoryList = this.productService.categoryList;
     this.role = this.shareService.readCookie("role");
     if (this.shareService.readCookie("role") && this.shareService.readCookie("role") == "admin") {
-      this.displayedColumns = ['name', 'category', 'originalPrice', 'agentPrice', 'wholesalerPrice', 'status', 'button']
+      this.displayedColumns = ['name', 'category', 'originalPrice', 'agentPrice', 'wholesalerPrice', 'status', 'button', 'deletebutton']
     }
     else if (this.shareService.readCookie("role") && this.shareService.readCookie("role") == "agent") {
       this.displayedColumns = ['name', 'category', 'originalPrice', 'agentPrice', 'qty', 'status', 'button']
@@ -95,7 +97,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
       } else if (type.includes('promotion')) {
         this.title = 'Promotions';
       } else {
-        this.title = 'Sold Out';
+        this.title = 'Out of Stock';
       }
       if (!this.products.length) {
         this.getProducts(type);
@@ -123,7 +125,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
   filterProducts(type: string, value: Product[]) {
     this.filteredProducts = value.filter(x => x.status && x.status.toLowerCase().trim().includes(type.toLowerCase().trim()));
     this.filteredProducts.forEach(product => product.quantity = 0);
-    this.dataSource = new MatTableDataSource(this.filteredProducts);
+    this.dataSource = new MatTableDataSource(_.orderBy(this.filteredProducts, 'name'));
   }
 
   applyFilter(value: string) {
@@ -132,7 +134,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
     this.dataSource.filter = value;
   }
 
-  _keyPress(event: any) {
+  isNumberKey(event: any) {
     const pattern = /[0-9\+\-\ ]/;
     let inputChar = String.fromCharCode(event.charCode);
 
@@ -163,7 +165,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
                 } else if (type.includes('promotion')) {
                   this.title = 'Promotions';
                 } else {
-                  this.title = 'Sold Out';
+                  this.title = 'Out of Stock';
                 }
                 if (!this.products.length) {
                   this.getProducts(type);
@@ -194,11 +196,14 @@ export class ProductsComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.loadContent = false;
+        console.info(result);
         product.name = result.name;
         product.category = result.category;
         product.agentPrice = result.agentPrice;
         product.originalPrice = result.originalPrice;
         product.wholesalerPrice = result.wholesalerPrice;
+        product.status = result.status;
+        product.prepaymentDiscount = result.prepaymentDiscount;
         this.productService.UpdateProduct(product).subscribe((res: ApiResponse) => {
           if (res.status == "success") {
             this.shareService.showSuccess("#" + product.id, res.message, "right");
@@ -211,7 +216,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
                 } else if (type.includes('promotion')) {
                   this.title = 'Promotions';
                 } else {
-                  this.title = 'Sold Out';
+                  this.title = 'Out of Stock';
                 }
                 if (!this.products.length) {
                   this.getProducts(type);
@@ -219,10 +224,47 @@ export class ProductsComponent implements OnInit, OnDestroy {
                   this.filterProducts(type, this.products);
                 }
               });
-            }, 2000);
+            }, 1500);
           } else {
             this.loadContent = true;
             this.shareService.showError("#" + product.id, res.message, "right");
+          }
+        },
+          (error: any) => {
+            this.loadContent = true;
+            console.info(error);
+          });
+      }
+    });
+  }
+
+  deleteProduct(element: Product): void{
+    const dialogRef = this.dialog.open(DeleteConfirmComponent, {
+      width: '500px',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result){
+        this.productService.DeleteProduct(element).subscribe((res: ApiResponse) => {
+          if (res.status == "success") {
+            this.shareService.showSuccess(".delete" + element.id, res.message, "right");
+            setTimeout(() => {
+              this.activatedRouter.paramMap.subscribe(param => {
+                this.viewType = param.get('type');
+                const type = this.viewType.toLowerCase();
+                if (type === 'new') {
+                  this.title = 'New Products';
+                } else if (type.includes('promotion')) {
+                  this.title = 'Promotions';
+                } else {
+                  this.title = 'Out of Stock';
+                }
+                this.getProducts(type);
+              });
+            }, 1500);
+          } else {
+            this.loadContent = true;
+            this.shareService.showError(".delete" + element.id, res.message, "right");
           }
         },
           (error: any) => {

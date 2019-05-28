@@ -41,8 +41,8 @@
                         The actual rendered columns are set as a property on the row definition" -->
       
               <ng-container matColumnDef="name">
-                <mat-header-cell *matHeaderCellDef> Description </mat-header-cell>
-                <mat-cell *matCellDef="let element"> <span class="productid">#{{element.id}}</span>{{element.name}} </mat-cell>
+                <mat-header-cell *matHeaderCellDef class="mat-table_3fex"> Description </mat-header-cell>
+                <mat-cell *matCellDef="let element" class="mat-table_3fex"> <span class="productid">#{{element.id}}</span>{{element.name}} </mat-cell>
               </ng-container>
       
               <!-- wlpPrice Column -->
@@ -71,19 +71,26 @@
       
               <ng-container matColumnDef="qty" *ngIf="role!='admin'">
                 <mat-header-cell *matHeaderCellDef> Quantity </mat-header-cell>
-                <mat-cell *matCellDef="let element"> <input id="product{{element.id}}" type="number" (keypress)="_keyPress($event)" (keyup)="changeQuantity(element)" [(ngModel)]="element.quantity"> </mat-cell>
+                <mat-cell *matCellDef="let element"> <input id="product{{element.id}}" type="number" (keypress)="isNumberKey($event)" (keyup)="changeQuantity(element)" [(ngModel)]="element.quantity"> </mat-cell>
               </ng-container>
 
               <ng-container matColumnDef="status">
                 <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
-                <mat-cell *matCellDef="let element"> {{element.status}} </mat-cell>
+                <mat-cell *matCellDef="let element"> {{element.status=="outofstock" ? "Out of Stock" : element.status}} </mat-cell>
               </ng-container>
       
               <ng-container matColumnDef="button">
                 <mat-header-cell *matHeaderCellDef></mat-header-cell>
                 <mat-cell *matCellDef="let element">
-                  <button id="{{element.id}}" class="btn btn-long" (click)="addToCart(element)" [disabled]="element.status.toLowerCase() == 'soldout' || !element.quantity" *ngIf="role !='admin'">Add To Cart</button>
+                  <button id="{{element.id}}" class="btn btn-long" (click)="addToCart(element)" [disabled]="element.status.toLowerCase() == 'outofstock' || !element.quantity" *ngIf="role !='admin'">Add To Cart</button>
                   <button id="{{element.id}}" class="btn btn-long" (click)="editProduct(element)" *ngIf="role =='admin'">Edit</button>
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="deletebutton" *ngIf="role == 'admin'">
+                <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                  <button class="btn btn-long delete{{element.id}}" (click)="deleteProduct(element)">Delete</button>
                 </mat-cell>
               </ng-container>
       

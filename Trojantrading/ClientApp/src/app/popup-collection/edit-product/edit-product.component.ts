@@ -58,7 +58,7 @@ export class EditProductComponent implements OnInit {
 
   updateProductDetails(): void {
     if (this.userFormGroup.valid) {
-      this.dialogRef.close(this.userFormGroup.value);
+      this.dialogRef.close(this.userFormGroup.getRawValue());
     } else {
       this.isNotValidField('name', this.account_validation_messages.name);
       this.isNotValidField('category', this.account_validation_messages.category);
