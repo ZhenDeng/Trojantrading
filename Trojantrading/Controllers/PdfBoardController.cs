@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
+using SelectPdf;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,7 +12,6 @@ using Trojantrading.Models;
 using Trojantrading.Repositories;
 using Trojantrading.Service;
 using Trojantrading.Util;
-using IronPdf;
 
 namespace Trojantrading.Controllers
 {
@@ -241,7 +241,7 @@ namespace Trojantrading.Controllers
                 stringBuilder.Append("#notices,#notices .notice {color: #5D6975;font-size: 1.2em;}footer {font-size: 1.5em;color: #5D6975;width: 100%;height: 30px;position: absolute;bottom: 0;border-top: 1px solid #C1CED9;padding: 8px 0;text-align: center;}");
                 stringBuilder.Append("</style></head>");
                 stringBuilder.Append("<body><header class='clearfix'><div id='logo'><p>Trojan Trading Company PTY LTD</p></div>");
-                stringBuilder.Append("<h1>Your Order #" + orderId + " for Customer " + currentUser.Account + "</h1>");
+                stringBuilder.Append("<h1>Order #" + orderId + " for Customer " + currentUser.Account + "</h1>");
                 stringBuilder.Append("<div id='company' class='clearfix'><div>SHIPPING ADDRESS</div><div><span>ACCOUNT:&nbsp;&nbsp;</span>" + currentUser.Account + "</div><div><span>CUSTOMER:&nbsp;&nbsp;</span>" + currentUser.ShippingCustomerName + "</div><div><span>ADDRESS:&nbsp;&nbsp;</span>" + currentUser.ShippingStreetNumber + " " + currentUser.ShippingAddressLine + "</div><div>" + currentUser.ShippingSuburb + ", " + currentUser.ShippingState + ", " + currentUser.ShippingPostCode + "</div><div><span>EMAIL:&nbsp;&nbsp;</span> <a href='" + currentUser.Email + "' target='_blank'>" + currentUser.Email + "</a></div><div><span>PHONE:&nbsp;&nbsp;</span>" + currentUser.Phone + "</div></div>");
                 stringBuilder.Append("<div id='project'><div>BILLING ADDRESS</div><div><span>ACCOUNT:&nbsp;&nbsp;</span>" + currentUser.Account + "</div><div><span>CUSTOMER:&nbsp;&nbsp;</span>" + currentUser.BillingCustomerName + "</div><div><span>ADDRESS:&nbsp;&nbsp;</span>" + currentUser.BillingStreetNumber + " " + currentUser.BillingAddressLine + "</div><div>" + currentUser.BillingSuburb + ", " + currentUser.BillingState + ", " + currentUser.BillingPostCode + "</div><div><span>EMAIL:&nbsp;&nbsp;</span> <a href='" + currentUser.Email + "' target='_blank'>" + currentUser.Email + "</a></div><div><span>PHONE:&nbsp;&nbsp;</span>" + currentUser.Phone + "</div></div></header>");
                 stringBuilder.Append("<main><table><thead><tr><th>Product Name</th><th>WLP ex.GST</th><th>Buy Price ex.GST</th><th>Order Qty</th><th>Line Amount ex.GST</th></tr></thead><tbody>");
@@ -267,10 +267,10 @@ namespace Trojantrading.Controllers
                     }
                 }
                 stringBuilder.Append("<tr><td colspan='4'> Payment Method</ td ><td class='total'>" + String.Format("{0}", cart.PaymentMethod == "onaccount" ? "On Account" : "Prepayment") + "</td></tr>");
-                stringBuilder.Append("<tr><td colspan='4'> You Will Pay Excl.GST</ td ><td class='total'>" + String.Format("{0:0.00}", priceExclGst) + "</td></tr>");
+                stringBuilder.Append("<tr><td colspan='4'>Price Excl.GST</ td ><td class='total'>" + String.Format("{0:0.00}", priceExclGst) + "</td></tr>");
                 stringBuilder.Append("<tr><td colspan='4'> GST</ td ><td class='total'>" + String.Format("{0:0.00}", gst) + "</td></tr>");
                 stringBuilder.Append("<tr><td colspan='4'> Total Discount Earned</ td ><td class='total'>" + String.Format("{0:0.00}", discount) + "</td></tr>");
-                stringBuilder.Append("<tr><td colspan='4' class='grand total'> You will pay Inc.GST</ td ><td class='grand total'>" + String.Format("{0:0.00}", priceIncGst) + "</td></tr>");
+                stringBuilder.Append("<tr><td colspan='4' class='grand total'> Price Inc.GST</ td ><td class='grand total'>" + String.Format("{0:0.00}", priceIncGst) + "</td></tr>");
                 stringBuilder.Append("</tbody></table>");
                 stringBuilder.Append("<div id='notices'><div>NOTICE:</div><div class='notice'>A finance charge of 1.5% will be made on unpaid balances after 30 days.</div></div>");
                 stringBuilder.Append("</main>");
@@ -279,11 +279,10 @@ namespace Trojantrading.Controllers
                 string pdfBody = stringBuilder.ToString();
                 HtmlToPdf Renderer = new HtmlToPdf();
                 var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "order_" + orderId + ".pdf");
-                var PDF = Renderer.RenderHtmlAsPdf(pdfBody);
+                var pdf = Renderer.ConvertHtmlString(pdfBody);
                 using (var stream = new FileStream(path, FileMode.Create))
                 {
-                    PDF.Stream.CopyTo(stream);
-                    stream.Close();
+                    pdf.Save(stream);
                 }
                 return Ok(new ApiResponse
                 {
