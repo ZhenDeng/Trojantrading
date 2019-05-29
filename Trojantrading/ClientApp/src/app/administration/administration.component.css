@@ -31,8 +31,13 @@ h4{
 }
 
 ::ng-deep .mat-header-cell {
-    font-size: 13px !important;
+    font-size: 14px !important;
     font-weight: bold !important;
+}
+
+::ng-deep .mat-cell {
+	font-size: 16px;
+	font-weight: 500;
 }
 
 ::ng-deep .mat-tab-body{

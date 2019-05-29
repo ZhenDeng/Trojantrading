@@ -564,5 +564,10 @@ a:hover{
 .mat-table_2fex{
 	flex: 2 !important;
 }
+::ng-deep .mat-header-cell {
+    font-size: 14px !important;
+    font-weight: bold !important;
+}
+
 /*#endregion */
 
