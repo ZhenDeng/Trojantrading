@@ -2,6 +2,7 @@ import { ShoppingItem } from './shoppingItem';
 
 export interface Product {
     id: number
+    itemCode: string
     name: string
     originalPrice: number
     agentPrice: number

@@ -509,8 +509,8 @@ export class AdministrationComponent implements OnInit, OnDestroy {
           }
           this.fileService.WritePdf(element.id, this.gst, this.priceExclGst, this.discount, element.userId).subscribe((res: ApiResponse) => {
             if (res.status == "success") {
-              this.shareSevice.showSuccess("#pdf" + element.id, res.message, "right");
               window.open("/order_" + element.id + ".pdf", "_blank");
+              this.shareSevice.showSuccess("#pdf" + element.id, res.message, "right");
             } else {
               this.shareSevice.showError("#pdf" + element.id, res.message, "right");
             }

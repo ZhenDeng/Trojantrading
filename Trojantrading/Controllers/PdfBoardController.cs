@@ -233,21 +233,21 @@ namespace Trojantrading.Controllers
                 var currentUser = userRepository.GetUserByAccount(userId);
                 double priceIncGst = priceExclGst + gst;
                 StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.Append("<html lang='en'><head><style>");
-                stringBuilder.Append(".clearfix:after{content:'';display: table;clear: both;} a{color: #5D6975;text-decoration: underline;} body{position: relative;width: 21cm;height: 29.7cm;margin: 0 auto;color: #001028;background: #FFFFFF;font-family: Arial, sans-serif;font-size: 12px;font-family: Arial;}");
+                stringBuilder.Append("<!DOCTYPE html><html lang='en'><head><meta charset='utf-8'><style>");
+                stringBuilder.Append(".clearfix:after{content:'';display: table;clear: both;} a{color: #5D6975;text-decoration: underline;} body{position: relative;width: 21cm;height: 29.7cm;margin: 0 auto;color: #001028;background: #FFFFFF;font-family: Arial, sans-serif;font-size: 12px;}");
                 stringBuilder.Append("header{padding: 10px 0;margin-bottom: 30px;}#logo{text-align: center;margin-bottom: 10px; font-size: 2em}#logo img{width: 90px;}h1 {border-top: 1px solid #5D6975;border-bottom: 1px solid #5D6975;color: #5D6975;font-size: 1.5em;line-height: 1.4em;font-weight: normal;text-align: center;margin: 0 0 20px 0;}");
                 stringBuilder.Append("#project {float: left; font-size: 18px}#project span {color: #5D6975;text-align:left;display: inline-block;font-size: 0.8em;}#company {float: right;text-align: right; font-size: 18px}#company span {color: #5D6975;text-align: right;display: inline-block;font-size: 0.8em;}#project div,#company div {white-space: nowrap;}");
-                stringBuilder.Append("table {width: 100%;border-collapse: collapse;border-spacing: 0;margin-bottom: 20px;}table tr:nth-child(2n-1) td {background: #F5F5F5;}table th,table td {text-align: center;}table th {padding: 5px 20px;color: #5D6975;border-bottom: 1px solid #C1CED9;white-space: nowrap;font-weight: normal;}table.service,table.desc {text-align: left;}table td {padding: 20px;text-align: right;}table td.service,table td.desc {vertical-align: top;}table td.unit,table td.qty,table td.total {font-size: 1.2em;}table td.grand {border-top: 1px solid #5D6975;}");
+                stringBuilder.Append("table {width: 100%;border-collapse: collapse;border-spacing: 0;margin-bottom: 20px;}table tr:nth-child(2n-1) td {background: #F5F5F5;}table th,table td {text-align: center;white-space:pre-wrap;word-wrap:break-word;}table th {padding: 5px 20px;color: #5D6975;border-bottom: 1px solid #C1CED9;font-weight: normal;}table .service,table .desc {text-align: left;}table td{padding: 20px;text-align: right;}table td.service,table td.desc {vertical-align: top;}table td.unit,table td.qty,table td.total {font-size: 1.2em;}table td.grand {border-top: 1px solid #5D6975;}");
                 stringBuilder.Append("#notices,#notices .notice {color: #5D6975;font-size: 1.2em;}footer {font-size: 1.5em;color: #5D6975;width: 100%;height: 30px;position: absolute;bottom: 0;border-top: 1px solid #C1CED9;padding: 8px 0;text-align: center;}");
                 stringBuilder.Append("</style></head>");
                 stringBuilder.Append("<body><header class='clearfix'><div id='logo'><p>Trojan Trading Company PTY LTD</p></div>");
                 stringBuilder.Append("<h1>Order #" + orderId + " for Customer " + currentUser.Account + "</h1>");
                 stringBuilder.Append("<div id='company' class='clearfix'><div>SHIPPING ADDRESS</div><div><span>ACCOUNT:&nbsp;&nbsp;</span>" + currentUser.Account + "</div><div><span>CUSTOMER:&nbsp;&nbsp;</span>" + currentUser.ShippingCustomerName + "</div><div><span>ADDRESS:&nbsp;&nbsp;</span>" + currentUser.ShippingStreetNumber + " " + currentUser.ShippingAddressLine + "</div><div>" + currentUser.ShippingSuburb + ", " + currentUser.ShippingState + ", " + currentUser.ShippingPostCode + "</div><div><span>EMAIL:&nbsp;&nbsp;</span> <a href='" + currentUser.Email + "' target='_blank'>" + currentUser.Email + "</a></div><div><span>PHONE:&nbsp;&nbsp;</span>" + currentUser.Phone + "</div></div>");
                 stringBuilder.Append("<div id='project'><div>BILLING ADDRESS</div><div><span>ACCOUNT:&nbsp;&nbsp;</span>" + currentUser.Account + "</div><div><span>CUSTOMER:&nbsp;&nbsp;</span>" + currentUser.BillingCustomerName + "</div><div><span>ADDRESS:&nbsp;&nbsp;</span>" + currentUser.BillingStreetNumber + " " + currentUser.BillingAddressLine + "</div><div>" + currentUser.BillingSuburb + ", " + currentUser.BillingState + ", " + currentUser.BillingPostCode + "</div><div><span>EMAIL:&nbsp;&nbsp;</span> <a href='" + currentUser.Email + "' target='_blank'>" + currentUser.Email + "</a></div><div><span>PHONE:&nbsp;&nbsp;</span>" + currentUser.Phone + "</div></div></header>");
-                stringBuilder.Append("<main><table><thead><tr><th>Product Name</th><th>Original Price ex.GST</th><th>Buy Price ex.GST</th><th>Order Qty</th><th>Line Amount ex.GST</th></tr></thead><tbody>");
+                stringBuilder.Append("<main><table><thead><tr><th class='service' style='width: 10%'>Item Code</th><th class='desc' style='width: 50%'>Product Name</th><th style='width: 10%'>Original Price ex.GST</th><th style='width: 10%'>Buy Price ex.GST</th><th style='width: 10%'>Order Qty</th><th style='width: 10%'>Line Amount ex.GST</th></tr></thead><tbody>");
                 foreach (var item in cart.ShoppingItems)
                 {
-                    stringBuilder.Append("<tr><td class='service'>#" + item.Product.Id + " " + item.Product.Name + "</td><td class='total'>$" + item.Product.OriginalPrice + "</td>");
+                    stringBuilder.Append("<tr><td class='service'>" + item.Product.ItemCode + "</td><td class='desc'>#" + item.Product.Id + " " + item.Product.Name + "</td><td class='total'>$" + item.Product.OriginalPrice + "</td>");
                     if (currentUser.Role.ToLower() == "agent")
                     {
                         stringBuilder.Append("<td class='unit'>$" + String.Format("{0:0.00}", item.Product.AgentPrice) + "</td>");
@@ -259,22 +259,22 @@ namespace Trojantrading.Controllers
                     stringBuilder.Append("<td class='qty'>" + item.Amount + "</td>");
                     if (currentUser.Role.ToLower() == "agent")
                     {
-                        stringBuilder.Append("<td class='total'>$" + String.Format("{0:0.00}", item.Product.AgentPrice) + "</td></tr>");
+                        stringBuilder.Append("<td class='total'>$" + String.Format("{0:0.00}", item.Product.AgentPrice * item.Amount) + "</td></tr>");
                     }
                     else if (currentUser.Role.ToLower() == "wholesaler")
                     {
-                        stringBuilder.Append("<td class='total'>$" + String.Format("{0:0.00}", item.Product.WholesalerPrice) + "</td></tr>");
+                        stringBuilder.Append("<td class='total'>$" + String.Format("{0:0.00}", item.Product.WholesalerPrice * item.Amount) + "</td></tr>");
                     }
                 }
-                stringBuilder.Append("<tr><td colspan='4'> Payment Method</ td ><td class='total'>" + String.Format("{0}", cart.PaymentMethod == "onaccount" ? "On Account" : "Prepayment") + "</td></tr>");
-                stringBuilder.Append("<tr><td colspan='4'> Total Price Excl.GST</ td ><td class='total'>" + String.Format("{0:0.00}", priceExclGst) + "</td></tr>");
-                stringBuilder.Append("<tr><td colspan='4'> GST</ td ><td class='total'>" + String.Format("{0:0.00}", gst) + "</td></tr>");
-                stringBuilder.Append("<tr><td colspan='4'> Total Discount Earned</ td ><td class='total'>" + String.Format("{0:0.00}", discount) + "</td></tr>");
-                stringBuilder.Append("<tr><td colspan='4' class='grand total'> Total Price Inc.GST</ td ><td class='grand total'>" + String.Format("{0:0.00}", priceIncGst) + "</td></tr>");
+                stringBuilder.Append("<tr><td colspan='4' style='text-align:right'> Payment Method</td><td class='total' colspan='2'>" + String.Format("{0}", cart.PaymentMethod == "onaccount" ? "On Account" : "Prepayment") + "</td></tr>");
+                stringBuilder.Append("<tr><td colspan='4' style='text-align:right'> Total Price Excl.GST</td><td class='total' colspan='2'>$" + String.Format("{0:0.00}", priceExclGst) + "</td></tr>");
+                stringBuilder.Append("<tr><td colspan='4' style='text-align:right'> GST</td><td class='total' colspan='2'>$" + String.Format("{0:0.00}", gst) + "</td></tr>");
+                stringBuilder.Append("<tr><td colspan='4' style='text-align:right'> Total Discount Earned</td><td class='total' colspan='2'>$" + String.Format("{0:0.00}", discount) + "</td></tr>");
+                stringBuilder.Append("<tr><td colspan='4' style='text-align:right' class='grand total'> Total Price Inc.GST</td><td class='grand total' colspan='2'>$" + String.Format("{0:0.00}", priceIncGst) + "</td></tr>");
                 stringBuilder.Append("</tbody></table>");
                 stringBuilder.Append("<div id='notices'><div>NOTICE:</div><div class='notice'>A finance charge of 1.5% will be made on unpaid balances after 30 days.</div></div>");
                 stringBuilder.Append("</main>");
-                stringBuilder.Append("<footer><a href='' target='_blank'>http://xxxxxxxx</a></footer>");
+                stringBuilder.Append("<footer><a href='http://xxxxxxxx' target='_blank'>http://xxxxxxxx</a></footer>");
                 stringBuilder.Append("</body></html>");
                 string pdfBody = stringBuilder.ToString();
                 HtmlToPdf Renderer = new HtmlToPdf();

@@ -94,15 +94,15 @@ export class HomeComponent implements OnInit, OnDestroy {
 
         this.title = 'Products in All Categories';
         if (this.shareService.readCookie("role") && this.shareService.readCookie("role") == "admin") {
-          this.displayedColumns = ['name', 'category', 'originalPrice', 'agentPrice', 'wholesalerPrice', 'status', 'button', 'deletebutton']
+          this.displayedColumns = ['itemcode','name', 'category', 'originalPrice', 'agentPrice', 'wholesalerPrice', 'status', 'button', 'deletebutton']
         }
         else if (this.shareService.readCookie("role") && this.shareService.readCookie("role") == "agent") {
-          this.displayedColumns = ['name', 'category', 'originalPrice', 'agentPrice', 'qty', 'status', 'button']
+          this.displayedColumns = ['itemcode','name', 'category', 'originalPrice', 'agentPrice', 'qty', 'status', 'button']
         }
         else if (this.shareService.readCookie("role") && this.shareService.readCookie("role") == "wholesaler") {
-          this.displayedColumns = ['name', 'category', 'originalPrice', 'wholesalerPrice', 'qty', 'status', 'button']
+          this.displayedColumns = ['itemcode','name', 'category', 'originalPrice', 'wholesalerPrice', 'qty', 'status', 'button']
         } else {
-          this.displayedColumns = ['name', 'category', 'originalPrice', 'qty', 'status', 'button']
+          this.displayedColumns = ['itemcode','name', 'category', 'originalPrice', 'qty', 'status', 'button']
         }
 
         this.dataSource = new MatTableDataSource();
@@ -261,6 +261,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       if (result) {
         this.loadContent = false;
         product.name = result.name;
+        product.itemCode = result.itemCode;
         product.category = result.category;
         product.agentPrice = result.agentPrice;
         product.originalPrice = result.originalPrice;

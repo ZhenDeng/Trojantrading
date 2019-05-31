@@ -12,6 +12,9 @@ export class EditProductComponent implements OnInit {
 
   userFormGroup: FormGroup;
   account_validation_messages: any = {
+    'itemCode': [
+      { class: 'itemCodeValidate', message: 'Please enter item code' }
+    ],
     'name': [
       { class: 'descriptionValidate', message: 'Please enter description' }
     ],
@@ -34,6 +37,7 @@ export class EditProductComponent implements OnInit {
     public dialogRef: MatDialogRef<EditProductComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) {
     this.userFormGroup = this.formBuilder.group({
+      itemCode: new FormControl("", Validators.compose([Validators.required])),
       name: new FormControl("", Validators.compose([Validators.required])),
       category: new FormControl("", Validators.compose([Validators.required])),
       originalPrice: new FormControl("", Validators.compose([Validators.required])),
@@ -46,6 +50,7 @@ export class EditProductComponent implements OnInit {
 
   ngOnInit() {
     if(this.data.product){
+      this.userFormGroup.get("itemCode").setValue(this.data.product.itemCode);
       this.userFormGroup.get("name").setValue(this.data.product.name);
       this.userFormGroup.get("category").setValue(this.data.product.category);
       this.userFormGroup.get("originalPrice").setValue(this.data.product.originalPrice);
@@ -61,6 +66,7 @@ export class EditProductComponent implements OnInit {
       this.dialogRef.close(this.userFormGroup.getRawValue());
     } else {
       this.isNotValidField('name', this.account_validation_messages.name);
+      this.isNotValidField('itemCode', this.account_validation_messages.itemCode);
       this.isNotValidField('category', this.account_validation_messages.category);
       this.isNotValidField('originalPrice', this.account_validation_messages.originalPrice);
       this.isNotValidField('agentPrice', this.account_validation_messages.agentPrice);

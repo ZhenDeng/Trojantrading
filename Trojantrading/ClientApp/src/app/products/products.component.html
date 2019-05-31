@@ -37,10 +37,14 @@
           
               <!--- Note that these columns can be defined in any order.
                         The actual rendered columns are set as a property on the row definition" -->
-      
+              <ng-container matColumnDef="itemcode">
+                <mat-header-cell *matHeaderCellDef> Item Code </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.itemCode}} </mat-cell>
+              </ng-container>
+
               <ng-container matColumnDef="name">
-                <mat-header-cell *matHeaderCellDef class="mat-table_3fex"> Description </mat-header-cell>
-                <mat-cell *matCellDef="let element" class="mat-table_3fex"> <span class="productid">#{{element.id}}</span>{{element.name}} </mat-cell>
+                <mat-header-cell *matHeaderCellDef class="mat-table_2fex"> Description </mat-header-cell>
+                <mat-cell *matCellDef="let element" class="mat-table_2fex"> <span class="productid">#{{element.id}}</span>{{element.name}} </mat-cell>
               </ng-container>
       
               <!-- wlpPrice Column -->

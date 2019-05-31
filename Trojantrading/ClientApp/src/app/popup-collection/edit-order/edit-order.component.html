@@ -34,6 +34,7 @@
     <table class="white" id="orders">
         <thead>
           <tr class="row">
+            <th class="col">Item Code</th>
             <th class="col" style="max-width:30%">Product Name</th>
             <th class="col">Category</th>
             <th class="col">Original Price</th>
@@ -46,8 +47,11 @@
         <tbody>
             <ng-container *ngFor="let item of currentItems">
               <tr class="row">
+                <td class="col-md align-left">
+                  {{ item.product.itemCode }}
+                </td>
                 <td class="col-md align-left" style="max-width:30%">
-                  {{ item.product.name }}
+                  {{ item.product.name }}dsadsadsadsadsadasdsadasdasdasd
                 </td>
                 <td class="col-md align-left">
                   {{ item.product.category }}

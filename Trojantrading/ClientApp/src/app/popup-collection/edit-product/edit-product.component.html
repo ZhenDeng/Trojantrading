@@ -1,5 +1,8 @@
-<h1 mat-dialog-title>Edit Product Details</h1>
+<h1 mat-dialog-title>{{data.product?"Edit":"Add"}} Product Details</h1>
 <div mat-dialog-content [formGroup]="userFormGroup">
+  <mat-form-field>
+    <input matInput class="itemCodeValidate" formControlName="itemCode" placeholder="Item Code" required>
+  </mat-form-field>
   <mat-form-field>
     <input matInput class="descriptionValidate" formControlName="name" placeholder="Description" required>
   </mat-form-field>
@@ -36,6 +39,6 @@
   </mat-form-field>
 </div>
 <div mat-dialog-actions>
-  <button mat-button class="btn btn-long" (click)="updateProductDetails()">Update</button>
+  <button mat-button class="btn btn-long" (click)="updateProductDetails()">{{data.product?"Update":"Add"}}</button>
   <button mat-button class="btn btn-long" (click)="onNoClick()">Cancel</button>
 </div>

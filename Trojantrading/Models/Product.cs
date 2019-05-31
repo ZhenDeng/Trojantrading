@@ -7,9 +7,8 @@ namespace Trojantrading.Models
         public int Id { get; set; }
 
         public DateTime CreatedDate { get; set; }
-
         public string Name { get; set; }
-
+        public string ItemCode { get; set; }
         public double OriginalPrice { get; set; }
 
         public double AgentPrice { get; set; }
