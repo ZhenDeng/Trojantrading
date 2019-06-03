@@ -442,7 +442,7 @@ export class AdministrationComponent implements OnInit, OnDestroy {
 
   uploadPdf(): void {
     const dialogRef = this.dialog.open(UploadPdfComponent, {
-      width: '650px',
+      width: '700px',
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -452,7 +452,7 @@ export class AdministrationComponent implements OnInit, OnDestroy {
 
   uploadUsers(): void {
     const dialogRef = this.dialog.open(UploadUsersComponent, {
-      width: '650px',
+      width: '700px',
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -462,7 +462,7 @@ export class AdministrationComponent implements OnInit, OnDestroy {
 
   uploadImage(): void {
     const dialogRef = this.dialog.open(UploadImageComponent, {
-      width: '650px',
+      width: '700px',
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -483,28 +483,26 @@ export class AdministrationComponent implements OnInit, OnDestroy {
         this.adminService.GetUserByAccount(element.userId).subscribe((user: User) => {
           if (res.paymentMethod == "onaccount") {
             res.shoppingItems.forEach(si => {
-              this.oringinalPriceExclGst += _.toNumber(si.amount) * si.product.originalPrice;
+              this.oringinalPriceIncGst += _.toNumber(si.amount) * si.product.originalPrice;
               if (user.role == "agent") {
                 si.subTotal = _.toNumber(si.amount) * si.product.agentPrice;
-                this.priceExclGst += si.subTotal;
+                this.priceIncGst += si.subTotal;
               } else if (user.role == "wholesaler") {
                 si.subTotal = _.toNumber(si.amount) * si.product.wholesalerPrice;
-                this.priceExclGst += si.subTotal;
+                this.priceIncGst += si.subTotal;
               }
             });
-            this.gst = this.priceExclGst * 0.1;
-            this.oringinalPriceIncGst = this.oringinalPriceExclGst * 1.1;
-            this.priceIncGst = this.gst + this.priceExclGst;
+            this.gst = this.priceIncGst/11;
+            this.priceExclGst = this.priceIncGst/11*10;
             this.discount = this.oringinalPriceIncGst - this.priceIncGst;
           } else {
             res.shoppingItems.forEach(si => {
-              this.oringinalPriceExclGst += _.toNumber(si.amount) * si.product.originalPrice;
+              this.oringinalPriceIncGst += _.toNumber(si.amount) * si.product.originalPrice;
               si.subTotal = _.toNumber(si.amount) * si.product.prepaymentDiscount;
-              this.priceExclGst += si.subTotal;
+              this.priceIncGst += si.subTotal;
             });
-            this.gst = this.priceExclGst * 0.1;
-            this.oringinalPriceIncGst = this.oringinalPriceExclGst * 1.1;
-            this.priceIncGst = this.gst + this.priceExclGst;
+            this.gst = this.priceIncGst/11;
+            this.priceExclGst = this.priceIncGst/11*10;
             this.discount = this.oringinalPriceIncGst - this.priceIncGst;
           }
           this.fileService.WritePdf(element.id, this.gst, this.priceExclGst, this.discount, element.userId).subscribe((res: ApiResponse) => {

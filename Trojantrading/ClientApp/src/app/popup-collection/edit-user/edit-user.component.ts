@@ -29,9 +29,6 @@ export class EditUserComponent implements OnInit {
     'abn': [
       { class: 'abnValidate', message: 'Please enter Australian Business Number' }
     ],
-    'trn': [
-      { class: 'trnValidate', message: 'Please enter Tobacco Licence Number' }
-    ],
     'email': [
       { class: 'emailValidate', message: 'Please enter valid email' }
     ],
@@ -59,7 +56,7 @@ export class EditUserComponent implements OnInit {
       email: new FormControl("", Validators.compose([Validators.required, Validators.email])),
       phone: new FormControl("", Validators.compose([Validators.required])),
       abn: new FormControl("", Validators.compose([Validators.required])),
-      trn: new FormControl("", Validators.compose([Validators.required])),
+      trn: new FormControl(""),
       status:  this.roleName == "admin"? new FormControl({ value: "active", disabled: true }, Validators.required):new FormControl("", Validators.compose([Validators.required])),
       mobile: new FormControl(""),
       billingCustomerName: new FormControl(""),
@@ -118,15 +115,23 @@ export class EditUserComponent implements OnInit {
     if (this.userFormGroup.valid) {
       this.dialogRef.close(this.userFormGroup.getRawValue());
     } else {
-      this.isNotValidField('account', this.account_validation_messages.account);
-      this.isNotValidField('password', this.account_validation_messages.password);
-      this.isNotValidField('role', this.account_validation_messages.role);
-      this.isNotValidField('phone', this.account_validation_messages.phone);
-      this.isNotValidField('abn', this.account_validation_messages.abn);
-      this.isNotValidField('trn', this.account_validation_messages.trn);
-      this.isNotValidField('bussinessName', this.account_validation_messages.bussinessName);
-      this.isNotValidField('email', this.account_validation_messages.email);
-      this.isNotValidField('status', this.account_validation_messages.status);
+      if(this.roleName == "admin"){
+        this.isNotValidField('account', this.account_validation_messages.account);
+        this.isNotValidField('password', this.account_validation_messages.password);
+        this.isNotValidField('phone', this.account_validation_messages.phone);
+        this.isNotValidField('abn', this.account_validation_messages.abn);
+        this.isNotValidField('bussinessName', this.account_validation_messages.bussinessName);
+        this.isNotValidField('email', this.account_validation_messages.email);
+      }else{
+        this.isNotValidField('account', this.account_validation_messages.account);
+        this.isNotValidField('password', this.account_validation_messages.password);
+        this.isNotValidField('role', this.account_validation_messages.role);
+        this.isNotValidField('phone', this.account_validation_messages.phone);
+        this.isNotValidField('abn', this.account_validation_messages.abn);
+        this.isNotValidField('bussinessName', this.account_validation_messages.bussinessName);
+        this.isNotValidField('email', this.account_validation_messages.email);
+        this.isNotValidField('status', this.account_validation_messages.status);
+      }
     }
   }
 

@@ -44,7 +44,7 @@
 
               <ng-container matColumnDef="name">
                 <mat-header-cell *matHeaderCellDef class="mat-table_2fex"> Description </mat-header-cell>
-                <mat-cell *matCellDef="let element" class="mat-table_2fex"> <span class="productid">#{{element.id}}</span>{{element.name}} </mat-cell>
+                <mat-cell *matCellDef="let element" class="mat-table_2fex"> {{element.name}} </mat-cell>
               </ng-container>
       
               <!-- wlpPrice Column -->
@@ -55,20 +55,26 @@
       
               <!-- buyPrice Column -->
               <ng-container matColumnDef="originalPrice">
-                <mat-header-cell *matHeaderCellDef> Original Price ex. GST </mat-header-cell>
+                <mat-header-cell *matHeaderCellDef> Original Price </mat-header-cell>
                 <mat-cell *matCellDef="let element"> {{element.originalPrice | currency:'AUD':'symbol-narrow':'.2-2'}} </mat-cell>
               </ng-container>
 
               <!-- buyPrice Column -->
               <ng-container matColumnDef="agentPrice" *ngIf="role=='admin' || role=='agent'">
-                <mat-header-cell *matHeaderCellDef> Agent Price ex. GST </mat-header-cell>
+                <mat-header-cell *matHeaderCellDef> Agent Price </mat-header-cell>
                 <mat-cell *matCellDef="let element"> {{element.agentPrice | currency:'AUD':'symbol-narrow':'.2-2'}} </mat-cell>
               </ng-container>
 
               <!-- buyPrice Column -->
               <ng-container matColumnDef="wholesalerPrice" *ngIf="role=='admin' || role=='wholesaler'">
-                <mat-header-cell *matHeaderCellDef> Wholesaler Price ex. GST </mat-header-cell>
+                <mat-header-cell *matHeaderCellDef> Wholesaler Price </mat-header-cell>
                 <mat-cell *matCellDef="let element"> {{element.wholesalerPrice | currency:'AUD':'symbol-narrow':'.2-2'}} </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="prepaymentDiscount" *ngIf="role=='admin' || role=='wholesaler'">
+                <mat-header-cell *matHeaderCellDef> Prepayment Price </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.prepaymentDiscount | currency:'AUD':'symbol-narrow':'.2-2'}}
+                </mat-cell>
               </ng-container>
       
               <ng-container matColumnDef="qty" *ngIf="role!='admin'">
