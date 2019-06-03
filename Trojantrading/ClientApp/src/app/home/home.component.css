@@ -36,10 +36,6 @@ h4{
 	background-color: #C20047 !important;
 }
 
-::ng-deep .mat-cell, .mat-header-cell{
-	padding:15px;
-}
-
 ::ng-deep .mat-header-cell {
     font-size: 14px !important;
     font-weight: bold !important;
@@ -47,7 +43,8 @@ h4{
 
 ::ng-deep .mat-cell {
 	font-size: 16px;
-	font-weight: 500;
+  font-weight: 500;
+  padding: 15px 0;
 }
 
 .filter-wrapper{

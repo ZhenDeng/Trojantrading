@@ -4,7 +4,6 @@ import { ShareService } from '../services/share.service';
 import { ShoppingCartService } from '../services/shopping-cart.service';
 import { ShoppingCart } from '../models/shoppingCart';
 import { AdminService } from '../services/admin.service';
-import { User } from '../models/user';
 import { Router } from '@angular/router';
 import { ShoppingItem } from '../models/shoppingItem';
 import { ApiResponse } from '../models/ApiResponse';
@@ -53,7 +52,7 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
       this.displayedColumns = ['itemcode','name', 'category', 'originalPrice', 'agentPrice', 'qty', 'subTotal', 'remove'];
     }
     else if (this.shareService.readCookie("role") && this.shareService.readCookie("role") == "wholesaler") {
-      this.displayedColumns = ['itemcode','name', 'category', 'originalPrice', 'wholesalerPrice', 'qty', 'subTotal', 'remove'];
+      this.displayedColumns = ['itemcode','name', 'category', 'originalPrice', 'wholesalerPrice', 'prepaymentDiscount', 'qty', 'subTotal', 'remove'];
     }
   }
 
@@ -177,29 +176,28 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
     this.oringinalPriceIncGst = 0;
     if (this.selectedPayment == "onaccount") {
       this.dataSource.forEach(si => {
-        this.oringinalPriceExclGst += si.amount * si.product.originalPrice;
+        this.oringinalPriceIncGst += si.amount * si.product.originalPrice;
         if (this.role == "agent") {
           si.subTotal = si.amount * si.product.agentPrice;
-          this.priceExclGst += si.subTotal;
+          this.priceIncGst += si.subTotal;
         } else if (this.role == "wholesaler") {
           si.subTotal = si.amount * si.product.wholesalerPrice;
-          this.priceExclGst += si.subTotal;
+          this.priceIncGst += si.subTotal;
         }
       });
-      this.gst = this.priceExclGst * 0.1;
-      this.oringinalPriceIncGst = this.oringinalPriceExclGst + this.oringinalPriceExclGst * 0.1;
-      this.priceIncGst = this.gst + this.priceExclGst;
+      this.gst = this.priceIncGst/11;
       this.shoppingCart.totalPrice = this.priceIncGst;
+      this.priceExclGst = this.priceIncGst/11*10;
       this.discount = this.oringinalPriceIncGst - this.priceIncGst;
     } else {
       this.dataSource.forEach(si => {
-        this.oringinalPriceExclGst += si.amount * si.product.originalPrice;
+        this.oringinalPriceIncGst += si.amount * si.product.originalPrice;
         si.subTotal = si.amount * si.product.prepaymentDiscount;
-        this.priceExclGst += si.subTotal;
+        this.priceIncGst += si.subTotal;
       });
-      this.gst = this.priceExclGst * 0.1;
-      this.oringinalPriceIncGst = this.oringinalPriceExclGst + this.oringinalPriceExclGst * 0.1;
-      this.priceIncGst = this.gst + this.priceExclGst;
+      
+      this.priceExclGst = this.priceIncGst/11*10;
+      this.gst = this.priceIncGst/11;
       this.shoppingCart.totalPrice = this.priceIncGst;
       this.discount = this.oringinalPriceIncGst - this.priceIncGst;
     }
@@ -218,29 +216,28 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
       if (res && res.status == "success") {
         if (this.selectedPayment == "onaccount") {
           this.dataSource.forEach(si => {
-            this.oringinalPriceExclGst += si.amount * si.product.originalPrice;
+            this.oringinalPriceIncGst += si.amount * si.product.originalPrice;
             if (this.role == "agent") {
               si.subTotal = si.amount * si.product.agentPrice;
-              this.priceExclGst += si.subTotal;
+              this.priceIncGst += si.subTotal;
             } else if (this.role == "wholesaler") {
               si.subTotal = si.amount * si.product.wholesalerPrice;
-              this.priceExclGst += si.subTotal;
+              this.priceIncGst += si.subTotal;
             }
           });
-          this.gst = this.priceExclGst * 0.1;
-          this.oringinalPriceIncGst = this.oringinalPriceExclGst + this.oringinalPriceExclGst * 0.1;
-          this.priceIncGst = this.gst + this.priceExclGst;
+          this.gst = this.priceIncGst/11;
           this.shoppingCart.totalPrice = this.priceIncGst;
+          this.priceExclGst = this.priceIncGst/11*10;
           this.discount = this.oringinalPriceIncGst - this.priceIncGst;
         } else {
           this.dataSource.forEach(si => {
-            this.oringinalPriceExclGst += si.amount * si.product.originalPrice;
+            this.oringinalPriceIncGst += si.amount * si.product.originalPrice;
             si.subTotal = si.amount * si.product.prepaymentDiscount;
-            this.priceExclGst += si.subTotal;
+            this.priceIncGst += si.subTotal;
           });
-          this.gst = this.priceExclGst * 0.1;
-          this.oringinalPriceIncGst = this.oringinalPriceExclGst + this.oringinalPriceExclGst * 0.1;
-          this.priceIncGst = this.gst + this.priceExclGst;
+          
+          this.priceExclGst = this.priceIncGst/11*10;
+          this.gst = this.priceIncGst/11;
           this.shoppingCart.totalPrice = this.priceIncGst;
           this.discount = this.oringinalPriceIncGst - this.priceIncGst;
         }

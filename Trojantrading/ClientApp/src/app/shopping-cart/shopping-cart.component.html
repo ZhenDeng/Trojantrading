@@ -29,8 +29,7 @@
 
               <ng-container matColumnDef="name">
                 <mat-header-cell *matHeaderCellDef class="mat-table_3fex"> Description </mat-header-cell>
-                <mat-cell *matCellDef="let element" class="mat-table_3fex"> <span
-                    class="productid">#{{element.product.id}}</span>{{element.product.name}} </mat-cell>
+                <mat-cell *matCellDef="let element" class="mat-table_3fex"> {{element.product.name}} </mat-cell>
               </ng-container>
       
               <ng-container matColumnDef="category">
@@ -39,30 +38,36 @@
               </ng-container>
       
               <ng-container matColumnDef="originalPrice">
-                <mat-header-cell *matHeaderCellDef class="mat-table_3fex"> Original Price ex. GST </mat-header-cell>
-                <mat-cell *matCellDef="let element" class="mat-table_3fex"> {{element.product.originalPrice | currency:'AUD':'symbol-narrow':'.2-2'}} </mat-cell>
+                <mat-header-cell *matHeaderCellDef class="mat-table_2fex"> Original Price </mat-header-cell>
+                <mat-cell *matCellDef="let element" class="mat-table_2fex"> {{element.product.originalPrice | currency:'AUD':'symbol-narrow':'.2-2'}} </mat-cell>
               </ng-container>
 
               <!-- buyPrice Column -->
               <ng-container matColumnDef="agentPrice" *ngIf="role=='agent'">
-                <mat-header-cell *matHeaderCellDef class="mat-table_2fex"> Agent Price ex. GST </mat-header-cell>
+                <mat-header-cell *matHeaderCellDef class="mat-table_2fex"> Agent Price </mat-header-cell>
                 <mat-cell *matCellDef="let element" class="mat-table_2fex"> {{element.product.agentPrice | currency:'AUD':'symbol-narrow':'.2-2'}} </mat-cell>
               </ng-container>
 
               <!-- buyPrice Column -->
               <ng-container matColumnDef="wholesalerPrice" *ngIf="role=='wholesaler'">
-                <mat-header-cell *matHeaderCellDef class="mat-table_2fex"> Wholesaler Price ex. GST </mat-header-cell>
+                <mat-header-cell *matHeaderCellDef class="mat-table_2fex"> Wholesaler Price </mat-header-cell>
                 <mat-cell *matCellDef="let element" class="mat-table_2fex"> {{element.product.wholesalerPrice | currency:'AUD':'symbol-narrow':'.2-2'}} </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="prepaymentDiscount" *ngIf="role=='wholesaler'">
+                <mat-header-cell *matHeaderCellDef class="mat-table_2fex"> Prepayment Price </mat-header-cell>
+                <mat-cell *matCellDef="let element" class="mat-table_2fex"> {{element.product.prepaymentDiscount | currency:'AUD':'symbol-narrow':'.2-2'}}
+                </mat-cell>
               </ng-container>
       
               <ng-container matColumnDef="qty">
-                <mat-header-cell *matHeaderCellDef class="mat-table_3fex"> Quantity </mat-header-cell>
-                <mat-cell *matCellDef="let element" class="mat-table_3fex"> <input id="qty{{element.id}}" type="number" (keypress)="isNumberKey($event)" (keyup)="changeQuantity(element)" [(ngModel)]="element.amount"> </mat-cell>
+                <mat-header-cell *matHeaderCellDef class="mat-table_2fex"> Quantity </mat-header-cell>
+                <mat-cell *matCellDef="let element" class="mat-table_2fex"> <input id="qty{{element.id}}" type="number" (keypress)="isNumberKey($event)" (keyup)="changeQuantity(element)" [(ngModel)]="element.amount"> </mat-cell>
               </ng-container>
       
               <ng-container matColumnDef="subTotal">
-                <mat-header-cell *matHeaderCellDef class="mat-table_3fex">Line Amount ex. GST</mat-header-cell>
-                <mat-cell *matCellDef="let element" class="mat-table_3fex">{{element.subTotal | currency:'AUD':'symbol-narrow':'.2-2'}}</mat-cell>
+                <mat-header-cell *matHeaderCellDef class="mat-table_2fex">Line Amount </mat-header-cell>
+                <mat-cell *matCellDef="let element" class="mat-table_2fex">{{element.subTotal | currency:'AUD':'symbol-narrow':'.2-2'}}</mat-cell>
               </ng-container>
       
               <ng-container matColumnDef="remove">
@@ -95,12 +100,12 @@
               <p class="totalprice">{{gst | currency:'AUD':'symbol-narrow':'.2-2'}}</p>
             </div>
             <div class="totalrow">
-              <p class="totaltext">You will pay Inc. GST</p>
-              <p class="totalprice">{{priceIncGst | currency:'AUD':'symbol-narrow':'.2-2'}}</p>
-            </div>
-            <div class="totalrow">
               <p class="totaltext">Total Discount Earned</p>
               <p class="totalprice">{{discount | currency:'AUD':'symbol-narrow':'.2-2'}}</p>
+            </div>
+            <div class="totalrow">
+              <p class="totaltext">You will pay Inc. GST</p>
+              <p class="totalprice">{{priceIncGst | currency:'AUD':'symbol-narrow':'.2-2'}}</p>
             </div>
             <div class="totalrow buttonrow">
               <button class="btn btn-long" (click)="continueShopping()">Continue Shopping</button>

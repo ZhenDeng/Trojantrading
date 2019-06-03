@@ -127,11 +127,11 @@ export class EditOrderComponent implements OnInit {
           item.subTotal = 0;
         }else{
           if (this.currentRole == 'agent') {
-            item.subTotal = item.product.agentPrice * (_.toNumber(item.amount)+0.1);
+            item.subTotal = item.product.agentPrice * (_.toNumber(item.amount));
           } else if (this.currentRole == 'wholesaler') {
-            item.subTotal = item.product.wholesalerPrice * (_.toNumber(item.amount)+0.1);
+            item.subTotal = item.product.wholesalerPrice * (_.toNumber(item.amount));
           } else {
-            item.subTotal = item.product.originalPrice * (_.toNumber(item.amount)+0.1);
+            item.subTotal = item.product.originalPrice * (_.toNumber(item.amount));
           }
         }
       })
@@ -140,7 +140,7 @@ export class EditOrderComponent implements OnInit {
         if(_.toNumber(item.amount) == 0){
           item.subTotal = 0;
         }else{
-          item.subTotal = item.product.prepaymentDiscount * (_.toNumber(item.amount)+0.1);
+          item.subTotal = item.product.prepaymentDiscount * (_.toNumber(item.amount));
         }
       });
     }
