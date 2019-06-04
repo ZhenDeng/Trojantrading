@@ -76,7 +76,7 @@ export class EditProductComponent implements OnInit {
 
   isNotValidField(path: string, validation: any): void {
     if (!this.userFormGroup.get(path).valid) {
-      this.shareSevice.showValidator("." + validation[0].class, validation[0].message, "right", "error");
+      this.shareSevice.showValidator("." + validation[0].class, validation[0].message, "left", "error");
     }
   }
 

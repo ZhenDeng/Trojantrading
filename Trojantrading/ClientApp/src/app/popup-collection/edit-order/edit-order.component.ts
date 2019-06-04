@@ -89,7 +89,7 @@ export class EditOrderComponent implements OnInit {
 
   isNotValidField(path: string, validation: any): void {
     if (!this.orderFormGroup.get(path).valid) {
-      this.shareService.showValidator("." + validation[0].class, validation[0].message, "right", "error");
+      this.shareService.showValidator("." + validation[0].class, validation[0].message, "left", "error");
     }
   }
 
@@ -111,7 +111,7 @@ export class EditOrderComponent implements OnInit {
 
   onQtyChange(item: ShoppingItem, qty: number) {
     if (!qty) {
-      this.shareService.showValidator("#qty" + item.id, "Please enter quantity number", "right", "error");
+      this.shareService.showValidator("#qty" + item.id, "Please enter quantity number", "left", "error");
       item.amount = 0;
     }
 

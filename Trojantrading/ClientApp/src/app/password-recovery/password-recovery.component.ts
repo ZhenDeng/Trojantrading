@@ -37,21 +37,21 @@ export class PasswordRecoveryComponent implements OnInit {
     if (this.userFormGroup.valid) {
       this.userService.UpdatePassword(_.toNumber(this.shareService.readCookie("recoverUserId")), this.userFormGroup.get("newPassword").value).subscribe((res: ApiResponse) => {
         if(res && res.status == "success"){
-          this.shareService.showSuccess(".btn-long", res.message, "right");
+          this.shareService.showSuccess(".btn-long", res.message, "left");
           this.shareService.createCookie("recoverToken", "", 1);
           this.shareService.createCookie("recoverUser", "", 1);
           setTimeout(() => {
             this.router.navigate(['/login']);
           }, 2000);
         }else{
-          this.shareService.showError(".btn-long", res.message, "right");
+          this.shareService.showError(".btn-long", res.message, "left");
         }
       },
         (error: any) => {
           console.info(error);
         });
     } else {
-      this.shareService.showError(".btn-long", "password can not be empty", "right");
+      this.shareService.showError(".btn-long", "password can not be empty", "left");
     }
   }
 }

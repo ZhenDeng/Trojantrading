@@ -135,7 +135,7 @@ export class AdministrationComponent implements OnInit, OnDestroy {
   changeStatus(order: Order) {
     this.loadContent = false;
     this.orderService.updateOrder(order).subscribe((res: any) => {
-      this.shareSevice.showSuccess(`#status${order.id}`, res.message, "right");
+      this.shareSevice.showSuccess(`#status${order.id}`, res.message, "left");
       this.loadContent = true;
     },
       (error: any) => {
@@ -203,13 +203,13 @@ export class AdministrationComponent implements OnInit, OnDestroy {
         user = result
         this.adminService.AddUser(user).subscribe((res: ApiResponse) => {
           if (res.status == "success") {
-            this.shareSevice.showSuccess(".addnewuser", res.message, "right");
+            this.shareSevice.showSuccess(".addnewuser", res.message, "left");
             setTimeout(() => {
               this.getUsers();
             }, 1500);
           } else {
             this.loadContent = true;
-            this.shareSevice.showError(".addnewuser", res.message, "right");
+            this.shareSevice.showError(".addnewuser", res.message, "left");
           }
         },
           (error: any) => {
@@ -234,13 +234,13 @@ export class AdministrationComponent implements OnInit, OnDestroy {
         orderModel.createdDate = order.createdDate;
         this.orderService.updateOrder(orderModel).subscribe((res: ApiResponse) => {
           if (res.status == "success") {
-            this.shareSevice.showSuccess("#editorder" + order.id, res.message, "right");
+            this.shareSevice.showSuccess("#editorder" + order.id, res.message, "left");
             setTimeout(() => {
               this.getOrders();
             }, 1500);
           } else {
             this.loadContent = true;
-            this.shareSevice.showError("#editorder" + order.id, res.message, "right");
+            this.shareSevice.showError("#editorder" + order.id, res.message, "left");
           }
         },
           (error: any) => {
@@ -261,13 +261,13 @@ export class AdministrationComponent implements OnInit, OnDestroy {
         this.loadContent = false;
         this.orderService.DeleteOrder(order.id).subscribe((res: ApiResponse) => {
           if (res.status == "success") {
-            this.shareSevice.showSuccess("#deleteorder" + order.id, res.message, "right");
+            this.shareSevice.showSuccess("#deleteorder" + order.id, res.message, "left");
             setTimeout(() => {
               this.getOrders();
             }, 1500);
           } else {
             this.loadContent = true;
-            this.shareSevice.showError("#deleteorder" + order.id, res.message, "right");
+            this.shareSevice.showError("#deleteorder" + order.id, res.message, "left");
           }
         },
           (error: any) => {
@@ -294,13 +294,13 @@ export class AdministrationComponent implements OnInit, OnDestroy {
         userModel.sendEmail = user.sendEmail;
         this.adminService.UpdateUser(userModel).subscribe((res: ApiResponse) => {
           if (res.status == "success") {
-            this.shareSevice.showSuccess("#edit" + user.id, res.message, "right");
+            this.shareSevice.showSuccess("#edit" + user.id, res.message, "left");
             setTimeout(() => {
               this.getUsers();
             }, 1500);
           } else {
             this.loadContent = true;
-            this.shareSevice.showError("#edit" + user.id, res.message, "right");
+            this.shareSevice.showError("#edit" + user.id, res.message, "left");
           }
         },
           (error: any) => {
@@ -321,13 +321,13 @@ export class AdministrationComponent implements OnInit, OnDestroy {
         this.loadContent = false;
         this.adminService.DeleteUser(user.id).subscribe((res: ApiResponse) => {
           if (res.status == "success") {
-            this.shareSevice.showSuccess("#delete" + user.id, res.message, "right");
+            this.shareSevice.showSuccess("#delete" + user.id, res.message, "left");
             setTimeout(() => {
               this.getUsers();
             }, 1500);
           } else {
             this.loadContent = true;
-            this.shareSevice.showError("#delete" + user.id, res.message, "right");
+            this.shareSevice.showError("#delete" + user.id, res.message, "left");
           }
         },
           (error: any) => {
@@ -365,13 +365,13 @@ export class AdministrationComponent implements OnInit, OnDestroy {
         this.loadContent = false;
         this.headInformationService.UpdateHeadInfomation(element).subscribe((res: ApiResponse) => {
           if (res && res.status == "success") {
-            this.shareSevice.showSuccess("#editheader" + element.id, res.message, "right");
+            this.shareSevice.showSuccess("#editheader" + element.id, res.message, "left");
             setTimeout(() => {
               this.getHeadInformation();
             }, 1500);
           } else {
             this.loadContent = true;
-            this.shareSevice.showError("#editheader" + element.id, res.message, "right");
+            this.shareSevice.showError("#editheader" + element.id, res.message, "left");
           }
         },
           (error: any) => {
@@ -392,13 +392,13 @@ export class AdministrationComponent implements OnInit, OnDestroy {
         this.loadContent = false;
         this.headInformationService.DeleteHeadInfomation(element).subscribe((res: ApiResponse) => {
           if (res.status == "success") {
-            this.shareSevice.showSuccess("#deleteheader" + element.id, res.message, "right");
+            this.shareSevice.showSuccess("#deleteheader" + element.id, res.message, "left");
             setTimeout(() => {
               this.getHeadInformation();
             }, 1500);
           } else {
             this.loadContent = true;
-            this.shareSevice.showError("#deleteheader" + element.id, res.message, "right");
+            this.shareSevice.showError("#deleteheader" + element.id, res.message, "left");
           }
         },
           (error: any) => {
@@ -419,13 +419,13 @@ export class AdministrationComponent implements OnInit, OnDestroy {
         this.loadContent = false;
         this.fileService.DeletePdfBoards(element).subscribe((res: ApiResponse) => {
           if (res.status == "success") {
-            this.shareSevice.showSuccess("#deletepdf" + element.id, res.message, "right");
+            this.shareSevice.showSuccess("#deletepdf" + element.id, res.message, "left");
             setTimeout(() => {
               this.getPdfBoards();
             }, 1500);
           } else {
             this.loadContent = true;
-            this.shareSevice.showError("#deletepdf" + element.id, res.message, "right");
+            this.shareSevice.showError("#deletepdf" + element.id, res.message, "left");
           }
         },
           (error: any) => {
@@ -508,9 +508,9 @@ export class AdministrationComponent implements OnInit, OnDestroy {
           this.fileService.WritePdf(element.id, this.gst, this.priceExclGst, this.discount, element.userId).subscribe((res: ApiResponse) => {
             if (res.status == "success") {
               window.open("/order_" + element.id + ".pdf", "_blank");
-              this.shareSevice.showSuccess("#pdf" + element.id, res.message, "right");
+              this.shareSevice.showSuccess("#pdf" + element.id, res.message, "left");
             } else {
-              this.shareSevice.showError("#pdf" + element.id, res.message, "right");
+              this.shareSevice.showError("#pdf" + element.id, res.message, "left");
             }
             this.loadContent = true;
           },

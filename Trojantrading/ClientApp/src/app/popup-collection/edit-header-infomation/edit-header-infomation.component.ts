@@ -35,7 +35,7 @@ export class EditHeaderInfomationComponent implements OnInit {
     if(this.userFormGroup.valid){
       this.dialogRef.close(this.userFormGroup.value);
     }else{
-      this.shareSevice.showError(".imagePathValidate", "Please enter image path", "right");
+      this.shareSevice.showError(".imagePathValidate", "Please enter image path", "left");
     }
   }
 

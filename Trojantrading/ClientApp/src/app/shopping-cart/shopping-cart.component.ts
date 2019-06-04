@@ -113,7 +113,7 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
             this.loadContent = true;
           });
       } else {
-        this.shareService.showError(".checkoutbtn", res.message, "right");
+        this.shareService.showError(".checkoutbtn", res.message, "left");
       }
     },
       (error: any) => {
@@ -143,7 +143,7 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
                 console.info(error);
               });
           } else {
-            this.shareService.showError(".shoppingItem" + shoppingItem.id, res.message, "right");
+            this.shareService.showError(".shoppingItem" + shoppingItem.id, res.message, "left");
           }
         },
           (error: any) => {
@@ -157,7 +157,7 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
   changeQuantity(item: ShoppingItem): void {
     if (item.amount < 1) {
       item.amount = 1;
-      this.shareService.showError("#qty" + item.id, "Minimum qty is 1", "right");
+      this.shareService.showError("#qty" + item.id, "Minimum qty is 1", "left");
     } else {
       this.updatePrice();
     }
@@ -247,7 +247,7 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
         } else {
           this.selectedPayment = "prepay";
         }
-        this.shareService.showError(".payment", res.message, "right");
+        this.shareService.showError(".payment", res.message, "left");
       }
     },
       (error: any) => {

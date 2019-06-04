@@ -40,7 +40,7 @@ export class ShareService {
     message: string,
     position: 'top' | 'right' | 'bottom' | 'left',
   ) => {
-    this.showValidator(selector, message, position, 'error', true, true);
+    this.showValidator(selector, message, position, 'error', true, false);
   }
 
   showSuccess = (

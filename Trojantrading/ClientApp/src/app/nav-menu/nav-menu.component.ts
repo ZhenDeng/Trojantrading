@@ -118,7 +118,7 @@ export class NavMenuComponent implements OnInit {
                 console.info(error);
               });
           } else {
-            this.shareService.showError("shoppingItem" + shoppingItem.id, res.message, "right");
+            this.shareService.showError("shoppingItem" + shoppingItem.id, res.message, "left");
           }
         },
           (error: any) => {

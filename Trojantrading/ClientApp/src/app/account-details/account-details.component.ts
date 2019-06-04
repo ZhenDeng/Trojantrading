@@ -79,16 +79,16 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
 
   updateInfo(): void {
     if (!this.userFormGroup.get("abn").valid) {
-      this.shareService.showError(".abn", "Australian Business Number can not be empty", "right");
+      this.shareService.showError(".abn", "Australian Business Number can not be empty", "left");
     }
     if (!this.userFormGroup.get("email").valid) {
-      this.shareService.showError(".email", "Email can not be empty", "right");
+      this.shareService.showError(".email", "Email can not be empty", "left");
     }
     if (!this.userFormGroup.get("phone").valid) {
-      this.shareService.showError(".phone", "Phone can not be empty", "right");
+      this.shareService.showError(".phone", "Phone can not be empty", "left");
     }
     if (!this.userFormGroup.get("mobile").valid) {
-      this.shareService.showError(".mobile", "Mobile can not be empty", "right");
+      this.shareService.showError(".mobile", "Mobile can not be empty", "left");
     }
     if (this.userFormGroup.valid) {
       this.user.trn = this.userFormGroup.get("trn").value;
@@ -98,7 +98,7 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
       this.user.mobile = this.userFormGroup.get("mobile").value;
       this.adminService.UpdateUser(this.user).subscribe((res: ApiResponse) => {
         if (res && res.status == "success") {
-          this.shareService.showSuccess(".updateinfo", res.message, "right");
+          this.shareService.showSuccess(".updateinfo", res.message, "left");
           setTimeout(() => {
             this.adminService.GetUserByAccount(_.toNumber(this.shareService.readCookie("userId"))).subscribe((res: User) => {
               this.user = res;
@@ -113,7 +113,7 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
               });
           }, 2000);
         } else {
-          this.shareService.showError(".updateinfo", res.message, "right");
+          this.shareService.showError(".updateinfo", res.message, "left");
         }
       },
         (error: any) => {
@@ -124,13 +124,13 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
 
   updatePassword(): void {
     if (!this.userPasswordGroup.get("password").valid) {
-      this.shareService.showError(".password", "Current password can not be empty", "right");
+      this.shareService.showError(".password", "Current password can not be empty", "left");
     }
     if (!this.userPasswordGroup.get("newpassord").valid) {
-      this.shareService.showError(".newpassord", "New password can not be empty", "right");
+      this.shareService.showError(".newpassord", "New password can not be empty", "left");
     }
     if (!this.userPasswordGroup.get("confirmpassord").valid) {
-      this.shareService.showError(".confirmpassord", "Confirm password can not be empty", "right");
+      this.shareService.showError(".confirmpassord", "Confirm password can not be empty", "left");
     }
     if (this.userPasswordGroup.valid) {
       if (this.userPasswordGroup.get("confirmpassord").value == this.userPasswordGroup.get("newpassord").value) {
@@ -139,26 +139,26 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
             if (res && res.status == "success") {
               this.adminService.UpdatePassword(_.toNumber(this.shareService.readCookie("userId")), this.userPasswordGroup.get("newpassord").value).subscribe((res: ApiResponse) => {
                 if(res && res.status == "success"){
-                  this.shareService.showSuccess(".updatepassword", res.message, "right");
+                  this.shareService.showSuccess(".updatepassword", res.message, "left");
                 }else{
-                  this.shareService.showError(".updatepassword", res.message, "right");
+                  this.shareService.showError(".updatepassword", res.message, "left");
                 }
               },
                 (error: any) => {
                   console.info(error);
                 });
             } else {
-              this.shareService.showError(".updatepassword", res.message, "right");
+              this.shareService.showError(".updatepassword", res.message, "left");
             }
           },
             (error: any) => {
               console.info(error);
             });
         }else{
-          this.shareService.showError(".newpassord", "Your password Must be at least 6 characters long", "right");
+          this.shareService.showError(".newpassord", "Your password Must be at least 6 characters long", "left");
         }
       } else {
-        this.shareService.showError(".confirmpassord", "Confirm password must be the same as new password", "right");
+        this.shareService.showError(".confirmpassord", "Confirm password must be the same as new password", "left");
       }
     }
   }
@@ -173,7 +173,7 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
       if (result) {
         this.adminService.UpdateUser(result).subscribe((res: ApiResponse) => {
           if (res && res.status == "success") {
-            this.shareService.showSuccess("."+type, res.message, "right");
+            this.shareService.showSuccess("."+type, res.message, "left");
             setTimeout(() => {
               this.adminService.GetUserByAccount(_.toNumber(this.shareService.readCookie("userId"))).subscribe((res: User) => {
                 this.user = res;
@@ -188,7 +188,7 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
                 });
             }, 2000);
           } else {
-            this.shareService.showError("."+type, res.message, "right");
+            this.shareService.showError("."+type, res.message, "left");
           }
         },
           (error: any) => {

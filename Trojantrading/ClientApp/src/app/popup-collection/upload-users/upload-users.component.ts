@@ -34,18 +34,18 @@ export class UploadUsersComponent implements OnInit {
     if(this.file){
       this.formData.append(this.file.name, this.file);
       if(_.lowerCase(this.file.name.split('.')[1]) != "xlsx" && _.lowerCase(this.file.name.split('.')[1]) != "xls"){
-        this.shareService.showError(".uploadusers", "Please upload a excel file", "right");
+        this.shareService.showError(".uploadusers", "Please upload a excel file", "left");
       }else{
         this.loadContent = false;
         this.fileService.UploadUsers(this.formData).subscribe((res: ApiResponse) => {
           if(res.status == "success"){
-            this.shareService.showSuccess(".uploadusers", res.message, "right");
+            this.shareService.showSuccess(".uploadusers", res.message, "left");
             setTimeout(() => {
               this.loadContent = true;
               this.dialogRef.close();
             }, 1500);
           }else{
-            this.shareService.showError(".uploadusers", res.message, "right");
+            this.shareService.showError(".uploadusers", res.message, "left");
             this.loadContent = true;
           }
         },
@@ -55,7 +55,7 @@ export class UploadUsersComponent implements OnInit {
           });
       }
     }else{
-      this.shareService.showError(".uploadusers", "Upload file is empty", "right");
+      this.shareService.showError(".uploadusers", "Upload file is empty", "left");
     }
   }
 

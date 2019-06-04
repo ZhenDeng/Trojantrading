@@ -53,13 +53,13 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     
     if(!this.userFormGroup.get('account').valid){
-      this.shareService.showError('#account', 'Please enter your account', "right");
+      this.shareService.showError('#account', 'Please enter your account', "left");
     }
     if(!this.userFormGroup.get('password').valid){
-      this.shareService.showError('#password', 'Please enter your password', "right");
+      this.shareService.showError('#password', 'Please enter your password', "left");
     }
     if(!this.checked){
-      this.shareService.showError('#checkbox', 'Please check the t&c to use our service', "right");
+      this.shareService.showError('#checkbox', 'Please check the t&c to use our service', "left");
     }
 
     if(this.userFormGroup.valid && this.checked){
@@ -74,10 +74,10 @@ export class LoginComponent implements OnInit {
           this.router.navigate(['/home']);
         }else if(data && data.userName.toLowerCase() == "inactive"){
           this.loadContent = true;
-          this.shareService.showError(".loginbtn", "Your Account Has Been Suspended", "right");
+          this.shareService.showError(".loginbtn", "Your Account Has Been Suspended", "left");
         }else if(data && data.userName.toLowerCase() == "wrong"){
           this.loadContent = true;
-          this.shareService.showError(".loginbtn", "User name or password is invalid", "right");
+          this.shareService.showError(".loginbtn", "User name or password is invalid", "left");
         }
       },
         (error: any) => {
@@ -115,7 +115,7 @@ export class LoginComponent implements OnInit {
               this.showResetText = true;
             }
             else{
-              this.shareService.showError(".sendresetemail", "Your Account Has Been Suspended", "right");
+              this.shareService.showError(".sendresetemail", "Your Account Has Been Suspended", "left");
             }
           },
             (error: any) => {
@@ -123,14 +123,14 @@ export class LoginComponent implements OnInit {
             });
         }
         else{
-          this.shareService.showError(".sendresetemail", res.message, "right");
+          this.shareService.showError(".sendresetemail", res.message, "left");
         }
       },
         (error: any) => {
           console.info(error);
         });
     } else {
-      this.shareService.showError(".sendresetemail", "Please enter valid email address", "right");
+      this.shareService.showError(".sendresetemail", "Please enter valid email address", "left");
     }
   }
 
