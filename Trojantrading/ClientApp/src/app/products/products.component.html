@@ -19,7 +19,7 @@
         </a>
       </nav>
       <loading-screen *ngIf="!loadContent" [showBlurTable]="false" (currentLoadingStatus)="onLoading($event)"></loading-screen>
-      <ng-container *ngIf="!isHomeComponentDestroyed">
+      <ng-container>
         <section class="product-wrapper">
           <h4>{{title}}</h4>
           <button class="btn btn-green addnewproduct" (click)="addNewProduct()" *ngIf="role =='admin'">Add New Product</button>
