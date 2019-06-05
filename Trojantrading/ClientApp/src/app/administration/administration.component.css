@@ -60,6 +60,10 @@ h4{
 	flex: 2 !important;
 }
 
+::ng-deep .mat-tab-body-wrapper {
+	min-height: 300px;
+}
+
 .filter-wrapper{
 	width: 300px;
 	display: block;

@@ -20,3 +20,4 @@
 .vs/Trojantrading/config/applicationhost.config
 Trojantrading/appsettings.json
 Trojantrading/appsettings.json
+*.pdf

@@ -27,6 +27,9 @@ import { Subject } from 'rxjs';
 import 'rxjs/add/operator/takeUntil';
 import { UploadImageComponent } from '../popup-collection/upload-image/upload-image.component';
 import { DeleteConfirmComponent } from '../popup-collection/delete-confirm/delete-confirm.component';
+import { Product } from '../models/Product';
+
+declare let alasql;
 
 @Component({
   selector: 'app-administration',
@@ -179,16 +182,45 @@ export class AdministrationComponent implements OnInit, OnDestroy {
   downloadExcel() {
     this.convertDateFormat();
 
-    let exportOrdersArray = this.orders.map(x => ({
-      "Invoice Number": x.invoiceNo,
-      "Customer": x.user.bussinessName,
-      "CreatedDate": this.datePipe.transform(x.createdDate, 'yyyy-MM-dd'),
-      "Total Price Inc GST": x.totalPrice,
-      "Payment Method": x.clientMessage,
-      "Status": x.orderStatus
-    }));
-    this.fileService.exportAsExcelFile(exportOrdersArray, 'TrojanTrading_Orders_' + this.strDateFrom + '_' + this.strDateTo);
+    if (this.orders.length > 0) {
+      let exportArray = [];
+      let optArray = [];
+      this.orders.forEach(order => {
+        let itemArray = [];
+         order.shoppingCart.shoppingItems.forEach(item => {
+          itemArray.push({
+             "Item Code": item.product.itemCode,
+             "Product Name": item.product.name,
+             "Original Price": `$${item.product.originalPrice}`,
+             "Buy Price": '$' + this.getBuyPrice(order.user.role,item.product),
+             "Order Qty": item.amount,
+             "Line Amount": '$' + (item.amount * this.getBuyPrice(order.user.role,item.product)).toFixed(2)
+           })
+         });
+         exportArray.push(itemArray);
+         optArray.push({"sheetid": 'Order_' +order.id, "header": true });
+      });
+
+      const fileName = 'TrojanTrading_Orders_' + this.strDateFrom + '_' + this.strDateTo;
+      let res = alasql('SELECT INTO XLSX("' + fileName +'.xlsx",?) FROM ?',
+                       [optArray,exportArray]);
+
+    } else {
+      this.shareService.openSnackBar('No available data for export', 'error');
+    }
+
   }
+
+  getBuyPrice(userRole:string,product: Product):number {
+    if (userRole === 'agent') {
+      return product.agentPrice;
+    } else if (userRole === 'wholesaler') {
+      return product.wholesalerPrice;
+    } else {
+      return product.originalPrice;
+    }
+  }
+
 
   addNewUser(): void {
     const dialogRef = this.dialog.open(EditUserComponent, {

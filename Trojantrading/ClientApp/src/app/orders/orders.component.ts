@@ -1,3 +1,4 @@
+import { Product } from './../models/Product';
 import { FileService } from './../services/file.service';
 import { MatTableDataSource } from '@angular/material';
 import { Component, OnInit, OnDestroy } from '@angular/core';
@@ -11,6 +12,7 @@ import { DatePipe } from '@angular/common';
 import { Subject } from 'rxjs';
 import 'rxjs/add/operator/takeUntil';
 
+declare let alasql;
 
 @Component({
   selector: 'app-orders',
@@ -57,6 +59,12 @@ export class OrdersComponent implements OnInit, OnDestroy {
     //admin user parse empty userid to get all other users' order records
     this.userId = this.role === "admin" ? '' : this.shareService.readCookie("userId");
 
+    this.getOrders();
+
+  }
+
+  getOrders() {
+    
     this.convertDateFormat();
 
     this.orderService.getOrdersByUserID(this.userId, this.strDateFrom, this.strDateTo).takeUntil(this.ngUnsubscribe)
@@ -68,7 +76,6 @@ export class OrdersComponent implements OnInit, OnDestroy {
     (error: any) => {
       console.info(error);
     });
-
   }
 
   convertDateFormat(): void {
@@ -78,23 +85,49 @@ export class OrdersComponent implements OnInit, OnDestroy {
 
   downloadExcel() {
     this.convertDateFormat();
+    if (this.orders.length > 0) {
+      let exportArray = [];
+      let optArray = [];
+      this.orders.forEach(order => {
+        let itemArray = [];
+         order.shoppingCart.shoppingItems.forEach(item => {
+          itemArray.push({
+             "Item Code": item.product.itemCode,
+             "Product Name": item.product.name,
+             "Original Price": `$${item.product.originalPrice}`,
+             "Buy Price": '$' + this.getBuyPrice(item.product),
+             "Order Qty": item.amount,
+             "Line Amount": '$' + (item.amount * this.getBuyPrice(item.product)).toFixed(2)
+           })
+         });
+         exportArray.push(itemArray);
+         optArray.push({"sheetid": 'Order_' +order.id, "header": true });
+      });
 
-    let exportOrdersArray = this.orders.map(x => ({
-      "Invoice Number": x.invoiceNo,
-      "Customer": x.user.bussinessName,
-      "Created Date": this.datePipe.transform(x.createdDate, 'yyyy-MM-dd'),
-      "Total Price Inc GST": x.totalPrice,
-      "Payment Method": x.clientMessage,
-      "Status": x.orderStatus
-    }));
+      const fileName = 'TrojanTrading_Orders_' + this.strDateFrom + '_' + this.strDateTo;
+      let res = alasql('SELECT INTO XLSX("' + fileName +'.xlsx",?) FROM ?',
+                       [optArray,exportArray]);
 
+    } else {
+      this.shareService.openSnackBar('No available data for export', 'error');
+    }
 
-    this.fileService.exportAsExcelFile(exportOrdersArray, 'TrojanTrading_Orders_' + this.strDateFrom + '_' + this.strDateTo);
+    // this.fileService.exportAsExcelFile(exportOrdersArray, 'TrojanTrading_Orders_' + this.strDateFrom + '_' + this.strDateTo);
 
   }
 
   onLoading(currentLoadingStatus: boolean) {
     this.loadContent = !currentLoadingStatus;
+  }
+
+  getBuyPrice(product: Product):number {
+    if (this.role === 'agent') {
+      return product.agentPrice;
+    } else if (this.role === 'wholesaler') {
+      return product.wholesalerPrice;
+    } else {
+      return product.originalPrice;
+    }
   }
 
   applyFilter(value: string) {

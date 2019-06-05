@@ -245,8 +245,9 @@ namespace Trojantrading.Repositories
 
             foreach (var order in orders)
             {
-                var userInfo = userRepository.GetUserByAccount(order.UserId);
-                order.User = userInfo;
+                var orderDetails = GetOrdersWithShoppingItems(order.Id);
+                order.ShoppingCart = orderDetails.ShoppingCart;
+                order.User = orderDetails.User;
             }
 
             return orders;
@@ -265,8 +266,9 @@ namespace Trojantrading.Repositories
 
             foreach (var order in orders)
             {
-                var userInfo = userRepository.GetUserByAccount(order.UserId);
-                order.User = userInfo;
+                var orderDetails = GetOrdersWithShoppingItems(order.Id);
+                order.ShoppingCart = orderDetails.ShoppingCart;
+                order.User = orderDetails.User;
             }
             return orders;
 
