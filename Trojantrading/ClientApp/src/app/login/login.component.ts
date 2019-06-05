@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../services/user.service';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { UserResponse, ApiResponse } from '../models/ApiResponse';
 import { NavbarService } from '../services/navbar.service';
 import { ShareService } from '../services/share.service';
@@ -33,8 +33,7 @@ export class LoginComponent implements OnInit {
     private formBuilder: FormBuilder,
     private nav: NavbarService,
     private shareService: ShareService,
-    public dialog: MatDialog,
-    private activatedRouter: ActivatedRoute) {
+    public dialog: MatDialog) {
     this.userFormGroup = this.formBuilder.group({
       account: new FormControl("", Validators.compose([Validators.required])),
       password: new FormControl("", Validators.compose([Validators.required]))
@@ -53,13 +52,13 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     
     if(!this.userFormGroup.get('account').valid){
-      this.shareService.showError('#account', 'Please enter your account', "right");
+      this.shareService.openSnackBar('Please enter your account', "error");
     }
     if(!this.userFormGroup.get('password').valid){
-      this.shareService.showError('#password', 'Please enter your password', "right");
+      this.shareService.openSnackBar('Please enter your password', "error");
     }
     if(!this.checked){
-      this.shareService.showError('#checkbox', 'Please check the t&c to use our service', "right");
+      this.shareService.openSnackBar('Please check the t&c to use our service', "error");
     }
 
     if(this.userFormGroup.valid && this.checked){
@@ -74,10 +73,10 @@ export class LoginComponent implements OnInit {
           this.router.navigate(['/home']);
         }else if(data && data.userName.toLowerCase() == "inactive"){
           this.loadContent = true;
-          this.shareService.showError(".loginbtn", "Your Account Has Been Suspended", "right");
+          this.shareService.openSnackBar("Your Account Has Been Suspended", "error");
         }else if(data && data.userName.toLowerCase() == "wrong"){
           this.loadContent = true;
-          this.shareService.showError(".loginbtn", "User name or password is invalid", "right");
+          this.shareService.openSnackBar("User name or password is invalid", "error");
         }
       },
         (error: any) => {
@@ -115,7 +114,7 @@ export class LoginComponent implements OnInit {
               this.showResetText = true;
             }
             else{
-              this.shareService.showError(".sendresetemail", "Your Account Has Been Suspended", "right");
+              this.shareService.openSnackBar("Your Account Has Been Suspended", "error");
             }
           },
             (error: any) => {
@@ -123,14 +122,14 @@ export class LoginComponent implements OnInit {
             });
         }
         else{
-          this.shareService.showError(".sendresetemail", res.message, "right");
+          this.shareService.openSnackBar(res.message, "error");
         }
       },
         (error: any) => {
           console.info(error);
         });
     } else {
-      this.shareService.showError(".sendresetemail", "Please enter valid email address", "right");
+      this.shareService.openSnackBar("Please enter valid email address", "error");
     }
   }
 

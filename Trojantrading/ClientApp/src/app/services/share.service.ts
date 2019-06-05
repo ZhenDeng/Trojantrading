@@ -1,8 +1,5 @@
-/// <reference path="../../../node_modules/@types/jquery/index.d.ts" />
-/// <reference path="../../../node_modules/@types/jqueryui/index.d.ts" />
-/// <reference path="./jquery.extension.d.ts" />
-
 import { Injectable } from '@angular/core';
+import { MatSnackBar } from '@angular/material';
 
 declare var jquery: any;
 declare var $: any;
@@ -10,11 +7,12 @@ declare var $: any;
 @Injectable()
 export class ShareService {
 
-  constructor() { }
+  constructor(private _snackBar: MatSnackBar) { }
 
   savecookies(name: string, value: string, mins: number) {
     this.createCookie(name, value, mins);
   }
+
   createCookie(name: string, value: string, mins: number) {
     var expires = "";
     if (mins) {
@@ -24,6 +22,7 @@ export class ShareService {
     }
     document.cookie = name + "=" + value + expires + "; path=/";
   }
+
   readCookie(name: string) {
     var nameEQ = name + "=";
     var ca = document.cookie.split(';');
@@ -35,34 +34,16 @@ export class ShareService {
     return null;
   }
 
-  showError = (
-    selector: string,
-    message: string,
-    position: 'top' | 'right' | 'bottom' | 'left',
-  ) => {
-    this.showValidator(selector, message, position, 'error', true, true);
-  }
-
-  showSuccess = (
-    selector: string,
-    message: string,
-    position: 'top' | 'right' | 'bottom' | 'left',
-  ) => {
-    this.showValidator(selector, message, position, 'success', true, false);
-  }
-
-  showValidator = (
-    selector: string,
-    message: string,
-    position: 'top' | 'right' | 'bottom' | 'left',
-    messageType: 'success' | 'error' | 'confirm' | 'warning',
-    isStayOut: boolean = false,
-    isStayAlive: boolean = false,
-    finishTime?: number,
-    confirmCallback?: Function,
-    confirmOptions?: string[],
-    confirmTheme?: string
-  ) => {
-    $(selector).showValidator(message, messageType, position, isStayOut, isStayAlive, finishTime, confirmCallback, confirmTheme, confirmOptions);
+openSnackBar = (
+      message: string
+    , messageType: 'success' | 'error'
+) =>  {
+  this._snackBar.open(message, "Dismiss", {
+      duration: 1500,
+      data: {message: message, messageType: messageType},
+      horizontalPosition: "center",
+      verticalPosition: "bottom",
+      panelClass: messageType
+    });
   }
 }

@@ -41,7 +41,7 @@ export class EditUserComponent implements OnInit {
   }
 
   constructor(private formBuilder: FormBuilder,
-    private shareSevice: ShareService,
+    private shareService: ShareService,
     public dialogRef: MatDialogRef<EditUserComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) {
     if(this.data&&this.data.user){
@@ -137,7 +137,7 @@ export class EditUserComponent implements OnInit {
 
   isNotValidField(path: string, validation: any): void {
     if (!this.userFormGroup.get(path).valid) {
-      this.shareSevice.showValidator("." + validation[0].class, validation[0].message, "right", "error");
+      this.shareService.openSnackBar(validation[0].message, "error");
     }
   }
 

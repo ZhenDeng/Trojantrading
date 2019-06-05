@@ -211,10 +211,10 @@ export class HomeComponent implements OnInit, OnDestroy {
             this.loadContent = true;
             console.info(error);
           });
-        this.shareService.showSuccess("#" + product.id, res.message, "right");
+          this.shareService.openSnackBar(res.message, "success");
       } else {
         this.loadContent = true;
-        this.shareService.showError("#" + product.id, res.message, "right");
+        this.shareService.openSnackBar(res.message, "error");
       }
     },
       (error: any) => {
@@ -234,13 +234,13 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.loadContent = false;
         this.productService.AddProduct(result).subscribe((res: ApiResponse) => {
           if (res.status == "success") {
-            this.shareService.showSuccess(".addnewproduct", res.message, "right");
+            this.shareService.openSnackBar(res.message, "success");
             setTimeout(() => {
               this.getAllProducts();
             }, 2000);
           } else {
             this.loadContent = true;
-            this.shareService.showError(".addnewproduct", res.message, "right");
+            this.shareService.openSnackBar(res.message, "error");
           }
         },
           (error: any) => {
@@ -270,13 +270,13 @@ export class HomeComponent implements OnInit, OnDestroy {
         product.prepaymentDiscount = result.prepaymentDiscount;
         this.productService.UpdateProduct(product).subscribe((res: ApiResponse) => {
           if (res.status == "success") {
-            this.shareService.showSuccess("#" + product.id, res.message, "right");
+            this.shareService.openSnackBar(res.message, "success");
             setTimeout(() => {
               this.getAllProducts();
             }, 2000);
           } else {
             this.loadContent = true;
-            this.shareService.showError("#" + product.id, res.message, "right");
+            this.shareService.openSnackBar(res.message, "error");
           }
         },
           (error: any) => {
@@ -296,13 +296,13 @@ export class HomeComponent implements OnInit, OnDestroy {
       if(result){
         this.productService.DeleteProduct(element).subscribe((res: ApiResponse) => {
           if (res.status == "success") {
-            this.shareService.showSuccess(".delete" + element.id, res.message, "right");
+            this.shareService.openSnackBar(res.message, "success");
             setTimeout(() => {
               this.getAllProducts();
             }, 2000);
           } else {
             this.loadContent = true;
-            this.shareService.showError(".delete" + element.id, res.message, "right");
+            this.shareService.openSnackBar(res.message, "error");
           }
         },
           (error: any) => {
@@ -317,11 +317,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     if(element.quantity){
       if (element.quantity < 0) {
         element.quantity = 0;
-        this.shareService.showError("#product" + element.id, "Minimum qty is 0", "right");
+        this.shareService.openSnackBar("Minimum qty is 0", "error");
       }
     }else{
       element.quantity = 0;
-      this.shareService.showError("#product" + element.id, "Minimum qty is 0", "right");
+      this.shareService.openSnackBar("Minimum qty is 0", "error");
     }
   }
 

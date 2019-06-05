@@ -13,6 +13,7 @@ import { AuthRecovery } from './auth/auth.recovery';
 import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
 import { OrdersComponent } from './orders/orders.component';
 import { AdministrationComponent } from './administration/administration.component';
+import { MaintainencePageComponent } from './maintainence-page/maintainence-page.component';
 
 const appRoutes: Routes = [
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
@@ -21,7 +22,9 @@ const appRoutes: Routes = [
   {
     path: 'login', component: LoginComponent
   },
-
+  {
+    path: 'maintain', component: MaintainencePageComponent
+  },
   { path: 'about-us', component: AboutUsComponent, canActivate: [AuthGuard] },
   { path: 'contact-us', component: ContactUsComponent, canActivate: [AuthGuard] },
   { path: 'promo', component: PromoSummaryComponent, canActivate: [AuthGuard] },

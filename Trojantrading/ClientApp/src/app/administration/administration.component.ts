@@ -70,7 +70,7 @@ export class AdministrationComponent implements OnInit, OnDestroy {
   constructor(
     public nav: NavbarService,
     private adminService: AdminService,
-    private shareSevice: ShareService,
+    private shareService: ShareService,
     private orderService: OrderService,
     private fileService: FileService,
     private calendar: NgbCalendar,
@@ -85,7 +85,7 @@ export class AdministrationComponent implements OnInit, OnDestroy {
     this.nav.show();
     this.dateFrom = this.calendar.getNext(this.calendar.getToday(), 'd', -30);
     this.dateTo = this.calendar.getToday();
-    this.role = this.shareSevice.readCookie("role");
+    this.role = this.shareService.readCookie("role");
 
     this.getUsers();
 
@@ -135,7 +135,7 @@ export class AdministrationComponent implements OnInit, OnDestroy {
   changeStatus(order: Order) {
     this.loadContent = false;
     this.orderService.updateOrder(order).subscribe((res: any) => {
-      this.shareSevice.showSuccess(`#status${order.id}`, res.message, "right");
+      this.shareService.openSnackBar(res.message, "success");
       this.loadContent = true;
     },
       (error: any) => {
@@ -203,13 +203,13 @@ export class AdministrationComponent implements OnInit, OnDestroy {
         user = result
         this.adminService.AddUser(user).subscribe((res: ApiResponse) => {
           if (res.status == "success") {
-            this.shareSevice.showSuccess(".addnewuser", res.message, "right");
+            this.shareService.openSnackBar(res.message, "success");
             setTimeout(() => {
               this.getUsers();
             }, 1500);
           } else {
             this.loadContent = true;
-            this.shareSevice.showError(".addnewuser", res.message, "right");
+            this.shareService.openSnackBar(res.message, "error");
           }
         },
           (error: any) => {
@@ -234,13 +234,13 @@ export class AdministrationComponent implements OnInit, OnDestroy {
         orderModel.createdDate = order.createdDate;
         this.orderService.updateOrder(orderModel).subscribe((res: ApiResponse) => {
           if (res.status == "success") {
-            this.shareSevice.showSuccess("#editorder" + order.id, res.message, "right");
+            this.shareService.openSnackBar(res.message, "success");
             setTimeout(() => {
               this.getOrders();
             }, 1500);
           } else {
             this.loadContent = true;
-            this.shareSevice.showError("#editorder" + order.id, res.message, "right");
+            this.shareService.openSnackBar(res.message, "error");
           }
         },
           (error: any) => {
@@ -261,13 +261,13 @@ export class AdministrationComponent implements OnInit, OnDestroy {
         this.loadContent = false;
         this.orderService.DeleteOrder(order.id).subscribe((res: ApiResponse) => {
           if (res.status == "success") {
-            this.shareSevice.showSuccess("#deleteorder" + order.id, res.message, "right");
+            this.shareService.openSnackBar(res.message, "success");
             setTimeout(() => {
               this.getOrders();
             }, 1500);
           } else {
             this.loadContent = true;
-            this.shareSevice.showError("#deleteorder" + order.id, res.message, "right");
+            this.shareService.openSnackBar(res.message, "error");
           }
         },
           (error: any) => {
@@ -294,13 +294,13 @@ export class AdministrationComponent implements OnInit, OnDestroy {
         userModel.sendEmail = user.sendEmail;
         this.adminService.UpdateUser(userModel).subscribe((res: ApiResponse) => {
           if (res.status == "success") {
-            this.shareSevice.showSuccess("#edit" + user.id, res.message, "right");
+            this.shareService.openSnackBar(res.message, "success");
             setTimeout(() => {
               this.getUsers();
             }, 1500);
           } else {
             this.loadContent = true;
-            this.shareSevice.showError("#edit" + user.id, res.message, "right");
+            this.shareService.openSnackBar(res.message, "error");
           }
         },
           (error: any) => {
@@ -321,13 +321,13 @@ export class AdministrationComponent implements OnInit, OnDestroy {
         this.loadContent = false;
         this.adminService.DeleteUser(user.id).subscribe((res: ApiResponse) => {
           if (res.status == "success") {
-            this.shareSevice.showSuccess("#delete" + user.id, res.message, "right");
+            this.shareService.openSnackBar(res.message, "success");
             setTimeout(() => {
               this.getUsers();
             }, 1500);
           } else {
             this.loadContent = true;
-            this.shareSevice.showError("#delete" + user.id, res.message, "right");
+            this.shareService.openSnackBar(res.message, "error");
           }
         },
           (error: any) => {
@@ -365,13 +365,13 @@ export class AdministrationComponent implements OnInit, OnDestroy {
         this.loadContent = false;
         this.headInformationService.UpdateHeadInfomation(element).subscribe((res: ApiResponse) => {
           if (res && res.status == "success") {
-            this.shareSevice.showSuccess("#editheader" + element.id, res.message, "right");
+            this.shareService.openSnackBar(res.message, "success");
             setTimeout(() => {
               this.getHeadInformation();
             }, 1500);
           } else {
             this.loadContent = true;
-            this.shareSevice.showError("#editheader" + element.id, res.message, "right");
+            this.shareService.openSnackBar(res.message, "error");
           }
         },
           (error: any) => {
@@ -392,13 +392,13 @@ export class AdministrationComponent implements OnInit, OnDestroy {
         this.loadContent = false;
         this.headInformationService.DeleteHeadInfomation(element).subscribe((res: ApiResponse) => {
           if (res.status == "success") {
-            this.shareSevice.showSuccess("#deleteheader" + element.id, res.message, "right");
+            this.shareService.openSnackBar(res.message, "success");
             setTimeout(() => {
               this.getHeadInformation();
             }, 1500);
           } else {
             this.loadContent = true;
-            this.shareSevice.showError("#deleteheader" + element.id, res.message, "right");
+            this.shareService.openSnackBar(res.message, "error");
           }
         },
           (error: any) => {
@@ -419,13 +419,13 @@ export class AdministrationComponent implements OnInit, OnDestroy {
         this.loadContent = false;
         this.fileService.DeletePdfBoards(element).subscribe((res: ApiResponse) => {
           if (res.status == "success") {
-            this.shareSevice.showSuccess("#deletepdf" + element.id, res.message, "right");
+            this.shareService.openSnackBar(res.message, "success");
             setTimeout(() => {
               this.getPdfBoards();
             }, 1500);
           } else {
             this.loadContent = true;
-            this.shareSevice.showError("#deletepdf" + element.id, res.message, "right");
+            this.shareService.openSnackBar(res.message, "error");
           }
         },
           (error: any) => {
@@ -508,9 +508,9 @@ export class AdministrationComponent implements OnInit, OnDestroy {
           this.fileService.WritePdf(element.id, this.gst, this.priceExclGst, this.discount, element.userId).subscribe((res: ApiResponse) => {
             if (res.status == "success") {
               window.open("/order_" + element.id + ".pdf", "_blank");
-              this.shareSevice.showSuccess("#pdf" + element.id, res.message, "right");
+              this.shareService.openSnackBar(res.message, "success");
             } else {
-              this.shareSevice.showError("#pdf" + element.id, res.message, "right");
+              this.shareService.openSnackBar(res.message, "error");
             }
             this.loadContent = true;
           },
@@ -529,5 +529,15 @@ export class AdministrationComponent implements OnInit, OnDestroy {
         this.loadContent = true;
         console.info(error);
       });
+  }
+
+  maintain(): void{
+    this.shareService.savecookies("website", "down", 60000);
+    this.shareService.openSnackBar("Website is under Maintainence now", "success");
+  }
+
+  backOnline(): void{
+    this.shareService.savecookies("website", "", 1);
+    this.shareService.openSnackBar("Website is Back Online now", "success");
   }
 }

@@ -35,19 +35,19 @@ export class UploadPdfComponent implements OnInit {
     if(this.file){
       this.formData.append(this.file.name, this.file);
       if(_.lowerCase(this.file.name.split('.')[1]) != "pdf"){
-        this.shareService.showError(".uploadpdf", "Please upload a pdf file", "right");
+        this.shareService.openSnackBar("Please upload a pdf file", "error");
       }else{
         this.loadContent = false;
         this.fileService.SavePdf(this.selectedRole, this.formData).subscribe((res: ApiResponse) => {
           if (res.status == "success") {
-            this.shareService.showSuccess(".uploadpdf", res.message, "right");
+            this.shareService.openSnackBar(res.message, "success");
             setTimeout(() => {
               this.loadContent = true;
               this.dialogRef.close();
             }, 1500);
           } else {
             this.loadContent = true;
-            this.shareService.showError(".uploadpdf", res.message, "right");
+            this.shareService.openSnackBar(res.message, "error");
           }
         },
           (error: any) => {
@@ -56,7 +56,7 @@ export class UploadPdfComponent implements OnInit {
           });
       }
     }else{
-      this.shareService.showError(".uploadpdf", "Upload file is empty", "right");
+      this.shareService.openSnackBar("Upload file is empty", "error");
     }
   }
 
