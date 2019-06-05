@@ -57,6 +57,10 @@ export class OrdersComponent implements OnInit, OnDestroy {
     //admin user parse empty userid to get all other users' order records
     this.userId = this.role === "admin" ? '' : this.shareService.readCookie("userId");
 
+    this.getOrders();
+  }
+
+  getOrders() {
     this.convertDateFormat();
 
     this.orderService.getOrdersByUserID(this.userId, this.strDateFrom, this.strDateTo).takeUntil(this.ngUnsubscribe)
@@ -68,7 +72,6 @@ export class OrdersComponent implements OnInit, OnDestroy {
     (error: any) => {
       console.info(error);
     });
-
   }
 
   convertDateFormat(): void {
@@ -87,7 +90,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
       "Payment Method": x.clientMessage,
       "Status": x.orderStatus
     }));
-
+   
 
     this.fileService.exportAsExcelFile(exportOrdersArray, 'TrojanTrading_Orders_' + this.strDateFrom + '_' + this.strDateTo);
 
