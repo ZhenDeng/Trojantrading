@@ -35,14 +35,14 @@ export class UploadImageComponent implements OnInit {
       this.loadContent = false;
       this.fileService.SaveImage(this.formData).subscribe((res: ApiResponse) => {
         if (res.status == "success") {
-          this.shareService.showSuccess(".uploadimg", res.message, "left");
+          this.shareService.openSnackBar(res.message, "success");
           setTimeout(() => {
             this.loadContent = true;
             this.dialogRef.close();
           }, 1500);
         } else {
           this.loadContent = true;
-          this.shareService.showError(".uploadimg", res.message, "left");
+          this.shareService.openSnackBar(res.message, "error");
         }
       },
         (error: any) => {
@@ -50,7 +50,7 @@ export class UploadImageComponent implements OnInit {
           this.loadContent = true;
         });
     } else {
-      this.shareService.showError(".uploadimg", "Upload file is empty", "left");
+      this.shareService.openSnackBar("Upload file is empty", "error");
     }
   }
 

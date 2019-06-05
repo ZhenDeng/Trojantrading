@@ -33,8 +33,7 @@ export class LoginComponent implements OnInit {
     private formBuilder: FormBuilder,
     private nav: NavbarService,
     private shareService: ShareService,
-    public dialog: MatDialog,
-    private activatedRouter: ActivatedRoute) {
+    public dialog: MatDialog) {
     this.userFormGroup = this.formBuilder.group({
       account: new FormControl("", Validators.compose([Validators.required])),
       password: new FormControl("", Validators.compose([Validators.required]))
@@ -53,13 +52,13 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     
     if(!this.userFormGroup.get('account').valid){
-      this.shareService.showError('#account', 'Please enter your account', "left");
+      this.shareService.openSnackBar('Please enter your account', "error");
     }
     if(!this.userFormGroup.get('password').valid){
-      this.shareService.showError('#password', 'Please enter your password', "left");
+      this.shareService.openSnackBar('Please enter your password', "error");
     }
     if(!this.checked){
-      this.shareService.showError('#checkbox', 'Please check the t&c to use our service', "left");
+      this.shareService.openSnackBar('Please check the t&c to use our service', "error");
     }
 
     if(this.userFormGroup.valid && this.checked){
@@ -74,10 +73,10 @@ export class LoginComponent implements OnInit {
           this.router.navigate(['/home']);
         }else if(data && data.userName.toLowerCase() == "inactive"){
           this.loadContent = true;
-          this.shareService.showError(".loginbtn", "Your Account Has Been Suspended", "left");
+          this.shareService.openSnackBar("Your Account Has Been Suspended", "error");
         }else if(data && data.userName.toLowerCase() == "wrong"){
           this.loadContent = true;
-          this.shareService.showError(".loginbtn", "User name or password is invalid", "left");
+          this.shareService.openSnackBar("User name or password is invalid", "error");
         }
       },
         (error: any) => {
@@ -115,7 +114,7 @@ export class LoginComponent implements OnInit {
               this.showResetText = true;
             }
             else{
-              this.shareService.showError(".sendresetemail", "Your Account Has Been Suspended", "left");
+              this.shareService.openSnackBar("Your Account Has Been Suspended", "error");
             }
           },
             (error: any) => {
@@ -123,14 +122,14 @@ export class LoginComponent implements OnInit {
             });
         }
         else{
-          this.shareService.showError(".sendresetemail", res.message, "left");
+          this.shareService.openSnackBar(res.message, "error");
         }
       },
         (error: any) => {
           console.info(error);
         });
     } else {
-      this.shareService.showError(".sendresetemail", "Please enter valid email address", "left");
+      this.shareService.openSnackBar("Please enter valid email address", "error");
     }
   }
 

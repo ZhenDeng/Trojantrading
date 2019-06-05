@@ -15,7 +15,7 @@ export class EditHeaderInfomationComponent implements OnInit {
   type: string;
 
   constructor(private formBuilder: FormBuilder,
-    private shareSevice: ShareService,
+    private shareService: ShareService,
     public dialogRef: MatDialogRef<EditHeaderInfomationComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) {
     this.userFormGroup = this.formBuilder.group({
@@ -35,7 +35,7 @@ export class EditHeaderInfomationComponent implements OnInit {
     if(this.userFormGroup.valid){
       this.dialogRef.close(this.userFormGroup.value);
     }else{
-      this.shareSevice.showError(".imagePathValidate", "Please enter image path", "left");
+      this.shareService.openSnackBar("Please enter image path", "error");
     }
   }
 

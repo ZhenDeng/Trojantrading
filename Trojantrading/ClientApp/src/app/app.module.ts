@@ -52,6 +52,8 @@ import { UploadPdfComponent } from './popup-collection/upload-pdf/upload-pdf.com
 import { UploadUsersComponent } from './popup-collection/upload-users/upload-users.component';
 import { UploadImageComponent } from './popup-collection/upload-image/upload-image.component';
 import { DeleteConfirmComponent } from './popup-collection/delete-confirm/delete-confirm.component';
+import { SnackBarComponent } from './snack-bar/snack-bar.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -76,7 +78,8 @@ import { DeleteConfirmComponent } from './popup-collection/delete-confirm/delete
     UploadPdfComponent,
     UploadUsersComponent,
     UploadImageComponent,
-    DeleteConfirmComponent
+    DeleteConfirmComponent,
+    SnackBarComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -100,7 +103,8 @@ import { DeleteConfirmComponent } from './popup-collection/delete-confirm/delete
     NavMenuModule,
     MatSelectModule,
     SlickCarouselModule,
-    NgbdCarouselBasicModule
+    NgbdCarouselBasicModule,
+    MatSnackBarModule
   ],
   providers: [
     UserService,
