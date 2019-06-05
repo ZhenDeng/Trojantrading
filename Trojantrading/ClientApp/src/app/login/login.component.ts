@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../services/user.service';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { UserResponse, ApiResponse } from '../models/ApiResponse';
 import { NavbarService } from '../services/navbar.service';
 import { ShareService } from '../services/share.service';

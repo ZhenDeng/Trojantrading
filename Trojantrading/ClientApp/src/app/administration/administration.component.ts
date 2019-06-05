@@ -530,4 +530,14 @@ export class AdministrationComponent implements OnInit, OnDestroy {
         console.info(error);
       });
   }
+
+  maintain(): void{
+    this.shareService.savecookies("website", "down", 60000);
+    this.shareService.openSnackBar("Website is under Maintainence now", "success");
+  }
+
+  backOnline(): void{
+    this.shareService.savecookies("website", "", 1);
+    this.shareService.openSnackBar("Website is Back Online now", "success");
+  }
 }

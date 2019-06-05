@@ -53,6 +53,7 @@ import { UploadUsersComponent } from './popup-collection/upload-users/upload-use
 import { UploadImageComponent } from './popup-collection/upload-image/upload-image.component';
 import { DeleteConfirmComponent } from './popup-collection/delete-confirm/delete-confirm.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MaintainencePageComponent } from './maintainence-page/maintainence-page.component';
 
 @NgModule({
   declarations: [
@@ -77,7 +78,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     UploadPdfComponent,
     UploadUsersComponent,
     UploadImageComponent,
-    DeleteConfirmComponent
+    DeleteConfirmComponent,
+    MaintainencePageComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

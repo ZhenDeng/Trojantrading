@@ -9,6 +9,8 @@
             <div class="page-title-position">
               <i class="fas fa-list fa-fw"></i>
               {{title}}
+              <button class="btn btn-long" style="float: right;" (click)="backOnline()">Put Website Online</button> 
+              <button class="btn btn-long" style="float: right;" (click)="maintain()">Maintain Website</button>
             </div>
           </div>
           <loading-screen *ngIf="!loadContent" [showBlurTable]="false" (currentLoadingStatus)="onLoading($event)">
