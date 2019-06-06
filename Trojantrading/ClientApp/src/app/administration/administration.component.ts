@@ -193,6 +193,7 @@ export class AdministrationComponent implements OnInit, OnDestroy {
              "Product Name": item.product.name,
              "Original Price": `$${item.product.originalPrice}`,
              "Buy Price": '$' + this.getBuyPrice(order.user.role,item.product),
+             "Order Date": this.datePipe.transform(order.createdDate,'dd/MM/yyyy'),
              "Order Qty": item.amount,
              "Line Amount": '$' + (item.amount * this.getBuyPrice(order.user.role,item.product)).toFixed(2)
            })
