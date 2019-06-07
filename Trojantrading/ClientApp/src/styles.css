@@ -3,15 +3,22 @@
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 /*#region Buttons */
 
+html{
+    height: 100%;
+}
+
 body{
+    min-height: 100%;
     font-family: "proxima-nova",sans-serif !important;
+    overflow-x: hidden;
+    position: relative;
 }
 
 .btn {
     display: inline-block;
     font-weight: 400;
     text-align: center;
-    white-space: nowrap;
+    overflow-wrap: break-word;
     vertical-align: middle;
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -44,7 +51,6 @@ body{
     text-align: center;
     display: inline-block;
     border: 1px #CA1845 solid;
-    white-space: nowrap;
     margin-top: 25px;
 }
 
@@ -52,6 +58,11 @@ body{
     border: 1px #CA1845 solid;
     color: #CA1845 !important;
     background: white;
+}
+
+.btn.btn-long{
+    white-space: normal !important;
+    overflow-wrap: break-word !important;
 }
 
 .btn-tiny {
@@ -177,13 +188,15 @@ a:hover{
 }
 
 .globalfooter{
-    width: 100%;
     background: #3a3633;
     color: white;
     text-align: center;
-    padding: 17px 0;
-    margin-top: 100px;
+    padding: 13px 0;
     box-shadow: 0px 19px 19px 27px rgba(43, 43, 43, 0.2);
+    position: absolute;
+    height: 40px;
+    bottom: 0;
+    width: 100%
 }
 
 .slick-next{
@@ -362,3 +375,7 @@ a:hover{
     background: #A01B3C;
 }
 
+.example-container{
+    max-height: 550px !important;
+    overflow: auto;
+}

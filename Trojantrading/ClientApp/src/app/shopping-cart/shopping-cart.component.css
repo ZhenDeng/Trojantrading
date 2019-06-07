@@ -1,7 +1,5 @@
-.container{
-	margin-top: 30px;
-	min-height: 77.3rem;
-}
+@import "../home/home.component.css";
+
 nav a{
 	width: 25%;
 }

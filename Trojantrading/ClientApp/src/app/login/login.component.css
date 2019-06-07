@@ -22,7 +22,7 @@
   min-height: 200px;
   z-index: 2;
   text-align: center;
-  height: 480px;
+  height: 100%;
 }
 
 #welcome {
@@ -76,6 +76,8 @@
 :host /deep/ .mat-checkbox-label{
   color: rgba(0,0,0,.54);
   font-weight: normal;
+  white-space: normal;
+  overflow-wrap: break-word;
 }
 
 :host /deep/ .mat-input-container{

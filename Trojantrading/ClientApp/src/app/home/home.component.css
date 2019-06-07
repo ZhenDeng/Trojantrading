@@ -1,7 +1,7 @@
 .container{
 	margin-top: 30px;
-  width: 1250px !important;
-  min-height: 77.3rem;
+  position: relative;
+  width: 100%;
 }
 
 nav a{
