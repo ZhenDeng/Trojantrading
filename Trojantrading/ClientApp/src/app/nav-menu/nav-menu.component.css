@@ -134,6 +134,10 @@ a{
   .largewidth{
     width: 60%;
   }
+
+  .largewidthadmin{
+    width: 59%;
+  }
   
   .float-right{
     float: right;

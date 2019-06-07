@@ -11,7 +11,11 @@
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav navbar-right" style="max-width: 640px;text-align: right">
-          <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }' class="largewidth">
+          <li class="largewidth" *ngIf="role !='admin'">
+            &nbsp;
+          </li>
+
+          <li class="largewidthadmin" *ngIf="role =='admin'">
             &nbsp;
           </li>
           <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }' class="thirdwidth">
