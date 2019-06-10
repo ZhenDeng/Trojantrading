@@ -48,7 +48,12 @@
 
               <ng-container matColumnDef="name">
                 <mat-header-cell *matHeaderCellDef class="mat-table_3fex"> Description </mat-header-cell>
-                <mat-cell *matCellDef="let element" class="mat-table_3fex"> {{element.name}} </mat-cell>
+                <mat-cell *matCellDef="let element" class="mat-table_3fex"> 
+                  {{element.name}} 
+                  <img width="60" style="background: white" *ngIf="element.status=='outofstock'" src="/img/soldout.png">
+                  <img width="60" style="background: white" *ngIf="element.status=='New'" src="/img/new.png">
+                  <img width="40" *ngIf="element.status=='Promotion'" src="/img/sale.png">
+                </mat-cell>
               </ng-container>
 
               <!-- wlpPrice Column -->
