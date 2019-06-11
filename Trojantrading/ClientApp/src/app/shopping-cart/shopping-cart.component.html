@@ -31,9 +31,10 @@
                 <mat-header-cell *matHeaderCellDef class="mat-table_3fex"> Description </mat-header-cell>
                 <mat-cell *matCellDef="let element" class="mat-table_3fex"> 
                   {{element.product.name}}
-                  <img width="60" style="background: white" *ngIf="element.product.status=='outofstock'" src="/img/soldout.png">
-                  <img width="60" style="background: white" *ngIf="element.product.status=='New'" src="/img/new.png">
-                  <img width="40" *ngIf="element.product.status=='Promotion'" src="/img/sale.png">
+                  <img width="40" style="background: white" *ngIf="element.product.status=='outofstock'" src="/img/outofstock.png">
+                  <img width="40" style="background: white" *ngIf="element.product.status=='New'" src="/img/new.png">
+                  <img width="40" *ngIf="element.product.status=='Hot'" src="/img/hot.png">
+                  <img width="40" *ngIf="element.product.status=='Limited'" src="/img/limited.png">
                 </mat-cell>
               </ng-container>
       

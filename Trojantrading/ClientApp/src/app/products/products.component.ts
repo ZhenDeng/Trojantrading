@@ -46,13 +46,18 @@ export class ProductsComponent implements OnInit, OnDestroy {
     },
     {
       path: '/productsview/new',
-      label: 'New Product',
+      label: 'New',
       id: 'newProduct'
     },
     {
-      path: '/productsview/promotion',
-      label: 'Promotions',
-      id: 'promotions'
+      path: '/productsview/hot',
+      label: 'Hot',
+      id: 'hots'
+    },
+    {
+      path: '/productsview/limited',
+      label: 'Limited',
+      id: 'limited'
     },
     {
       path: '/productsview/outofstock',
@@ -93,9 +98,11 @@ export class ProductsComponent implements OnInit, OnDestroy {
       this.viewType = param.get('type');
       const type = this.viewType.toLowerCase();
       if (type === 'new') {
-        this.title = 'New Products';
-      } else if (type.includes('promotion')) {
-        this.title = 'Promotions';
+        this.title = 'New';
+      } else if (type.includes('hot')) {
+        this.title = 'Hot';
+      } else if (type.includes('limited')) {
+        this.title = 'Limited';
       } else {
         this.title = 'Out of Stock';
       }
