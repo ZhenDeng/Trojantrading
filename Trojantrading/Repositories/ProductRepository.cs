@@ -9,7 +9,7 @@ namespace Trojantrading.Repositories
     public interface IProductRepository
     {
         ApiResponse Add(Product product);
-        Product Get(int id);
+        Product GetProductById(int id);
         List<Product> GetAllProducts();
         ApiResponse DeleteProduct(Product product);
         int GetTotalProducts();
@@ -48,7 +48,7 @@ namespace Trojantrading.Repositories
             }
         }
 
-        public Product Get(int id)
+        public Product GetProductById(int id)
         {
             var product = trojantradingDbContext.Products
                 .Where(p => p.Id == id)
@@ -61,6 +61,15 @@ namespace Trojantrading.Repositories
             List<Product> allProducts = new List<Product>();
 
             allProducts = trojantradingDbContext.Products.ToList();
+
+            foreach (var item in allProducts)
+            {
+                List<PackagingList> packagingLists = trojantradingDbContext.PackagingLists.Where(pl => pl.ProductId == item.Id).ToList();
+                if (packagingLists.Count > 0)
+                {
+                    item.PackagingLists = packagingLists;
+                }
+            }
 
             return allProducts;
         }
@@ -97,7 +106,34 @@ namespace Trojantrading.Repositories
         public ApiResponse UpdateProduct(Product product) {
             try
             {
+                List<PackagingList> packagingLists = product.PackagingLists;
                 trojantradingDbContext.Products.Update(product);
+                if (packagingLists.Count < 1)
+                {
+                    List<PackagingList> lists = trojantradingDbContext.PackagingLists.Where(pl => pl.ProductId == product.Id).ToList();
+                    if (lists.Count > 0) {
+                        trojantradingDbContext.PackagingLists.RemoveRange(lists);
+                    }
+                }
+                else {
+                    List<PackagingList> lists = trojantradingDbContext.PackagingLists.Where(pl => pl.ProductId == product.Id).ToList();
+                    foreach (var pack in packagingLists)
+                    {
+                        pack.ProductId = product.Id;
+                    }
+                    if (lists.Count > 0)
+                    {
+                        foreach (var pack in packagingLists) {
+                            foreach (var list in lists)
+                            {
+                                
+                            }
+                        }
+                    }
+                    else {
+                        trojantradingDbContext.PackagingLists.AddRange(packagingLists);
+                    }
+                }
                 trojantradingDbContext.SaveChanges();
                 return new ApiResponse()
                 {

@@ -49,10 +49,10 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
     private dialog: MatDialog
   ) {
     if (this.shareService.readCookie("role") && this.shareService.readCookie("role") == "agent") {
-      this.displayedColumns = ['itemcode','name', 'category', 'originalPrice', 'agentPrice', 'qty', 'subTotal', 'remove'];
+      this.displayedColumns = ['itemcode','name', 'category', 'packaging', 'originalPrice', 'agentPrice', 'qty', 'subTotal', 'remove'];
     }
     else if (this.shareService.readCookie("role") && this.shareService.readCookie("role") == "wholesaler") {
-      this.displayedColumns = ['itemcode','name', 'category', 'originalPrice', 'wholesalerPrice', 'prepaymentDiscount', 'qty', 'subTotal', 'remove'];
+      this.displayedColumns = ['itemcode','name', 'category', 'packaging', 'originalPrice', 'wholesalerPrice', 'prepaymentDiscount', 'qty', 'subTotal', 'remove'];
     }
   }
 

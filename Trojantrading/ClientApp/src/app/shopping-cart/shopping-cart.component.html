@@ -42,6 +42,13 @@
                 <mat-header-cell *matHeaderCellDef class="mat-table_3fex"> Category </mat-header-cell>
                 <mat-cell *matCellDef="let element" class="mat-table_3fex"> {{element.product.category}} </mat-cell>
               </ng-container>
+
+              <ng-container matColumnDef="packaging" *ngIf="role=='admin'">
+                <mat-header-cell *matHeaderCellDef> packaging </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                  {{element.product.packaging}}
+                </mat-cell>
+              </ng-container>
       
               <ng-container matColumnDef="originalPrice">
                 <mat-header-cell *matHeaderCellDef class="mat-table_2fex"> Original Price </mat-header-cell>

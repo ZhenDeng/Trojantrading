@@ -94,6 +94,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
           itemArray.push({
              "Item Code": item.product.itemCode,
              "Product Name": item.product.name,
+             "Packaging": item.product.packaging,
              "Original Price": `$${item.product.originalPrice}`,
              "Buy Price": '$' + this.getBuyPrice(item.product),
              "Order Date": this.datePipe.transform(order.createdDate,'dd/MM/yyyy'),

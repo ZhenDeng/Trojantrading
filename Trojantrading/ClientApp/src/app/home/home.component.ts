@@ -8,7 +8,6 @@ import { ShareService } from '../services/share.service';
 import { MatTableDataSource, MatDialog } from '@angular/material';
 import { ShoppingCartService } from '../services/shopping-cart.service';
 import { AdminService } from '../services/admin.service';
-import { User } from '../models/user';
 import { ApiResponse } from '../models/ApiResponse';
 import { ShoppingItem } from '../models/shoppingItem';
 import { ShoppingCart } from '../models/shoppingCart';
@@ -34,7 +33,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   role: string;
   category: string = '';
   dataSource = new MatTableDataSource();
-  user: User;
   shoppingItem: ShoppingItem;
   shoppingItems: ShoppingItem[];
 
@@ -99,21 +97,18 @@ export class HomeComponent implements OnInit, OnDestroy {
 
         this.title = 'Products in All Categories';
         if (this.shareService.readCookie("role") && this.shareService.readCookie("role") == "admin") {
-          this.displayedColumns = ['itemcode','name', 'category', 'originalPrice', 'agentPrice', 'wholesalerPrice', 'prepaymentDiscount', 'status', 'button', 'deletebutton']
+          this.displayedColumns = ['itemcode','name', 'category', 'packaging', 'originalPrice', 'agentPrice', 'wholesalerPrice', 'prepaymentDiscount', 'status', 'button', 'deletebutton']
         }
         else if (this.shareService.readCookie("role") && this.shareService.readCookie("role") == "agent") {
-          this.displayedColumns = ['itemcode','name', 'category', 'originalPrice', 'agentPrice', 'qty', 'status', 'button']
+          this.displayedColumns = ['itemcode','name', 'category', 'packaging', 'originalPrice', 'agentPrice', 'qty', 'status', 'button']
         }
         else if (this.shareService.readCookie("role") && this.shareService.readCookie("role") == "wholesaler") {
-          this.displayedColumns = ['itemcode','name', 'category', 'originalPrice', 'wholesalerPrice', 'prepaymentDiscount', 'qty', 'status', 'button']
+          this.displayedColumns = ['itemcode','name', 'category', 'packaging', 'originalPrice', 'wholesalerPrice', 'prepaymentDiscount', 'qty', 'status', 'button']
         } else {
-          this.displayedColumns = ['itemcode','name', 'category', 'originalPrice', 'qty', 'status', 'button']
+          this.displayedColumns = ['itemcode','name', 'category', 'packaging', 'originalPrice', 'qty', 'status', 'button']
         }
 
-        this.dataSource = new MatTableDataSource();
-
         this.getAllProducts();
-
       });
 
       let currentURL = this.router.url;
@@ -122,25 +117,15 @@ export class HomeComponent implements OnInit, OnDestroy {
       }
       this.role = this.shareService.readCookie("role");
       this.nav.show();
-      this.getAllProducts();
-      this.adminService.GetUserByAccount(_.toNumber(this.shareService.readCookie("userId"))).takeUntil(this.ngUnsubscribe)
-      .subscribe((res: User) => {
-        this.loadContent = true;
-        if (res) {
-          this.user = res;
-          this.shoppingCartService.AddShoppingCart(res.id).subscribe((res: ApiResponse) => {
-            console.info(res);
-          },
-            (error: any) => {
-              this.loadContent = true;
-              console.info(error);
-            });
-        }
-      },
-        (error: any) => {
+      if(this.shareService.readCookie("userId")){
+        this.shoppingCartService.AddShoppingCart(_.toNumber(this.shareService.readCookie("userId"))).subscribe((res: ApiResponse) => {
           this.loadContent = true;
-          console.info(error);
-        });
+        },
+          (error: any) => {
+            this.loadContent = true;
+            console.info(error);
+          });
+      }
     }
 
   }
@@ -192,17 +177,19 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   addToCart(product: Product): void {
-    this.shoppingItem = {
-      id: 0,
-      amount: product.quantity,
-      product: product,
-      subTotal: 0
-    }
-    this.loadContent = false;
-    this.shoppingCartService.UpdateShoppingCart(this.user.id, this.shoppingItem).subscribe((res: ApiResponse) => {
-      if (res.status == "success") {
-        this.adminService.GetUserByAccount(_.toNumber(this.shareService.readCookie("userId"))).subscribe((user: User) => {
-          this.shoppingCartService.GetShoppingCart(user.id).subscribe((res: ShoppingCart) => {
+    if(product.packagingLists.length && !product.packaging){
+      this.shareService.openSnackBar("Please select packaging", "error");
+    }else{
+      this.shoppingItem = {
+        id: 0,
+        amount: product.quantity,
+        product: product,
+        subTotal: 0
+      }
+      this.loadContent = false;
+      this.shoppingCartService.UpdateShoppingCart(_.toNumber(this.shareService.readCookie("userId")), this.shoppingItem).subscribe((res: ApiResponse) => {
+        if (res.status == "success") {
+          this.shoppingCartService.GetShoppingCart(_.toNumber(this.shareService.readCookie("userId"))).subscribe((res: ShoppingCart) => {
             this.loadContent = true;
             this.shoppingItems = res.shoppingItems;
             this.shoppingCartService.MonitorShoppingItemLength(this.shoppingItems.length);
@@ -211,21 +198,17 @@ export class HomeComponent implements OnInit, OnDestroy {
               this.loadContent = true;
               console.info(error);
             });
-        },
-          (error: any) => {
-            this.loadContent = true;
-            console.info(error);
-          });
-          this.shareService.openSnackBar(res.message, "success");
-      } else {
-        this.loadContent = true;
-        this.shareService.openSnackBar(res.message, "error");
-      }
-    },
-      (error: any) => {
-        this.loadContent = true;
-        console.info(error);
-      });
+            this.shareService.openSnackBar(res.message, "success");
+        } else {
+          this.loadContent = true;
+          this.shareService.openSnackBar(res.message, "error");
+        }
+      },
+        (error: any) => {
+          this.loadContent = true;
+          console.info(error);
+        });
+    }
   }
 
   addNewProduct(): void {
@@ -265,14 +248,15 @@ export class HomeComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.loadContent = false;
-        product.name = result.name;
-        product.itemCode = result.itemCode;
-        product.category = result.category;
-        product.agentPrice = result.agentPrice;
-        product.originalPrice = result.originalPrice;
-        product.wholesalerPrice = result.wholesalerPrice;
-        product.status = result.status;
-        product.prepaymentDiscount = result.prepaymentDiscount;
+        product.packagingLists = result.packaging;
+        product.name = result.product.name;
+        product.itemCode = result.product.itemCode;
+        product.category = result.product.category;
+        product.agentPrice = result.product.agentPrice;
+        product.originalPrice = result.product.originalPrice;
+        product.wholesalerPrice = result.product.wholesalerPrice;
+        product.status = result.product.status;
+        product.prepaymentDiscount = result.product.prepaymentDiscount;
         this.productService.UpdateProduct(product).subscribe((res: ApiResponse) => {
           if (res.status == "success") {
             this.shareService.openSnackBar(res.message, "success");

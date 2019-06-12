@@ -1,9 +1,8 @@
-import { ShoppingItem } from './shoppingItem';
-
 export interface Product {
     id: number
     itemCode: string
     name: string
+    packaging: string
     originalPrice: number
     agentPrice: number
     wholesalerPrice: number
@@ -12,10 +11,16 @@ export interface Product {
     button: string
     quantity: number
     status: string
-    //shoppingItem: ShoppingItem[]
+    packagingLists: PackagingList[]
 }
 
 export interface Category{
     type: string
     category: string
+}
+
+export interface PackagingList{
+    id: number
+    packageName: string
+    ProductId: number
 }

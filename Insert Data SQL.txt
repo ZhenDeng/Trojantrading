@@ -73,6 +73,7 @@ INSERT INTO [trojantrading].[product]
            ([CreatedDate]
            ,[Name]
 		   ,ItemCode
+		   ,Packaging
            ,[OriginalPrice]
            ,[AgentPrice]
 		   ,WholesalerPrice
@@ -82,19 +83,21 @@ INSERT INTO [trojantrading].[product]
      VALUES
            (GETDATE()
            ,'Dunhill 23'
-		   ,'T0008'
+		   ,'T0004'
+		   ,''
            ,23.95
            ,21.95
            ,22.95
 		   ,5
            ,'hand-made'
-           ,'')
+           ,'Limited')
 GO
 
 INSERT INTO [trojantrading].[product]
            ([CreatedDate]
            ,[Name]
 		   ,ItemCode
+		   ,Packaging
            ,[OriginalPrice]
            ,[AgentPrice]
            ,WholesalerPrice
@@ -104,7 +107,8 @@ INSERT INTO [trojantrading].[product]
      VALUES
            (GETDATE()
            ,'Winfield 23'
-		   ,'T0008'
+		   ,'T0005'
+		   ,''
            ,33.95
            ,31.95
            ,32.95
@@ -117,6 +121,7 @@ INSERT INTO [trojantrading].[product]
            ([CreatedDate]
            ,[Name]
 		   ,ItemCode
+		   ,Packaging
            ,[OriginalPrice]
            ,[AgentPrice]
            ,WholesalerPrice
@@ -126,19 +131,21 @@ INSERT INTO [trojantrading].[product]
      VALUES
            (GETDATE()
            ,'Malboro 23'
-		   ,'T0008'
+		   ,'T0006'
+		   ,''
            ,43.95
            ,41.95
            ,42.95
 		   ,20
            ,'little-cigars'
-           ,'Promotion')
+           ,'Hot')
 GO
 
 INSERT INTO [trojantrading].[product]
            ([CreatedDate]
            ,[Name]
 		   ,ItemCode
+		   ,Packaging
            ,[OriginalPrice]
            ,[AgentPrice]
            ,WholesalerPrice
@@ -148,7 +155,8 @@ INSERT INTO [trojantrading].[product]
      VALUES
            (GETDATE()
            ,'DoulbeHappiness 23'
-		   ,'T0008'
+		   ,'T0007'
+		   ,''
            ,53.95
            ,51.95
            ,52.95

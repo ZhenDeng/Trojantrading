@@ -18,6 +18,7 @@ namespace Trojantrading.Repositories
         public DbSet<ShoppingCart> ShoppingCarts { get; set; }
         public DbSet<PdfBoard> PdfBoards { get; set; }
         public DbSet<ShoppingItem> ShoppingItems { get; set; }
+        public DbSet<PackagingList> PackagingLists { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -44,6 +45,9 @@ namespace Trojantrading.Repositories
             modelBuilder.Entity<HeadInformation>()
                 .ToTable("headInformation")
                 .HasKey(h => h.Id);
+            modelBuilder.Entity<PackagingList>()
+                .ToTable("packagingList")
+                .HasKey(h => h.Id);
 
             //user shoppingcart 1:m
             modelBuilder.Entity<User>()
@@ -64,12 +68,6 @@ namespace Trojantrading.Repositories
                 .WithMany(s => s.ShoppingItems)
                 .HasForeignKey(s => s.ShoppingCartId)
                 .OnDelete(DeleteBehavior.Restrict);
-
-            //shopping item product 1:1
-            //modelBuilder.Entity<ShoppingItem>()
-            //    .HasOne(s => s.Product)
-            //    .WithMany(p => p.ShoppingItems)
-            //    .HasForeignKey(s => s.ProductId);
         }
     }
 }

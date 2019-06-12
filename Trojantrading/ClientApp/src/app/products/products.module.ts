@@ -9,7 +9,7 @@ import { ProductsComponent } from './products.component';
 import { ProductService } from '../services/product.service';
 import { NavMenuModule } from '../nav-menu/nav-menu.module';
 import { LoadScreenComponent } from '../load-screen/load-screen.component';
-
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   imports: [
@@ -21,7 +21,8 @@ import { LoadScreenComponent } from '../load-screen/load-screen.component';
     MatTableModule,
     MatInputModule,
     MatTabsModule,
-    NavMenuModule
+    NavMenuModule,
+    MatSelectModule
   ],
   declarations: [
     ProductsComponent,

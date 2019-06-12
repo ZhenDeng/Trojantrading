@@ -1,7 +1,13 @@
-::ng-deep .mat-form-field{
-    width: 100%;
+::ng-deep .mat-form-field {
+  width: 100%;
 }
 
-::ng-deep .mat-dialog-actions{
-    padding: 12px 27px !important;
+::ng-deep .mat-dialog-actions {
+  padding: 12px 27px !important;
+}
+
+.checkboxtitle {
+  margin-bottom: 15px;
+  color: rgba(0, 0, 0, .38);
+  font-size: 11px;
 }

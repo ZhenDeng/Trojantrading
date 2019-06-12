@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Trojantrading.Models
 {
@@ -9,8 +10,10 @@ namespace Trojantrading.Models
         public DateTime CreatedDate { get; set; }
         public string Name { get; set; }
         public string ItemCode { get; set; }
+        public string Packaging { get; set; }
         public double OriginalPrice { get; set; }
-
+        public int? MaxQty { get; set; }
+        public int? MinQty { get; set; }
         public double AgentPrice { get; set; }
 
         public double WholesalerPrice { get; set; }
@@ -18,9 +21,14 @@ namespace Trojantrading.Models
         public double PrepaymentDiscount { get; set; }
 
         public string Category { get; set; }
+        public List<PackagingList> PackagingLists { get; set; }
 
-        //public ShoppingItem[] ShoppingItems{get;set;}
+        public string Status { get; set; }  // New, Hot, Limited, Out of Stock
+    }
 
-        public string Status { get; set; }  // 1.New 2.Promotion 3.SoldOut
+    public class PackagingList {
+        public int Id { get; set; }
+        public string PackageName { get; set; } // 1.OP 2.PP
+        public int ProductId { get; set; }
     }
 }

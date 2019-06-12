@@ -2,6 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { ShareService } from '../../services/share.service';
+import { PackagingList } from '../../models/Product';
 
 @Component({
   selector: 'app-edit-product',
@@ -11,6 +12,9 @@ import { ShareService } from '../../services/share.service';
 export class EditProductComponent implements OnInit {
 
   userFormGroup: FormGroup;
+  packOne: boolean = false;
+  packTwo: boolean = false;
+  packagingList: PackagingList[];
   account_validation_messages: any = {
     'itemCode': [
       { class: 'itemCodeValidate', message: 'Please enter item code' }
@@ -49,7 +53,19 @@ export class EditProductComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.packOne = false;
+    this.packTwo = false;
     if(this.data.product){
+      if(this.data.product.packagingLists && this.data.product.packagingLists.length){
+        this.data.product.packagingLists.forEach(pack => {
+          if(pack.packageName == "OP"){
+            this.packOne = true;
+          }
+          if(pack.packageName == "PP"){
+            this.packTwo = true;
+          }
+        });
+      }
       this.userFormGroup.get("itemCode").setValue(this.data.product.itemCode);
       this.userFormGroup.get("name").setValue(this.data.product.name);
       this.userFormGroup.get("category").setValue(this.data.product.category);
@@ -62,8 +78,23 @@ export class EditProductComponent implements OnInit {
   }
 
   updateProductDetails(): void {
+    this.packagingList = [];
     if (this.userFormGroup.valid) {
-      this.dialogRef.close(this.userFormGroup.getRawValue());
+      if(this.packOne){
+        let packagingOne = {
+          id: 0,
+          packageName: "OP"
+        } as PackagingList
+        this.packagingList.push(packagingOne);
+      }
+      if(this.packTwo){
+        let packagingTwo = {
+          id: 0,
+          packageName: "PP"
+        } as PackagingList
+        this.packagingList.push(packagingTwo);
+      }
+      this.dialogRef.close({product: this.userFormGroup.getRawValue(), packaging: this.packagingList});
     } else {
       this.isNotValidField('name', this.account_validation_messages.name);
       this.isNotValidField('itemCode', this.account_validation_messages.itemCode);
