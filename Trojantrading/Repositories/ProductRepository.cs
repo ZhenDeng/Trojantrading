@@ -14,6 +14,7 @@ namespace Trojantrading.Repositories
         ApiResponse DeleteProduct(Product product);
         int GetTotalProducts();
         ApiResponse UpdateProduct(Product product);
+        ApiResponse UpdatePackagingList(List<PackagingList> lists, int productId);
     }
 
     public class ProductRepository:IProductRepository
@@ -106,39 +107,38 @@ namespace Trojantrading.Repositories
         public ApiResponse UpdateProduct(Product product) {
             try
             {
-                List<PackagingList> packagingLists = product.PackagingLists;
                 trojantradingDbContext.Products.Update(product);
-                if (packagingLists.Count < 1)
-                {
-                    List<PackagingList> lists = trojantradingDbContext.PackagingLists.Where(pl => pl.ProductId == product.Id).ToList();
-                    if (lists.Count > 0) {
-                        trojantradingDbContext.PackagingLists.RemoveRange(lists);
-                    }
-                }
-                else {
-                    List<PackagingList> lists = trojantradingDbContext.PackagingLists.Where(pl => pl.ProductId == product.Id).ToList();
-                    foreach (var pack in packagingLists)
-                    {
-                        pack.ProductId = product.Id;
-                    }
-                    if (lists.Count > 0)
-                    {
-                        foreach (var pack in packagingLists) {
-                            foreach (var list in lists)
-                            {
-                                
-                            }
-                        }
-                    }
-                    else {
-                        trojantradingDbContext.PackagingLists.AddRange(packagingLists);
-                    }
-                }
                 trojantradingDbContext.SaveChanges();
                 return new ApiResponse()
                 {
                     Status = "success",
                     Message = "Successfully update product"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse()
+                {
+                    Status = "fail",
+                    Message = ex.Message
+                };
+            }
+        }
+
+        public ApiResponse UpdatePackagingList(List<PackagingList> lists, int productId)
+        {
+            try
+            {
+                List<PackagingList> originalList = trojantradingDbContext.PackagingLists.Where(pl => pl.ProductId == productId).ToList();
+                trojantradingDbContext.PackagingLists.RemoveRange(originalList);
+                trojantradingDbContext.SaveChanges();
+                trojantradingDbContext.PackagingLists.AddRange(lists);
+                trojantradingDbContext.SaveChanges();
+
+                return new ApiResponse()
+                {
+                    Status = "success",
+                    Message = "Successfully update packaging"
                 };
             }
             catch (Exception ex)

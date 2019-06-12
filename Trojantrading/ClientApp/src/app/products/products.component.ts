@@ -168,7 +168,8 @@ export class ProductsComponent implements OnInit, OnDestroy {
         id: 0,
         amount: product.quantity,
         product: product,
-        subTotal: 0
+        subTotal: 0,
+        packaging: product.packaging
       }
       this.loadContent = false;
       this.shoppingCartService.UpdateShoppingCart(_.toNumber(this.shareService.readCookie("userId")), this.shoppingItem).subscribe((res: ApiResponse) => {

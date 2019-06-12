@@ -103,7 +103,7 @@ namespace Trojantrading.Repositories
                 foreach (var item in cart.ShoppingItems)
                 {
                     stringBuilder.Append("<tr><td style='padding:0 0.25em;border-bottom:1px solid #c4c4c4'><h4 style='margin:0'>" + item.Product.Name + "</h4></td>");
-                    stringBuilder.Append("<tr><td style='padding:0 0.25em;border-bottom:1px solid #c4c4c4'><h4 style='margin:0'>" + item.Product.Packaging + "</h4></td>");
+                    stringBuilder.Append("<tr><td style='padding:0 0.25em;border-bottom:1px solid #c4c4c4'><h4 style='margin:0'>" + item.Packaging + "</h4></td>");
                     stringBuilder.Append("<td style='padding:0 0.25em;border-bottom:1px solid #c4c4c4;text-align:right'><p style='font:12px/1.5 Arial,Helvetica,sans-serif;margin:0 0 0 0'>$" + item.Product.OriginalPrice + "</p></td>");
                     if (currentUser.Role.ToLower() == "agent")
                     {

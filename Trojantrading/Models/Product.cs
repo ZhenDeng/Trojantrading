@@ -10,7 +10,6 @@ namespace Trojantrading.Models
         public DateTime CreatedDate { get; set; }
         public string Name { get; set; }
         public string ItemCode { get; set; }
-        public string Packaging { get; set; }
         public double OriginalPrice { get; set; }
         public int? MaxQty { get; set; }
         public int? MinQty { get; set; }

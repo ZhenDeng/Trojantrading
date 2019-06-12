@@ -137,6 +137,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     .subscribe((value: Product[]) => {
       this.allProducts = value;
       this.allProducts.forEach(product => product.quantity = 0);
+      this.allProducts.forEach(product => product.packaging="");
       this.loadContent = true;
       if (value.length && this.category != null && this.category != '') {
         this.filterProductsByCategory();
@@ -184,7 +185,8 @@ export class HomeComponent implements OnInit, OnDestroy {
         id: 0,
         amount: product.quantity,
         product: product,
-        subTotal: 0
+        subTotal: 0,
+        packaging: product.packaging
       }
       this.loadContent = false;
       this.shoppingCartService.UpdateShoppingCart(_.toNumber(this.shareService.readCookie("userId")), this.shoppingItem).subscribe((res: ApiResponse) => {
@@ -260,9 +262,19 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.productService.UpdateProduct(product).subscribe((res: ApiResponse) => {
           if (res.status == "success") {
             this.shareService.openSnackBar(res.message, "success");
-            setTimeout(() => {
-              this.getAllProducts();
-            }, 2000);
+            this.productService.UpdatePackagingList(product.id, product.packagingLists).subscribe((result: ApiResponse) => {
+              if(result.status == "success"){
+                this.loadContent = true;
+                this.getAllProducts();
+              }else{
+                this.loadContent = true;
+                this.shareService.openSnackBar(result.message, "error");
+              }
+            },
+              (error: any) => {
+                this.loadContent = true;
+                console.info(error);
+              });
           } else {
             this.loadContent = true;
             this.shareService.openSnackBar(res.message, "error");

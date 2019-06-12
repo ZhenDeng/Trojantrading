@@ -58,10 +58,10 @@ export class EditProductComponent implements OnInit {
     if(this.data.product){
       if(this.data.product.packagingLists && this.data.product.packagingLists.length){
         this.data.product.packagingLists.forEach(pack => {
-          if(pack.packageName == "OP"){
+          if(pack.packageName.trim() == "OP"){
             this.packOne = true;
           }
-          if(pack.packageName == "PP"){
+          if(pack.packageName.trim() == "PP"){
             this.packTwo = true;
           }
         });
@@ -82,15 +82,15 @@ export class EditProductComponent implements OnInit {
     if (this.userFormGroup.valid) {
       if(this.packOne){
         let packagingOne = {
-          id: 0,
-          packageName: "OP"
+          packageName: "OP",
+          productId: this.data.product.id
         } as PackagingList
         this.packagingList.push(packagingOne);
       }
       if(this.packTwo){
         let packagingTwo = {
-          id: 0,
-          packageName: "PP"
+          packageName: "PP",
+          productId: this.data.product.id
         } as PackagingList
         this.packagingList.push(packagingTwo);
       }

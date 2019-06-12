@@ -108,7 +108,8 @@ namespace Trojantrading.Repositories
                                 Amount = join.ShoppingItem.Amount,
                                 Product = join.Product,
                                 ProductId = join.Product.Id,
-                                Status = join.ShoppingItem.Status
+                                Status = join.ShoppingItem.Status,
+                                Packaging = join.ShoppingItem.Packaging
                             }).ToList();
             }
 
@@ -142,7 +143,8 @@ namespace Trojantrading.Repositories
                                 Amount = join.ShoppingItem.Amount,
                                 Product = join.Product,
                                 ProductId = join.Product.Id,
-                                Status = join.ShoppingItem.Status
+                                Status = join.ShoppingItem.Status,
+                                Packaging = join.ShoppingItem.Packaging
                             }).ToList();
             }
 
@@ -177,7 +179,8 @@ namespace Trojantrading.Repositories
                                 Amount = join.ShoppingItem.Amount,
                                 Product = join.Product,
                                 ProductId = join.Product.Id,
-                                Status = join.ShoppingItem.Status
+                                Status = join.ShoppingItem.Status,
+                                Packaging = join.ShoppingItem.Packaging
                             }).ToList();
             }
 
@@ -225,6 +228,7 @@ namespace Trojantrading.Repositories
                 {
                     var shoppingItemModel = trojantradingDbContext.ShoppingItems.Where(si => si.ShoppingCartId == shoppingCart.Id && si.ProductId == shoppingItem.Product.Id && si.Status == "0").FirstOrDefault();
                     shoppingItemModel.Amount += shoppingItem.Amount;
+                    shoppingItemModel.Packaging = shoppingItem.Packaging;
                     trojantradingDbContext.ShoppingItems.Update(shoppingItemModel);
                     trojantradingDbContext.SaveChanges();
                 }
@@ -235,7 +239,8 @@ namespace Trojantrading.Repositories
                         Amount = shoppingItem.Amount,
                         ProductId = shoppingItem.Product.Id,
                         ShoppingCartId = shoppingCart.Id,
-                        Status = "0"
+                        Status = "0",
+                        Packaging = shoppingItem.Packaging
                     };
                     trojantradingDbContext.ShoppingItems.Add(si);
                     trojantradingDbContext.SaveChanges();

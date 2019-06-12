@@ -133,7 +133,6 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
             this.shoppingCartService.GetShoppingCart(_.toNumber(this.shareService.readCookie("userId"))).subscribe((res: ShoppingCart) => {
               this.shoppingCart = res;
               this.dataSource = this.shoppingCart.shoppingItems;
-              console.info(this.dataSource);
               this.shoppingCartService.MonitorShoppingItemLength(this.dataSource.length);
               if (res && res.shoppingItems.length) {
                 this.updatePrice();

@@ -20,7 +20,6 @@ export interface Category{
 }
 
 export interface PackagingList{
-    id: number
     packageName: string
-    ProductId: number
+    productId: number
 }
