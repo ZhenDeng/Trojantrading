@@ -244,10 +244,10 @@ namespace Trojantrading.Controllers
                 stringBuilder.Append("<h1>Order #" + orderId + " for Customer " + currentUser.Account + "</h1>");
                 stringBuilder.Append("<div id='company' class='clearfix'><div>SHIPPING ADDRESS</div><div><span>Business Name:&nbsp;&nbsp;</span>" + currentUser.BussinessName + "</div><div><span>ADDRESS:&nbsp;&nbsp;</span>" + currentUser.ShippingStreetNumber + " " + currentUser.ShippingAddressLine + "</div><div>" + currentUser.ShippingSuburb + ", " + currentUser.ShippingState + ", " + currentUser.ShippingPostCode + "</div><div><span>EMAIL:&nbsp;&nbsp;</span> <a href='" + currentUser.Email + "' target='_blank'>" + currentUser.Email + "</a></div><div><span>PHONE:&nbsp;&nbsp;</span>" + currentUser.Phone + "</div></div>");
                 stringBuilder.Append("<div id='project'><div>BILLING ADDRESS</div><div><span>Business Name:&nbsp;&nbsp;</span>" + currentUser.BussinessName + "</div><div><span>ADDRESS:&nbsp;&nbsp;</span>" + currentUser.BillingStreetNumber + " " + currentUser.BillingAddressLine + "</div><div>" + currentUser.BillingSuburb + ", " + currentUser.BillingState + ", " + currentUser.BillingPostCode + "</div><div><span>EMAIL:&nbsp;&nbsp;</span> <a href='" + currentUser.Email + "' target='_blank'>" + currentUser.Email + "</a></div><div><span>PHONE:&nbsp;&nbsp;</span>" + currentUser.Phone + "</div></div></header>");
-                stringBuilder.Append("<main><table><thead><tr><th class='service' style='width: 10%'>Item Code</th><th class='desc' style='width: 50%'>Product Name</th><th style='width: 10%'>Original Price</th><th style='width: 10%'>Buy Price</th><th style='width: 10%'>Order Qty</th><th style='width: 10%'>Line Amount</th></tr></thead><tbody>");
+                stringBuilder.Append("<main><table><thead><tr><th class='service' style='width: 10%'>Item Code</th><th class='desc' style='width: 40%'>Product Name</th><th style='width: 10%'>Packaging</th><th style='width: 10%'>Original Price</th><th style='width: 10%'>Buy Price</th><th style='width: 10%'>Order Qty</th><th style='width: 10%'>Line Amount</th></tr></thead><tbody>");
                 foreach (var item in cart.ShoppingItems)
                 {
-                    stringBuilder.Append("<tr><td class='service'>" + item.Product.ItemCode + "</td><td class='desc'>" + item.Product.Name + "</td><td class='total'>$" + item.Product.OriginalPrice + "</td>");
+                    stringBuilder.Append("<tr><td class='service'>" + item.Product.ItemCode + "</td><td class='desc'>" + item.Product.Name + "</td><td class='total'>" + item.Packaging + "</td><td class='total'>$" + item.Product.OriginalPrice + "</td>");
                     if (currentUser.Role.ToLower() == "agent")
                     {
                         stringBuilder.Append("<td class='unit'>$" + String.Format("{0:0.00}", item.Product.AgentPrice) + "</td>");
@@ -266,11 +266,11 @@ namespace Trojantrading.Controllers
                         stringBuilder.Append("<td class='total'>$" + String.Format("{0:0.00}", item.Product.WholesalerPrice * item.Amount) + "</td></tr>");
                     }
                 }
-                stringBuilder.Append("<tr><td colspan='4' style='text-align:right'> Payment Method</td><td class='total' colspan='2'>" + String.Format("{0}", cart.PaymentMethod == "onaccount" ? "On Account" : "Prepayment") + "</td></tr>");
-                stringBuilder.Append("<tr><td colspan='4' style='text-align:right'> Total Price Excl.GST</td><td class='total' colspan='2'>$" + String.Format("{0:0.00}", priceExclGst) + "</td></tr>");
-                stringBuilder.Append("<tr><td colspan='4' style='text-align:right'> GST</td><td class='total' colspan='2'>$" + String.Format("{0:0.00}", gst) + "</td></tr>");
-                stringBuilder.Append("<tr><td colspan='4' style='text-align:right'> Total Discount Earned</td><td class='total' colspan='2'>$" + String.Format("{0:0.00}", discount) + "</td></tr>");
-                stringBuilder.Append("<tr><td colspan='4' style='text-align:right' class='grand total'> Total Price Inc.GST</td><td class='grand total' colspan='2'>$" + String.Format("{0:0.00}", priceIncGst) + "</td></tr>");
+                stringBuilder.Append("<tr><td colspan='4' style='text-align:right'> Payment Method</td><td class='total' colspan='3'>" + String.Format("{0}", cart.PaymentMethod == "onaccount" ? "On Account" : "Prepayment") + "</td></tr>");
+                stringBuilder.Append("<tr><td colspan='4' style='text-align:right'> Total Price Excl.GST</td><td class='total' colspan='3'>$" + String.Format("{0:0.00}", priceExclGst) + "</td></tr>");
+                stringBuilder.Append("<tr><td colspan='4' style='text-align:right'> GST</td><td class='total' colspan='3'>$" + String.Format("{0:0.00}", gst) + "</td></tr>");
+                stringBuilder.Append("<tr><td colspan='4' style='text-align:right'> Total Discount Earned</td><td class='total' colspan='3'>$" + String.Format("{0:0.00}", discount) + "</td></tr>");
+                stringBuilder.Append("<tr><td colspan='4' style='text-align:right' class='grand total'> Total Price Inc.GST</td><td class='grand total' colspan='3'>$" + String.Format("{0:0.00}", priceIncGst) + "</td></tr>");
                 stringBuilder.Append("</tbody></table>");
                 stringBuilder.Append("<div id='notices'><div>NOTICE:</div><div class='notice'>A finance charge of 1.5% will be made on unpaid balances after 30 days.</div></div>");
                 stringBuilder.Append("</main>");
@@ -320,15 +320,13 @@ namespace Trojantrading.Controllers
                         var path = Path.Combine(
                                     Directory.GetCurrentDirectory(), "wwwroot", "img", uploadFile.FileName);
 
-                        if (System.IO.File.Exists(path))
+                        if (!System.IO.File.Exists(path))
                         {
-                            System.IO.File.Delete(path);
-                        }
-
-                        using (var stream = new FileStream(path, FileMode.Create))
-                        {
-                            uploadFile.CopyTo(stream);
-                            stream.Close();
+                            using (var stream = new FileStream(path, FileMode.Create))
+                            {
+                                uploadFile.CopyTo(stream);
+                                stream.Close();
+                            }
                         }
 
                         if (trojantradingDbContext.HeadInformations.Where(img => img.ImagePath == path).Count() == 0)

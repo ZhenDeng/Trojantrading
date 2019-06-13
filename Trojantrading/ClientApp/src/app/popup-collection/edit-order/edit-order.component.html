@@ -37,6 +37,7 @@
             <th class="col">Item Code</th>
             <th class="col" style="max-width:30%">Product Name</th>
             <th class="col">Category</th>
+            <th class="col">Packaging</th>
             <th class="col">Original Price</th>
             <th class="col" *ngIf="currentRole =='agent'">Agent Price</th>
             <th class="col" *ngIf="currentRole =='wholesaler'">WholeSeller Price</th>
@@ -55,6 +56,9 @@
                 </td>
                 <td class="col-md align-left">
                   {{ item.product.category }}
+                </td>
+                <td class="col-md align-left">
+                  {{ item.packaging }}
                 </td>
                 <td class="col-md align-left">
                   {{ item.product.originalPrice | currency:'AUD':'symbol-narrow':'.2-2' }}
