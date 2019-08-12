@@ -28,6 +28,7 @@
           <h4 style="text-transform:capitalize;">{{title}}</h4>
           <button class="btn btn-green addnewproduct" (click)="addNewProduct()" *ngIf="role =='admin'">Add New
             Product</button>
+          <button class="btn btn-green addnewproduct" (click)="uploadProduct()" *ngIf="role =='admin'">Upload Products</button>
           <span class="filter-wrapper">
             <span class="searchInputGroup">
               <span class="searchIcon">

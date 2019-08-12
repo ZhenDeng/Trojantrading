@@ -54,6 +54,7 @@ import { UploadImageComponent } from './popup-collection/upload-image/upload-ima
 import { DeleteConfirmComponent } from './popup-collection/delete-confirm/delete-confirm.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MaintainencePageComponent } from './maintainence-page/maintainence-page.component';
+import { UploadProductsComponent } from './popup-collection/upload-products/upload-products.component';
 
 @NgModule({
   declarations: [
@@ -79,7 +80,8 @@ import { MaintainencePageComponent } from './maintainence-page/maintainence-page
     UploadUsersComponent,
     UploadImageComponent,
     DeleteConfirmComponent,
-    MaintainencePageComponent
+    MaintainencePageComponent,
+    UploadProductsComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

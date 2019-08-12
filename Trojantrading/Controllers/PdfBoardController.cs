@@ -25,19 +25,22 @@ namespace Trojantrading.Controllers
         private readonly IShare share;
         private readonly IUserRepository userRepository;
         private readonly IShoppingCartRepository shoppingCartRepository;
+        private readonly IProductRepository productRepository;
 
         public PdfBoardController(
             IPdfBoardRepository pdfBoardRepository,
             TrojantradingDbContext trojantradingDbContext,
             IShare share,
             IUserRepository userRepository,
-            IShoppingCartRepository shoppingCartRepository)
+            IShoppingCartRepository shoppingCartRepository,
+            IProductRepository productRepository)
         {
             this.pdfBoardRepository = pdfBoardRepository;
             this.trojantradingDbContext = trojantradingDbContext;
             this.share = share;
             this.userRepository = userRepository;
             this.shoppingCartRepository = shoppingCartRepository;
+            this.productRepository = productRepository;
         }
 
         [HttpGet("GetPdfBoards")]
@@ -199,7 +202,118 @@ namespace Trojantrading.Controllers
                         return Ok(new ApiResponse
                         {
                             Status = "success",
-                            Message = " PRICE LIST Pdf file uploaded."
+                            Message = "Users uploaded."
+                        });
+                    }
+                }
+                return Ok(new ApiResponse
+                {
+                    Status = "fail",
+                    Message = "Upload file is empty"
+                });
+            }
+            catch (Exception ex)
+            {
+                return Ok(new ApiResponse
+                {
+                    Status = "fail",
+                    Message = ex.Message
+                });
+            }
+        }
+        #endregion
+
+
+        #region Upload Users
+        [HttpPost("UploadProducts"), DisableRequestSizeLimit]
+        [NoCache]
+        [ProducesResponseType(typeof(ApiResponse), 200)]
+        [ProducesResponseType(typeof(ApiResponse), 400)]
+        public IActionResult UploadProducts()
+        {
+            try
+            {
+                var httpRequest = HttpContext.Request;
+                if (httpRequest.Form.Files.Count > 0)
+                {
+                    var uploadFile = httpRequest.Form.Files[0];  // get the uploaded file
+                    if (uploadFile != null && uploadFile.Length > 0)
+                    {
+                        var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ImportProducts.xlsx");
+                        if (System.IO.File.Exists(path))
+                        {
+                            System.IO.File.Delete(path);
+                        }
+
+                        using (var stream = new FileStream(path, FileMode.Create))
+                        {
+                            uploadFile.CopyTo(stream);
+                            stream.Close();
+                        }
+                        FileInfo file = new FileInfo(path);
+                        using (ExcelPackage package = new ExcelPackage(file))
+                        {
+                            ExcelWorksheet workSheet = package.Workbook.Worksheets["Trojan Product items as at 2407"];
+                            int totalRows = workSheet.Dimension.Rows;
+
+                            List<Product> productList = new List<Product>();
+
+                            for (int i = 1; i <= totalRows; i++)
+                            {
+                                if (workSheet.Cells[i, 1].Value != null)
+                                {
+                                    productList.Add(new Product()
+                                    {
+                                        ItemCode = workSheet.Cells[i, 1].Value == null ? "" : workSheet.Cells[i, 1].Value.ToString(),
+                                        Name = workSheet.Cells[i, 2].Value == null ? "" : workSheet.Cells[i, 2].Value.ToString(),
+                                        Category = workSheet.Cells[i, 3].Value == null ? "" : workSheet.Cells[i, 3].Value.ToString(),
+                                        //PackagingLists = workSheet.Cells[i, 4].Value == null ? "" : workSheet.Cells[i, 4].Value.ToString(),
+                                        OriginalPrice = workSheet.Cells[i, 5].Value == null ? 0 : double.Parse(workSheet.Cells[i, 5].Value.ToString().Replace("$", "").Trim()),
+                                        AgentPrice = workSheet.Cells[i, 6].Value == null ? 0 : double.Parse(workSheet.Cells[i, 6].Value.ToString().Replace("$", "").Trim()),
+                                        WholesalerPrice = workSheet.Cells[i, 7].Value == null ? 0 : double.Parse(workSheet.Cells[i, 7].Value.ToString().Replace("$", "").Trim()),
+                                        PrepaymentDiscount = workSheet.Cells[i, 8].Value == null ? 0 : double.Parse(workSheet.Cells[i, 8].Value.ToString().Replace("$", "").Trim()),
+                                        Status = workSheet.Cells[i, 9].Value == null ? "" : workSheet.Cells[i, 9].Value.ToString()
+                                    });
+                                }
+                            }
+                            
+                            trojantradingDbContext.Products.AddRange(productList);
+                            trojantradingDbContext.SaveChanges();
+                            
+                            for (int i = 1; i <= totalRows; i++)
+                            {
+                                if (workSheet.Cells[i, 1].Value != null)
+                                {
+                                    List<PackagingList> PackageNames = new List<PackagingList>();
+                                    string PackageName = workSheet.Cells[i, 4].Value == null ? "" : workSheet.Cells[i, 4].Value.ToString();
+                                    int productId = trojantradingDbContext.Products.Where(x => x.ItemCode == workSheet.Cells[i, 1].Value.ToString()).FirstOrDefault().Id;
+                                    if (PackageName.ToLower().Contains("op")) {
+                                        PackageNames.Add(new PackagingList() {
+                                            ProductId = productId,
+                                            PackageName = "OP"
+                                        });
+                                    }
+                                    if (PackageName.ToLower().Contains("PP"))
+                                    {
+                                        PackageNames.Add(new PackagingList()
+                                        {
+                                            ProductId = productId,
+                                            PackageName = "PP"
+                                        });
+                                    }
+                                    trojantradingDbContext.PackagingLists.AddRange(PackageNames);
+                                    trojantradingDbContext.SaveChanges();
+                                }
+                            }
+
+                            trojantradingDbContext.Dispose();
+                            package.Stream.Close();
+                            package.Dispose();
+                        }
+                        return Ok(new ApiResponse
+                        {
+                            Status = "success",
+                            Message = "Products uploaded."
                         });
                     }
                 }
