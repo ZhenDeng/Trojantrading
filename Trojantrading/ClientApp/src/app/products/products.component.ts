@@ -16,6 +16,7 @@ import { User } from '../models/user';
 import { ShoppingItem } from '../models/shoppingItem';
 import { ShoppingCart } from '../models/shoppingCart';
 import { ShoppingCartService } from '../services/shopping-cart.service';
+import { UploadProductsComponent } from '../popup-collection/upload-products/upload-products.component';
 
 @Component({
   selector: 'app-products',
@@ -343,6 +344,16 @@ export class ProductsComponent implements OnInit, OnDestroy {
       element.quantity = 0;
       this.shareService.openSnackBar("Minimum qty is 0", "error");
     }
+  }
+
+  uploadProduct(): void{
+    const dialogRef = this.dialog.open(UploadProductsComponent, {
+      width: '700px',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.getProducts(this.viewType);
+    });
   }
 
   switchLabel(id: string): void{

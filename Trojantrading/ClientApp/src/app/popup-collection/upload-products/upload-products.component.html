@@ -1,0 +1,9 @@
+<h1 mat-dialog-title>UPLOAD USERS</h1>
+<div mat-dialog-content>
+  <loading-screen *ngIf="!loadContent" [showBlurTable]="false"></loading-screen>
+  <input class="file-upload" type='file' (change)="onSelectFile($event)">
+</div>
+<div mat-dialog-actions>
+  <button mat-button class="btn btn-long" (click)="onNoClick()">CANCEL</button>
+  <button mat-button class="btn btn-long uploadusers" (click)="uploadUsers()">UPLOAD</button>
+</div>

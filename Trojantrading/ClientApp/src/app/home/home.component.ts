@@ -17,6 +17,7 @@ import { NgbDropdownConfig } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs';
 import 'rxjs/add/operator/takeUntil';
 import { DeleteConfirmComponent } from '../popup-collection/delete-confirm/delete-confirm.component';
+import { UploadProductsComponent } from '../popup-collection/upload-products/upload-products.component';
 
 @Component({
   selector: 'app-home',
@@ -324,6 +325,16 @@ export class HomeComponent implements OnInit, OnDestroy {
       element.quantity = 0;
       this.shareService.openSnackBar("Minimum qty is 0", "error");
     }
+  }
+
+  uploadProduct(): void{
+    const dialogRef = this.dialog.open(UploadProductsComponent, {
+      width: '700px',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.getAllProducts();
+    });
   }
 
   manageRedirect(category: string) {
