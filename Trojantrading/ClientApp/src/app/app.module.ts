@@ -135,7 +135,8 @@ import { UploadProductsComponent } from './popup-collection/upload-products/uplo
     UploadPdfComponent,
     UploadUsersComponent,
     UploadImageComponent,
-    DeleteConfirmComponent
+    DeleteConfirmComponent,
+    UploadProductsComponent
   ],
   bootstrap: [AppComponent]
 })
