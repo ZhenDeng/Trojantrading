@@ -11,16 +11,14 @@ export class ProductService {
   base_url: string = "api/Product";
 
   categoryList: Category[] = [
-    { type: 'Hand-Made Cigars', category: 'hand-made' },
-    { type: 'Machine-Made Cigars', category: 'machine-made' },
-    { type: 'Little Cigars', category: 'little-cigars' },
-    { type: 'Cigarettes', category: 'cigarettes' },
-    { type: 'Pipe Tobacco', category: 'pipe-tobacco' },
-    { type: 'Roll Your Own', category: 'roll-your-won' },
-    { type: 'Filters', category: 'filters' },
-    { type: 'Papers', category: 'papers' },
-    { type: 'Lighters', category: 'lighters' },
-    { type: 'Accessories', category: 'accessories' },
+    { type: 'Cigarettes', category: 'Cigarettes' },
+    { type: 'RYO', category: 'RYO' },
+    { type: 'Pipe', category: 'Pipe' },
+    { type: 'Cigars', category: 'Cigars' },
+    { type: 'Premium Cigar', category: 'Premium-Cigar' },
+    { type: 'Lighters', category: 'Lighters' },
+    { type: 'Accessories', category: 'Accessories' },
+    { type: 'Papers', category: 'Papers' }
   ];
 
   constructor(

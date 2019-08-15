@@ -266,7 +266,7 @@ namespace Trojantrading.Controllers
                                     {
                                         ItemCode = workSheet.Cells[i, 2].Value == null ? "" : workSheet.Cells[i, 2].Value.ToString(),
                                         Name = workSheet.Cells[i, 3].Value == null ? "" : workSheet.Cells[i, 3].Value.ToString(),
-                                        Category = workSheet.Cells[i, 4].Value == null ? "" : workSheet.Cells[i, 4].Value.ToString(),
+                                        Category = workSheet.Cells[i, 4].Value == null ? "" : workSheet.Cells[i, 4].Value.ToString().Trim().Replace(' ', '-'),
                                         OriginalPrice = workSheet.Cells[i, 6].Value == null ? 0 : double.Parse(workSheet.Cells[i, 6].Value.ToString().Replace("$", "").Trim()),
                                         AgentPrice = workSheet.Cells[i, 7].Value == null ? 0 : double.Parse(workSheet.Cells[i, 7].Value.ToString().Replace("$", "").Trim()),
                                         WholesalerPrice = workSheet.Cells[i, 8].Value == null ? 0 : double.Parse(workSheet.Cells[i, 8].Value.ToString().Replace("$", "").Trim()),
@@ -285,14 +285,14 @@ namespace Trojantrading.Controllers
                                 {
                                     List<PackagingList> PackageNames = new List<PackagingList>();
                                     string PackageName = workSheet.Cells[i, 5].Value == null ? "" : workSheet.Cells[i, 5].Value.ToString();
-                                    int productId = trojantradingDbContext.Products.Where(x => x.ItemCode == workSheet.Cells[i, 2].Value.ToString()).FirstOrDefault().Id;
+                                    int productId = trojantradingDbContext.Products.Where(x => x.Name == workSheet.Cells[i, 3].Value.ToString()).FirstOrDefault().Id;
                                     if (PackageName.ToLower().Contains("op")) {
                                         PackageNames.Add(new PackagingList() {
                                             ProductId = productId,
                                             PackageName = "OP"
                                         });
                                     }
-                                    if (PackageName.ToLower().Contains("PP"))
+                                    if (PackageName.ToLower().Contains("pp"))
                                     {
                                         PackageNames.Add(new PackagingList()
                                         {
