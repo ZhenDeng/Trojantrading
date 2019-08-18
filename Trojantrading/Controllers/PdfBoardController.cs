@@ -257,26 +257,44 @@ namespace Trojantrading.Controllers
                             int totalRows = workSheet.Dimension.Rows;
 
                             List<Product> productList = new List<Product>();
+                            List<Product> updateProductList = new List<Product>();
 
                             for (int i = 2; i <= totalRows; i++)
                             {
                                 if (workSheet.Cells[i, 2].Value != null)
                                 {
-                                    productList.Add(new Product()
+                                    if (trojantradingDbContext.Products.Where(x => x.Name == workSheet.Cells[i, 3].Value.ToString()).Count() < 1)
                                     {
-                                        ItemCode = workSheet.Cells[i, 2].Value == null ? "" : workSheet.Cells[i, 2].Value.ToString(),
-                                        Name = workSheet.Cells[i, 3].Value == null ? "" : workSheet.Cells[i, 3].Value.ToString(),
-                                        Category = workSheet.Cells[i, 4].Value == null ? "" : workSheet.Cells[i, 4].Value.ToString().Trim().Replace(' ', '-'),
-                                        OriginalPrice = workSheet.Cells[i, 6].Value == null ? 0 : double.Parse(workSheet.Cells[i, 6].Value.ToString().Replace("$", "").Trim()),
-                                        AgentPrice = workSheet.Cells[i, 7].Value == null ? 0 : double.Parse(workSheet.Cells[i, 7].Value.ToString().Replace("$", "").Trim()),
-                                        WholesalerPrice = workSheet.Cells[i, 8].Value == null ? 0 : double.Parse(workSheet.Cells[i, 8].Value.ToString().Replace("$", "").Trim()),
-                                        PrepaymentDiscount = workSheet.Cells[i, 9].Value == null ? 0 : double.Parse(workSheet.Cells[i, 9].Value.ToString().Replace("$", "").Trim()),
-                                        Status = workSheet.Cells[i, 10].Value == null ? "" : workSheet.Cells[i, 10].Value.ToString()
-                                    });
+                                        productList.Add(new Product()
+                                        {
+                                            ItemCode = workSheet.Cells[i, 2].Value == null ? "" : workSheet.Cells[i, 2].Value.ToString(),
+                                            Name = workSheet.Cells[i, 3].Value == null ? "" : workSheet.Cells[i, 3].Value.ToString(),
+                                            Category = workSheet.Cells[i, 4].Value == null ? "" : workSheet.Cells[i, 4].Value.ToString().Trim().Replace(' ', '-'),
+                                            OriginalPrice = workSheet.Cells[i, 6].Value == null ? 0 : double.Parse(workSheet.Cells[i, 6].Value.ToString().Replace("$", "").Trim()),
+                                            AgentPrice = workSheet.Cells[i, 7].Value == null ? 0 : double.Parse(workSheet.Cells[i, 7].Value.ToString().Replace("$", "").Trim()),
+                                            WholesalerPrice = workSheet.Cells[i, 8].Value == null ? 0 : double.Parse(workSheet.Cells[i, 8].Value.ToString().Replace("$", "").Trim()),
+                                            PrepaymentDiscount = workSheet.Cells[i, 9].Value == null ? 0 : double.Parse(workSheet.Cells[i, 9].Value.ToString().Replace("$", "").Trim()),
+                                            Status = workSheet.Cells[i, 10].Value == null ? "" : workSheet.Cells[i, 10].Value.ToString()
+                                        });
+                                    }
+                                    else {
+                                        updateProductList.Add(new Product()
+                                        {
+                                            ItemCode = workSheet.Cells[i, 2].Value == null ? "" : workSheet.Cells[i, 2].Value.ToString(),
+                                            Name = workSheet.Cells[i, 3].Value == null ? "" : workSheet.Cells[i, 3].Value.ToString(),
+                                            Category = workSheet.Cells[i, 4].Value == null ? "" : workSheet.Cells[i, 4].Value.ToString().Trim().Replace(' ', '-'),
+                                            OriginalPrice = workSheet.Cells[i, 6].Value == null ? 0 : double.Parse(workSheet.Cells[i, 6].Value.ToString().Replace("$", "").Trim()),
+                                            AgentPrice = workSheet.Cells[i, 7].Value == null ? 0 : double.Parse(workSheet.Cells[i, 7].Value.ToString().Replace("$", "").Trim()),
+                                            WholesalerPrice = workSheet.Cells[i, 8].Value == null ? 0 : double.Parse(workSheet.Cells[i, 8].Value.ToString().Replace("$", "").Trim()),
+                                            PrepaymentDiscount = workSheet.Cells[i, 9].Value == null ? 0 : double.Parse(workSheet.Cells[i, 9].Value.ToString().Replace("$", "").Trim()),
+                                            Status = workSheet.Cells[i, 10].Value == null ? "" : workSheet.Cells[i, 10].Value.ToString()
+                                        });
+                                    }
                                 }
                             }
                             
                             trojantradingDbContext.Products.AddRange(productList);
+                            trojantradingDbContext.Products.UpdateRange(updateProductList);
                             trojantradingDbContext.SaveChanges();
                             
                             for (int i = 2; i <= totalRows; i++)

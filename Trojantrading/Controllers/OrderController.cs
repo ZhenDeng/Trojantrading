@@ -1,15 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Trojantrading.Repositories;
 using Trojantrading.Models;
 using Trojantrading.Util;
-using OfficeOpenXml;
-using System.IO;
-using Trojantrading.DAL;
 
 namespace Trojantrading.Controllers
 {

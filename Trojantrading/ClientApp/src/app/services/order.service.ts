@@ -13,7 +13,7 @@ export class OrderService {
   base_url: string = "api/Order";
 
   statusList: Status[] = [
-    { orderStatus: 'Unprocessed'},
+    { orderStatus: 'Submitted'},
     { orderStatus: 'Accepted'},
     { orderStatus: 'Rejected'},
     { orderStatus: 'Shipped '}
