@@ -278,48 +278,75 @@ namespace Trojantrading.Controllers
                                         });
                                     }
                                     else {
-                                        updateProductList.Add(new Product()
-                                        {
-                                            ItemCode = workSheet.Cells[i, 2].Value == null ? "" : workSheet.Cells[i, 2].Value.ToString(),
-                                            Name = workSheet.Cells[i, 3].Value == null ? "" : workSheet.Cells[i, 3].Value.ToString(),
-                                            Category = workSheet.Cells[i, 4].Value == null ? "" : workSheet.Cells[i, 4].Value.ToString().Trim().Replace(' ', '-'),
-                                            OriginalPrice = workSheet.Cells[i, 6].Value == null ? 0 : double.Parse(workSheet.Cells[i, 6].Value.ToString().Replace("$", "").Trim()),
-                                            AgentPrice = workSheet.Cells[i, 7].Value == null ? 0 : double.Parse(workSheet.Cells[i, 7].Value.ToString().Replace("$", "").Trim()),
-                                            WholesalerPrice = workSheet.Cells[i, 8].Value == null ? 0 : double.Parse(workSheet.Cells[i, 8].Value.ToString().Replace("$", "").Trim()),
-                                            PrepaymentDiscount = workSheet.Cells[i, 9].Value == null ? 0 : double.Parse(workSheet.Cells[i, 9].Value.ToString().Replace("$", "").Trim()),
-                                            Status = workSheet.Cells[i, 10].Value == null ? "" : workSheet.Cells[i, 10].Value.ToString()
-                                        });
+                                        var product = trojantradingDbContext.Products.Where(x => x.Name == workSheet.Cells[i, 3].Value.ToString()).FirstOrDefault();
+                                        product.ItemCode = workSheet.Cells[i, 2].Value == null ? "" : workSheet.Cells[i, 2].Value.ToString();
+                                        product.Name = workSheet.Cells[i, 3].Value == null ? "" : workSheet.Cells[i, 3].Value.ToString();
+                                        product.Category = workSheet.Cells[i, 4].Value == null ? "" : workSheet.Cells[i, 4].Value.ToString().Trim().Replace(' ', '-');
+                                        product.OriginalPrice = workSheet.Cells[i, 6].Value == null ? 0 : double.Parse(workSheet.Cells[i, 6].Value.ToString().Replace("$", "").Trim());
+                                        product.AgentPrice = workSheet.Cells[i, 7].Value == null ? 0 : double.Parse(workSheet.Cells[i, 7].Value.ToString().Replace("$", "").Trim());
+                                        product.WholesalerPrice = workSheet.Cells[i, 8].Value == null ? 0 : double.Parse(workSheet.Cells[i, 8].Value.ToString().Replace("$", "").Trim());
+                                        product.PrepaymentDiscount = workSheet.Cells[i, 9].Value == null ? 0 : double.Parse(workSheet.Cells[i, 9].Value.ToString().Replace("$", "").Trim());
+                                        product.Status = workSheet.Cells[i, 10].Value == null ? "" : workSheet.Cells[i, 10].Value.ToString();
+                                        trojantradingDbContext.Products.Update(product);
+                                        trojantradingDbContext.SaveChanges();
                                     }
                                 }
                             }
-                            
-                            trojantradingDbContext.Products.AddRange(productList);
-                            trojantradingDbContext.Products.UpdateRange(updateProductList);
-                            trojantradingDbContext.SaveChanges();
-                            
+                            if (productList.Count>0) {
+                                trojantradingDbContext.Products.AddRange(productList);
+                                trojantradingDbContext.SaveChanges();
+                            }
+
                             for (int i = 2; i <= totalRows; i++)
                             {
                                 if (workSheet.Cells[i, 2].Value != null)
                                 {
-                                    List<PackagingList> PackageNames = new List<PackagingList>();
-                                    string PackageName = workSheet.Cells[i, 5].Value == null ? "" : workSheet.Cells[i, 5].Value.ToString();
-                                    int productId = trojantradingDbContext.Products.Where(x => x.Name == workSheet.Cells[i, 3].Value.ToString()).FirstOrDefault().Id;
-                                    if (PackageName.ToLower().Contains("op")) {
-                                        PackageNames.Add(new PackagingList() {
-                                            ProductId = productId,
-                                            PackageName = "OP"
-                                        });
-                                    }
-                                    if (PackageName.ToLower().Contains("pp"))
+                                    if (trojantradingDbContext.PackagingLists.Where(x => x.ProductId == trojantradingDbContext.Products.Where(y => y.Name == workSheet.Cells[i, 3].Value.ToString()).FirstOrDefault().Id).Count() < 1)
                                     {
-                                        PackageNames.Add(new PackagingList()
+                                        List<PackagingList> PackageNames = new List<PackagingList>();
+                                        string PackageName = workSheet.Cells[i, 5].Value == null ? "" : workSheet.Cells[i, 5].Value.ToString();
+                                        int productId = trojantradingDbContext.Products.Where(x => x.Name == workSheet.Cells[i, 3].Value.ToString()).FirstOrDefault().Id;
+                                        if (PackageName.ToLower().Contains("op"))
                                         {
-                                            ProductId = productId,
-                                            PackageName = "PP"
-                                        });
+                                            PackageNames.Add(new PackagingList()
+                                            {
+                                                ProductId = productId,
+                                                PackageName = "OP"
+                                            });
+                                        }
+                                        if (PackageName.ToLower().Contains("pp"))
+                                        {
+                                            PackageNames.Add(new PackagingList()
+                                            {
+                                                ProductId = productId,
+                                                PackageName = "PP"
+                                            });
+                                        }
+                                        trojantradingDbContext.PackagingLists.AddRange(PackageNames);
+                                        trojantradingDbContext.SaveChanges();
                                     }
-                                    trojantradingDbContext.PackagingLists.AddRange(PackageNames);
-                                    trojantradingDbContext.SaveChanges();
+                                    else
+                                    {
+                                        var updatePackageNames = trojantradingDbContext.PackagingLists.Where(x => x.ProductId == trojantradingDbContext.Products.Where(y => y.Name == workSheet.Cells[i, 3].Value.ToString()).FirstOrDefault().Id).FirstOrDefault();
+                                        string PackageName = workSheet.Cells[i, 5].Value == null ? "" : workSheet.Cells[i, 5].Value.ToString();
+                                        int productId = trojantradingDbContext.Products.Where(x => x.Name == workSheet.Cells[i, 3].Value.ToString()).FirstOrDefault().Id;
+                                        if (PackageName.ToLower().Contains("op"))
+                                        {
+                                            updatePackageNames.ProductId = productId;
+                                            updatePackageNames.PackageName = "OP";
+                                        }
+                                        else if (PackageName.ToLower().Contains("pp"))
+                                        {
+                                            updatePackageNames.ProductId = productId;
+                                            updatePackageNames.PackageName = "PP";
+                                        }
+                                        else {
+                                            trojantradingDbContext.PackagingLists.Remove(updatePackageNames);
+                                            trojantradingDbContext.SaveChanges();
+                                        }
+                                        trojantradingDbContext.PackagingLists.Update(updatePackageNames);
+                                        trojantradingDbContext.SaveChanges();
+                                    }
                                 }
                             }
 
