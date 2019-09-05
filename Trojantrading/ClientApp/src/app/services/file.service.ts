@@ -58,8 +58,8 @@ export class FileService {
     .pipe(catchError(this.handleError));
   }
 
-  WritePdf(orderId: number, gst: number, priceExclGst: number, discount: number, userId: number): Observable<ApiResponse>{
-    return this.http.get(this.base_url + "/WritePdf?orderId="+orderId+"&gst="+gst+"&priceExclGst="+priceExclGst+"&discount="+discount+"&userId="+userId)
+  WritePdf(orderId: number, gst: number, priceExclGst: number, discount: number, userId: number): Observable<any>{
+    return this.http.get(this.base_url + "/WritePdf?orderId="+orderId+"&gst="+gst+"&priceExclGst="+priceExclGst+"&discount="+discount+"&userId="+userId, { responseType: 'blob', headers: {'Accept': 'application/pdf;charset=UTF-8'} })
     .pipe(catchError(this.handleError));
   }
 

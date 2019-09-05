@@ -175,8 +175,8 @@ export class AdministrationComponent implements OnInit, OnDestroy {
   }
 
   convertDateFormat(): void {
-    this.strDateFrom = this.dateFrom.month + '/' + this.dateFrom.day + '/' + this.dateFrom.year;
-    this.strDateTo = this.dateTo.month + '/' + this.dateTo.day + '/' + this.dateTo.year;
+    this.strDateFrom = this.dateFrom.day + '/' + this.dateFrom.month + '/' + this.dateFrom.year;
+    this.strDateTo = this.dateTo.day + '/' + this.dateTo.month + '/' + this.dateTo.year;
   }
 
   downloadExcel() {
@@ -538,13 +538,9 @@ export class AdministrationComponent implements OnInit, OnDestroy {
             this.priceExclGst = this.priceIncGst/11*10;
             this.discount = this.oringinalPriceIncGst - this.priceIncGst;
           }
-          this.fileService.WritePdf(element.id, this.gst, this.priceExclGst, this.discount, element.userId).subscribe((res: ApiResponse) => {
-            if (res.status == "success") {
-              window.open("/order_" + element.id + ".pdf", "_blank");
-              this.shareService.openSnackBar(res.message, "success");
-            } else {
-              this.shareService.openSnackBar(res.message, "error");
-            }
+          this.fileService.WritePdf(element.id, this.gst, this.priceExclGst, this.discount, element.userId).subscribe(data => {
+            const fileName = "order_" + element.id + ".pdf";
+            this.fileService.saveAsPdf(data, fileName);
             this.loadContent = true;
           },
             (error: any) => {

@@ -438,15 +438,13 @@ namespace Trojantrading.Controllers
                 HtmlToPdf Renderer = new HtmlToPdf();
                 var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "order_" + orderId + ".pdf");
                 var pdf = Renderer.ConvertHtmlString(pdfBody);
-                using (var stream = new FileStream(path, FileMode.Create))
-                {
-                    pdf.Save(stream);
-                }
-                return Ok(new ApiResponse
-                {
-                    Status = "success",
-                    Message = "Successfully write order to pdf file",
-                });
+
+                MemoryStream stream = new MemoryStream();
+                pdf.Save(stream);
+                pdf.Close();
+                byte[] docBytes = stream.ToArray();
+
+                return File(docBytes, "application/pdf");
             }
             catch (Exception ex)
             {
