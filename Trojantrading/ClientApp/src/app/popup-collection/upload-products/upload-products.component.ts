@@ -2,7 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { FileService } from '../../services/file.service';
 import { ShareService } from '../../services/share.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import _ = require('lodash');
+import * as _ from 'lodash';
 import { ApiResponse } from '../../models/ApiResponse';
 
 @Component({

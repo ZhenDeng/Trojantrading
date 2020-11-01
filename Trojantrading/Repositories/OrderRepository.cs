@@ -242,11 +242,11 @@ namespace Trojantrading.Repositories
         public List<Order> GetOrdersByUserID(int userId, string dateFrom, string dateTo)
         {
 
-            DateTime fromDate = string.IsNullOrWhiteSpace(dateFrom) ? DateTime.Now.AddMonths(-1) : DateTime.Parse(dateFrom);
-            DateTime toDate = string.IsNullOrWhiteSpace(dateTo) ? DateTime.Now.AddDays(1) : DateTime.Parse(dateTo).AddDays(1); // end date always next day midnight
+            DateTime fromDate = string.IsNullOrWhiteSpace(dateFrom) ? DateTime.Now.AddMonths(-1) : DateTime.ParseExact(dateFrom, @"d/M/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+            DateTime toDate = string.IsNullOrWhiteSpace(dateTo) ? DateTime.Now.AddDays(1) : DateTime.ParseExact(dateTo, @"d/M/yyyy", System.Globalization.CultureInfo.InvariantCulture).AddDays(1); // end date always next day midnight
 
             var orders = trojantradingDbContext.Orders
-                .Where(x => x.UserId == userId && DateTime.Compare(x.CreatedDate, fromDate)>=0 && DateTime.Compare(x.CreatedDate, toDate) <= 0).ToList();
+                .Where(x => x.UserId == userId && DateTime.Compare(x.CreatedDate, fromDate) >= 0 && DateTime.Compare(x.CreatedDate, toDate) <= 0).ToList();
 
             foreach (var order in orders)
             {
@@ -263,8 +263,8 @@ namespace Trojantrading.Repositories
         {
             List<Order> orders = new List<Order>();
 
-            DateTime fromDate = string.IsNullOrWhiteSpace(dateFrom) ? DateTime.Now.AddMonths(-1).Date : DateTime.Parse(dateFrom).Date;
-            DateTime toDate = string.IsNullOrWhiteSpace(dateTo) ? DateTime.Now.AddDays(1).Date : DateTime.Parse(dateTo).AddDays(1).Date; // end date always next day midnight
+            DateTime fromDate = string.IsNullOrWhiteSpace(dateFrom) ? DateTime.Now.AddMonths(-1).Date : DateTime.ParseExact(dateFrom, @"d/M/yyyy", System.Globalization.CultureInfo.InvariantCulture).Date;
+            DateTime toDate = string.IsNullOrWhiteSpace(dateTo) ? DateTime.Now.AddDays(1).Date : DateTime.ParseExact(dateTo, @"d/M/yyyy", System.Globalization.CultureInfo.InvariantCulture).AddDays(1).Date; // end date always next day midnight
 
             orders = trojantradingDbContext.Orders
                 .Where(x => DateTime.Compare(x.CreatedDate, fromDate) >= 0 && DateTime.Compare(x.CreatedDate, toDate) <= 0).ToList();
@@ -278,7 +278,6 @@ namespace Trojantrading.Repositories
             return orders;
 
         }
-
 
         public Order GetOrdersWithShoppingItems(int orderId)
         {
