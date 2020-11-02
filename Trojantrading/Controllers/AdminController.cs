@@ -4,6 +4,7 @@ using Trojantrading.Util;
 using Trojantrading.Models;
 using Microsoft.AspNetCore.Authorization;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Trojantrading.Controllers
 {
@@ -31,63 +32,63 @@ namespace Trojantrading.Controllers
         [HttpGet("GetUserByAccount")]
         [NoCache]
         [ProducesResponseType(typeof(User), 200)]
-        public IActionResult GetUserByAccount(int userId)
+        public async Task<IActionResult> GetUserByAccount(int userId)
         {
-            var userInfo = _userRepository.GetUserByAccount(userId);
+            var userInfo = await _userRepository.GetUserByAccount(userId);
             return Ok(userInfo);
         }
 
         [HttpGet("GetUsers")]
         [NoCache]
         [ProducesResponseType(typeof(List<User>), 200)]
-        public IActionResult GetUsers()
+        public async Task<IActionResult> GetUsers()
         {
-            var users = _userRepository.GetUsers();
+            var users = await _userRepository.GetUsers();
             return Ok(users);
         }
 
         [HttpGet("DeleteUser")]
         [NoCache]
         [ProducesResponseType(typeof(ApiResponse), 200)]
-        public IActionResult DeleteUser(int userId)
+        public async Task<IActionResult> DeleteUser(int userId)
         {
-            var result = _userRepository.DeleteUser(userId);
+            var result = await _userRepository.DeleteUser(userId);
             return Ok(result);
         }
 
         [HttpPost("UpdateUser")]
         [NoCache]
         [ProducesResponseType(typeof(ApiResponse), 200)]
-        public IActionResult UpdateUser([FromBody]User user)
+        public async Task<IActionResult> UpdateUser([FromBody]User user)
         {
-            var result = _userRepository.Update(user);
+            var result = await _userRepository.Update(user);
             return Ok(result);
         }
 
         [HttpPost("AddUser")]
         [NoCache]
         [ProducesResponseType(typeof(ApiResponse), 200)]
-        public IActionResult AddUser([FromBody]User user)
+        public async Task<IActionResult> AddUser([FromBody]User user)
         {
-            var result = _userRepository.AddUser(user);
+            var result = await _userRepository.AddUser(user);
             return Ok(result);
         }
 
         [HttpGet("ValidatePassword")]
         [NoCache]
         [ProducesResponseType(typeof(ApiResponse), 200)]
-        public IActionResult ValidatePassword(int userId, string password)
+        public async Task<IActionResult> ValidatePassword(int userId, string password)
         {
-            var result = _userRepository.ValidatePassword(userId, password);
+            var result = await _userRepository.ValidatePassword(userId, password);
             return Ok(result);
         }
 
         [HttpGet("UpdatePassword")]
         [NoCache]
         [ProducesResponseType(typeof(ApiResponse), 200)]
-        public IActionResult UpdatePassword(int userId, string password)
+        public async Task<IActionResult> UpdatePassword(int userId, string password)
         {
-            var result = _userRepository.UpdatePassword(userId, password);
+            var result = await _userRepository.UpdatePassword(userId, password);
             return Ok(result);
         }
     }

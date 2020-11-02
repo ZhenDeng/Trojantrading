@@ -4,35 +4,38 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using Trojantrading.Models;
+using Trojantrading.Repositories.Generic;
+using Trojantrading.Utilities;
 
 namespace Trojantrading.Repositories
 {
     public interface IPdfBoardRepository
     {
-        List<PdfBoard> GetPdfBoards();
-        ApiResponse DeletePdfBoards(PdfBoard pdf);
+        Task<List<PdfBoard>> GetPdfBoards();
+        Task<ApiResponse> DeletePdfBoards(PdfBoard pdf);
     }
     public class PdfBoardRepository:IPdfBoardRepository
     {
-        private readonly TrojantradingDbContext trojantradingDbContext;
+        private readonly IRepositoryV2<PdfBoard> _pdfBoardRepository;
 
-        public PdfBoardRepository(TrojantradingDbContext trojantradingDbContext)
+        public PdfBoardRepository(IRepositoryV2<PdfBoard> pdfBoardRepository)
         {
-            this.trojantradingDbContext = trojantradingDbContext;
+            _pdfBoardRepository = pdfBoardRepository;
         }
 
-        public List<PdfBoard> GetPdfBoards() {
-            var pdfBoards = trojantradingDbContext.PdfBoards.ToList();
+        public async Task<List<PdfBoard>> GetPdfBoards() {
+            var pdfBoards = await  _pdfBoardRepository.Queryable.GetListAsync();
             return pdfBoards;
         }
 
-        public ApiResponse DeletePdfBoards(PdfBoard pdf)
+        public async Task<ApiResponse> DeletePdfBoards(PdfBoard pdf)
         {
             try
             {
-                trojantradingDbContext.PdfBoards.Remove(pdf);
-                trojantradingDbContext.SaveChanges();
+                _pdfBoardRepository.Delete(pdf);
+                await _pdfBoardRepository.SaveChangesAsync();
 
                 var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", pdf.Title);
                 if (File.Exists(path))

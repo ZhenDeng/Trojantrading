@@ -25,54 +25,54 @@ namespace Trojantrading.Controllers
         [NoCache]
         [ProducesResponseType(typeof(ShoppingCart), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
-        public IActionResult GetShoppingCart(int userId)
+        public async Task<IActionResult> GetShoppingCart(int userId)
         {
-            return Ok(_shoppingCartRepository.GetCartWithShoppingItems(userId));
+            return Ok(await _shoppingCartRepository.GetCartWithShoppingItems(userId));
         }
 
         [HttpGet("GetCartInIdWithShoppingItems")]
         [NoCache]
         [ProducesResponseType(typeof(ShoppingCart), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
-        public IActionResult GetCartInIdWithShoppingItems(int shoppingCartId)
+        public async Task<IActionResult> GetCartInIdWithShoppingItems(int shoppingCartId)
         {
-            return Ok(_shoppingCartRepository.GetCartInIdWithShoppingItems(shoppingCartId));
+            return Ok(await _shoppingCartRepository.GetCartInIdWithShoppingItems(shoppingCartId));
         }
 
         [HttpGet("AddShoppingCart")]
         [NoCache]
         [ProducesResponseType(typeof(ApiResponse), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
-        public IActionResult AddShoppingCart(int userId)
+        public async Task<IActionResult> AddShoppingCart(int userId)
         {
-            return Ok(_shoppingCartRepository.AddShoppingCart(userId));
+            return Ok(await _shoppingCartRepository.AddShoppingCart(userId));
         }
 
         [HttpPost("UpdateShoppingCart")]
         [NoCache]
         [ProducesResponseType(typeof(ApiResponse), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
-        public IActionResult UpdateShoppingCart(int userId, [FromBody]ShoppingItem shoppingItem)
+        public async Task<IActionResult> UpdateShoppingCart(int userId, [FromBody]ShoppingItem shoppingItem)
         {
-            return Ok(_shoppingCartRepository.UpdateShoppingCart(userId, shoppingItem));
+            return Ok(await _shoppingCartRepository.UpdateShoppingCart(userId, shoppingItem));
         }
 
         [HttpGet("UpdateShoppingCartPaymentMethod")]
         [NoCache]
         [ProducesResponseType(typeof(ApiResponse), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
-        public IActionResult UpdateShoppingCartPaymentMethod(int userId, string selectedPayment)
+        public async Task<IActionResult> UpdateShoppingCartPaymentMethod(int userId, string selectedPayment)
         {
-            return Ok(_shoppingCartRepository.UpdateShoppingCartPaymentMethod(userId, selectedPayment));
+            return Ok(await _shoppingCartRepository.UpdateShoppingCartPaymentMethod(userId, selectedPayment));
         }
 
         [HttpDelete("deleteShoppingItem")]
         [NoCache]
         [ProducesResponseType(typeof(ApiResponse), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
-        public IActionResult deleteShoppingItem(int shoppingItemId)
+        public async Task<IActionResult> deleteShoppingItem(int shoppingItemId)
         {
-            return Ok(_shoppingCartRepository.deleteShoppingItem(shoppingItemId));
+            return Ok(await _shoppingCartRepository.deleteShoppingItem(shoppingItemId));
         }
     }
 }

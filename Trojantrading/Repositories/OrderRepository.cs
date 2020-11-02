@@ -2,43 +2,53 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Trojantrading.Models;
+using Trojantrading.Repositories.Generic;
 using Trojantrading.Service;
+using Trojantrading.Utilities;
 
 namespace Trojantrading.Repositories
 {
 
     public interface IOrderRepository
     {
-        ApiResponse AddOrder(ShoppingCart cart, double gst, double priceExclGst, double discount);
-        Order Get(int id);
-        ApiResponse DeleteOrder(int id);
-        ApiResponse UpdateOrder(Order order);
-        Order GetOrdersWithShoppingItems(int orderId);
-        List<Order> GetOrdersByUserID(int userId, string dateFrom, string dateTo);
-        List<Order> GetOrdersByDate(string dateFrom, string dateTo);
+        Task<ApiResponse> AddOrder(ShoppingCart cart, double gst, double priceExclGst, double discount);
+        Task<Order> Get(int id);
+        Task<ApiResponse> DeleteOrder(int id);
+        Task<ApiResponse> UpdateOrder(Order order);
+        Task<Order> GetOrdersWithShoppingItems(int orderId);
+        Task<List<Order>> GetOrdersByUserID(int userId, string dateFrom, string dateTo);
+        Task<List<Order>> GetOrdersByDate(string dateFrom, string dateTo);
     }
 
     public class OrderRepository : IOrderRepository
     {
-        private readonly TrojantradingDbContext trojantradingDbContext;
         private readonly IUserRepository userRepository;
         private readonly IShoppingCartRepository shoppingCartRepository;
         private readonly IShare share;
+        private readonly IRepositoryV2<Order> _orderDataRepository;
+        private readonly IRepositoryV2<ShoppingCart> _shoppingCartDataRepository;
+        private readonly IRepositoryV2<ShoppingItem> _shoppingItemDataRepository;
 
         public OrderRepository(
-            TrojantradingDbContext trojantradingDbContext,
             IUserRepository userRepository,
             IShoppingCartRepository shoppingCartRepository,
-            IShare share)
+            IShare share,
+            IRepositoryV2<Order> orderDataRepository,
+            IRepositoryV2<ShoppingCart> shoppingCartDataRepository,
+            IRepositoryV2<ShoppingItem> shoppingItemDataRepository
+            )
         {
-            this.trojantradingDbContext = trojantradingDbContext;
             this.userRepository = userRepository;
             this.shoppingCartRepository = shoppingCartRepository;
             this.share = share;
+            _orderDataRepository = orderDataRepository;
+            _shoppingCartDataRepository = shoppingCartDataRepository;
+            _shoppingItemDataRepository = shoppingItemDataRepository;
         }
 
-        public ApiResponse AddOrder(ShoppingCart cart, double gst, double priceExclGst, double discount)
+        public async Task<ApiResponse> AddOrder(ShoppingCart cart, double gst, double priceExclGst, double discount)
         {
             try
             {
@@ -55,16 +65,16 @@ namespace Trojantrading.Repositories
                     AdminMessage = "",
                     Balance = 0
                 };
-                trojantradingDbContext.Orders.Add(order);
+                _orderDataRepository.Create(order);
                 int orderId;
-                if (trojantradingDbContext.Orders.ToList().Count < 1)
+                if ((await _orderDataRepository.Queryable.GetListAsync()).Count < 1)
                 {
                     orderId = 1;
                 }
                 else {
-                    orderId = trojantradingDbContext.Orders.Last().Id + 1;
+                    orderId = _orderDataRepository.Queryable.Last().Id + 1;
                 }
-                var currentUser = userRepository.GetUserByAccount(cart.UserId);
+                var currentUser = await userRepository.GetUserByAccount(cart.UserId);
                 double priceIncGst = priceExclGst + gst;
                 StringBuilder stringBuilder = new StringBuilder();
                 stringBuilder.Append("<div style='padding: 0; margin: 0; width:100%; height: 100%; background:#fbfaf7;'>");
@@ -153,9 +163,11 @@ namespace Trojantrading.Repositories
                     si.Product = null;
                 }
 
-                trojantradingDbContext.ShoppingItems.UpdateRange(cart.ShoppingItems);
+                _shoppingItemDataRepository.UpdateRange(cart.ShoppingItems.ToList());
+                await _shoppingItemDataRepository.SaveChangesAsync();
                 cart.Status = "1";
-                trojantradingDbContext.ShoppingCarts.Update(cart);
+                _shoppingCartDataRepository.Update(cart);
+                await _shoppingCartDataRepository.SaveChangesAsync();
                 ShoppingCart sc = new ShoppingCart()
                 {
                     TotalItems = 0,
@@ -166,9 +178,9 @@ namespace Trojantrading.Repositories
                     PaymentMethod = "onaccount"
                 };
 
-                trojantradingDbContext.ShoppingCarts.Add(sc);
-                trojantradingDbContext.SaveChanges();
-                
+                _shoppingCartDataRepository.Create(sc);
+                await _shoppingCartDataRepository.SaveChangesAsync();
+
                 return new ApiResponse()
                 {
                     Status = "success",
@@ -186,21 +198,21 @@ namespace Trojantrading.Repositories
 
         }
 
-        public Order Get(int id)
+        public async Task<Order> Get(int id)
         {
-            var order = trojantradingDbContext.Orders
+            var order = await _orderDataRepository.Queryable
                 .Where(o => o.Id == id)
-                .FirstOrDefault();
+                .GetFirstOrDefaultAsync();
             return order;
         }
 
-        public ApiResponse DeleteOrder(int id)
+        public async Task<ApiResponse> DeleteOrder(int id)
         {
             try
             {
-                var order = trojantradingDbContext.Orders.Where(u => u.Id == id).FirstOrDefault();
-                trojantradingDbContext.Orders.Remove(order);
-                trojantradingDbContext.SaveChanges();
+                var order = await _orderDataRepository.Queryable.Where(u => u.Id == id).GetFirstOrDefaultAsync();
+                _orderDataRepository.Delete(order);
+                await _orderDataRepository.SaveChangesAsync();
                 return new ApiResponse()
                 {
                     Status = "success",
@@ -217,12 +229,12 @@ namespace Trojantrading.Repositories
             }
         }
 
-        public ApiResponse UpdateOrder(Order order)
+        public async Task<ApiResponse> UpdateOrder(Order order)
         {
             try
             {
-                trojantradingDbContext.Orders.Update(order);
-                trojantradingDbContext.SaveChanges();
+                _orderDataRepository.Update(order);
+                await _orderDataRepository.SaveChangesAsync();
                 return new ApiResponse()
                 {
                     Status = "success",
@@ -239,18 +251,18 @@ namespace Trojantrading.Repositories
             }
         }
 
-        public List<Order> GetOrdersByUserID(int userId, string dateFrom, string dateTo)
+        public async Task<List<Order>> GetOrdersByUserID(int userId, string dateFrom, string dateTo)
         {
 
             DateTime fromDate = string.IsNullOrWhiteSpace(dateFrom) ? DateTime.Now.AddMonths(-1) : DateTime.ParseExact(dateFrom, @"d/M/yyyy", System.Globalization.CultureInfo.InvariantCulture);
             DateTime toDate = string.IsNullOrWhiteSpace(dateTo) ? DateTime.Now.AddDays(1) : DateTime.ParseExact(dateTo, @"d/M/yyyy", System.Globalization.CultureInfo.InvariantCulture).AddDays(1); // end date always next day midnight
 
-            var orders = trojantradingDbContext.Orders
-                .Where(x => x.UserId == userId && DateTime.Compare(x.CreatedDate, fromDate) >= 0 && DateTime.Compare(x.CreatedDate, toDate) <= 0).ToList();
+            var orders = await _orderDataRepository.Queryable
+                .Where(x => x.UserId == userId && DateTime.Compare(x.CreatedDate, fromDate) >= 0 && DateTime.Compare(x.CreatedDate, toDate) <= 0).GetListAsync();
 
             foreach (var order in orders)
             {
-                var orderDetails = GetOrdersWithShoppingItems(order.Id);
+                var orderDetails = await GetOrdersWithShoppingItems(order.Id);
                 order.ShoppingCart = orderDetails.ShoppingCart;
                 order.User = orderDetails.User;
             }
@@ -259,19 +271,19 @@ namespace Trojantrading.Repositories
 
         }
 
-        public List<Order> GetOrdersByDate(string dateFrom, string dateTo)
+        public async Task<List<Order>> GetOrdersByDate(string dateFrom, string dateTo)
         {
             List<Order> orders = new List<Order>();
 
             DateTime fromDate = string.IsNullOrWhiteSpace(dateFrom) ? DateTime.Now.AddMonths(-1).Date : DateTime.ParseExact(dateFrom, @"d/M/yyyy", System.Globalization.CultureInfo.InvariantCulture).Date;
             DateTime toDate = string.IsNullOrWhiteSpace(dateTo) ? DateTime.Now.AddDays(1).Date : DateTime.ParseExact(dateTo, @"d/M/yyyy", System.Globalization.CultureInfo.InvariantCulture).AddDays(1).Date; // end date always next day midnight
 
-            orders = trojantradingDbContext.Orders
-                .Where(x => DateTime.Compare(x.CreatedDate, fromDate) >= 0 && DateTime.Compare(x.CreatedDate, toDate) <= 0).ToList();
+            orders = await _orderDataRepository.Queryable
+                .Where(x => DateTime.Compare(x.CreatedDate, fromDate) >= 0 && DateTime.Compare(x.CreatedDate, toDate) <= 0).GetListAsync();
 
             foreach (var order in orders)
             {
-                var orderDetails = GetOrdersWithShoppingItems(order.Id);
+                var orderDetails = await GetOrdersWithShoppingItems(order.Id);
                 order.ShoppingCart = orderDetails.ShoppingCart;
                 order.User = orderDetails.User;
             }
@@ -279,13 +291,13 @@ namespace Trojantrading.Repositories
 
         }
 
-        public Order GetOrdersWithShoppingItems(int orderId)
+        public async Task<Order> GetOrdersWithShoppingItems(int orderId)
         {
-            var order = trojantradingDbContext.Orders.Where(x => x.Id == orderId).FirstOrDefault();
+            var order = await _orderDataRepository.Queryable.Where(x => x.Id == orderId).GetFirstOrDefaultAsync();
 
-            var shoppingCart = shoppingCartRepository.GetShoppingCartByID(order.ShoppingCartId, order.UserId);
+            var shoppingCart = await shoppingCartRepository.GetShoppingCartByID(order.ShoppingCartId, order.UserId);
 
-            var userDetail = userRepository.GetUserByAccount(order.UserId);
+            var userDetail = await userRepository.GetUserByAccount(order.UserId);
 
             order.ShoppingCart = shoppingCart;
             order.User = userDetail;

@@ -8,10 +8,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Trojantrading.Models;
 using Trojantrading.Repositories;
+using Trojantrading.Repositories.Generic;
 using Trojantrading.Service;
 using Trojantrading.Util;
+using Trojantrading.Utilities;
 
 namespace Trojantrading.Controllers
 {
@@ -21,43 +24,58 @@ namespace Trojantrading.Controllers
     public class PdfBoardController : Controller
     {
         private readonly IPdfBoardRepository pdfBoardRepository;
-        private readonly TrojantradingDbContext trojantradingDbContext;
         private readonly IShare share;
         private readonly IUserRepository userRepository;
         private readonly IShoppingCartRepository shoppingCartRepository;
         private readonly IProductRepository productRepository;
+        private readonly IRepositoryV2<Order> _orderDataRepository;
+        private readonly IRepositoryV2<PdfBoard> _pdfBoardDataRepository;
+        private readonly IRepositoryV2<User> _userDataRepository;
+        private readonly IRepositoryV2<Product> _productDataRepository;
+        private readonly IRepositoryV2<PackagingList> _packagingListDataRepository;
+        private readonly IRepositoryV2<HeadInformation> _headInformationDataRepository;
 
         public PdfBoardController(
             IPdfBoardRepository pdfBoardRepository,
-            TrojantradingDbContext trojantradingDbContext,
             IShare share,
             IUserRepository userRepository,
             IShoppingCartRepository shoppingCartRepository,
-            IProductRepository productRepository)
+            IProductRepository productRepository,
+            IRepositoryV2<Order> orderDataRepository,
+            IRepositoryV2<PdfBoard> pdfBoardDataRepository,
+            IRepositoryV2<User> userDataRepository,
+            IRepositoryV2<Product> productDataRepository,
+            IRepositoryV2<PackagingList> packagingListDataRepository,
+            IRepositoryV2<HeadInformation> headInformationDataRepository)
         {
             this.pdfBoardRepository = pdfBoardRepository;
-            this.trojantradingDbContext = trojantradingDbContext;
             this.share = share;
             this.userRepository = userRepository;
             this.shoppingCartRepository = shoppingCartRepository;
             this.productRepository = productRepository;
+            _orderDataRepository = orderDataRepository;
+            _pdfBoardDataRepository = pdfBoardDataRepository;
+            _userDataRepository = userDataRepository;
+            _productDataRepository = productDataRepository;
+            _packagingListDataRepository = packagingListDataRepository;
+            _headInformationDataRepository = headInformationDataRepository;
         }
 
         [HttpGet("GetPdfBoards")]
         [NoCache]
         [ProducesResponseType(typeof(List<PdfBoard>), 200)]
-        public IActionResult GetPdfBoards()
+        public async Task<IActionResult> GetPdfBoards()
         {
-            return Ok(pdfBoardRepository.GetPdfBoards());
+            return Ok(await pdfBoardRepository.GetPdfBoards());
         }
 
         [HttpPost("DeletePdfBoards")]
         [NoCache]
         [ProducesResponseType(typeof(ApiResponse), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
-        public IActionResult DeletePdfBoards([FromBody]PdfBoard pdf)
+        public async Task<IActionResult> DeletePdfBoards([FromBody]PdfBoard pdf)
         {
-            return Ok(pdfBoardRepository.DeletePdfBoards(pdf));
+            return Ok(await pdfBoardRepository.DeletePdfBoards(pdf));
         }
 
         #region SavePdf
@@ -65,7 +83,7 @@ namespace Trojantrading.Controllers
         [NoCache]
         [ProducesResponseType(typeof(ApiResponse), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
-        public IActionResult SavePdf(string type)
+        public async Task<IActionResult> SavePdf(string type)
         {
             try
             {
@@ -97,11 +115,10 @@ namespace Trojantrading.Controllers
                             Path = path
                         };
 
-                        if (trojantradingDbContext.PdfBoards.Where(pdf => pdf.Path == pdfBoard.Path).Count() == 0)
+                        if (_pdfBoardDataRepository.Queryable.Where(pdf => pdf.Path == pdfBoard.Path).Count() == 0)
                         {
-                            trojantradingDbContext.PdfBoards.Add(pdfBoard);
-                            trojantradingDbContext.SaveChanges();
-                            trojantradingDbContext.Dispose();
+                            _pdfBoardDataRepository.Create(pdfBoard);
+                            await _pdfBoardDataRepository.SaveChangesAsync();
                         }
 
                         return Ok(new ApiResponse
@@ -133,7 +150,7 @@ namespace Trojantrading.Controllers
         [NoCache]
         [ProducesResponseType(typeof(ApiResponse), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
-        public IActionResult UploadUsers()
+        public async Task<IActionResult> UploadUsers()
         {
             try
             {
@@ -195,9 +212,8 @@ namespace Trojantrading.Controllers
                             }
                             package.Stream.Close();
                             package.Dispose();
-                            trojantradingDbContext.Users.AddRange(userList);
-                            trojantradingDbContext.SaveChanges();
-                            trojantradingDbContext.Dispose();
+                            _userDataRepository.CreateRange(userList);
+                            await _userDataRepository.SaveChangesAsync();
                         }
                         return Ok(new ApiResponse
                         {
@@ -229,7 +245,7 @@ namespace Trojantrading.Controllers
         [NoCache]
         [ProducesResponseType(typeof(ApiResponse), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
-        public IActionResult UploadProducts()
+        public async Task<IActionResult> UploadProducts()
         {
             try
             {
@@ -263,7 +279,7 @@ namespace Trojantrading.Controllers
                             {
                                 if (workSheet.Cells[i, 2].Value != null)
                                 {
-                                    if (trojantradingDbContext.Products.Where(x => x.Name == workSheet.Cells[i, 3].Value.ToString()).Count() < 1)
+                                    if (_productDataRepository.Queryable.Where(x => x.Name == workSheet.Cells[i, 3].Value.ToString()).Count() < 1)
                                     {
                                         productList.Add(new Product()
                                         {
@@ -278,7 +294,7 @@ namespace Trojantrading.Controllers
                                         });
                                     }
                                     else {
-                                        var product = trojantradingDbContext.Products.Where(x => x.Name == workSheet.Cells[i, 3].Value.ToString()).FirstOrDefault();
+                                        var product = _productDataRepository.Queryable.Where(x => x.Name == workSheet.Cells[i, 3].Value.ToString()).FirstOrDefault();
                                         product.ItemCode = workSheet.Cells[i, 2].Value == null ? "" : workSheet.Cells[i, 2].Value.ToString();
                                         product.Name = workSheet.Cells[i, 3].Value == null ? "" : workSheet.Cells[i, 3].Value.ToString();
                                         product.Category = workSheet.Cells[i, 4].Value == null ? "" : workSheet.Cells[i, 4].Value.ToString().Trim().Replace(' ', '-');
@@ -287,25 +303,25 @@ namespace Trojantrading.Controllers
                                         product.WholesalerPrice = workSheet.Cells[i, 8].Value == null ? 0 : double.Parse(workSheet.Cells[i, 8].Value.ToString().Replace("$", "").Trim());
                                         product.PrepaymentDiscount = workSheet.Cells[i, 9].Value == null ? 0 : double.Parse(workSheet.Cells[i, 9].Value.ToString().Replace("$", "").Trim());
                                         product.Status = workSheet.Cells[i, 10].Value == null ? "" : workSheet.Cells[i, 10].Value.ToString();
-                                        trojantradingDbContext.Products.Update(product);
-                                        trojantradingDbContext.SaveChanges();
+                                        _productDataRepository.Update(product);
+                                        await _productDataRepository.SaveChangesAsync();
                                     }
                                 }
                             }
                             if (productList.Count>0) {
-                                trojantradingDbContext.Products.AddRange(productList);
-                                trojantradingDbContext.SaveChanges();
+                                _productDataRepository.CreateRange(productList);
+                                await _productDataRepository.SaveChangesAsync();
                             }
 
                             for (int i = 2; i <= totalRows; i++)
                             {
                                 if (workSheet.Cells[i, 2].Value != null)
                                 {
-                                    if (trojantradingDbContext.PackagingLists.Where(x => x.ProductId == trojantradingDbContext.Products.Where(y => y.Name == workSheet.Cells[i, 3].Value.ToString()).FirstOrDefault().Id).Count() < 1)
+                                    if (_packagingListDataRepository.Queryable.Where(x => x.ProductId == _productDataRepository.Queryable.Where(y => y.Name == workSheet.Cells[i, 3].Value.ToString()).FirstOrDefault().Id).Count() < 1)
                                     {
                                         List<PackagingList> PackageNames = new List<PackagingList>();
                                         string PackageName = workSheet.Cells[i, 5].Value == null ? "" : workSheet.Cells[i, 5].Value.ToString();
-                                        int productId = trojantradingDbContext.Products.Where(x => x.Name == workSheet.Cells[i, 3].Value.ToString()).FirstOrDefault().Id;
+                                        int productId = _productDataRepository.Queryable.Where(x => x.Name == workSheet.Cells[i, 3].Value.ToString()).FirstOrDefault().Id;
                                         if (PackageName.ToLower().Contains("op"))
                                         {
                                             PackageNames.Add(new PackagingList()
@@ -322,14 +338,14 @@ namespace Trojantrading.Controllers
                                                 PackageName = "PP"
                                             });
                                         }
-                                        trojantradingDbContext.PackagingLists.AddRange(PackageNames);
-                                        trojantradingDbContext.SaveChanges();
+                                        _packagingListDataRepository.CreateRange(PackageNames);
+                                        await _packagingListDataRepository.SaveChangesAsync();
                                     }
                                     else
                                     {
-                                        var updatePackageNames = trojantradingDbContext.PackagingLists.Where(x => x.ProductId == trojantradingDbContext.Products.Where(y => y.Name == workSheet.Cells[i, 3].Value.ToString()).FirstOrDefault().Id).FirstOrDefault();
+                                        var updatePackageNames = _packagingListDataRepository.Queryable.Where(x => x.ProductId == _productDataRepository.Queryable.Where(y => y.Name == workSheet.Cells[i, 3].Value.ToString()).FirstOrDefault().Id).FirstOrDefault();
                                         string PackageName = workSheet.Cells[i, 5].Value == null ? "" : workSheet.Cells[i, 5].Value.ToString();
-                                        int productId = trojantradingDbContext.Products.Where(x => x.Name == workSheet.Cells[i, 3].Value.ToString()).FirstOrDefault().Id;
+                                        int productId = _productDataRepository.Queryable.Where(x => x.Name == workSheet.Cells[i, 3].Value.ToString()).FirstOrDefault().Id;
                                         if (PackageName.ToLower().Contains("op"))
                                         {
                                             updatePackageNames.ProductId = productId;
@@ -341,16 +357,14 @@ namespace Trojantrading.Controllers
                                             updatePackageNames.PackageName = "PP";
                                         }
                                         else {
-                                            trojantradingDbContext.PackagingLists.Remove(updatePackageNames);
-                                            trojantradingDbContext.SaveChanges();
+                                            _packagingListDataRepository.Delete(updatePackageNames);
+                                            await _packagingListDataRepository.SaveChangesAsync();
                                         }
-                                        trojantradingDbContext.PackagingLists.Update(updatePackageNames);
-                                        trojantradingDbContext.SaveChanges();
+                                        _packagingListDataRepository.Update(updatePackageNames);
+                                        await _packagingListDataRepository.SaveChangesAsync();
                                     }
                                 }
                             }
-
-                            trojantradingDbContext.Dispose();
                             package.Stream.Close();
                             package.Dispose();
                         }
@@ -382,13 +396,13 @@ namespace Trojantrading.Controllers
         [HttpGet("WritePdf")]
         [ProducesResponseType(typeof(ApiResponse), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
-        public IActionResult WritePdf(int orderId, double gst, double priceExclGst, double discount, int userId)
+        public async Task<IActionResult> WritePdf(int orderId, double gst, double priceExclGst, double discount, int userId)
         {
             try
             {
-                var order = trojantradingDbContext.Orders.Where(x => x.Id == orderId).FirstOrDefault();
-                var cart = shoppingCartRepository.GetShoppingCartByID(order.ShoppingCartId, userId);
-                var currentUser = userRepository.GetUserByAccount(userId);
+                var order = await _orderDataRepository.Queryable.Where(x => x.Id == orderId).GetFirstOrDefaultAsync();
+                var cart = await shoppingCartRepository.GetShoppingCartByID(order.ShoppingCartId, userId);
+                var currentUser = await userRepository.GetUserByAccount(userId);
                 double priceIncGst = priceExclGst + gst;
                 StringBuilder stringBuilder = new StringBuilder();
                 stringBuilder.Append("<!DOCTYPE html><html lang='en'><head><meta charset='utf-8'><style>");
@@ -462,7 +476,7 @@ namespace Trojantrading.Controllers
         [NoCache]
         [ProducesResponseType(typeof(ApiResponse), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
-        public IActionResult SaveImage()
+        public async Task<IActionResult> SaveImage()
         {
             try
             {
@@ -485,14 +499,13 @@ namespace Trojantrading.Controllers
                             }
                         }
 
-                        if (trojantradingDbContext.HeadInformations.Where(img => img.ImagePath == path).Count() == 0)
+                        if (_headInformationDataRepository.Queryable.Where(img => img.ImagePath == path).Count() == 0)
                         {
                             HeadInformation imageModel = new HeadInformation();
                             imageModel.Content = "";
                             imageModel.ImagePath = uploadFile.FileName;
-                            trojantradingDbContext.HeadInformations.Add(imageModel);
-                            trojantradingDbContext.SaveChanges();
-                            trojantradingDbContext.Dispose();
+                            _headInformationDataRepository.Create(imageModel);
+                            await _headInformationDataRepository.SaveChangesAsync();
                         }
 
                         return Ok(new ApiResponse

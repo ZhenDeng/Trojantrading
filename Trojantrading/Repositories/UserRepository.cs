@@ -5,43 +5,46 @@ using System.Collections.Generic;
 using System;
 using System.Text;
 using Trojantrading.Service;
+using Trojantrading.Repositories.Generic;
+using Trojantrading.Utilities;
+using Trojantrading.Util;
 
 namespace Trojantrading.Repositories
 {
     public interface IUserRepository
     {
-        ApiResponse AddUser(User user);
-        ApiResponse DeleteUser(int id);
-        ApiResponse Update(User user);
-        User GetUserByAccount(int userId);
-        List<User> GetUsers();
-        ApiResponse ValidateEmail(string email);
-        ApiResponse UpdatePassword(int userId, string newPassword);
-        ApiResponse ValidatePassword(int userId, string password);
+        Task<ApiResponse> AddUser(User user);
+        Task<ApiResponse> DeleteUser(int id);
+        Task<ApiResponse> Update(User user);
+        Task<User> GetUserByAccount(int userId);
+        Task<List<User>> GetUsers();
+        Task<ApiResponse> ValidateEmail(string email);
+        Task<ApiResponse> UpdatePassword(int userId, string newPassword);
+        Task<ApiResponse> ValidatePassword(int userId, string password);
     }
 
     public class UserRepository:IUserRepository
     {
-        private readonly TrojantradingDbContext trojantradingDbContext;
-        private readonly IShare share;
+        private readonly IShare _share;
+        private readonly IRepositoryV2<User> _userRepository;
 
-        public UserRepository(TrojantradingDbContext trojantradingDbContext, IShare share)
+        public UserRepository(IShare share, IRepositoryV2<User> userRepository)
         {
-            this.trojantradingDbContext = trojantradingDbContext;
-            this.share = share;
+            _share = share;
+            _userRepository = userRepository;
         }
 
-        public ApiResponse AddUser(User user)
+        public async Task<ApiResponse> AddUser(User user)
         {
             try
             {
                 StringBuilder builder = new StringBuilder();
-                builder.Append(share.RandomString(4, true));
-                builder.Append(share.RandomNumber(1000, 9999));
-                builder.Append(share.RandomString(2, false));
+                builder.Append(_share.RandomString(4, true));
+                builder.Append(_share.RandomNumber(1000, 9999));
+                builder.Append(_share.RandomString(2, false));
                 user.Password = builder.ToString();
-                trojantradingDbContext.Users.Add(user);
-                trojantradingDbContext.SaveChanges();
+                _userRepository.Create(user);
+                await _userRepository.SaveChangesAsync();
                 return new ApiResponse() {
                     Status = "success",
                     Message = "Successfully add user"
@@ -58,13 +61,14 @@ namespace Trojantrading.Repositories
             
         }
 
-        public ApiResponse DeleteUser(int id)
+        public async Task<ApiResponse> DeleteUser(int id)
         {
             try
             {
-                var user = trojantradingDbContext.Users.Where(u => u.Id == id).FirstOrDefault();
-                trojantradingDbContext.Users.Remove(user);
-                trojantradingDbContext.SaveChanges();
+                var user = await _userRepository.Queryable.Where(u => u.Id == id).GetFirstOrDefaultAsync();
+                user.Status = Constrants.USER_STATUS_INACTIVE;
+                _userRepository.Update(user);
+                await _userRepository.SaveChangesAsync();
                 return new ApiResponse()
                 {
                     Status = "success",
@@ -81,26 +85,24 @@ namespace Trojantrading.Repositories
             }
         }
 
-        public User GetUserByAccount(int userId)
+        public async Task<User> GetUserByAccount(int userId)
         {
-            var user = trojantradingDbContext.Users
-                .Where(u=>u.Id == userId)
-                .FirstOrDefault();
+            var user = await _userRepository.Queryable.Where(u => u.Id == userId).GetFirstOrDefaultAsync();
             return user;
         }
 
-        public List<User> GetUsers()
+        public async Task<List<User>> GetUsers()
         {
-            var users = trojantradingDbContext.Users.ToList();
+            var users = await _userRepository.Queryable.GetListAsync();
             return users;
         }
 
-        public ApiResponse Update(User user)
+        public async Task<ApiResponse> Update(User user)
         {
             try
             {
-                trojantradingDbContext.Users.Update(user);
-                trojantradingDbContext.SaveChanges();
+                _userRepository.Update(user);
+                await _userRepository.SaveChangesAsync();
                 return new ApiResponse() {
                     Status = "success",
                     Message = "Successfully update user"
@@ -116,14 +118,14 @@ namespace Trojantrading.Repositories
             }
         }
 
-        public ApiResponse UpdatePassword(int userId, string newPassword)
+        public async Task<ApiResponse> UpdatePassword(int userId, string newPassword)
         {
             try
             {
-                User user = trojantradingDbContext.Users.Where(item => item.Id == userId).FirstOrDefault();
+                User user = await _userRepository.Queryable.Where(item => item.Id == userId).GetFirstOrDefaultAsync();
                 user.Password = newPassword;
-                trojantradingDbContext.Users.Update(user);
-                trojantradingDbContext.SaveChanges();
+                _userRepository.Update(user);
+                await _userRepository.SaveChangesAsync();
 
                 return new ApiResponse()
                 {
@@ -141,11 +143,11 @@ namespace Trojantrading.Repositories
             }
         }
 
-        public ApiResponse ValidateEmail(string email)
+        public async Task<ApiResponse> ValidateEmail(string email)
         {
             try
             {
-                string userName = trojantradingDbContext.Users.Where(user => user.Email == email).FirstOrDefault().Account;
+                string userName = (await _userRepository.Queryable.Where(user => user.Email == email).GetFirstOrDefaultAsync()).Account;
                 if (!string.IsNullOrEmpty(userName))
                 {
                     return new ApiResponse()
@@ -174,11 +176,11 @@ namespace Trojantrading.Repositories
             }
         }
 
-        public ApiResponse ValidatePassword(int userId, string password)
+        public async Task<ApiResponse> ValidatePassword(int userId, string password)
         {
             try
             {
-                var userModel = trojantradingDbContext.Users.Where(user => user.Id == userId).FirstOrDefault();
+                var userModel = await _userRepository.Queryable.Where(user => user.Id == userId).GetFirstOrDefaultAsync();
                 if (userModel.Password == password)
                 {
                     return new ApiResponse()

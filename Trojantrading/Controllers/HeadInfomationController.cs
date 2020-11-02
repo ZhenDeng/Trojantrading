@@ -26,36 +26,36 @@ namespace Trojantrading.Controllers
         [HttpGet("GetHeadInformation")]
         [NoCache]
         [ProducesResponseType(typeof(HeadInformation), 200)]
-        public IActionResult GetHeadInformation()
+        public async Task<IActionResult> GetHeadInformation()
         {
-            var headInformation = headerInfomationRepository.GetHeadInformation();
+            var headInformation = await headerInfomationRepository.GetHeadInformation();
             return Ok(headInformation);
         }
 
         [HttpPost("AddHeader")]
         [NoCache]
         [ProducesResponseType(typeof(ApiResponse), 200)]
-        public IActionResult AddHeader([FromBody]HeadInformation headInformation)
+        public async Task<IActionResult> AddHeader([FromBody]HeadInformation headInformation)
         {
-            var result = headerInfomationRepository.AddHeader(headInformation);
+            var result = await headerInfomationRepository.AddHeader(headInformation);
             return Ok(result);
         }
 
         [HttpPost("UpdateHeadInfomation")]
         [NoCache]
         [ProducesResponseType(typeof(ApiResponse), 200)]
-        public IActionResult UpdateHeadInfomation([FromBody]HeadInformation headInformation)
+        public async Task<IActionResult> UpdateHeadInfomation([FromBody]HeadInformation headInformation)
         {
-            var result = headerInfomationRepository.UpdateHeadInfomation(headInformation);
+            var result = await headerInfomationRepository.UpdateHeadInfomation(headInformation);
             return Ok(result);
         }
 
         [HttpPost("DeleteHeadInfomation")]
         [NoCache]
         [ProducesResponseType(typeof(ApiResponse), 200)]
-        public IActionResult DeleteHeadInfomation([FromBody]HeadInformation headInformation)
+        public async Task<IActionResult> DeleteHeadInfomation([FromBody]HeadInformation headInformation)
         {
-            var result = headerInfomationRepository.DeleteHeadInfomation(headInformation);
+            var result = await headerInfomationRepository.DeleteHeadInfomation(headInformation);
             return Ok(result);
         }
     }

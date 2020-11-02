@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Trojantrading.Repositories;
 using Trojantrading.Models;
 using Trojantrading.Util;
+using System.Threading.Tasks;
 
 namespace Trojantrading.Controllers
 {
@@ -33,12 +34,12 @@ namespace Trojantrading.Controllers
         [NoCache]
         [ProducesResponseType(typeof(List<Product>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
-        public IActionResult GetAllProducts()
+        public async Task<IActionResult> GetAllProducts()
         {
             try
             {
                 List<Product> products = new List<Product>();
-                products = _productRepository.GetAllProducts();
+                products = await _productRepository.GetAllProducts();
                 return Ok(products);
             }
             catch (Exception ex)
@@ -52,36 +53,36 @@ namespace Trojantrading.Controllers
         [NoCache]
         [ProducesResponseType(typeof(ApiResponse), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
-        public IActionResult AddProduct([FromBody]Product product)
+        public async Task<IActionResult> AddProduct([FromBody]Product product)
         {
-            return Ok(_productRepository.Add(product));
+            return Ok(await _productRepository.Add(product));
         }
 
         [HttpPost("UpdateProduct")]
         [NoCache]
         [ProducesResponseType(typeof(ApiResponse), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
-        public IActionResult UpdateProduct([FromBody]Product product)
+        public async Task<IActionResult> UpdateProduct([FromBody]Product product)
         {
-            return Ok(_productRepository.UpdateProduct(product));
+            return Ok(await _productRepository.UpdateProduct(product));
         }
 
         [HttpPost("UpdatePackagingList")]
         [NoCache]
         [ProducesResponseType(typeof(ApiResponse), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
-        public IActionResult UpdatePackagingList(int productId, [FromBody]List<PackagingList> lists)
+        public async Task<IActionResult> UpdatePackagingList(int productId, [FromBody]List<PackagingList> lists)
         {
-            return Ok(_productRepository.UpdatePackagingList(lists, productId));
+            return Ok(await _productRepository.UpdatePackagingList(lists, productId));
         }
 
         [HttpPost("DeleteProduct")]
         [NoCache]
         [ProducesResponseType(typeof(ApiResponse), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
-        public IActionResult DeleteProduct([FromBody]Product product)
+        public async Task<IActionResult> DeleteProduct([FromBody]Product product)
         {
-            return Ok(_productRepository.DeleteProduct(product));
+            return Ok(await _productRepository.DeleteProduct(product));
         }
     }
 }

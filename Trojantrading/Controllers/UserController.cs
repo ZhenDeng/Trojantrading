@@ -7,10 +7,13 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
 using Trojantrading.Models;
 using Trojantrading.Repositories;
+using Trojantrading.Repositories.Generic;
 using Trojantrading.Service;
 using Trojantrading.Util;
+using Trojantrading.Utilities;
 
 namespace Trojantrading.Controllers
 {
@@ -19,19 +22,21 @@ namespace Trojantrading.Controllers
     public class UserController : Controller
     {
         private readonly IUserRepository _userRepository;
+        private readonly IOptions<AppSettings> appSettings;
         private readonly IShare _share;
-        private readonly TrojantradingDbContext trojantradingDbContext;
+        private readonly IRepositoryV2<User> _userDataRepository;
         private readonly AppSettings _appSettings;
 
         public UserController(
             IUserRepository userRepository,
             IOptions<AppSettings> appSettings,
             IShare share,
-            TrojantradingDbContext trojantradingDbContext)
+            IRepositoryV2<User> userDataRepository)
         {
             _userRepository = userRepository;
+            this.appSettings = appSettings;
             _share = share;
-            this.trojantradingDbContext = trojantradingDbContext;
+            _userDataRepository = userDataRepository;
             _appSettings = appSettings.Value;
         }
 
@@ -39,14 +44,14 @@ namespace Trojantrading.Controllers
         [HttpPost("authenticate")]
         [NoCache]
         [ProducesResponseType(typeof(UserResponse), 200)]
-        public IActionResult Authenticate([FromBody]User userModel)
+        public async Task<IActionResult> Authenticate([FromBody]User userModel)
         {
-            int userCount = trojantradingDbContext.Users.Where(u => u.Account == userModel.Account && u.Password == userModel.Password).Count();
+            int userCount = _userDataRepository.Queryable.Where(u => u.Account == userModel.Account && u.Password == userModel.Password).Count();
             if (userCount > 0)
             {
-                int userId = trojantradingDbContext.Users.Where(u => u.Account == userModel.Account && u.Password == userModel.Password).FirstOrDefault().Id;
-                User user = _userRepository.GetUserByAccount(userId);
-                if (user.Status.ToLower() == "active")
+                int userId = (await _userDataRepository.Queryable.Where(u => u.Account == userModel.Account && u.Password == userModel.Password).GetFirstOrDefaultAsync()).Id;
+                User user = await _userRepository.GetUserByAccount(userId);
+                if (user.Status.ToLower() == Constrants.USER_STATUS_ACTIVE)
                 {
                     if (userModel.Account != user.Account || userModel.Password != user.Password)
                     {
@@ -96,10 +101,10 @@ namespace Trojantrading.Controllers
         [HttpGet("PasswordRecover")]
         [NoCache]
         [ProducesResponseType(typeof(UserResponse), 200)]
-        public IActionResult PasswordRecover(string email, int userId)
+        public async Task<IActionResult> PasswordRecover(string email, int userId)
         {
-            User userModel = _userRepository.GetUserByAccount(userId);
-            if (userModel.Status.ToLower() == "active")
+            User userModel = await _userRepository.GetUserByAccount(userId);
+            if (userModel.Status.ToLower() == Constrants.USER_STATUS_ACTIVE)
             {
                 if (userModel.Id != userId)
                 {
@@ -142,9 +147,9 @@ namespace Trojantrading.Controllers
         [HttpGet("ValidateEmail")]
         [NoCache]
         [ProducesResponseType(typeof(ApiResponse), 200)]
-        public IActionResult ValidateEmail(string email)
+        public async Task<IActionResult> ValidateEmail(string email)
         {
-            var result = _userRepository.ValidateEmail(email);
+            var result = await _userRepository.ValidateEmail(email);
             return Ok(result);
         }
     }

@@ -3,34 +3,36 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Trojantrading.Models;
+using Trojantrading.Repositories.Generic;
+using Trojantrading.Utilities;
 
 namespace Trojantrading.Repositories
 {
     public interface IHeaderInfomationRepository
     {
-        ApiResponse AddHeader(HeadInformation headInformation);
-        List<HeadInformation> GetHeadInformation();
-        ApiResponse UpdateHeadInfomation(HeadInformation headInformation);
-        ApiResponse DeleteHeadInfomation(HeadInformation headInformation);
+        Task<ApiResponse> AddHeader(HeadInformation headInformation);
+        Task<List<HeadInformation>> GetHeadInformation();
+        Task<ApiResponse> UpdateHeadInfomation(HeadInformation headInformation);
+        Task<ApiResponse> DeleteHeadInfomation(HeadInformation headInformation);
     }
 
     public class HeaderInfomationRepository : IHeaderInfomationRepository
     {
-        private readonly TrojantradingDbContext trojantradingDbContext;
+        private readonly IRepositoryV2<HeadInformation> _headInformationDataRepository;
 
-        public HeaderInfomationRepository(
-            TrojantradingDbContext trojantradingDbContext)
+        public HeaderInfomationRepository(IRepositoryV2<HeadInformation> headInformationDataRepository)
         {
-            this.trojantradingDbContext = trojantradingDbContext;
+            _headInformationDataRepository = headInformationDataRepository;
         }
 
-        public ApiResponse AddHeader(HeadInformation headInformation)
+        public async Task<ApiResponse> AddHeader(HeadInformation headInformation)
         {
             try
             {
-                trojantradingDbContext.HeadInformations.Add(headInformation);
-                trojantradingDbContext.SaveChanges();
+                _headInformationDataRepository.Create(headInformation);
+                await _headInformationDataRepository.SaveChangesAsync();
                 return new ApiResponse()
                 {
                     Status = "success",
@@ -48,18 +50,18 @@ namespace Trojantrading.Repositories
 
         }
 
-        public List<HeadInformation> GetHeadInformation()
+        public async Task<List<HeadInformation>> GetHeadInformation()
         {
-            var head = trojantradingDbContext.HeadInformations.ToList();
+            var head = await _headInformationDataRepository.Queryable.GetListAsync();
             return head;
         }
 
-        public ApiResponse UpdateHeadInfomation(HeadInformation headInformation)
+        public async Task<ApiResponse> UpdateHeadInfomation(HeadInformation headInformation)
         {
             try
             {
-                trojantradingDbContext.HeadInformations.Update(headInformation);
-                trojantradingDbContext.SaveChanges();
+                _headInformationDataRepository.Update(headInformation);
+                await _headInformationDataRepository.SaveChangesAsync();
                 return new ApiResponse()
                 {
                     Status = "success",
@@ -76,12 +78,12 @@ namespace Trojantrading.Repositories
             }
         }
 
-        public ApiResponse DeleteHeadInfomation(HeadInformation headInformation)
+        public async Task<ApiResponse> DeleteHeadInfomation(HeadInformation headInformation)
         {
             try
             {
-                trojantradingDbContext.HeadInformations.Remove(headInformation);
-                trojantradingDbContext.SaveChanges();
+                _headInformationDataRepository.Delete(headInformation);
+                await _headInformationDataRepository.SaveChangesAsync();
 
                 var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img", headInformation.ImagePath);
                 if (File.Exists(path))

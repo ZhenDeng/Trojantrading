@@ -25,6 +25,6 @@ namespace Trojantrading.Models
 
         public string Status { get; set; }// checkout -- 1, not check out -- 0
 
-        public List<ShoppingItem> ShoppingItems { get; set; }
+        public virtual ICollection<ShoppingItem> ShoppingItems { get; set; }
     }
 }

@@ -11,8 +11,10 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IO;
 using System.Text;
+using Trojantrading.Extensions;
 using Trojantrading.Models;
 using Trojantrading.Repositories;
+using Trojantrading.Repositories.Generic;
 using Trojantrading.Service;
 
 
@@ -69,6 +71,9 @@ namespace Trojantrading
             services.AddTransient<IShoppingCartRepository, ShoppingCartRepository>();
             services.AddTransient<IHeaderInfomationRepository, HeaderInfomationRepository>();
             services.AddTransient<IShare, Share>();
+            services.AddTransient(typeof(IRepositoryV2<>), typeof(GenericRepositoryV2<>));
+            services.AddTransient(typeof(IReadOnlyRelationshipRepositoryV2<>), typeof(ReadOnlyRelationshipRepositoryV2<>));
+            services.AddTransient(typeof(IReadOnlyRepositoryV2<>), typeof(ReadOnlyRepositoryV2<>));
 
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -104,6 +109,7 @@ namespace Trojantrading
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
+            app.ConfigureCustomExceptionMiddleware();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

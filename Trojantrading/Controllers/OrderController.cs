@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Trojantrading.Repositories;
 using Trojantrading.Models;
 using Trojantrading.Util;
+using System.Threading.Tasks;
 
 namespace Trojantrading.Controllers
 {
@@ -26,26 +27,26 @@ namespace Trojantrading.Controllers
         [NoCache]
         [ProducesResponseType(typeof(ApiResponse), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
-        public IActionResult AddOrder(double gst, double priceExclGst, double discount, [FromBody]ShoppingCart cart)
+        public async Task<IActionResult> AddOrder(double gst, double priceExclGst, double discount, [FromBody]ShoppingCart cart)
         {
-            return Ok(_orderRepository.AddOrder(cart, gst, priceExclGst, discount));
+            return Ok(await _orderRepository.AddOrder(cart, gst, priceExclGst, discount));
         }
 
         [HttpPost("UpdateOrder")]
         [NoCache]
         [ProducesResponseType(typeof(ApiResponse), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
-        public IActionResult UpdateOrder([FromBody]Order order)
+        public async Task<IActionResult> UpdateOrder([FromBody]Order order)
         {
-            return Ok(_orderRepository.UpdateOrder(order));
+            return Ok(await _orderRepository.UpdateOrder(order));
         }
 
         [HttpGet("GetOrdersWithShoppingItems")]
         [NoCache]
         [ProducesResponseType(typeof(Order), 200)]
-        public IActionResult GetOrdersWithShoppingItems(int orderId)
+        public async Task<IActionResult> GetOrdersWithShoppingItems(int orderId)
         {
-            var result = _orderRepository.GetOrdersWithShoppingItems(orderId);
+            var result = await _orderRepository.GetOrdersWithShoppingItems(orderId);
             return Ok(result);
         }
 
@@ -53,7 +54,7 @@ namespace Trojantrading.Controllers
         [NoCache]
         [ProducesResponseType(typeof(List<Order>), 200)]
         [ProducesResponseType(typeof(ApiResponse), 400)]
-        public IActionResult GetOrdersByUserID(string userId, string dateFrom, string dateTo)
+        public async Task<IActionResult> GetOrdersByUserID(string userId, string dateFrom, string dateTo)
         {
             try
             {
@@ -62,11 +63,11 @@ namespace Trojantrading.Controllers
                 if (!string.IsNullOrWhiteSpace(userId))
                 {
                     int id = int.Parse(userId);
-                    results = _orderRepository.GetOrdersByUserID(id, dateFrom, dateTo);
+                    results = await _orderRepository.GetOrdersByUserID(id, dateFrom, dateTo);
                 }
                 else
                 {
-                    results = _orderRepository.GetOrdersByDate(dateFrom, dateTo);
+                    results = await _orderRepository.GetOrdersByDate(dateFrom, dateTo);
                 }
 
 
@@ -81,9 +82,9 @@ namespace Trojantrading.Controllers
         [HttpGet("DeleteOrder")]
         [NoCache]
         [ProducesResponseType(typeof(ApiResponse), 200)]
-        public IActionResult DeleteOrder(int orderId)
+        public async Task<IActionResult> DeleteOrder(int orderId)
         {
-            var result = _orderRepository.DeleteOrder(orderId);
+            var result = await _orderRepository.DeleteOrder(orderId);
             return Ok(result);
         }
     }
