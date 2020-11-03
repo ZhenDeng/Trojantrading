@@ -1,6 +1,6 @@
 import { Product } from './../models/Product';
 import { FileService } from './../services/file.service';
-import { MatTableDataSource } from '@angular/material';
+import { DateAdapter, MatTableDataSource } from '@angular/material';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NavbarService } from '../services/navbar.service';
 import { ShareService } from '../services/share.service';
@@ -11,6 +11,7 @@ import { NgbDate } from '@ng-bootstrap/ng-bootstrap/datepicker/ngb-date';
 import { DatePipe } from '@angular/common';
 import { Subject } from 'rxjs';
 import 'rxjs/add/operator/takeUntil';
+import * as _moment from 'moment';
 
 declare let alasql;
 
@@ -26,8 +27,8 @@ export class OrdersComponent implements OnInit, OnDestroy {
   url = '';
   userId: string = '';
   role: string = '';
-  dateFrom: NgbDate;
-  dateTo: NgbDate;
+  dateFrom: string = '';
+  dateTo: string = '';
   strDateFrom: string = '';
   strDateTo: string = '';
   orders: Order[] = [];
@@ -35,9 +36,9 @@ export class OrdersComponent implements OnInit, OnDestroy {
   dataSource = new MatTableDataSource();
   loadContent: boolean = false;
   displayedColumns: string[] = ['invoiceNo', 'customer', 'createdDate', 'totalPrice', 'payment', 'orderStatus'];
-  
-   //unsubscribe
-   ngUnsubscribe: Subject<void> = new Subject<void>();
+
+  //unsubscribe
+  ngUnsubscribe: Subject<void> = new Subject<void>();
 
   constructor(
     private nav: NavbarService,
@@ -45,12 +46,12 @@ export class OrdersComponent implements OnInit, OnDestroy {
     private orderService: OrderService,
     private fileService: FileService,
     private calendar: NgbCalendar,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private _adapter: DateAdapter<any>
   ) { }
 
   ngOnInit() {
-    this.dateFrom = this.calendar.getNext(this.calendar.getToday(), 'd', -30);
-    this.dateTo = this.calendar.getToday();
+    this._adapter.setLocale('au');
 
     this.nav.show();
 
@@ -64,51 +65,42 @@ export class OrdersComponent implements OnInit, OnDestroy {
   }
 
   getOrders() {
-    
-    this.convertDateFormat();
-
     this.orderService.getOrdersByUserID(this.userId, this.strDateFrom, this.strDateTo).takeUntil(this.ngUnsubscribe)
-    .subscribe((value: Order[]) => {
-      console.info(value);
-      this.orders = value;
-      this.dataSource = new MatTableDataSource(this.orders);
-    },
-    (error: any) => {
-      console.info(error);
-    });
-  }
-
-  convertDateFormat(): void {
-    this.strDateFrom = this.dateFrom.month + '/' + this.dateFrom.day + '/' + this.dateFrom.year;
-    this.strDateTo = this.dateTo.month + '/' + this.dateTo.day + '/' + this.dateTo.year;
+      .subscribe((value: Order[]) => {
+        console.info(value);
+        this.orders = value;
+        this.dataSource = new MatTableDataSource(this.orders);
+      },
+        (error: any) => {
+          console.info(error);
+        });
   }
 
   downloadExcel() {
-    this.convertDateFormat();
     if (this.orders.length > 0) {
       let exportArray = [];
       let optArray = [];
       this.orders.forEach(order => {
         let itemArray = [];
-         order.shoppingCart.shoppingItems.forEach(item => {
+        order.shoppingCart.shoppingItems.forEach(item => {
           itemArray.push({
-             "Item Code": item.product.itemCode,
-             "Product Name": item.product.name,
-             "Packaging": item.packaging,
-             "Original Price": `$${item.product.originalPrice}`,
-             "Buy Price": '$' + this.getBuyPrice(item.product),
-             "Order Date": this.datePipe.transform(order.createdDate,'dd/MM/yyyy'),
-             "Order Qty": item.amount,
-             "Line Amount": '$' + (item.amount * this.getBuyPrice(item.product)).toFixed(2)
-           })
-         });
-         exportArray.push(itemArray);
-         optArray.push({"sheetid": 'Order_' +order.id, "header": true });
+            "Item Code": item.product.itemCode,
+            "Product Name": item.product.name,
+            "Packaging": item.packaging,
+            "Original Price": `$${item.product.originalPrice}`,
+            "Buy Price": '$' + this.getBuyPrice(item.product),
+            "Order Date": this.datePipe.transform(order.createdDate, 'dd/MM/yyyy'),
+            "Order Qty": item.amount,
+            "Line Amount": '$' + (item.amount * this.getBuyPrice(item.product)).toFixed(2)
+          })
+        });
+        exportArray.push(itemArray);
+        optArray.push({ "sheetid": 'Order_' + order.id, "header": true });
       });
 
       const fileName = 'TrojanTrading_Orders_' + this.strDateFrom + '_' + this.strDateTo;
-      let res = alasql('SELECT INTO XLSX("' + fileName +'.xlsx",?) FROM ?',
-                       [optArray,exportArray]);
+      let res = alasql('SELECT INTO XLSX("' + fileName + '.xlsx",?) FROM ?',
+        [optArray, exportArray]);
 
     } else {
       this.shareService.openSnackBar('No available data for export', 'error');
@@ -122,7 +114,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
     this.loadContent = !currentLoadingStatus;
   }
 
-  getBuyPrice(product: Product):number {
+  getBuyPrice(product: Product): number {
     if (this.role === 'agent') {
       return product.agentPrice;
     } else if (this.role === 'wholesaler') {
@@ -136,6 +128,14 @@ export class OrdersComponent implements OnInit, OnDestroy {
     value = value.trim();
     value = value.toLowerCase();
     this.dataSource.filter = value;
+  }
+
+  setDateFrom(): void {
+    this.strDateFrom = _moment(this.dateFrom).format("DD/MM/YYYY");
+  }
+
+  setDateTo(): void {
+    this.strDateTo = _moment(this.dateTo).format("DD/MM/YYYY");
   }
 
   ngOnDestroy() {

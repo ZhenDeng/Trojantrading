@@ -10,7 +10,7 @@ import { ShoppingItem } from '../models/shoppingItem';
 export class ShoppingCartService {
 
   base_url: string = "api/ShoppingCart";
-  shoppingItemLength: number;
+  shoppingItemLength: number = 0;
 
   private shoppingItemLengthSource = new BehaviorSubject<number>(this.shoppingItemLength);
   currentShoppingItemLength = this.shoppingItemLengthSource.asObservable();

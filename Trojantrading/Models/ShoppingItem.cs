@@ -9,9 +9,9 @@ namespace Trojantrading.Models
 
         public int ProductId { get; set; }
         public string Packaging { get; set; }
-        public virtual Product Product { get; set; }
+        public Product Product { get; set; }
 
-        public virtual ShoppingCart ShoppingCart { get; set; }
+        public ShoppingCart ShoppingCart { get; set; }
 
         public int ShoppingCartId { get; set; }
 

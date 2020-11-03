@@ -3,7 +3,7 @@
 <div class="container">
   <div class="row">
     <div class="col-sm-12 body-content">
-      
+
       <ng-container>
         <section class="product-wrapper">
           <div class="page-title-wrapper">
@@ -12,7 +12,8 @@
               {{title}}
             </div>
           </div>
-          <loading-screen *ngIf="!loadContent" [showBlurTable]="false" (currentLoadingStatus)="onLoading($event)"></loading-screen>
+          <loading-screen *ngIf="!loadContent" [showBlurTable]="false" (currentLoadingStatus)="onLoading($event)">
+          </loading-screen>
           <div class="filter-wrapper" style="width:60%;">
             <span class="searchInputGroup">
               <span class="searchIcon">
@@ -21,25 +22,37 @@
               <input class="searchInput" (keyup)="applyFilter($event.target.value)" type="text" placeholder="Search">
               <div class="form-group">
                 <div class="input-group">
-                  Date From: 
-                  <input class="form-control" placeholder="yyyy-mm-dd" (click)="df.toggle()"
-                         name="dp" [(ngModel)]="dateFrom" ngbDatepicker #df="ngbDatepicker">
+                  Date From:
+                  <!-- <input class="form-control" placeholder="yyyy-mm-dd" (click)="df.toggle()"
+                         name="dp" [(ngModel)]="dateFrom" ngbDatepicker #df="ngbDatepicker"> -->
+                  <mat-form-field appearance="fill">
+                    <!-- <mat-label>dd/mm/yyyy</mat-label> -->
+                    <input matInput [matDatepicker]="picker1" [max]="dateTo" [(ngModel)]="dateFrom" (ngModelChange)="setDateFrom()" disabled>
+                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                    <mat-datepicker #picker1 disabled="false"></mat-datepicker>
+                  </mat-form-field>
                 </div>
                 <div class="input-group">
-                    Date To: 
-                    <input class="form-control" placeholder="yyyy-mm-dd" (click)="dt.toggle()"
-                           name="dp" [(ngModel)]="dateTo" ngbDatepicker #dt="ngbDatepicker">
-                  </div>
-                  
+                  Date To:
+                  <!-- <input class="form-control" placeholder="yyyy-mm-dd" (click)="dt.toggle()" name="dp"
+                    [(ngModel)]="dateTo" ngbDatepicker #dt="ngbDatepicker"> -->
+                  <mat-form-field appearance="fill">
+                    <!-- <mat-label>dd/mm/yyyy</mat-label> -->
+                    <input matInput [matDatepicker]="picker2" [min]="dateFrom" [(ngModel)]="dateTo" (ngModelChange)="setDateTo()" disabled>
+                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                    <mat-datepicker #picker2 disabled="false"></mat-datepicker>
+                  </mat-form-field>
+                </div>
+
               </div>
               <button class="btn btn-green" (click)="getOrders()">Search</button>
               <button class="btn btn-green" (click)="downloadExcel()">Download Excel</button>
             </span>
           </div>
-      
+
           <div class="example-container mat-elevation-z8">
             <mat-table #table [dataSource]="dataSource">
-          
+
               <ng-container matColumnDef="invoiceNo">
                 <mat-header-cell *matHeaderCellDef> Order Number </mat-header-cell>
                 <mat-cell *matCellDef="let element">{{element.id}}</mat-cell>
@@ -47,29 +60,31 @@
 
               <ng-container matColumnDef="customer">
                 <mat-header-cell *matHeaderCellDef class="mat-table_2fex"> Customer </mat-header-cell>
-                <mat-cell *matCellDef="let element" style="text-transform:capitalize;" class="mat-table_2fex"> {{element.user.bussinessName}} </mat-cell>
+                <mat-cell *matCellDef="let element" style="text-transform:capitalize;" class="mat-table_2fex">
+                  {{element.user.bussinessName}} </mat-cell>
               </ng-container>
 
               <ng-container matColumnDef="createdDate">
                 <mat-header-cell *matHeaderCellDef> Created Date </mat-header-cell>
                 <mat-cell *matCellDef="let element">{{ element.createdDate | date }}</mat-cell>
               </ng-container>
-      
+
               <ng-container matColumnDef="totalPrice">
                 <mat-header-cell *matHeaderCellDef> Total Price Inc GST </mat-header-cell>
-                <mat-cell *matCellDef="let element"> {{element.totalPrice | currency:'AUD':'symbol-narrow':'.2-2'}} </mat-cell>
+                <mat-cell *matCellDef="let element"> {{element.totalPrice | currency:'AUD':'symbol-narrow':'.2-2'}}
+                </mat-cell>
               </ng-container>
 
               <ng-container matColumnDef="payment">
                 <mat-header-cell *matHeaderCellDef> Payment Method </mat-header-cell>
                 <mat-cell *matCellDef="let element"> {{ element.clientMessage }}</mat-cell>
               </ng-container>
-      
+
               <ng-container matColumnDef="orderStatus">
                 <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
                 <mat-cell *matCellDef="let element"> {{ element.orderStatus }}</mat-cell>
               </ng-container>
-      
+
               <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
               <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
             </mat-table>
@@ -78,5 +93,5 @@
       </ng-container>
     </div>
   </div>
-  
+
 </div>

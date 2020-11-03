@@ -13,7 +13,7 @@ import { AuthInterceptor } from './auth/auth.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatTabsModule, MatTableModule, MatDialogModule } from '@angular/material';
+import { MatTabsModule, MatTableModule, MatDialogModule, MatDatepickerModule, MatNativeDateModule } from '@angular/material';
 import { AccountDetailsComponent } from './account-details/account-details.component';
 import { AdminService } from './services/admin.service';
 import { AboutUsComponent } from './about-us/about-us.component';
@@ -106,7 +106,9 @@ import { UploadProductsComponent } from './popup-collection/upload-products/uplo
     MatSelectModule,
     SlickCarouselModule,
     NgbdCarouselBasicModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   providers: [
     UserService,

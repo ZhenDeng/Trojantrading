@@ -161,6 +161,7 @@ namespace Trojantrading.Repositories
                 {
                     si.Status = "1";
                     si.Product = null;
+                    si.ShoppingCartId = cart.Id;
                 }
 
                 _shoppingItemDataRepository.UpdateRange(cart.ShoppingItems.ToList());
@@ -254,8 +255,8 @@ namespace Trojantrading.Repositories
         public async Task<List<Order>> GetOrdersByUserID(int userId, string dateFrom, string dateTo)
         {
 
-            DateTime fromDate = string.IsNullOrWhiteSpace(dateFrom) ? DateTime.Now.AddMonths(-1) : DateTime.ParseExact(dateFrom, @"d/M/yyyy", System.Globalization.CultureInfo.InvariantCulture);
-            DateTime toDate = string.IsNullOrWhiteSpace(dateTo) ? DateTime.Now.AddDays(1) : DateTime.ParseExact(dateTo, @"d/M/yyyy", System.Globalization.CultureInfo.InvariantCulture).AddDays(1); // end date always next day midnight
+            DateTime fromDate = string.IsNullOrEmpty(dateFrom) ? DateTime.Now.AddMonths(-1).Date : DateTime.ParseExact(dateFrom, @"d/M/yyyy", System.Globalization.CultureInfo.InvariantCulture).Date;
+            DateTime toDate = string.IsNullOrEmpty(dateTo) ? DateTime.Now.AddDays(1).Date : DateTime.ParseExact(dateTo, @"d/M/yyyy", System.Globalization.CultureInfo.InvariantCulture).AddDays(1).Date; // end date always next day midnight
 
             var orders = await _orderDataRepository.Queryable
                 .Where(x => x.UserId == userId && DateTime.Compare(x.CreatedDate, fromDate) >= 0 && DateTime.Compare(x.CreatedDate, toDate) <= 0).GetListAsync();
@@ -275,8 +276,8 @@ namespace Trojantrading.Repositories
         {
             List<Order> orders = new List<Order>();
 
-            DateTime fromDate = string.IsNullOrWhiteSpace(dateFrom) ? DateTime.Now.AddMonths(-1).Date : DateTime.ParseExact(dateFrom, @"d/M/yyyy", System.Globalization.CultureInfo.InvariantCulture).Date;
-            DateTime toDate = string.IsNullOrWhiteSpace(dateTo) ? DateTime.Now.AddDays(1).Date : DateTime.ParseExact(dateTo, @"d/M/yyyy", System.Globalization.CultureInfo.InvariantCulture).AddDays(1).Date; // end date always next day midnight
+            DateTime fromDate = string.IsNullOrEmpty(dateFrom) ? DateTime.Now.AddMonths(-1).Date : DateTime.ParseExact(dateFrom, @"d/M/yyyy", System.Globalization.CultureInfo.InvariantCulture).Date;
+            DateTime toDate = string.IsNullOrEmpty(dateTo) ? DateTime.Now.AddDays(1).Date : DateTime.ParseExact(dateTo, @"d/M/yyyy", System.Globalization.CultureInfo.InvariantCulture).AddDays(1).Date; // end date always next day midnight
 
             orders = await _orderDataRepository.Queryable
                 .Where(x => DateTime.Compare(x.CreatedDate, fromDate) >= 0 && DateTime.Compare(x.CreatedDate, toDate) <= 0).GetListAsync();
