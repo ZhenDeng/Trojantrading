@@ -15,10 +15,11 @@ export class ProductService {
     { type: 'RYO', category: 'RYO' },
     { type: 'Pipe', category: 'Pipe' },
     { type: 'Cigars', category: 'Cigars' },
-    { type: 'Premium Cigar', category: 'Premium-Cigar' },
+    { type: 'Cuban Cigar', category: 'Cuban-Cigar' },
+    { type: 'non-Cuban Cigar', category: 'nonCuban-Cigar' },
     { type: 'Lighters', category: 'Lighters' },
-    { type: 'Accessories', category: 'Accessories' },
-    { type: 'Papers', category: 'Papers' }
+    { type: 'Papers', category: 'Papers' },
+    { type: 'Accessories', category: 'Accessories' }
   ];
 
   constructor(

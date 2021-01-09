@@ -76,7 +76,7 @@
               </ng-container>
 
               <ng-container matColumnDef="packaging" *ngIf="role=='admin'">
-                <mat-header-cell *matHeaderCellDef> packaging List </mat-header-cell>
+                <mat-header-cell *matHeaderCellDef> packaging </mat-header-cell>
                 <mat-cell *matCellDef="let element">
                   <span *ngFor="let package of element?.packagingLists">{{package?.packageName}}&nbsp;&nbsp;</span>
                 </mat-cell>
